@@ -69,7 +69,9 @@ def import_options():
     # as opposed to newly calibrated paramaters
     options["load_precal_param"] = 0
     # Dummy for fitting informal housing disamenity parameter to grid level
-    options["location_based_calib"] = 1
+    # NB: doing so is a matter of choice. It yields more accurate results on
+    # spatial sorting, but also increases the risk of overfitting the model.
+    options["location_based_calib"] = 0
     # Dummy for defining dominant income group based on number of people
     # instead of median income at SP level
     options["correct_dominant_incgrp"] = 0
@@ -115,11 +117,15 @@ def import_options():
     # basic need in housing from maximum rent estimation (deprecated)
     options["test_maxrent"] = 0
     # Dummy for using scipy solver to refine utility function parameter
-    # estimates from scanning
-    options["param_optim"] = 1
+    # estimates from scanning (requires well-defined interior starting values
+    # for algorithm not to converge towards a corner solution): not stable
+    options["param_optim"] = 0
     # Dummy for taking log form into account in rent interpolation for utility
-    # function parameter estimation (helps convergence)
+    # function parameter estimation (deprecated)
     options["log_form"] = 1
+    # Dummy for adding numerical terms that prevent exponential overflow
+    # when solving the commuting choice model, without changing results
+    options["prevent_exp_overflow"] = 1
 
     # CODE CORRECTION OPTIONS
     # Dummy for taking formal backyards into account in backyard land use
@@ -147,7 +153,7 @@ def import_options():
     #  However, price of fuel should be defined independently to be of interest
     #  We define dummy scenarios for the time being...
     #  Code corresponds to low/medium/high
-    options["fuel_price_scenario"] = 2
+    options["fuel_price_scenario"] = 1
 
     return options
 
@@ -189,12 +195,13 @@ def import_param(path_precalc_inp, options):
         param["beta"] = np.load(
             path_precalc_inp + 'calibratedUtility_beta.npy')
     #  Basic need in housing
-    #  NB: we take this value as given by Pfeiffer et al., since it is not
-    #  possible to run a stable optimization along with utility levels and
-    #  utility function parameters (see calibration.calib_main_func)
-    param["q0"] = scipy.io.loadmat(
-        path_precalc_inp + 'calibratedUtility_q0.mat'
-        )["calibratedUtility_q0"].squeeze()
+    if options["load_precal_param"] == 1:
+        param["q0"] = scipy.io.loadmat(
+            path_precalc_inp + 'calibratedUtility_q0.mat'
+            )["calibratedUtility_q0"].squeeze()
+    elif options["load_precal_param"] == 0:
+        param["q0"] = np.load(
+            path_precalc_inp + 'calibratedUtility_q0.npy')
     #  Composite good elasticity
     param["alpha"] = 1 - param["beta"]
 

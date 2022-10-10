@@ -324,6 +324,20 @@
         <span class="n">param</span><span class="p">,</span> <span class="n">timeOutput</span><span class="p">,</span> <span class="n">distanceOutput</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">monetaryCost</span><span class="p">,</span> <span class="n">costTime</span><span class="p">,</span>
         <span class="n">job_centers</span><span class="p">,</span> <span class="n">average_income</span><span class="p">,</span> <span class="n">income_distribution</span><span class="p">,</span> <span class="n">list_lambda</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
 
+    <span class="c1"># We also consider a selection based on the fit with observed aggregate</span>
+    <span class="c1"># average incomes, although this is likely to be more noisy</span>
+    <span class="c1"># NB: note that, in practice, it does not appear to change the final</span>
+    <span class="c1"># selection</span>
+
+    <span class="c1"># incomeCenters[incomeCenters &lt; 0] = math.nan</span>
+    <span class="c1"># cal_avg_income = [np.nanmean(incomeCenters[:, :, k], 0)</span>
+    <span class="c1">#                   for k in np.arange(0, len(list_lambda))]</span>
+    <span class="c1"># err_avg_income = [np.abs(1 - cal_avg_income[i] / average_income)</span>
+    <span class="c1">#                   for i in np.arange(0, len(cal_avg_income))]</span>
+    <span class="c1"># list_err_avginc = [np.nanmean(err_avg_income[i])</span>
+    <span class="c1">#                    for i in np.arange(0, len(err_avg_income))]</span>
+    <span class="c1"># whichLambda_test = np.argmin(list_err_avginc)</span>
+
     <span class="c1"># Gives aggregate statistics for % of commuters per distance bracket</span>
     <span class="c1"># NB: bracketsDistance = np.array([0, 5, 10, 15, 20, 25, 30, 35, 40, 200])</span>
     <span class="c1"># with floor residence-workplace distances in km</span>
@@ -449,10 +463,12 @@
 <span class="sd">        normalized yet.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># We select in which areas we actually measure the likelihood</span>
-    <span class="c1"># NB: Again, there is a trade-off between empirical validity and</span>
-    <span class="c1"># statistical power, which is why we use a less stringent sample selection</span>
-    <span class="c1"># than for the calibration of construction function parameters</span>
+    <span class="c1"># We select in which areas we actually measure the likelihood.</span>
+    <span class="c1"># We use a less stringent definition as for the fit on building density</span>
+    <span class="c1"># (estimation of construction function parameters), as we are going to</span>
+    <span class="c1"># separately add conditions more specific to each regression used in the</span>
+    <span class="c1"># process.</span>
+    <span class="c1"># NB: There is a trade-off between empirical validity and statistical power</span>
     <span class="n">selectedSP</span> <span class="o">=</span> <span class="p">(</span>
         <span class="p">(</span><span class="n">data_number_formal</span> <span class="o">&gt;</span> <span class="mf">0.90</span> <span class="o">*</span> <span class="n">housing_types_sp</span><span class="o">.</span><span class="n">total_dwellings_SP_2011</span><span class="p">)</span>
         <span class="o">&amp;</span> <span class="p">(</span><span class="n">data_income_group</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
@@ -463,17 +479,25 @@
     <span class="c1"># For beta, we take a relatively wide acceptable range, as there is no</span>
     <span class="c1"># empirical counterpart (final value essentially depend on internal</span>
     <span class="c1"># validity) on which to base a priori knowledge, and it is the key</span>
-    <span class="c1"># parameter over which we want to optimize</span>
-    <span class="n">listBeta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.23</span><span class="p">,</span> <span class="mf">0.331</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+    <span class="c1"># parameter over which we want to optimize. We may refine it further,</span>
+    <span class="c1"># even though it is made unnecessary if we use an interior-point algorithm</span>
+    <span class="c1"># for later optimization</span>
 
-    <span class="c1"># For basic need in housing, we pin the value to the one estimated in</span>
-    <span class="c1"># Pfeiffer et al. Again, we could optimize over this value, but this would</span>
-    <span class="c1"># add a lot of numerical complexity, and we should not do it over a wide</span>
-    <span class="c1"># range of values to stay within feasible allocations. Besides, this</span>
-    <span class="c1"># parameter can be calibrated empirically (as is usually done in the</span>
-    <span class="c1"># literature), which makes more sense than relying on an optimization</span>
-    <span class="c1"># process made noisier by the number of parameters.</span>
-    <span class="n">listBasicQ</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">param</span><span class="p">[</span><span class="s2">&quot;q0&quot;</span><span class="p">]])</span>
+    <span class="c1"># listBeta = np.arange(0.1, 0.51, 0.1)</span>
+    <span class="n">listBeta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.351</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+
+    <span class="c1"># We do the same for basic need in housing. Note that, contrary to</span>
+    <span class="c1"># elasticity parameter, we could find an empirical counterpart to this</span>
+    <span class="c1"># value (as is often done in the literature). This would allow to reduce</span>
+    <span class="c1"># the complexity of the problem by one dimension and to be more confident</span>
+    <span class="c1"># on the range for feasible solutions: we leave that for future</span>
+    <span class="c1"># implementations</span>
+
+    <span class="c1"># listBasicQ = np.arange(2, 10.1, 1)</span>
+    <span class="n">listBasicQ</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">5.5</span><span class="p">,</span> <span class="mf">6.51</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+    <span class="c1"># listBasicQ = scipy.io.loadmat(</span>
+    <span class="c1">#             path_precalc_inp + &#39;calibratedUtility_q0.mat&#39;</span>
+    <span class="c1">#             )[&quot;calibratedUtility_q0&quot;].squeeze()</span>
 
     <span class="c1"># Coefficient for spatial autocorrelation (not used)</span>
     <span class="n">listRho</span> <span class="o">=</span> <span class="mi">0</span>
@@ -489,12 +513,8 @@
     <span class="c1"># as it will in practice be crowded out of the formal private sector</span>
     <span class="c1"># (which drives most of our identification).</span>
 
-    <span class="c1"># NB: Again, we restrict ourselves to a quite narrow range as we have some</span>
-    <span class="c1"># a priori knowledge about welfare and we want to remain within feasible</span>
-    <span class="c1"># allocations (which would not be the case with richer income groups</span>
-    <span class="c1"># having a lower utility than poorer income groups, for instance)</span>
-
-    <span class="n">listVariation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.96</span><span class="p">,</span> <span class="mf">1.041</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">)</span>
+    <span class="n">listVariation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">1.21</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+    <span class="c1"># listVariation = 1</span>
     <span class="n">initUti2</span> <span class="o">=</span> <span class="n">utilityTarget</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">listUti3</span> <span class="o">=</span> <span class="n">utilityTarget</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">listVariation</span>
     <span class="n">listUti4</span> <span class="o">=</span> <span class="n">utilityTarget</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="n">listVariation</span>
@@ -537,7 +557,8 @@
         <span class="p">)</span>
 
     <span class="c1"># We import amenity data at the SP level</span>
-    <span class="n">amenities_sp</span> <span class="o">=</span> <span class="n">calam</span><span class="o">.</span><span class="n">import_amenities</span><span class="p">(</span><span class="n">path_data</span><span class="p">,</span> <span class="n">path_precalc_inp</span><span class="p">,</span> <span class="s1">&#39;SP&#39;</span><span class="p">)</span>
+    <span class="n">amenities_sp</span> <span class="o">=</span> <span class="n">calam</span><span class="o">.</span><span class="n">import_exog_amenities</span><span class="p">(</span>
+        <span class="n">path_data</span><span class="p">,</span> <span class="n">path_precalc_inp</span><span class="p">,</span> <span class="s1">&#39;SP&#39;</span><span class="p">)</span>
     <span class="c1"># We select amenity variables to be used in regressions</span>
     <span class="c1"># NB: choice has to do with relevance and exogeneity of variables</span>
     <span class="n">variables_regression</span> <span class="o">=</span> <span class="p">[</span>
@@ -550,7 +571,7 @@
     <span class="c1"># inputs: we need to make sure that the estimated parameters fall within</span>
     <span class="c1"># the predefined value ranges to exclude corner solutions.</span>
     <span class="p">(</span><span class="n">parametersScan</span><span class="p">,</span> <span class="n">scoreScan</span><span class="p">,</span> <span class="n">parametersAmenitiesScan</span><span class="p">,</span> <span class="n">modelAmenityScan</span><span class="p">,</span>
-     <span class="n">parametersHousing</span><span class="p">,</span> <span class="n">_</span><span class="p">)</span> <span class="o">=</span> <span class="n">calscan</span><span class="o">.</span><span class="n">EstimateParametersByScanning</span><span class="p">(</span>
+     <span class="n">parametersHousing</span><span class="p">)</span> <span class="o">=</span> <span class="n">calscan</span><span class="o">.</span><span class="n">EstimateParametersByScanning</span><span class="p">(</span>
          <span class="n">incomeNetOfCommuting</span><span class="p">,</span> <span class="n">dataRent</span><span class="p">,</span> <span class="n">data_sp</span><span class="p">[</span><span class="s2">&quot;dwelling_size&quot;</span><span class="p">],</span>
          <span class="n">data_income_group</span><span class="p">,</span> <span class="n">data_density</span><span class="p">,</span> <span class="n">selected_density</span><span class="p">,</span>
          <span class="n">housing_types_sp</span><span class="p">[</span><span class="s2">&quot;x_sp&quot;</span><span class="p">],</span> <span class="n">housing_types_sp</span><span class="p">[</span><span class="s2">&quot;y_sp&quot;</span><span class="p">],</span> <span class="n">selectedSP</span><span class="p">,</span>
@@ -561,16 +582,9 @@
 
     <span class="c1"># Now we run the optimization algorithm with identified value of the</span>
     <span class="c1"># parameters: this corresponds to an interior-point algorithm.</span>
-
-    <span class="c1"># Note that this may be long to run depending on the optimization programme</span>
-
-    <span class="c1"># Also note that this may not work: the optimization programme partly</span>
-    <span class="c1"># relies on interpolated inputs and may not be smooth enough for scipy&#39;s</span>
-    <span class="c1"># algorithm to run until the end. We have included some options to try</span>
-    <span class="c1"># other solvers that end up performing worse than the standard one:</span>
-    <span class="c1"># this is a complex numerical issue whose potential for model improvement</span>
-    <span class="c1"># we see as marginal, compared to parameter scanning. Hence, we leave that</span>
-    <span class="c1"># for future work.</span>
+    <span class="c1"># Note that this require above scanning process to be well-defined in</span>
+    <span class="c1"># order to converge to an interior solution: we provide the option of not</span>
+    <span class="c1"># running it in case this leads to absurd results.</span>
 
     <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;param_optim&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
 
@@ -580,8 +594,7 @@
         <span class="n">initUti4</span> <span class="o">=</span> <span class="n">parametersScan</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
 
         <span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="n">scoreTot</span><span class="p">,</span> <span class="n">parametersAmenities</span><span class="p">,</span> <span class="n">modelAmenity</span><span class="p">,</span>
-         <span class="n">parametersHousing</span><span class="p">,</span> <span class="n">selectedSPRent</span>
-         <span class="p">)</span> <span class="o">=</span> <span class="n">calopt</span><span class="o">.</span><span class="n">EstimateParametersByOptimization</span><span class="p">(</span>
+         <span class="n">parametersHousing</span><span class="p">)</span> <span class="o">=</span> <span class="n">calopt</span><span class="o">.</span><span class="n">EstimateParametersByOptimization</span><span class="p">(</span>
              <span class="n">incomeNetOfCommuting</span><span class="p">,</span> <span class="n">dataRent</span><span class="p">,</span> <span class="n">data_sp</span><span class="p">[</span><span class="s2">&quot;dwelling_size&quot;</span><span class="p">],</span>
              <span class="n">data_income_group</span><span class="p">,</span> <span class="n">data_density</span><span class="p">,</span> <span class="n">selected_density</span><span class="p">,</span>
              <span class="n">housing_types_sp</span><span class="p">[</span><span class="s2">&quot;x_sp&quot;</span><span class="p">],</span> <span class="n">housing_types_sp</span><span class="p">[</span><span class="s2">&quot;y_sp&quot;</span><span class="p">],</span> <span class="n">selectedSP</span><span class="p">,</span>
@@ -592,8 +605,8 @@
 
     <span class="c1"># Exporting and saving outputs</span>
 
-    <span class="n">amenities_grid</span> <span class="o">=</span> <span class="n">calam</span><span class="o">.</span><span class="n">import_amenities</span><span class="p">(</span><span class="n">path_data</span><span class="p">,</span> <span class="n">path_precalc_inp</span><span class="p">,</span>
-                                            <span class="s1">&#39;grid&#39;</span><span class="p">)</span>
+    <span class="n">amenities_grid</span> <span class="o">=</span> <span class="n">calam</span><span class="o">.</span><span class="n">import_exog_amenities</span><span class="p">(</span>
+        <span class="n">path_data</span><span class="p">,</span> <span class="n">path_precalc_inp</span><span class="p">,</span> <span class="s1">&#39;grid&#39;</span><span class="p">)</span>
     <span class="n">predictors_grid</span> <span class="o">=</span> <span class="n">amenities_grid</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">variables_regression</span><span class="p">]</span>
     <span class="n">predictors_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span>
         <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">predictors_grid</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>

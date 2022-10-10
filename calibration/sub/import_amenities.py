@@ -11,9 +11,28 @@ import copy
 import scipy.io
 
 
-def import_amenities(path_data, path_precalc_inp, dim):
-    """Import relevant amenity data at SP level."""
-    # Load amenity files
+def import_exog_amenities(path_data, path_precalc_inp, dim):
+    """
+    Import relevant amenity data at SP level.
+
+    Parameters
+    ----------
+    path_data : str
+        Path towards data used in the model
+    path_precalc_inp : str
+        Path for precalcuted input data (calibrated parameters)
+    dim : str
+        Geographic level of analysis at which we want to run the commuting
+        choice model: should be set to "grid" or "SP"
+
+    Returns
+    -------
+    table_amenities : DataFrame
+        Table yielding, for each selected geographic unit, a set of dummy
+        variables corresponding to available exogenous amenites
+
+    """
+    # Load amenity file
     amenity_data = pd.read_csv(path_data + dim + '_amenities.csv', sep=',')
 
     # We replace values for airport cone amenities with a dummy for being

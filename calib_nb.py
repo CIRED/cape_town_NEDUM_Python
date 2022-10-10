@@ -29,6 +29,7 @@ import os
 import geopandas as gpd
 import matplotlib.pyplot as plt
 from IPython.display import Image
+import scipy
 
 # We also import our own packages
 import inputs.data as inpdt
@@ -54,8 +55,8 @@ path_precalc_transp = path_folder + 'precalculated_transport/'
 path_scenarios = path_data + 'Scenarios/'
 path_outputs = path_code + '/Output/'
 path_floods = path_folder + "FATHOM/"
-path_input_plots = path_outputs + '/input_plots/'
-path_input_tables = path_outputs + '/input_tables/'
+path_input_plots = path_outputs + 'input_plots/'
+path_input_tables = path_outputs + 'input_tables/'
 
 # ### Create associated directories if needed
 
@@ -299,7 +300,8 @@ elif options["correct_dominant_incgrp"] == 1:
 # Although the second option seems more logical, we take the first one as
 # default since we are going to consider median SP prices, and we want
 # associated net income to be in line with those values to avoid a sample
-# selection bias in our regressions.
+# selection bias in our regressions. Indeed, the purpose of such definition
+# is to choose the right net income to estimate associated regressions.
 
 # ### Obtain number of formal private housing units per SP
 
@@ -357,11 +359,15 @@ elif options["substract_RDP_from_formal"] == 0:
 # prices and for which more than 5% of households are reported to live in
 # informal housing (settlements + backyards). We also exclude "rural" SPs
 # (i.e., those that are large, with a small share than can be urbanized).
+# This is more specific to the regression that is going to allow us to
+# estimates parameter of the construction function (fit on building density),
+# hence the name of the selected_density variable.
 
 # We also add options to consider other criteria, namely we offer to
 # exclude poorest income group (which is in effect crowded out from the
 # formal sector), as well as Mitchell's Plain (as its housing market is
-# very specific) and far-away land (for which we have few observations).
+# very specific) and far-away land (where SPs are too big for aggregates to
+# be representative of micro conditions).
 
 # region
 if options["correct_selected_density"] == 0:
@@ -457,11 +463,27 @@ np.save(path_precalc_inp + 'calibratedHousing_kappa.npy',
 
 # We start by selecting the range over which we want to scan
 if options["scan_type"] == "rough":
-    list_lambda = 10 ** np.arange(0.40, 0.51, 0.05)
+    # list_lambda = 10 ** np.arange(1.1, 1.31, 0.05)
+    list_lambda = 10 ** np.arange(1.1, 1.31, 0.1)
 if options["scan_type"] == "normal":
-    list_lambda = 10 ** np.arange(0.42, 0.441, 0.01)
+    # list_lambda = 10 ** np.arange(1.13, 1.171, 0.01)
+    list_lambda = 10 ** np.arange(1.36, 1.401, 0.02)
 if options["scan_type"] == "fine":
-    list_lambda = 10 ** np.arange(0.427, 0.4291, 0.001)
+    list_lambda = 10 ** np.arange(1.150, 1.1541, 0.001)
+
+# As a matter of fact, when adjusting numerical parameters to minimize error
+# terms, the algorithm seems to always converge towards the highest value
+# possible for the gravity parameter. For the time being, we therefore fix it
+# to be equal to value found in Pfeiffer et al. In fact, the identification of
+# the parameter per se is not a threat to the identification of our model: it
+# is mostly a matter of internal validity regarding the computation of income
+# net of commuting costs, which works for any value of the parameter (but may
+# be more or less noisy).
+
+import scipy
+list_lambda = np.array([
+    scipy.io.loadmat(path_precalc_inp + 'lambda.mat')["lambdaKeep"].squeeze()
+    ])
 
 # We then run the function that returns the calibrated outputs
 import calibration.calib_main_func as calmain
@@ -631,7 +653,6 @@ selected_centers_merge.loc[
 income_centers_TAZ = pd.merge(income_centers_init_merge,
                               selected_centers_merge,
                               how='right', on='count')
-income_centers_TAZ = income_centers_TAZ.fillna(value=0)
 
 income_centers_2d = pd.merge(geo_TAZ, income_centers_TAZ,
                              left_index=True, right_index=True)
@@ -730,8 +751,6 @@ import calibration.calib_main_func as calmain
      incomeNetOfCommuting, selected_density, path_data, path_precalc_inp,
      options, param)
 
-# The warnings in the execution come from the fact that rent interpolation is discountinuous when underlying data is scattered. This is not a big issue to the extent that we are not interested in the shape of the rent function per se, but it causes optimization solver to break down when the associated likelihood function is not smooth. The calibration therefore essentially relies on parameter scanning.
-
 # region
 # We update parameter vector
 param["beta"] = calibratedUtility_beta
@@ -780,7 +799,8 @@ amenity_map = outexp.export_map(
     amenities, grid, geo_grid, path_input_plots, 'amenity_map',
     "Map of average amenity index per location",
     path_input_tables,
-    ubnd=1.3, lbnd=0.8)
+    ubnd=np.quantile(amenities, 0.9999),
+    lbnd=np.quantile(amenities, 0.0001))
 
 Image(path_input_plots + "amenity_map.png")
 # endregion
@@ -794,8 +814,10 @@ Image(path_input_plots + "amenity_map.png")
 
 # We define a range of disamenity values which we would like to scan,
 # and arrange them in a grid
-list_amenity_backyard = np.arange(0.62, 0.661, 0.01)
-list_amenity_settlement = np.arange(0.60, 0.641, 0.01)
+list_amenity_backyard = np.arange(0.58, 0.621, 0.02)
+list_amenity_settlement = np.arange(0.48, 0.521, 0.02)
+# list_amenity_backyard = [1]
+# list_amenity_settlement = [1]
 housing_type_total = pd.DataFrame(np.array(np.meshgrid(
     list_amenity_backyard, list_amenity_settlement)).T.reshape(-1, 2))
 housing_type_total.columns = ["param_backyard", "param_settlement"]
@@ -1097,3 +1119,5 @@ disamenity_IB_map = outexp.export_map(
 
 Image(path_input_plots + "disamenity_IB_map.png")
 # endregion
+
+

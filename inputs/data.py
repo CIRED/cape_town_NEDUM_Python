@@ -1989,6 +1989,7 @@ def import_transport_data(grid, param, yearTraffic,
     elif options["load_precal_param"] == 0:
         income_centers_init = np.load(
             path_precalc_inp + 'incomeCentersKeep.npy')
+    # income_centers_init[income_centers_init == -np.inf] = np.nan
 
     # We correct the level of incomes per job center when overall average
     # income per income group changes with time (only used as an initial
@@ -1996,6 +1997,7 @@ def import_transport_data(grid, param, yearTraffic,
     incomeCenters = income_centers_init * incomeGroup / average_income
 
     # Switch to hourly
+    # NB: costTime is already in hourly format
     annualToHourly = 1 / (8*20*12)
     monetaryCost = monetaryCost * annualToHourly
     incomeCenters = incomeCenters * annualToHourly
@@ -2004,10 +2006,10 @@ def import_transport_data(grid, param, yearTraffic,
 
         # Household size varies with income group / transport costs
         householdSize = param["household_size"][j]
-        # Here, -100000 corresponds to an arbitrary value given to incomes in
-        # centers with too few jobs to have convergence in calibration (could
-        # have been nan): we exclude those centers from the analysis
-        whichCenters = incomeCenters[:, j] > -100000
+        if options["load_precal_param"] == 1:
+            whichCenters = incomeCenters[:, j] > -100000
+        elif options["load_precal_param"] == 0:
+            whichCenters = ~np.isnan(incomeCenters[:, j])
         incomeCentersGroup = incomeCenters[whichCenters, j]
 
         # We compute transport costs for each mode and per chosen mode
@@ -2016,42 +2018,81 @@ def import_transport_data(grid, param, yearTraffic,
         (transportCostModes, transportCost, _, valueMax, minIncome
          ) = calcmp.compute_ODflows(
             householdSize, monetaryCost, costTime, incomeCentersGroup,
-            whichCenters, param_lambda)
+            whichCenters, param_lambda, options)
 
         # NB: we compute origin-destination flows again later to get the full
         # matrix
 
-        # Modal shares : this comes from the multinomial model resulting from
+        # Modal shares: this comes from the multinomial model resulting from
         # extreme value theory with a Gumbel distribution
         # (generalized EV type-I), see math appendix
-        # NB: here, we consider minimum Gumbel
-        modalShares[whichCenters, :, :, j] = (np.exp(
-            - param_lambda * transportCostModes + valueMax[:, :, None])
-            / np.nansum(np.exp(- param_lambda * transportCostModes
-                               + valueMax[:, :, None]), 2)[:, :, None]
+
+        # if options["prevent_exp_overflow"] == 1:
+        #     modalShares[whichCenters, :, :, j] = (np.exp(
+        #         - param_lambda * transportCostModes + valueMax[:, :, None])
+        #         / np.nansum(np.exp(- param_lambda * transportCostModes
+        #                             + valueMax[:, :, None]), 2)[:, :, None]
+        #         )
+        modalShares[whichCenters, :, :, j] = (
+            np.exp(- param_lambda * transportCostModes)
+            / np.nansum(
+                np.exp(- param_lambda * transportCostModes), 2)[:, :, None]
             )
 
         # OD flows: corresponds to the probability, for a given household of
         # income group i and living in x, to work in a job centre c,
         # see math appendix
-        # NB: here, we consider maximum Gumbel
-        ODflows[whichCenters, :, j] = (
-            np.exp(param_lambda * (incomeCentersGroup[:, None] - transportCost)
-                   - minIncome)
-            / np.nansum(np.exp(param_lambda * (incomeCentersGroup[:, None]
-                                               - transportCost) - minIncome),
-                        0)[None, :]
-            )
+        # NB: here, we also need to divide by the scale factor (typo in
+        # Pfeiffer et al.)
 
-        # Expected income net of commuting costs : see correct formula in
-        # math appendix
-        # NB: here, we consider maximum Gumbel
-        incomeNetOfCommuting[j, :] = (
-            1/param_lambda * (np.log(np.nansum(np.exp(
-                param_lambda * (incomeCentersGroup[:, None] - transportCost)
-                - minIncome),
-                0)) + minIncome)
+        if options["prevent_exp_overflow"] == 1:
+            ODflows[whichCenters, :, j] = (
+                np.exp(param_lambda
+                       * (incomeCentersGroup[:, None] - transportCost)
+                       - minIncome)
+                / np.nansum(
+                    np.exp(param_lambda
+                           * (incomeCentersGroup[:, None] - transportCost)
+                           - minIncome),
+                    0)[None, :]
             )
+        elif options["prevent_exp_overflow"] == 0:
+            ODflows[whichCenters, :, j] = (
+                np.exp(
+                    param_lambda
+                    * (incomeCentersGroup[:, None] - transportCost))
+                / np.nansum(
+                    np.exp(param_lambda
+                           * (incomeCentersGroup[:, None] - transportCost)),
+                    0)[None, :]
+                )
+
+        # Expected income net of commuting costs
+        # NB: comments are a test for a log-sum specification that we dropped.
+        # Instead, we use a weighted average sum, as is standard in
+        # Pfeiffer et al.
+
+        # if options["prevent_exp_overflow"] == 1:
+        #     incomeNetOfCommuting[j, :] = (
+        #         1/param_lambda
+        #         * (np.log(np.nansum(np.exp(
+        #             param_lambda
+        #             * (incomeCentersGroup[:, None] - transportCost)
+        #             - minIncome), 0))
+        #             + minIncome)
+        #         )
+        # elif options["prevent_exp_overflow"] == 0:
+        #     incomeNetOfCommuting[j, :] = (
+        #         1/param_lambda
+        #         * np.log(np.nansum(np.exp(
+        #             param_lambda
+        #             * (incomeCentersGroup[:, None] - transportCost)),
+        #             0))
+        #         )
+
+        incomeNetOfCommuting[j, :] = np.nansum(
+            ODflows[whichCenters, :, j]
+            * (incomeCentersGroup[:, None] - transportCost), 0)
 
         # Average income (not net of commuting costs) earned per worker
         # NB: here, we just take the weighted average as there is no error term

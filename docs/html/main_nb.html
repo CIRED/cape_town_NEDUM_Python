@@ -466,8 +466,8 @@ div.rendered_html tbody tr:hover {
 <span class="n">path_scenarios</span> <span class="o">=</span> <span class="n">path_data</span> <span class="o">+</span> <span class="s1">&#39;Scenarios/&#39;</span>
 <span class="n">path_outputs</span> <span class="o">=</span> <span class="n">path_code</span> <span class="o">+</span> <span class="s1">&#39;/Output/&#39;</span>
 <span class="n">path_floods</span> <span class="o">=</span> <span class="n">path_folder</span> <span class="o">+</span> <span class="s2">&quot;FATHOM/&quot;</span>
-<span class="n">path_input_plots</span> <span class="o">=</span> <span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;/input_plots/&#39;</span>
-<span class="n">path_input_tables</span> <span class="o">=</span> <span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;/input_tables/&#39;</span>
+<span class="n">path_input_plots</span> <span class="o">=</span> <span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;input_plots/&#39;</span>
+<span class="n">path_input_tables</span> <span class="o">=</span> <span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;input_tables/&#39;</span>
 </pre></div>
 </div>
 </div>
@@ -1439,7 +1439,8 @@ structure_backyards_fract_K_destroyed done
     <span class="n">netincome_poor</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">geo_grid</span><span class="p">,</span> <span class="n">path_input_plots</span><span class="p">,</span> <span class="s1">&#39;netincome_poor_2d_sim&#39;</span><span class="p">,</span>
     <span class="s2">&quot;Expected annual income net of commuting costs for the poor, in rands (up to the 99% quantile)&quot;</span><span class="p">,</span>
     <span class="n">path_input_tables</span><span class="p">,</span>
-    <span class="n">ubnd</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">netincome_poor</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">netincome_poor</span><span class="p">)],</span> <span class="mf">0.99</span><span class="p">))</span>
+    <span class="n">ubnd</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">netincome_poor</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">netincome_poor</span><span class="p">)],</span> <span class="mf">0.99</span><span class="p">),</span>
+    <span class="n">lbnd</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">netincome_poor</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">netincome_poor</span><span class="p">)],</span> <span class="mf">0.01</span><span class="p">))</span>
 
 <span class="n">Image</span><span class="p">(</span><span class="n">path_input_plots</span> <span class="o">+</span> <span class="s1">&#39;netincome_poor_2d_sim.png&#39;</span><span class="p">)</span>
 </pre></div>
@@ -1473,7 +1474,8 @@ netincome_poor_2d_sim done
     <span class="s1">&#39;netincome_midpoor_2d_sim&#39;</span><span class="p">,</span>
     <span class="s2">&quot;Expected annual income net of commuting costs for the midpoor, in rands (up to the 99% quantile)&quot;</span><span class="p">,</span>
     <span class="n">path_input_tables</span><span class="p">,</span>
-    <span class="n">ubnd</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">netincome_midpoor</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">netincome_midpoor</span><span class="p">)],</span> <span class="mf">0.99</span><span class="p">))</span>
+    <span class="n">ubnd</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">netincome_midpoor</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">netincome_midpoor</span><span class="p">)],</span> <span class="mf">0.99</span><span class="p">),</span>
+    <span class="n">lbnd</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">netincome_midpoor</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">netincome_midpoor</span><span class="p">)],</span> <span class="mf">0.01</span><span class="p">))</span>
 
 <span class="n">Image</span><span class="p">(</span><span class="n">path_input_plots</span> <span class="o">+</span> <span class="s1">&#39;netincome_midpoor_2d_sim.png&#39;</span><span class="p">)</span>
 </pre></div>
@@ -1507,7 +1509,8 @@ netincome_midpoor_2d_sim done
     <span class="s1">&#39;netincome_midrich_2d_sim&#39;</span><span class="p">,</span>
     <span class="s2">&quot;Expected annual income net of commuting costs for the midrich, in rands (up to the 99% quantile)&quot;</span><span class="p">,</span>
     <span class="n">path_input_tables</span><span class="p">,</span>
-    <span class="n">ubnd</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">netincome_midrich</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">netincome_midrich</span><span class="p">)],</span> <span class="mf">0.99</span><span class="p">))</span>
+    <span class="n">ubnd</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">netincome_midrich</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">netincome_midrich</span><span class="p">)],</span> <span class="mf">0.99</span><span class="p">),</span>
+    <span class="n">lbnd</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">netincome_midrich</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">netincome_midrich</span><span class="p">)],</span> <span class="mf">0.01</span><span class="p">))</span>
 
 <span class="n">Image</span><span class="p">(</span><span class="n">path_input_plots</span> <span class="o">+</span> <span class="s1">&#39;netincome_midrich_2d_sim.png&#39;</span><span class="p">)</span>
 </pre></div>
@@ -1540,7 +1543,8 @@ netincome_midrich_2d_sim done
     <span class="n">netincome_rich</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">geo_grid</span><span class="p">,</span> <span class="n">path_input_plots</span><span class="p">,</span> <span class="s1">&#39;netincome_rich_2d_sim&#39;</span><span class="p">,</span>
     <span class="s2">&quot;Expected annual income net of commuting costs for the rich, in rands (up to the 99% quantile)&quot;</span><span class="p">,</span>
     <span class="n">path_input_tables</span><span class="p">,</span>
-    <span class="n">ubnd</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">netincome_rich</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">netincome_rich</span><span class="p">)],</span> <span class="mf">0.99</span><span class="p">))</span>
+    <span class="n">ubnd</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">netincome_rich</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">netincome_rich</span><span class="p">)],</span> <span class="mf">0.99</span><span class="p">),</span>
+    <span class="n">lbnd</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">netincome_rich</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">netincome_rich</span><span class="p">)],</span> <span class="mf">0.01</span><span class="p">))</span>
 
 <span class="n">Image</span><span class="p">(</span><span class="n">path_input_plots</span> <span class="o">+</span> <span class="s1">&#39;netincome_rich_2d_sim.png&#39;</span><span class="p">)</span>
 </pre></div>

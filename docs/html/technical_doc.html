@@ -170,13 +170,13 @@
 <div class="math notranslate nohighlight">
 \[R_A = \frac{(\delta P_A)^a (\rho + \delta)^{1-a}}{\kappa a^a (1-a)^{1-a}}\]</div>
 <p>In the <code class="docutils literal notranslate"><span class="pre">compute_agricultural_rent</span></code> function, this corresponds to:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">469</span>    <span class="c1"># In Mitchells Plain, housing supply is given exogenously (planning),</span>
-<span class="linenos">470</span>    <span class="c1"># and only households of group 2 live there (coloured neighborhood).</span>
-<span class="linenos">471</span>    <span class="c1"># We do the same as before: the idea is to have a min housing supply in</span>
-<span class="linenos">472</span>    <span class="c1"># this zone whose formal density might be underestimated by the model.</span>
-<span class="linenos">473</span>    <span class="c1"># Then, we may choose whether or not to apply this ad hoc correction.</span>
-<span class="linenos">474</span>
-<span class="linenos">475</span>    <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;correct_mitchells_plain&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">469</span>    <span class="n">param</span><span class="p">[</span><span class="s2">&quot;housing_in&quot;</span><span class="p">][</span>
+<span class="linenos">470</span>        <span class="p">(</span><span class="n">coeff_land</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="o">|</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">param</span><span class="p">[</span><span class="s2">&quot;housing_in&quot;</span><span class="p">])</span>
+<span class="linenos">471</span>        <span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="linenos">472</span>    <span class="c1"># Put a cap and a floor on values</span>
+<span class="linenos">473</span>    <span class="n">param</span><span class="p">[</span><span class="s2">&quot;housing_in&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">[</span><span class="s2">&quot;housing_in&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">10</span><span class="o">**</span><span class="mi">6</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">10</span><span class="o">**</span><span class="mi">6</span><span class="p">)</span>
+<span class="linenos">474</span>    <span class="n">param</span><span class="p">[</span><span class="s2">&quot;housing_in&quot;</span><span class="p">][</span><span class="n">param</span><span class="p">[</span><span class="s2">&quot;housing_in&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="linenos">475</span>
 </pre></div>
 </div>
 <p>Below this rent, it is therefore never profitable to build housing. Agricultural rent defines a floor on equilibrium rent values as well as an endogenous city edge.</p>
@@ -385,55 +385,55 @@
 <p>It then imports transport costs through the <code class="docutils literal notranslate"><span class="pre">import_transport_costs</span></code> function (from the <code class="docutils literal notranslate"><span class="pre">compute_income.py</span></code> module).</p>
 <p>The first part of this function imports the data on transportation times and distances, and estimates of public transportation fixed (over one month) and variable costs, based upon linear regressions using data from <span id="id18">Roux [<a class="reference internal" href="bibliography.html#id26" title="Y. Roux. A comparative study of public transport systems in developing countries. University of Cape Town, Masters Dissertation Series, 2013.">2013</a>]</span> (table 4.15). It also imports fuel prices for the variable component of private transportation costs, and 400 rands as the monthly depreciation cost of a vehicle for its fixed component.</p>
 <p>In a second part, it computes the total yearly monetary cost of commuting for one household over round trips:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">109</span>        <span class="n">multiplierPrice</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;distanceCar&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span>
-<span class="linenos">110</span>        <span class="n">multiplierPrice</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;distanceCar&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span>
-<span class="linenos">111</span>    <span class="k">elif</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;correct_round_trip&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-<span class="linenos">112</span>        <span class="n">multiplierPrice</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">timeOutput</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
-<span class="linenos">113</span>        <span class="n">multiplierPrice</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-<span class="linenos">114</span>        <span class="n">multiplierPrice</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">timeOutput</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
-<span class="linenos">115</span>        <span class="n">multiplierPrice</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;distanceCar&quot;</span><span class="p">]</span>
-<span class="linenos">116</span>        <span class="n">multiplierPrice</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;distanceCar&quot;</span><span class="p">]</span>
-<span class="linenos">117</span>        <span class="n">multiplierPrice</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;distanceCar&quot;</span><span class="p">]</span>
-<span class="linenos">118</span>        <span class="n">multiplierPrice</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;distanceCar&quot;</span><span class="p">]</span>
-<span class="linenos">119</span>
-<span class="linenos">120</span>    <span class="c1"># Multiplying by 235 (nb of working days per year)</span>
-<span class="linenos">121</span>    <span class="n">pricePerKM</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
-<span class="linenos">122</span>    <span class="n">pricePerKM</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-<span class="linenos">123</span>    <span class="n">pricePerKM</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="linenos">124</span>    <span class="n">pricePerKM</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">priceTrainPerKMMonth</span><span class="o">*</span><span class="n">numberDaysPerYear</span>
-<span class="linenos">125</span>    <span class="n">pricePerKM</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">priceFuelPerKMMonth</span><span class="o">*</span><span class="n">numberDaysPerYear</span>
-<span class="linenos">126</span>    <span class="n">pricePerKM</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">priceTaxiPerKMMonth</span><span class="o">*</span><span class="n">numberDaysPerYear</span>
-<span class="linenos">127</span>    <span class="n">pricePerKM</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">priceBusPerKMMonth</span><span class="o">*</span><span class="n">numberDaysPerYear</span>
-<span class="linenos">128</span>
-<span class="linenos">129</span>    <span class="c1"># Simple distances (not useful to calculate price but interesting output)</span>
-<span class="linenos">130</span>    <span class="n">distanceOutput</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">timeOutput</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
-<span class="linenos">131</span>    <span class="n">distanceOutput</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-<span class="linenos">132</span>    <span class="n">distanceOutput</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;distanceCar&quot;</span><span class="p">]</span>
-<span class="linenos">133</span>    <span class="n">distanceOutput</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;distanceCar&quot;</span><span class="p">]</span>
-<span class="linenos">134</span>    <span class="n">distanceOutput</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;distanceCar&quot;</span><span class="p">]</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">109</span>        <span class="o">/</span> <span class="n">spline_inflation</span><span class="p">(</span><span class="mi">2013</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;baseline_year&quot;</span><span class="p">])</span>
+<span class="linenos">110</span>        <span class="p">)</span>
+<span class="linenos">111</span>    <span class="c1"># priceTaxiPerKM = (</span>
+<span class="linenos">112</span>    <span class="c1">#     0.785 * spline_inflation(2011 - param[&quot;baseline_year&quot;])</span>
+<span class="linenos">113</span>    <span class="c1">#     / spline_inflation(2013 - param[&quot;baseline_year&quot;])</span>
+<span class="linenos">114</span>    <span class="c1">#     )</span>
+<span class="linenos">115</span>    <span class="c1"># priceTaxiFixedMonth = (</span>
+<span class="linenos">116</span>    <span class="c1">#     4.32 * 40 * spline_inflation(2011 - param[&quot;baseline_year&quot;])</span>
+<span class="linenos">117</span>    <span class="c1">#     / spline_inflation(2013 - param[&quot;baseline_year&quot;])</span>
+<span class="linenos">118</span>    <span class="c1">#     )</span>
+<span class="linenos">119</span>    <span class="n">priceTaxiPerKM</span> <span class="o">=</span> <span class="p">(</span>
+<span class="linenos">120</span>        <span class="mf">0.522</span> <span class="o">*</span> <span class="n">spline_inflation</span><span class="p">(</span><span class="mi">2011</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;baseline_year&quot;</span><span class="p">])</span>
+<span class="linenos">121</span>        <span class="o">/</span> <span class="n">spline_inflation</span><span class="p">(</span><span class="mi">2013</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;baseline_year&quot;</span><span class="p">])</span>
+<span class="linenos">122</span>        <span class="p">)</span>
+<span class="linenos">123</span>    <span class="n">priceTaxiFixedMonth</span> <span class="o">=</span> <span class="p">(</span>
+<span class="linenos">124</span>        <span class="mf">6.24</span> <span class="o">*</span> <span class="mi">40</span> <span class="o">*</span> <span class="n">spline_inflation</span><span class="p">(</span><span class="mi">2011</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;baseline_year&quot;</span><span class="p">])</span>
+<span class="linenos">125</span>        <span class="o">/</span> <span class="n">spline_inflation</span><span class="p">(</span><span class="mi">2013</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;baseline_year&quot;</span><span class="p">])</span>
+<span class="linenos">126</span>        <span class="p">)</span>
+<span class="linenos">127</span>    <span class="c1"># priceBusPerKM = (</span>
+<span class="linenos">128</span>    <span class="c1">#     0.522 * spline_inflation(2011 - param[&quot;baseline_year&quot;])</span>
+<span class="linenos">129</span>    <span class="c1">#     / spline_inflation(2013 - param[&quot;baseline_year&quot;])</span>
+<span class="linenos">130</span>    <span class="c1">#     )</span>
+<span class="linenos">131</span>    <span class="c1"># priceBusFixedMonth = (</span>
+<span class="linenos">132</span>    <span class="c1">#     6.24 * 40 * spline_inflation(2011 - param[&quot;baseline_year&quot;])</span>
+<span class="linenos">133</span>    <span class="c1">#     / spline_inflation(2013 - param[&quot;baseline_year&quot;])</span>
+<span class="linenos">134</span>    <span class="c1">#     )</span>
 </pre></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">145</span>    <span class="c1">#  Train (monthly fare)</span>
-<span class="linenos">146</span>    <span class="n">monetaryCost</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">monetaryCost</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">priceTrainFixedMonth</span> <span class="o">*</span> <span class="mi">12</span>
-<span class="linenos">147</span>    <span class="c1">#  Private car</span>
-<span class="linenos">148</span>    <span class="n">monetaryCost</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">monetaryCost</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">priceFixedVehiculeMonth</span>
-<span class="linenos">149</span>                             <span class="o">*</span> <span class="mi">12</span><span class="p">)</span>
-<span class="linenos">150</span>    <span class="c1">#  Minibus/taxi</span>
-<span class="linenos">151</span>    <span class="n">monetaryCost</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">monetaryCost</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">priceTaxiFixedMonth</span> <span class="o">*</span> <span class="mi">12</span>
-<span class="linenos">152</span>    <span class="c1">#  Bus</span>
-<span class="linenos">153</span>    <span class="n">monetaryCost</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">monetaryCost</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">4</span><span class="p">]</span> <span class="o">+</span> <span class="n">priceBusFixedMonth</span> <span class="o">*</span> <span class="mi">12</span>
-<span class="linenos">154</span>
-<span class="linenos">155</span>    <span class="c1"># We assume that people not taking some transport mode</span>
-<span class="linenos">156</span>    <span class="c1"># have a extra high cost of doing so&quot;</span>
-<span class="linenos">157</span>    <span class="c1"># monetaryCost[np.isnan(monetaryCost)] = 10 ** 3</span>
-<span class="linenos">158</span>    <span class="n">monetaryCost</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">monetaryCost</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="mi">5</span>
-<span class="linenos">159</span>
-<span class="linenos">160</span>    <span class="c1"># trans_monetaryCost = copy.deepcopy(monetaryCost)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">145</span>    <span class="n">priceTaxiFixedMonth</span> <span class="o">=</span> <span class="n">priceTaxiFixedMonth</span> <span class="o">*</span> <span class="n">inflation</span> <span class="o">/</span> <span class="n">infla_base</span>
+<span class="linenos">146</span>    <span class="n">priceBusPerKM</span> <span class="o">=</span> <span class="n">priceBusPerKM</span> <span class="o">*</span> <span class="n">inflation</span> <span class="o">/</span> <span class="n">infla_base</span>
+<span class="linenos">147</span>    <span class="n">priceBusFixedMonth</span> <span class="o">=</span> <span class="n">priceBusFixedMonth</span> <span class="o">*</span> <span class="n">inflation</span> <span class="o">/</span> <span class="n">infla_base</span>
+<span class="linenos">148</span>    <span class="n">priceFuelPerKM</span> <span class="o">=</span> <span class="n">spline_fuel</span><span class="p">(</span><span class="n">yearTraffic</span><span class="p">)</span>
+<span class="linenos">149</span>
+<span class="linenos">150</span>    <span class="c1"># Private fixed costs, in rands (variable is already defined by</span>
+<span class="linenos">151</span>    <span class="c1"># priceFuelPerKM)</span>
+<span class="linenos">152</span>    <span class="c1"># See Pfeiffer et al. (appendix B2) : corresponds to monthly vehicle</span>
+<span class="linenos">153</span>    <span class="c1"># depreciation in 2011</span>
+<span class="linenos">154</span>    <span class="n">priceFixedVehiculeMonth</span> <span class="o">=</span> <span class="mi">400</span>
+<span class="linenos">155</span>    <span class="n">priceFixedVehiculeMonth</span> <span class="o">=</span> <span class="n">priceFixedVehiculeMonth</span> <span class="o">*</span> <span class="n">inflation</span> <span class="o">/</span> <span class="n">infla_base</span>
+<span class="linenos">156</span>
+<span class="linenos">157</span>    <span class="c1"># STEP 2: TRAVEL TIMES AND COSTS AS MATRIX</span>
+<span class="linenos">158</span>
+<span class="linenos">159</span>    <span class="c1"># Parameters: see Pfeiffer et al. (appendix B2)</span>
+<span class="linenos">160</span>    <span class="c1"># We assume 8 working hours per day and 20 working days per month</span>
 </pre></div>
 </div>
 <p>In a third and last part, it computes the time opportunity cost parameter (i.e., the fraction of working time spent commuting). Here, the values are given in minutes:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">173</span>
-<span class="linenos">174</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">173</span>    <span class="c1"># To get walking times, we take 2 times the distances by car (to get trips</span>
+<span class="linenos">174</span>    <span class="c1"># in both directions) multiplied by 1.2 (sinusoity coefficient), divided</span>
 </pre></div>
 </div>
 </div>

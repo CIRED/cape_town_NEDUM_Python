@@ -107,7 +107,7 @@
     <span class="c1"># %% Errors on the amenity</span>
 
     <span class="c1"># Calculate amenities as a residual: corresponds to ln(A_s), appendix C4</span>
-    <span class="c1"># residualAmenities = (</span>
+    <span class="c1"># logAmenityIndex = (</span>
     <span class="c1">#     np.log(Uo[:, None])</span>
     <span class="c1">#     - np.log(</span>
     <span class="c1">#         (1 - beta) ** (1 - beta) * beta ** beta</span>
@@ -115,7 +115,7 @@
     <span class="c1">#            - basicQ * dataRent[None, selectedRents])</span>
     <span class="c1">#         / (dataRent[None, selectedRents] ** beta))</span>
     <span class="c1">#     )</span>
-    <span class="n">residualAmenities</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">logAmenityIndex</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Uo</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">])</span>
         <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span>
             <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">beta</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">beta</span><span class="p">)</span> <span class="o">*</span> <span class="n">beta</span> <span class="o">**</span> <span class="n">beta</span>
@@ -124,17 +124,17 @@
             <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dataRent</span><span class="p">)[</span><span class="kc">None</span><span class="p">,</span> <span class="n">selectedRents</span><span class="p">]</span> <span class="o">**</span> <span class="n">beta</span><span class="p">))</span>
         <span class="p">)</span>
     <span class="c1"># We select amenities for dominant income groups and flatten the array</span>
-    <span class="n">residualAmenities</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span>
-        <span class="n">residualAmenities</span> <span class="o">*</span> <span class="n">groupLivingSpMatrix</span><span class="p">[:,</span> <span class="n">selectedRents</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="n">residualAmenities</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">residualAmenities</span><span class="o">.</span><span class="n">imag</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-    <span class="n">residualAmenities</span><span class="p">[</span><span class="n">residualAmenities</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="n">logAmenityIndex</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span>
+        <span class="n">logAmenityIndex</span> <span class="o">*</span> <span class="n">groupLivingSpMatrix</span><span class="p">[:,</span> <span class="n">selectedRents</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">logAmenityIndex</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">logAmenityIndex</span><span class="o">.</span><span class="n">imag</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="n">logAmenityIndex</span><span class="p">[</span><span class="n">logAmenityIndex</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
 
     <span class="c1"># Residual for the regression of amenities follow a log-normal law</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">optionRegression</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
         <span class="c1"># Here regression as a matrix division (much faster)</span>
         <span class="c1"># Note that predictors are dummies, and not log-values as in paper</span>
-        <span class="n">A</span> <span class="o">=</span> <span class="n">predictorsAmenitiesMatrix</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">residualAmenities</span><span class="p">),</span> <span class="p">:]</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">residualAmenities</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">residualAmenities</span><span class="p">)])</span><span class="o">.</span><span class="n">real</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">predictorsAmenitiesMatrix</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">logAmenityIndex</span><span class="p">),</span> <span class="p">:]</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">logAmenityIndex</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">logAmenityIndex</span><span class="p">)])</span><span class="o">.</span><span class="n">real</span>
         <span class="c1"># parametersAmenities, residuals, rank, s = np.linalg.lstsq(A, y,</span>
         <span class="c1">#                                                           rcond=None)</span>
         <span class="c1"># res = scipy.optimize.lsq_linear(A, y)</span>
@@ -150,9 +150,9 @@
     <span class="k">elif</span> <span class="p">(</span><span class="n">optionRegression</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
         <span class="c1"># Compute regression with fitglm (longer)</span>
         <span class="c1"># Can only work if length(lists) = 1</span>
-        <span class="n">residu</span> <span class="o">=</span> <span class="n">residualAmenities</span><span class="o">.</span><span class="n">real</span>
-        <span class="n">A</span> <span class="o">=</span> <span class="n">predictorsAmenitiesMatrix</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">residualAmenities</span><span class="p">),</span> <span class="p">:]</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">residualAmenities</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">residualAmenities</span><span class="p">)])</span><span class="o">.</span><span class="n">real</span>
+        <span class="n">residu</span> <span class="o">=</span> <span class="n">logAmenityIndex</span><span class="o">.</span><span class="n">real</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="n">predictorsAmenitiesMatrix</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">logAmenityIndex</span><span class="p">),</span> <span class="p">:]</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">logAmenityIndex</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">logAmenityIndex</span><span class="p">)])</span><span class="o">.</span><span class="n">real</span>
         <span class="n">parametersAmenities</span><span class="p">,</span> <span class="n">residuals</span><span class="p">,</span> <span class="n">rank</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">lstsq</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span>
                                                                   <span class="n">rcond</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
         <span class="n">modelSpecification</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">GLM</span><span class="p">(</span>
@@ -180,19 +180,19 @@
             <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;griddata&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span> <span class="o">&amp;</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;log_form&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="n">bidRents</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">griddedRents</span><span class="p">(</span>
                     <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">Uo</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">])</span>
-                     <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">residualAmenities</span><span class="p">)[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:])[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span>
+                     <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">logAmenityIndex</span><span class="p">)[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:])[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span>
                     <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">net_income</span><span class="p">[:,</span> <span class="n">selectedRents</span><span class="p">][</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
                     <span class="p">))</span>
             <span class="c1"># elif options[&quot;griddata&quot;] == 0 &amp; options[&quot;log_form&quot;] == 0:</span>
             <span class="c1">#     bidRents[i, j] = griddedRents(</span>
             <span class="c1">#         (np.array(Uo)[:, None]</span>
-            <span class="c1">#          / np.exp(np.array(residualAmenities)[None, :])[i, j]),</span>
+            <span class="c1">#          / np.exp(np.array(logAmenityIndex)[None, :])[i, j]),</span>
             <span class="c1">#         net_income[:, selectedRents][i, j]</span>
             <span class="c1">#         )</span>
             <span class="c1"># elif options[&quot;griddata&quot;] == 1 &amp; options[&quot;log_form&quot;] == 1:</span>
             <span class="c1">#     coord = np.stack([</span>
             <span class="c1">#         (np.log(np.array(Uo)[:, None])</span>
-            <span class="c1">#          - np.array(residualAmenities)[None, :])[i, j],</span>
+            <span class="c1">#          - np.array(logAmenityIndex)[None, :])[i, j],</span>
             <span class="c1">#         np.log(net_income[:, selectedRents][i, j])</span>
             <span class="c1">#         ], -1)</span>
             <span class="c1">#     coord = np.expand_dims(coord, axis=0)</span>
@@ -203,7 +203,7 @@
     <span class="n">selectedBidRents</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">bidRents</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
     <span class="n">incomeGroupSelectedRents</span> <span class="o">=</span> <span class="n">groupLivingSpMatrix</span><span class="p">[:,</span> <span class="n">selectedRents</span><span class="p">]</span>
     <span class="c1"># Corresponds to formula in appendix C4</span>
-    <span class="n">likelihoodIncomeSorting</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">minusLogLikIncomeSorting</span> <span class="o">=</span> <span class="p">(</span>
         <span class="k">lambda</span> <span class="n">scaleParam</span><span class="p">:</span>
             <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span>
                 <span class="n">bidRents</span><span class="p">[:,</span> <span class="n">selectedBidRents</span><span class="p">]</span> <span class="o">/</span> <span class="n">scaleParam</span>
@@ -217,16 +217,16 @@
     <span class="n">bnds</span> <span class="o">=</span> <span class="p">{(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="o">**</span><span class="mi">10</span><span class="p">)}</span>
     <span class="n">initScale</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="mi">9</span>
     <span class="n">res</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">optimize</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span>
-        <span class="n">likelihoodIncomeSorting</span><span class="p">,</span> <span class="n">initScale</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">bnds</span><span class="p">,</span>
+        <span class="n">minusLogLikIncomeSorting</span><span class="p">,</span> <span class="n">initScale</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">bnds</span><span class="p">,</span>
         <span class="n">options</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;maxiter&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;disp&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
     <span class="c1"># scaleParameter = res.x</span>
-    <span class="n">errorIncomeSorting</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">fun</span>
+    <span class="n">optiminusLogLikIncomeSorting</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">fun</span>
     <span class="n">exitFlag</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">success</span>
     <span class="c1"># print(exitFlag)</span>
     <span class="k">if</span> <span class="n">exitFlag</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">scoreIncomeSorting</span> <span class="o">=</span> <span class="o">-</span> <span class="n">errorIncomeSorting</span>
+        <span class="n">scoreIncomeSorting</span> <span class="o">=</span> <span class="o">-</span> <span class="n">optiminusLogLikIncomeSorting</span>
     <span class="k">elif</span> <span class="n">exitFlag</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-        <span class="n">scoreIncomeSorting</span> <span class="o">=</span> <span class="o">-</span> <span class="n">likelihoodIncomeSorting</span><span class="p">(</span><span class="mi">10000</span><span class="p">)</span>
+        <span class="n">scoreIncomeSorting</span> <span class="o">=</span> <span class="o">-</span> <span class="n">minusLogLikIncomeSorting</span><span class="p">(</span><span class="mi">10000</span><span class="p">)</span>
 
     <span class="c1"># %% Errors on the dwelling sizes</span>
     <span class="c1"># Simulated rent, real sorting</span>

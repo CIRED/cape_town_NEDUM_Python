@@ -7,35 +7,126 @@ Created on Tue Oct 20 11:46:13 2020.
 
 import numpy as np
 import statsmodels.api as sm
-from scipy.interpolate import interp2d
-from scipy import interpolate
-import scipy
 
 
 def LogLikelihoodModel(X0, Uo2, net_income, groupLivingSpMatrix,
                        dataDwellingSize,
                        selectedDwellingSize, dataRent, selectedRents,
-                       selectedDensity, predictorsAmenitiesMatrix,
+                       predictorsAmenitiesMatrix,
                        tableRegression, variables_regression,
                        CalculateDwellingSize, ComputeLogLikelihood,
                        optionRegression, options):
-    """Estimate the total likelihood of the model given the parameters."""
+    """
+    Compute composite log-likelihood for model fit given scanned parameters.
+
+    This function computes three separate log-likelihoods that capture the fit
+    of the model along distinct data moments. Then, it sums them to give a
+    composite log-likelihood that will be maximized to calibrate the utility
+    function parameters (as part of scanning or smooth optimization process).
+    More precisely, it starts by regressing theoretical values of the log
+    amenity index on observed exogenous dummy amenity variables. The first
+    log-likelihood is computed based on the value of residuals. Then, it
+    defines a second log-likelihood for the fit on income sorting (matching
+    observed rents with highest bid-rents from the dominant income group), and
+    maximizes it across (unobserved) scale factors. Finally, it gets the
+    residuals from the log-difference between theoretical and observed dwelling
+    sizes, and computes the third log-likelihood from there.
+
+    Parameters
+    ----------
+    X0 : ndarray(float64)
+        Set of inputs (namely, surplus housing elasticity, basic need in
+        housing, utility levels for income groups 3 and 4) tested for a given
+        iteration
+    Uo2 : int32
+        Target utility level for income group 2
+    net_income : ndarray(float64, ndim=2)
+        Expected annual income net of commuting costs (in rands, for
+        one household), for SP (1,046), by income group excluding the poorest
+        (3)
+    groupLivingSpMatrix : ndarray(bool, ndim=2)
+        Dummy variable indicating, for each income group excluding the poorest
+        (3) whether it is dominant in each SP (1,046)
+    dataDwellingSize : Series
+        Average dwelling size (in m²) for each SP (1,046), from SP data
+    selectedDwellingSize : Series
+        Dummy variable indicating, for each SP (1,046), whether it is selected
+        into the sample used when regressing observed dwelling sizes on their
+        theoretical equivalent
+    dataRent : Series
+        Theoretical average annual rent for formal private housing, computed
+        from data on average land prices, for each SP (1,046)
+    selectedRents : Series
+        Dummy variable indicating, for each SP (1,046), whether it is selected
+        into the sample used when estimating the discrete choice logit model
+        associated with income sorting (identifying observed rents with highest
+        bid-rents from the dominant income group)
+    predictorsAmenitiesMatrix : ndarray(float64, ndim=2)
+        Values of selected exogenous dummy amenity variables (10, including the
+        intercept) in each selected SP (according to selectedRents)
+    tableRegression : DataFrame
+        Values of all exogenous dummy amenity variables (16, excluding the
+        intercept) in each selected SP (according to selectedRents)
+    variables_regression : list
+        List of labels for selected exogenous dummy amenity variables (9,
+        excluding the intercept)
+    CalculateDwellingSize : function
+        Function defining the relationship between rents and dwelling sizes
+        in the formal private sector (see technical documentation)
+    ComputeLogLikelihood : function
+        Log-likelihood function for a lognormal law of mean 0: we will assume
+        that dwelling size and amenity residuals follow such a law
+    optionRegression : int
+        Option to run GLM (instead of OLS) regression for the estimation of
+        exogenous amenity estimates: default is set as zero as GLM is unstable
+    options : dict
+        Dictionary of default options
+
+    Returns
+    -------
+    scoreTotal : float64
+        Value of the composite log-likelihood for the set of parameters scanned
+    scoreAmenities : float64
+        Value of the log-likelihood for the fit on exogenous amenities
+    scoreDwellingSize : float64
+        Value of the log-likelihood for the fit on observed dwelling sizes
+    scoreIncomeSorting : float64
+        Value of the log-likelihood for the fit on observed income sorting
+        (matching observed rents to highest bid-rents from dominant income
+         group)
+    scoreHousing : float64
+        Value of the log-likelihood for the fit on observed housing supply
+        / building density: this is not used in this version of the model as
+        the relation is already used for the calibration of construction
+        function parameters (hence is set equal to zero)
+    parametersAmenities : ndarray(float64)
+        List of estimates for the impact of exogenous (dummy) amenities on the
+        calibrated amenity index (in log-form). In the order: distance to the
+        ocean <2km, distance to the ocean between 2 and 4km, slope between
+        1 and 5%, slope >5%, being located within the airport cone, distance
+        to district parks <2km, distance to biosphere reserve <2km, distance
+        to train station <2km, distance to urban heritage site <2km
+    modelAmenities : regression.linear_model.RegressionResultsWrapper
+        Object summarizing the results of the log-regressions of the
+        theoretical amenity index over observed exogenous amenity dummies
+    parametersHousing : int
+        List of estimates related to the fit of the model on building density
+        / housing supply: this is not included in this version of the model
+        (vector is set equal to zero) as we already exploit this relation to
+        estimate parameters of the construction function (compared to other
+        versions where we use construction costs)
+
+    """
+    # We extract scanned parameters from input vector
     beta = X0[0]
     basicQ = X0[1]
     Uo = np.array([Uo2, X0[2], X0[3]])
 
-    # %% Errors on the amenity
+    # %% Error on the amenity index
 
-    # Calculate amenities as a residual: corresponds to ln(A_s), appendix C4
-    # residualAmenities = (
-    #     np.log(Uo[:, None])
-    #     - np.log(
-    #         (1 - beta) ** (1 - beta) * beta ** beta
-    #         * (net_income[:, selectedRents]
-    #            - basicQ * dataRent[None, selectedRents])
-    #         / (dataRent[None, selectedRents] ** beta))
-    #     )
-    residualAmenities = (
+    # Theoretical formula for log amenity index (from technical documentation)
+    # Note that we stay under sample selection from selectedRents variable
+    logAmenityIndex = (
         np.log(np.array(Uo)[:, None])
         - np.log(
             (1 - beta) ** (1 - beta) * beta ** beta
@@ -43,18 +134,23 @@ def LogLikelihoodModel(X0, Uo2, net_income, groupLivingSpMatrix,
                - basicQ * np.array(dataRent)[None, selectedRents])
             / (np.array(dataRent)[None, selectedRents] ** beta))
         )
-    # We select amenities for dominant income groups and flatten the array
-    residualAmenities = np.nansum(
-        residualAmenities * groupLivingSpMatrix[:, selectedRents], 0)
-    residualAmenities[np.abs(residualAmenities.imag) > 0] = np.nan
-    residualAmenities[residualAmenities == 0] = np.nan
+    # We select values for dominant income groups only and flatten the array:
+    # this allows to select the appropriate net income and utility to identify
+    # the regression
+    logAmenityIndex = np.nansum(
+        logAmenityIndex * groupLivingSpMatrix[:, selectedRents], 0)
+    logAmenityIndex[np.abs(logAmenityIndex.imag) > 0] = np.nan
+    logAmenityIndex[logAmenityIndex == 0] = np.nan
 
-    # Residual for the regression of amenities follow a log-normal law
+    # We get residuals for the regression of log amenity index on exogenous
+    # dummy variables.
+    # Note that we identify dummies with logs of original amenity values
+    # (normalized to take values between 1 and e): see technical documentation
+
+    # OLS estimation
     if (optionRegression == 0):
-        # Here regression as a matrix division (much faster)
-        # Note that predictors are dummies, and not log-values as in paper
-        A = predictorsAmenitiesMatrix[~np.isnan(residualAmenities), :]
-        y = (residualAmenities[~np.isnan(residualAmenities)]).real
+        A = predictorsAmenitiesMatrix[~np.isnan(logAmenityIndex), :]
+        y = (logAmenityIndex[~np.isnan(logAmenityIndex)]).real
         # parametersAmenities, residuals, rank, s = np.linalg.lstsq(A, y,
         #                                                           rcond=None)
         # res = scipy.optimize.lsq_linear(A, y)
@@ -67,93 +163,97 @@ def LogLikelihoodModel(X0, Uo2, net_income, groupLivingSpMatrix,
         # errorAmenities = y - np.nansum(A * parametersAmenities, 1)
         # modelAmenities = 0
 
+    # GLM estimation (deprecated)
     elif (optionRegression == 1):
-        # Compute regression with fitglm (longer)
-        # Can only work if length(lists) = 1
-        residu = residualAmenities.real
-        A = predictorsAmenitiesMatrix[~np.isnan(residualAmenities), :]
-        y = (residualAmenities[~np.isnan(residualAmenities)]).real
+        residu = logAmenityIndex.real
+        A = predictorsAmenitiesMatrix[~np.isnan(logAmenityIndex), :]
+        y = (logAmenityIndex[~np.isnan(logAmenityIndex)]).real
         parametersAmenities, residuals, rank, s = np.linalg.lstsq(A, y,
                                                                   rcond=None)
         modelSpecification = sm.GLM(
             residu, tableRegression.loc[:, variables_regression])
         modelAmenities = modelSpecification.fit()
-        print(modelAmenities.summary())
         errorAmenities = modelAmenities.resid_pearson
 
+    # Residuals follow a log-normal law, hence the associated log-likelihood
+    # from ComputeLogLikelihood function (see math appendix)
     scoreAmenities = ComputeLogLikelihood(
         np.sqrt(np.nansum(errorAmenities ** 2)
                 / np.nansum(~np.isnan(errorAmenities))),
         errorAmenities)
 
-    # %% Error on allocation of income groups
+    # %% Error on income sorting
 
-    # Here, we want the likelihood that simulated rent is equal to max bid rent
-    # to reproduce observed income sorting
+    # We start by defining input variables
+    utility_over_amenity = Uo[:, None] / np.exp(logAmenityIndex[None, :])
+    net_income_select = net_income[:, selectedRents]
 
-    #  We get a function that predicts ln(rent) based on any given ln(income)
-    #  and ln(u/A), interpolated from parameter initial values
-    griddedRents = InterpolateRents(beta, basicQ, net_income, options)
-    bidRents = np.empty((3, sum(selectedRents)))
-    for i in range(0, 3):
-        for j in range(0, sum(selectedRents)):
-            if options["griddata"] == 0 and options["log_form"] == 1:
-                bidRents[i, j] = np.exp(griddedRents(
-                    (np.log(np.array(Uo)[:, None])
-                     - np.array(residualAmenities)[None, :])[i, j],
-                    np.log(net_income[:, selectedRents][i, j])
-                    ))
-            # elif options["griddata"] == 0 and options["log_form"] == 0:
-            #     bidRents[i, j] = griddedRents(
-            #         (np.array(Uo)[:, None]
-            #          / np.exp(np.array(residualAmenities)[None, :])[i, j]),
-            #         net_income[:, selectedRents][i, j]
-            #         )
-            elif options["griddata"] == 1 and options["log_form"] == 1:
-                coord = np.stack([
-                    (np.log(np.array(Uo)[:, None])
-                     - np.array(residualAmenities)[None, :])[i, j],
-                    np.log(net_income[:, selectedRents][i, j])
-                    ], -1)
-                coord = np.expand_dims(coord, axis=0)
-                bidRents[i, j] = np.exp(griddedRents(coord))
+    # We then apply formula from technical documentation
+    bidRents = (
+        (net_income_select * (1 - beta) ** (1 - beta) * beta ** beta)
+        / (utility_over_amenity
+           - basicQ * (1 - beta) ** (1 - beta) * beta ** beta)
+        )
 
-    # Estimation of the parameters by maximization of the log-likelihood
-    # (in overarching function)
+    # We select SPs where at least some income group makes a positive bid
     selectedBidRents = (np.nansum(bidRents, 0) > 0)
+    # We again select the dominant income group
     incomeGroupSelectedRents = groupLivingSpMatrix[:, selectedRents]
-    # Corresponds to formula in appendix C4
-    likelihoodIncomeSorting = (
+
+    # We create a function for the minus log-likelihood of income sorting:
+    # see technical documentation for math formula. We consider minus form
+    # to be able to use scipy.optimize.minimize() function. We will then return
+    # minus form for the minimum obtained to recover the maximum value of the
+    # log-likelihood (across scale factors).
+
+    minusLogLikIncomeSorting = (
         lambda scaleParam:
             - np.nansum(np.nansum(
                 bidRents[:, selectedBidRents] / scaleParam
                 * incomeGroupSelectedRents[:, selectedBidRents], 0))
-            - np.nansum(np.log(np.nansum(
+            + np.nansum(np.log(np.nansum(
                 np.exp(bidRents[:, selectedBidRents] / scaleParam),
                 0)))
             )
 
-    # We then optimize over the scale parameter to be used in score
-    bnds = {(0, 10**10)}
-    initScale = 10**9
-    res = scipy.optimize.minimize(
-        likelihoodIncomeSorting, initScale, bounds=bnds,
-        options={'maxiter': 10, 'disp': True})
-    # scaleParameter = res.x
-    errorIncomeSorting = res.fun
-    exitFlag = res.success
-    # print(exitFlag)
-    if exitFlag is True:
-        scoreIncomeSorting = - errorIncomeSorting
-    elif exitFlag is False:
-        scoreIncomeSorting = - likelihoodIncomeSorting(10000)
+    # Actually, since we cannot identify the gravity parameter, we pin it at
+    # 10, which allows to get a score of the same order of magnitude as for
+    # the fit on amenities. It is also a realistic and conservative guess:
+    # the order of magnitude is the same as for the gravity parameter from the
+    # commuting choice model, and it is low enough (given the function
+    # definition, the higher the parameter, the smaller the output).
+    # Also note that the improvement is marginal for higher orders of magnitude
 
-    # %% Errors on the dwelling sizes
-    # Simulated rent, real sorting
+    # We keep the optimization in comments for reference, in case we want to be
+    # less conservative about the value of the log-likelihood
+
+    scoreIncomeSorting = - minusLogLikIncomeSorting(10)
+
+    # bnds = {(0, 10**10)}
+    # initScale = 10**5
+    # res = scipy.optimize.minimize(
+    #     minusLogLikIncomeSorting, initScale, bounds=bnds,
+    #     options={'maxiter': 100, 'disp': False})
+    # optiminusLogLikIncomeSorting = res.fun
+    # exitFlag = res.success
+    # print(exitFlag)
+
+    # %% Error on dwelling sizes
+
+    # We get theoretical values for market rents that we identify to highest
+    # bid-rents from dominant income group
+    # NB: As bid rents are already defined for sample of SPs selected under
+    # selectedRents, we need to take the subsection
+    # selectedDwellingSize[selectedRents] to operate another selection based on
+    # selectedDwellingSize while respecting array dimensions
     simulatedRents = np.nansum(
         bidRents[:, selectedDwellingSize[selectedRents]]
         * groupLivingSpMatrix[:, selectedDwellingSize],
         0)
+
+    # We get theoretical values for dwelling size based on pre-defined function
+    # (see technical documentation for math formula), leveraging the above
+    # definition of simulatedRents
     dwellingSize = CalculateDwellingSize(
         beta,
         basicQ,
@@ -161,12 +261,16 @@ def LogLikelihoodModel(X0, Uo2, net_income, groupLivingSpMatrix,
                   * groupLivingSpMatrix[:, selectedDwellingSize], 0),
         simulatedRents)
 
-    # Define errors
-    # Here we call on real data as it is part of the error term definition
+    # The (log) error on observed dwelling sizes is directly obtain by taking
+    # the log-difference with the theoretical counterpart (staying under the
+    # same sample selection)
     errorDwellingSize = (
         np.log(dwellingSize)
         - np.log(dataDwellingSize[selectedDwellingSize])
         )
+
+    # Residuals follow a log-normal law, hence the associated log-likelihood
+    # from ComputeLogLikelihood function (see math appendix)
     scoreDwellingSize = ComputeLogLikelihood(
         np.sqrt(np.nansum(errorDwellingSize ** 2)
                 / np.nansum(~np.isnan(errorDwellingSize))),
@@ -174,146 +278,21 @@ def LogLikelihoodModel(X0, Uo2, net_income, groupLivingSpMatrix,
 
     # %% Total
 
+    # The sum of logs is the same as the log of a product, hence we can define
+    # our composite log-likelihood function as the sum of our separate
+    # log-likelihoods
     scoreTotal = scoreAmenities + scoreDwellingSize + scoreIncomeSorting
+    # scoreTotal = scoreAmenities
 
-    # We may also include a measure of the fit for household density,
-    # which has not been retained in this version
-    # NB: this is because it is already taken into account in other likelihoods
-    # and we want to avoid overfit
+    # We may also include a measure of the fit for housing supply / household
+    # density, which has not been retained in this version of the model, as
+    # the underlying relation is already used to calibrate parameters of the
+    # construction function.
+    # NB: We still define the variables that we set equal to zero to serve as
+    # placeholders
     scoreHousing = 0
     parametersHousing = 0
 
     return (scoreTotal, scoreAmenities, scoreDwellingSize, scoreIncomeSorting,
             scoreHousing, parametersAmenities, modelAmenities,
             parametersHousing)
-
-
-def utilityFromRents(Ro, income, basic_q, beta):
-    """Return utility / amenity index ratio."""
-    # Equal to u/A (equation C2)
-    utility = (((1 - beta) ** (1 - beta))
-               * (beta ** beta)
-               * (income - (basic_q * Ro))
-               / (Ro ** beta))
-    utility[(income - (basic_q * Ro)) < 0] = 0
-    utility[income == 0] = 0
-    return utility
-
-
-def InterpolateRents(beta, basicQ, net_income, options):
-    """Interpolate log(rents) as a function of log(beta) and log(q0)."""
-    # Decomposition for the interpolation (the more points, the slower)
-    # TODO: should be changed?
-    decompositionRent = np.concatenate(
-        ([np.array([10 ** (-9), 10 ** (-4), 10 ** (-3), 10 ** (-2)]),
-          np.arange(0.02, 0.80, 0.01),
-          np.arange(0.8, 1, 0.02)])
-        )
-    decompositionIncome = np.concatenate(
-        (np.array([10 ** (-9)]),
-         10 ** np.arange(-4, -2, 0.5),
-         np.array([0.03]),
-         np.arange(0.06, 1.4, 0.02),
-         np.arange(1.5, 2.5, 0.1),
-         np.arange(4, 10, 2),
-         np.array([20, 10 ** 9]))
-        )
-
-    if options["griddata"] == 0:
-
-        # We scale the income vector accordingly
-        choiceIncome = 100000 * decompositionIncome
-        incomeMatrix = np.matlib.repmat(
-            choiceIncome, len(decompositionRent), 1)
-        # We do the same for rent vector by considering that the rent is max
-        # when utility equals zero
-        if options["test_maxrent"] == 0:
-            choiceRent = choiceIncome / basicQ
-        elif options["test_maxrent"] == 1:
-            choiceRent = choiceIncome
-        rentMatrix = (np.array(choiceRent)[:, None]
-                      * np.array(decompositionRent)[None, :])
-        #  Yields u/A for all values of decomposition
-        utilityMatrix = utilityFromRents(
-            rentMatrix, np.transpose(incomeMatrix), basicQ, beta)
-
-        #  We interpolate ln(rent) as a function of ln(income) and ln(u/A)
-        #  (calculated upon initial values of parameters)
-        #  Note that we observe rent but not actual max bid rent
-        #  for all income groups
-
-        # We first do it in simple form
-        solusRentTemp = (
-            lambda x, y:
-                interp2d(
-                    np.transpose(incomeMatrix),
-                    utilityMatrix,
-                    rentMatrix  # ** beta
-                    )(x, y)
-                )
-
-        if options["log_form"] == 1:
-            # Then we go to log-form (quickens computations and helps
-            # convergence)
-            utilityVectLog = np.arange(-1, np.log(np.nanmax(10 * net_income)),
-                                       0.1)
-            incomeLog = np.arange(
-                -1, np.log(np.nanmax(np.nanmax(10 * net_income))), 0.2)
-            rentLog = (
-                np.log(solusRentTemp(np.exp(incomeLog),
-                                     np.exp(utilityVectLog)))
-                )  # * 1/beta
-
-            griddedRents = interp2d(
-                utilityVectLog, incomeLog, np.transpose(rentLog))
-
-            return griddedRents
-
-        elif options["log_form"] == 0:
-            return solusRentTemp
-
-    if options["griddata"] == 1:
-
-        # We scale the income vector accordingly
-        choiceIncome = 100000 * decompositionIncome
-        incomeVector = np.repeat(choiceIncome, len(decompositionRent))
-        # We do the same for rent vector by considering that the rent is max
-        # when utility equals zero
-        if options["test_maxrent"] == 0:
-            choiceRent = choiceIncome / basicQ
-        elif options["test_maxrent"] == 1:
-            choiceRent = choiceIncome
-        rentList = [rent * decompositionRent for rent in choiceRent]
-        rentVector = np.concatenate(rentList)
-
-        logincomeVector = np.log(incomeVector)
-        logrentVector = np.log(rentVector)
-
-        y, z = logincomeVector, logrentVector
-        ey, ez = np.exp(y), np.exp(z)
-        x = np.log(utilityFromRents(ez, ey, basicQ, beta))
-        ex = np.exp(x)
-
-        # npts = 400
-        # index_select = np.random.randint(
-        #     0, len(logincomeVector), size=npts)
-        # py, pz = logincomeVector[index_select], logrentVector[index_select]
-        # epy, epz = np.exp(py), np.exp(pz)
-        # px = np.log(utilityFromRents(epz, epy, basicQ, beta))
-        # pX, pY = np.meshgrid(px, py)
-        # X, Y = np.meshgrid(x, y)
-
-        if options["log_form"] == 1:
-            points = np.stack([x, y], -1)
-            griddedRents = interpolate.RBFInterpolator(
-                points, z, neighbors=options["interpol_neighbors"]
-                )
-            # griddedRents = interpolate.griddata((x, y), z, (pX, pY))
-
-        elif options["log_form"] == 0:
-            points = np.stack([ex, ey], -1)
-            griddedRents = interpolate.RBFInterpolator(
-                points, ez, neighbors=options["interpol_neighbors"]
-                )
-
-        return griddedRents

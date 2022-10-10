@@ -91,29 +91,61 @@
 
 
 <div class="viewcode-block" id="import_employment_data"><a class="viewcode-back" href="../../../api_ref.html#calibration.sub.import_employment_data.import_employment_data">[docs]</a><span class="k">def</span> <span class="nf">import_employment_data</span><span class="p">(</span><span class="n">households_per_income_class</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">path_data</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Import number of jobs per selected employment center.&quot;&quot;&quot;</span>
-    <span class="c1"># Number of jobs per Transport Zone (TZ)</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Import number of jobs per income group in each selected employment center.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    households_per_income_class : ndarray(float64)</span>
+<span class="sd">        Exogenous total number of households per income group (excluding people</span>
+<span class="sd">        out of employment, for 4 groups)</span>
+<span class="sd">    param : dict</span>
+<span class="sd">        Dictionary of default parameters</span>
+<span class="sd">    path_data : str</span>
+<span class="sd">        Path towards data used in the model</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    jobsCentersNGroupRescaled : ndarray(float64, ndim=2)</span>
+<span class="sd">        Number of jobs in each selected job center (185) per income group (4).</span>
+<span class="sd">        Remember that we rescale the number of individual jobs to reflect total</span>
+<span class="sd">        household employment, as our income and population data are for</span>
+<span class="sd">        households only: one job basically provides employment for two people.</span>
+<span class="sd">        This simplification allows to model households as a single</span>
+<span class="sd">        representative agent and to abstract from a two-body problem.</span>
+<span class="sd">        Empirically, this holds on aggregate as households&#39; position on the</span>
+<span class="sd">        labor market is often determined by one household head.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># We import number of jobs per Transport Zone (1,787)</span>
+    <span class="c1"># TODO: We may need to rename underlying data</span>
     <span class="n">TAZ</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path_data</span> <span class="o">+</span> <span class="s1">&#39;TAZ_amp_2013_proj_centro2.csv&#39;</span><span class="p">)</span>
 
-    <span class="c1"># Number of employees in each TZ for the 12 income classes</span>
-    <span class="c1"># NB: we break income classes given by CoCT to stick better to equivalent</span>
-    <span class="c1"># from census data, as we will reweight towards the end</span>
+    <span class="c1"># Number of employees in each TAZ for the 12 income classes from data</span>
+    <span class="c1"># NB: we break income classes from TAZ data to stick better to equivalent</span>
+    <span class="c1"># from census data. Then, we will apply the proper allocation to go to the</span>
+    <span class="c1"># 4 income classes used in the model (do not correspond to the 4 income</span>
+    <span class="c1"># classes used in TAZ data)</span>
+    <span class="c1"># TODO: should document where the split comes from</span>
     <span class="n">jobsCenters12Class</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
         <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">TAZ</span><span class="o">.</span><span class="n">Ink1</span><span class="p">)),</span> <span class="n">TAZ</span><span class="o">.</span><span class="n">Ink1</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="n">TAZ</span><span class="o">.</span><span class="n">Ink1</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="n">TAZ</span><span class="o">.</span><span class="n">Ink1</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span>
          <span class="n">TAZ</span><span class="o">.</span><span class="n">Ink2</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">TAZ</span><span class="o">.</span><span class="n">Ink2</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">TAZ</span><span class="o">.</span><span class="n">Ink3</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="n">TAZ</span><span class="o">.</span><span class="n">Ink3</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="n">TAZ</span><span class="o">.</span><span class="n">Ink3</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span>
          <span class="n">TAZ</span><span class="o">.</span><span class="n">Ink4</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="n">TAZ</span><span class="o">.</span><span class="n">Ink4</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="n">TAZ</span><span class="o">.</span><span class="n">Ink4</span><span class="o">/</span><span class="mi">3</span><span class="p">]</span>
         <span class="p">)</span>
 
-    <span class="c1"># We get geographic coordinates</span>
+    <span class="c1"># We get geographic coordinates corresponding to CoCT&#39;s grid</span>
     <span class="n">codeCentersInitial</span> <span class="o">=</span> <span class="n">TAZ</span><span class="o">.</span><span class="n">TZ2013</span>
     <span class="n">xCoord</span> <span class="o">=</span> <span class="n">TAZ</span><span class="o">.</span><span class="n">X</span> <span class="o">/</span> <span class="mi">1000</span>
     <span class="n">yCoord</span> <span class="o">=</span> <span class="n">TAZ</span><span class="o">.</span><span class="n">Y</span> <span class="o">/</span> <span class="mi">1000</span>
 
-    <span class="c1"># We arbitrarily set the threshold at 2,500 jobs</span>
+    <span class="c1"># We select a restricted number of employment centers with a minimum number</span>
+    <span class="c1"># of jobs, for the sake of numerical simplicity</span>
     <span class="n">selectedCenters</span> <span class="o">=</span> <span class="p">(</span>
         <span class="nb">sum</span><span class="p">(</span><span class="n">jobsCenters12Class</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;job_center_threshold&quot;</span><span class="p">])</span>
 
-    <span class="c1"># Corrections where we don&#39;t have reliable transport data</span>
+    <span class="c1"># We select out job centers that may fall out of Cape Town&#39;s exclusive</span>
+    <span class="c1"># commuting zone (remember that TAZ data has a wider scope) + semi-rural</span>
+    <span class="c1"># Durbanville</span>
     <span class="n">selectedCenters</span><span class="p">[</span><span class="n">xCoord</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;bool&#39;</span><span class="p">)</span>
     <span class="n">selectedCenters</span><span class="p">[</span><span class="n">yCoord</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">3719</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;bool&#39;</span><span class="p">)</span>
     <span class="n">selectedCenters</span><span class="p">[(</span><span class="n">xCoord</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">20</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">yCoord</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">3765</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;bool&#39;</span><span class="p">)</span>
@@ -123,14 +155,15 @@
     <span class="n">selectedCenters</span><span class="p">[</span><span class="n">codeCentersInitial</span> <span class="o">==</span> <span class="mi">1499</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;bool&#39;</span><span class="p">)</span>
     <span class="n">selectedCenters</span><span class="p">[</span><span class="n">codeCentersInitial</span> <span class="o">==</span> <span class="mi">4703</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;bool&#39;</span><span class="p">)</span>
 
-    <span class="c1"># Number of workers per group for the selected centers</span>
+    <span class="c1"># Number of workers per income group in the model for the selected centers</span>
     <span class="n">jobsCentersNgroup</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">xCoord</span><span class="p">),</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;nb_of_income_classes&quot;</span><span class="p">]))</span>
     <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;nb_of_income_classes&quot;</span><span class="p">]):</span>
         <span class="n">jobsCentersNgroup</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
             <span class="n">jobsCenters12Class</span><span class="p">[</span><span class="n">param</span><span class="p">[</span><span class="s2">&quot;income_distribution&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:],</span> <span class="mi">0</span><span class="p">)</span>
     <span class="n">jobsCentersNgroup</span> <span class="o">=</span> <span class="n">jobsCentersNgroup</span><span class="p">[</span><span class="n">selectedCenters</span><span class="p">,</span> <span class="p">:]</span>
-    <span class="c1"># Rescale (wrt census data) to keep the correct global income distribution</span>
-    <span class="c1"># More specifically, this allows to go from individual to household level</span>
+
+    <span class="c1"># We rescale result to keep the correct global income distribution:</span>
+    <span class="c1"># more specifically, this allows to go from individual to household level</span>
     <span class="n">jobsCentersNGroupRescaled</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">jobsCentersNgroup</span> <span class="o">*</span> <span class="n">households_per_income_class</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
         <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">jobsCentersNgroup</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>

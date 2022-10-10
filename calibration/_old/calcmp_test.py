@@ -41,21 +41,21 @@ def import_transport_costs(income_baseline, param, grid, path_precalc_inp, path_
          spline_income, spline_minimum_housing_supply, spline_fuel) = eqdyn.import_scenarios(income_baseline, param, grid, path_scenarios)
 
         #Price per km
-        priceTrainPerKMMonth = 0.164 * spline_inflation(2011 - param["baseline_year"]) / spline_inflation(2013 - param["baseline_year"])
+        priceTrainPerKM = 0.164 * spline_inflation(2011 - param["baseline_year"]) / spline_inflation(2013 - param["baseline_year"])
         priceTrainFixedMonth = 4.48 * 40 * spline_inflation(2011 - param["baseline_year"]) / spline_inflation(2013 - param["baseline_year"])
-        priceTaxiPerKMMonth = 0.785 * spline_inflation(2011 - param["baseline_year"]) / spline_inflation(2013 - param["baseline_year"])
+        priceTaxiPerKM = 0.785 * spline_inflation(2011 - param["baseline_year"]) / spline_inflation(2013 - param["baseline_year"])
         priceTaxiFixedMonth = 4.32 * 40 * spline_inflation(2011 - param["baseline_year"]) / spline_inflation(2013 - param["baseline_year"])
-        priceBusPerKMMonth = 0.522 * spline_inflation(2011 - param["baseline_year"]) / spline_inflation(2013 - param["baseline_year"])
+        priceBusPerKM = 0.522 * spline_inflation(2011 - param["baseline_year"]) / spline_inflation(2013 - param["baseline_year"])
         priceBusFixedMonth = 6.24 * 40 * spline_inflation(2011 - param["baseline_year"]) / spline_inflation(2013 - param["baseline_year"])
         inflation = spline_inflation(0)
         infla_2012 = spline_inflation(2012 - param["baseline_year"])
-        priceTrainPerKMMonth = priceTrainPerKMMonth * inflation / infla_2012
+        priceTrainPerKM = priceTrainPerKM * inflation / infla_2012
         priceTrainFixedMonth = priceTrainFixedMonth * inflation / infla_2012
-        priceTaxiPerKMMonth = priceTaxiPerKMMonth * inflation / infla_2012
+        priceTaxiPerKM = priceTaxiPerKM * inflation / infla_2012
         priceTaxiFixedMonth = priceTaxiFixedMonth * inflation / infla_2012
-        priceBusPerKMMonth = priceBusPerKMMonth * inflation / infla_2012
+        priceBusPerKM = priceBusPerKM * inflation / infla_2012
         priceBusFixedMonth = priceBusFixedMonth * inflation / infla_2012
-        priceFuelPerKMMonth = spline_fuel(0)
+        priceFuelPerKM = spline_fuel(0)
         
         #Fixed costs
         priceFixedVehiculeMonth = 400 
@@ -90,10 +90,10 @@ def import_transport_costs(income_baseline, param, grid, path_precalc_inp, path_
         pricePerKM = np.empty(5)
         pricePerKM[:] = np.nan
         pricePerKM[0] = np.zeros(1)
-        pricePerKM[1] = priceTrainPerKMMonth*numberDaysPerYear
-        pricePerKM[2] = priceFuelPerKMMonth*numberDaysPerYear          
-        pricePerKM[3] = priceTaxiPerKMMonth*numberDaysPerYear
-        pricePerKM[4] = priceBusPerKMMonth*numberDaysPerYear
+        pricePerKM[1] = priceTrainPerKM*numberDaysPerYear
+        pricePerKM[2] = priceFuelPerKM*numberDaysPerYear          
+        pricePerKM[3] = priceTaxiPerKM*numberDaysPerYear
+        pricePerKM[4] = priceBusPerKM*numberDaysPerYear
         
         #Distances (not useful to calculate price but useful output)
         distanceOutput = np.empty((timeOutput.shape))
@@ -172,8 +172,8 @@ def EstimateIncome(param, timeOutput, distanceOutput, monetaryCost, costTime, jo
             #popResidence = income_distribution[cape_town_limits, j] * sum(job_centers[whichJobsCenters, j]) / sum(income_distribution[cape_town_limits, j])
             popResidence = income_distribution[:, j] * sum(job_centers[whichJobsCenters, j]) / sum(income_distribution[:, j])
            
-            funSolve = lambda incomeCentersTemp: fun0(incomeCentersTemp, averageIncomeGroup, popCenters, popResidence, monetary_cost[whichJobsCenters,:,:] * householdSize, timeCost[whichJobsCenters,:,:] * householdSize, param_lambda)
-            #funSolve = lambda incomeCentersTemp: fun0(incomeCentersTemp, averageIncomeGroup, popCenters, popResidence, monetary_cost[whichJobsCenters,:,:] * householdSize, timeCost[whichJobsCenters,:,:], param_lambda)
+            commutingSolve = lambda incomeCentersTemp: fun0(incomeCentersTemp, averageIncomeGroup, popCenters, popResidence, monetary_cost[whichJobsCenters,:,:] * householdSize, timeCost[whichJobsCenters,:,:] * householdSize, param_lambda)
+            #commutingSolve = lambda incomeCentersTemp: fun0(incomeCentersTemp, averageIncomeGroup, popCenters, popResidence, monetary_cost[whichJobsCenters,:,:] * householdSize, timeCost[whichJobsCenters,:,:], param_lambda)
 
             maxIter = 200
             tolerance = 0.001
@@ -192,7 +192,7 @@ def EstimateIncome(param, timeOutput, distanceOutput, monetaryCost, costTime, jo
             #Initializing the solver
             incomeCenters = np.zeros((sum(whichJobsCenters), maxIter))
             incomeCenters[:, 0] = averageIncomeGroup * (popCenters / np.nanmean(popCenters)) ** (0.1)
-            error[:, 0] = funSolve(incomeCenters[:, 0])
+            error[:, 0] = commutingSolve(incomeCenters[:, 0])
 
         
             while ((iter <= maxIter - 1) & (errorMax > tolerance)):
@@ -200,7 +200,7 @@ def EstimateIncome(param, timeOutput, distanceOutput, monetaryCost, costTime, jo
                 
                 incomeCenters[:,iter] = incomeCenters[:, max(iter-1, 0)] + factorConvergenge * averageIncomeGroup * error[:, max(iter - 1,0)] / popCenters
                 
-                error[:,iter] = funSolve(incomeCenters[:,iter])
+                error[:,iter] = commutingSolve(incomeCenters[:,iter])
                 errorMax = np.nanmax(np.abs(error[:, iter] / popCenters))
                 scoreIter[iter] = np.nanmean(np.abs(error[:, iter] / popCenters))
                 print(np.nanmean(np.abs(error[:, iter])))

@@ -110,7 +110,7 @@
     <span class="c1"># year the data was collected and the year of our analysis</span>
     <span class="c1"># NB: 40 in variable cost correspond to 20 working days per month, times</span>
     <span class="c1"># 2 for the round trip</span>
-    <span class="n">priceTrainPerKMMonth</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">priceTrainPerKM</span> <span class="o">=</span> <span class="p">(</span>
         <span class="mf">0.164</span> <span class="o">*</span> <span class="n">spline_inflation</span><span class="p">(</span><span class="mi">2011</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;baseline_year&quot;</span><span class="p">])</span>
         <span class="o">/</span> <span class="n">spline_inflation</span><span class="p">(</span><span class="mi">2013</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;baseline_year&quot;</span><span class="p">])</span>
                             <span class="p">)</span>
@@ -119,7 +119,7 @@
         <span class="o">/</span> <span class="n">spline_inflation</span><span class="p">(</span><span class="mi">2013</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;baseline_year&quot;</span><span class="p">])</span>
         <span class="p">)</span>
     <span class="c1"># Note that bus and taxi had been interverted in Basile&#39;s code</span>
-    <span class="n">priceBusPerKMMonth</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">priceBusPerKM</span> <span class="o">=</span> <span class="p">(</span>
         <span class="mf">0.785</span> <span class="o">*</span> <span class="n">spline_inflation</span><span class="p">(</span><span class="mi">2011</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;baseline_year&quot;</span><span class="p">])</span>
         <span class="o">/</span> <span class="n">spline_inflation</span><span class="p">(</span><span class="mi">2013</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;baseline_year&quot;</span><span class="p">])</span>
         <span class="p">)</span>
@@ -127,7 +127,7 @@
         <span class="mf">4.32</span> <span class="o">*</span> <span class="mi">40</span> <span class="o">*</span> <span class="n">spline_inflation</span><span class="p">(</span><span class="mi">2011</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;baseline_year&quot;</span><span class="p">])</span>
         <span class="o">/</span> <span class="n">spline_inflation</span><span class="p">(</span><span class="mi">2013</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;baseline_year&quot;</span><span class="p">])</span>
         <span class="p">)</span>
-    <span class="n">priceTaxiPerKMMonth</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">priceTaxiPerKM</span> <span class="o">=</span> <span class="p">(</span>
         <span class="mf">0.522</span> <span class="o">*</span> <span class="n">spline_inflation</span><span class="p">(</span><span class="mi">2011</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;baseline_year&quot;</span><span class="p">])</span>
         <span class="o">/</span> <span class="n">spline_inflation</span><span class="p">(</span><span class="mi">2013</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;baseline_year&quot;</span><span class="p">])</span>
         <span class="p">)</span>
@@ -142,13 +142,13 @@
         <span class="n">infla_base</span> <span class="o">=</span> <span class="n">spline_inflation</span><span class="p">(</span><span class="mi">2012</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;baseline_year&quot;</span><span class="p">])</span>
     <span class="k">elif</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;correct_infla_base&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">infla_base</span> <span class="o">=</span> <span class="n">spline_inflation</span><span class="p">(</span><span class="mi">2011</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;baseline_year&quot;</span><span class="p">])</span>
-    <span class="n">priceTrainPerKMMonth</span> <span class="o">=</span> <span class="n">priceTrainPerKMMonth</span> <span class="o">*</span> <span class="n">inflation</span> <span class="o">/</span> <span class="n">infla_base</span>
+    <span class="n">priceTrainPerKM</span> <span class="o">=</span> <span class="n">priceTrainPerKM</span> <span class="o">*</span> <span class="n">inflation</span> <span class="o">/</span> <span class="n">infla_base</span>
     <span class="n">priceTrainFixedMonth</span> <span class="o">=</span> <span class="n">priceTrainFixedMonth</span> <span class="o">*</span> <span class="n">inflation</span> <span class="o">/</span> <span class="n">infla_base</span>
-    <span class="n">priceTaxiPerKMMonth</span> <span class="o">=</span> <span class="n">priceTaxiPerKMMonth</span> <span class="o">*</span> <span class="n">inflation</span> <span class="o">/</span> <span class="n">infla_base</span>
+    <span class="n">priceTaxiPerKM</span> <span class="o">=</span> <span class="n">priceTaxiPerKM</span> <span class="o">*</span> <span class="n">inflation</span> <span class="o">/</span> <span class="n">infla_base</span>
     <span class="n">priceTaxiFixedMonth</span> <span class="o">=</span> <span class="n">priceTaxiFixedMonth</span> <span class="o">*</span> <span class="n">inflation</span> <span class="o">/</span> <span class="n">infla_base</span>
-    <span class="n">priceBusPerKMMonth</span> <span class="o">=</span> <span class="n">priceBusPerKMMonth</span> <span class="o">*</span> <span class="n">inflation</span> <span class="o">/</span> <span class="n">infla_base</span>
+    <span class="n">priceBusPerKM</span> <span class="o">=</span> <span class="n">priceBusPerKM</span> <span class="o">*</span> <span class="n">inflation</span> <span class="o">/</span> <span class="n">infla_base</span>
     <span class="n">priceBusFixedMonth</span> <span class="o">=</span> <span class="n">priceBusFixedMonth</span> <span class="o">*</span> <span class="n">inflation</span> <span class="o">/</span> <span class="n">infla_base</span>
-    <span class="n">priceFuelPerKMMonth</span> <span class="o">=</span> <span class="n">spline_fuel</span><span class="p">(</span><span class="n">yearTraffic</span><span class="p">)</span>
+    <span class="n">priceFuelPerKM</span> <span class="o">=</span> <span class="n">spline_fuel</span><span class="p">(</span><span class="n">yearTraffic</span><span class="p">)</span>
 
     <span class="c1"># Fixed costs</span>
     <span class="c1">#  See appendix B2</span>
@@ -206,10 +206,10 @@
     <span class="n">pricePerKM</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
     <span class="n">pricePerKM</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
     <span class="n">pricePerKM</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">pricePerKM</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">priceTrainPerKMMonth</span><span class="o">*</span><span class="n">numberDaysPerYear</span>
-    <span class="n">pricePerKM</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">priceFuelPerKMMonth</span><span class="o">*</span><span class="n">numberDaysPerYear</span>
-    <span class="n">pricePerKM</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">priceTaxiPerKMMonth</span><span class="o">*</span><span class="n">numberDaysPerYear</span>
-    <span class="n">pricePerKM</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">priceBusPerKMMonth</span><span class="o">*</span><span class="n">numberDaysPerYear</span>
+    <span class="n">pricePerKM</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">priceTrainPerKM</span><span class="o">*</span><span class="n">numberDaysPerYear</span>
+    <span class="n">pricePerKM</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">priceFuelPerKM</span><span class="o">*</span><span class="n">numberDaysPerYear</span>
+    <span class="n">pricePerKM</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">priceTaxiPerKM</span><span class="o">*</span><span class="n">numberDaysPerYear</span>
+    <span class="n">pricePerKM</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">priceBusPerKM</span><span class="o">*</span><span class="n">numberDaysPerYear</span>
 
     <span class="c1"># Simple distances (not useful to calculate price but interesting output)</span>
     <span class="n">distanceOutput</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">timeOutput</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
@@ -353,7 +353,7 @@
             <span class="p">)</span>
             <span class="c1"># Initial error corresponds to the difference between observed</span>
             <span class="c1"># and simulated population working in each job center</span>
-            <span class="n">error</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">_</span> <span class="o">=</span> <span class="n">funSolve</span><span class="p">(</span><span class="n">incomeCenters</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">averageIncomeGroup</span><span class="p">,</span>
+            <span class="n">error</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">_</span> <span class="o">=</span> <span class="n">commutingSolve</span><span class="p">(</span><span class="n">incomeCenters</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">averageIncomeGroup</span><span class="p">,</span>
                                       <span class="n">popCenters</span><span class="p">,</span> <span class="n">popResidence</span><span class="p">,</span>
                                       <span class="n">monetary_cost</span><span class="p">,</span> <span class="n">costTime</span><span class="p">,</span> <span class="n">param_lambda</span><span class="p">,</span>
                                       <span class="n">householdSize</span><span class="p">,</span> <span class="n">whichCenters</span><span class="p">,</span>
@@ -376,7 +376,7 @@
 
                 <span class="c1"># We also update the error term before and store some values</span>
                 <span class="c1"># before iterating over</span>
-                <span class="n">error</span><span class="p">[:,</span> <span class="nb">iter</span><span class="p">],</span> <span class="n">_</span> <span class="o">=</span> <span class="n">funSolve</span><span class="p">(</span>
+                <span class="n">error</span><span class="p">[:,</span> <span class="nb">iter</span><span class="p">],</span> <span class="n">_</span> <span class="o">=</span> <span class="n">commutingSolve</span><span class="p">(</span>
                     <span class="n">incomeCenters</span><span class="p">[:,</span> <span class="nb">iter</span><span class="p">],</span> <span class="n">averageIncomeGroup</span><span class="p">,</span> <span class="n">popCenters</span><span class="p">,</span>
                     <span class="n">popResidence</span><span class="p">,</span> <span class="n">monetary_cost</span><span class="p">,</span> <span class="n">costTime</span><span class="p">,</span> <span class="n">param_lambda</span><span class="p">,</span>
                     <span class="n">householdSize</span><span class="p">,</span> <span class="n">whichCenters</span><span class="p">,</span> <span class="n">bracketsDistance</span><span class="p">,</span>
@@ -409,7 +409,7 @@
 
             <span class="c1"># We also get (for the given income group) the number of commuters</span>
             <span class="c1"># for all job centers in given distance brackets</span>
-            <span class="n">_</span><span class="p">,</span> <span class="n">distanceDistributionGroup</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">funSolve</span><span class="p">(</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">distanceDistributionGroup</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">commutingSolve</span><span class="p">(</span>
                 <span class="n">incomeCenters</span><span class="p">[:,</span> <span class="nb">iter</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">averageIncomeGroup</span><span class="p">,</span> <span class="n">popCenters</span><span class="p">,</span>
                 <span class="n">popResidence</span><span class="p">,</span> <span class="n">monetary_cost</span><span class="p">,</span> <span class="n">costTime</span><span class="p">,</span> <span class="n">param_lambda</span><span class="p">,</span>
                 <span class="n">householdSize</span><span class="p">,</span> <span class="n">whichCenters</span><span class="p">,</span> <span class="n">bracketsDistance</span><span class="p">,</span> <span class="n">distanceOutput</span><span class="p">,</span>
@@ -490,7 +490,7 @@
     <span class="k">return</span> <span class="n">transportCostModes</span><span class="p">,</span> <span class="n">transportCost</span><span class="p">,</span> <span class="n">ODflows</span><span class="p">,</span> <span class="n">valueMax</span><span class="p">,</span> <span class="n">minIncome</span></div>
 
 
-<div class="viewcode-block" id="funSolve"><a class="viewcode-back" href="../../../api_ref.html#calibration.sub.compute_income.funSolve">[docs]</a><span class="k">def</span> <span class="nf">funSolve</span><span class="p">(</span><span class="n">incomeCentersTemp</span><span class="p">,</span> <span class="n">averageIncomeGroup</span><span class="p">,</span> <span class="n">popCenters</span><span class="p">,</span>
+<div class="viewcode-block" id="commutingSolve"><a class="viewcode-back" href="../../../api_ref.html#calibration.sub.compute_income.commutingSolve">[docs]</a><span class="k">def</span> <span class="nf">commutingSolve</span><span class="p">(</span><span class="n">incomeCentersTemp</span><span class="p">,</span> <span class="n">averageIncomeGroup</span><span class="p">,</span> <span class="n">popCenters</span><span class="p">,</span>
              <span class="n">popResidence</span><span class="p">,</span> <span class="n">monetaryCost</span><span class="p">,</span> <span class="n">costTime</span><span class="p">,</span> <span class="n">param_lambda</span><span class="p">,</span> <span class="n">householdSize</span><span class="p">,</span>
              <span class="n">whichCenters</span><span class="p">,</span> <span class="n">bracketsDistance</span><span class="p">,</span> <span class="n">distanceOutput</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Compute error in employment allocation.&quot;&quot;&quot;</span>

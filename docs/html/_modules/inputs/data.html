@@ -2070,6 +2070,7 @@
     <span class="k">elif</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;load_precal_param&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">income_centers_init</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
             <span class="n">path_precalc_inp</span> <span class="o">+</span> <span class="s1">&#39;incomeCentersKeep.npy&#39;</span><span class="p">)</span>
+    <span class="c1"># income_centers_init[income_centers_init == -np.inf] = np.nan</span>
 
     <span class="c1"># We correct the level of incomes per job center when overall average</span>
     <span class="c1"># income per income group changes with time (only used as an initial</span>
@@ -2077,6 +2078,7 @@
     <span class="n">incomeCenters</span> <span class="o">=</span> <span class="n">income_centers_init</span> <span class="o">*</span> <span class="n">incomeGroup</span> <span class="o">/</span> <span class="n">average_income</span>
 
     <span class="c1"># Switch to hourly</span>
+    <span class="c1"># NB: costTime is already in hourly format</span>
     <span class="n">annualToHourly</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">8</span><span class="o">*</span><span class="mi">20</span><span class="o">*</span><span class="mi">12</span><span class="p">)</span>
     <span class="n">monetaryCost</span> <span class="o">=</span> <span class="n">monetaryCost</span> <span class="o">*</span> <span class="n">annualToHourly</span>
     <span class="n">incomeCenters</span> <span class="o">=</span> <span class="n">incomeCenters</span> <span class="o">*</span> <span class="n">annualToHourly</span>
@@ -2085,10 +2087,10 @@
 
         <span class="c1"># Household size varies with income group / transport costs</span>
         <span class="n">householdSize</span> <span class="o">=</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;household_size&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
-        <span class="c1"># Here, -100000 corresponds to an arbitrary value given to incomes in</span>
-        <span class="c1"># centers with too few jobs to have convergence in calibration (could</span>
-        <span class="c1"># have been nan): we exclude those centers from the analysis</span>
-        <span class="n">whichCenters</span> <span class="o">=</span> <span class="n">incomeCenters</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">100000</span>
+        <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;load_precal_param&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">whichCenters</span> <span class="o">=</span> <span class="n">incomeCenters</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">100000</span>
+        <span class="k">elif</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;load_precal_param&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">whichCenters</span> <span class="o">=</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">incomeCenters</span><span class="p">[:,</span> <span class="n">j</span><span class="p">])</span>
         <span class="n">incomeCentersGroup</span> <span class="o">=</span> <span class="n">incomeCenters</span><span class="p">[</span><span class="n">whichCenters</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
 
         <span class="c1"># We compute transport costs for each mode and per chosen mode</span>
@@ -2097,42 +2099,81 @@
         <span class="p">(</span><span class="n">transportCostModes</span><span class="p">,</span> <span class="n">transportCost</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">valueMax</span><span class="p">,</span> <span class="n">minIncome</span>
          <span class="p">)</span> <span class="o">=</span> <span class="n">calcmp</span><span class="o">.</span><span class="n">compute_ODflows</span><span class="p">(</span>
             <span class="n">householdSize</span><span class="p">,</span> <span class="n">monetaryCost</span><span class="p">,</span> <span class="n">costTime</span><span class="p">,</span> <span class="n">incomeCentersGroup</span><span class="p">,</span>
-            <span class="n">whichCenters</span><span class="p">,</span> <span class="n">param_lambda</span><span class="p">)</span>
+            <span class="n">whichCenters</span><span class="p">,</span> <span class="n">param_lambda</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
 
         <span class="c1"># NB: we compute origin-destination flows again later to get the full</span>
         <span class="c1"># matrix</span>
 
-        <span class="c1"># Modal shares : this comes from the multinomial model resulting from</span>
+        <span class="c1"># Modal shares: this comes from the multinomial model resulting from</span>
         <span class="c1"># extreme value theory with a Gumbel distribution</span>
         <span class="c1"># (generalized EV type-I), see math appendix</span>
-        <span class="c1"># NB: here, we consider minimum Gumbel</span>
-        <span class="n">modalShares</span><span class="p">[</span><span class="n">whichCenters</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>
-            <span class="o">-</span> <span class="n">param_lambda</span> <span class="o">*</span> <span class="n">transportCostModes</span> <span class="o">+</span> <span class="n">valueMax</span><span class="p">[:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">])</span>
-            <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span> <span class="n">param_lambda</span> <span class="o">*</span> <span class="n">transportCostModes</span>
-                               <span class="o">+</span> <span class="n">valueMax</span><span class="p">[:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">]),</span> <span class="mi">2</span><span class="p">)[:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">]</span>
+
+        <span class="c1"># if options[&quot;prevent_exp_overflow&quot;] == 1:</span>
+        <span class="c1">#     modalShares[whichCenters, :, :, j] = (np.exp(</span>
+        <span class="c1">#         - param_lambda * transportCostModes + valueMax[:, :, None])</span>
+        <span class="c1">#         / np.nansum(np.exp(- param_lambda * transportCostModes</span>
+        <span class="c1">#                             + valueMax[:, :, None]), 2)[:, :, None]</span>
+        <span class="c1">#         )</span>
+        <span class="n">modalShares</span><span class="p">[</span><span class="n">whichCenters</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span> <span class="n">param_lambda</span> <span class="o">*</span> <span class="n">transportCostModes</span><span class="p">)</span>
+            <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span> <span class="n">param_lambda</span> <span class="o">*</span> <span class="n">transportCostModes</span><span class="p">),</span> <span class="mi">2</span><span class="p">)[:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">]</span>
             <span class="p">)</span>
 
         <span class="c1"># OD flows: corresponds to the probability, for a given household of</span>
         <span class="c1"># income group i and living in x, to work in a job centre c,</span>
         <span class="c1"># see math appendix</span>
-        <span class="c1"># NB: here, we consider maximum Gumbel</span>
-        <span class="n">ODflows</span><span class="p">[</span><span class="n">whichCenters</span><span class="p">,</span> <span class="p">:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">param_lambda</span> <span class="o">*</span> <span class="p">(</span><span class="n">incomeCentersGroup</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">-</span> <span class="n">transportCost</span><span class="p">)</span>
-                   <span class="o">-</span> <span class="n">minIncome</span><span class="p">)</span>
-            <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">param_lambda</span> <span class="o">*</span> <span class="p">(</span><span class="n">incomeCentersGroup</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span>
-                                               <span class="o">-</span> <span class="n">transportCost</span><span class="p">)</span> <span class="o">-</span> <span class="n">minIncome</span><span class="p">),</span>
-                        <span class="mi">0</span><span class="p">)[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
-            <span class="p">)</span>
+        <span class="c1"># NB: here, we also need to divide by the scale factor (typo in</span>
+        <span class="c1"># Pfeiffer et al.)</span>
 
-        <span class="c1"># Expected income net of commuting costs : see correct formula in</span>
-        <span class="c1"># math appendix</span>
-        <span class="c1"># NB: here, we consider maximum Gumbel</span>
-        <span class="n">incomeNetOfCommuting</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="mi">1</span><span class="o">/</span><span class="n">param_lambda</span> <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>
-                <span class="n">param_lambda</span> <span class="o">*</span> <span class="p">(</span><span class="n">incomeCentersGroup</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">-</span> <span class="n">transportCost</span><span class="p">)</span>
-                <span class="o">-</span> <span class="n">minIncome</span><span class="p">),</span>
-                <span class="mi">0</span><span class="p">))</span> <span class="o">+</span> <span class="n">minIncome</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;prevent_exp_overflow&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">ODflows</span><span class="p">[</span><span class="n">whichCenters</span><span class="p">,</span> <span class="p">:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">param_lambda</span>
+                       <span class="o">*</span> <span class="p">(</span><span class="n">incomeCentersGroup</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">-</span> <span class="n">transportCost</span><span class="p">)</span>
+                       <span class="o">-</span> <span class="n">minIncome</span><span class="p">)</span>
+                <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">param_lambda</span>
+                           <span class="o">*</span> <span class="p">(</span><span class="n">incomeCentersGroup</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">-</span> <span class="n">transportCost</span><span class="p">)</span>
+                           <span class="o">-</span> <span class="n">minIncome</span><span class="p">),</span>
+                    <span class="mi">0</span><span class="p">)[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
             <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;prevent_exp_overflow&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ODflows</span><span class="p">[</span><span class="n">whichCenters</span><span class="p">,</span> <span class="p">:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>
+                    <span class="n">param_lambda</span>
+                    <span class="o">*</span> <span class="p">(</span><span class="n">incomeCentersGroup</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">-</span> <span class="n">transportCost</span><span class="p">))</span>
+                <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">param_lambda</span>
+                           <span class="o">*</span> <span class="p">(</span><span class="n">incomeCentersGroup</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">-</span> <span class="n">transportCost</span><span class="p">)),</span>
+                    <span class="mi">0</span><span class="p">)[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+                <span class="p">)</span>
+
+        <span class="c1"># Expected income net of commuting costs</span>
+        <span class="c1"># NB: comments are a test for a log-sum specification that we dropped.</span>
+        <span class="c1"># Instead, we use a weighted average sum, as is standard in</span>
+        <span class="c1"># Pfeiffer et al.</span>
+
+        <span class="c1"># if options[&quot;prevent_exp_overflow&quot;] == 1:</span>
+        <span class="c1">#     incomeNetOfCommuting[j, :] = (</span>
+        <span class="c1">#         1/param_lambda</span>
+        <span class="c1">#         * (np.log(np.nansum(np.exp(</span>
+        <span class="c1">#             param_lambda</span>
+        <span class="c1">#             * (incomeCentersGroup[:, None] - transportCost)</span>
+        <span class="c1">#             - minIncome), 0))</span>
+        <span class="c1">#             + minIncome)</span>
+        <span class="c1">#         )</span>
+        <span class="c1"># elif options[&quot;prevent_exp_overflow&quot;] == 0:</span>
+        <span class="c1">#     incomeNetOfCommuting[j, :] = (</span>
+        <span class="c1">#         1/param_lambda</span>
+        <span class="c1">#         * np.log(np.nansum(np.exp(</span>
+        <span class="c1">#             param_lambda</span>
+        <span class="c1">#             * (incomeCentersGroup[:, None] - transportCost)),</span>
+        <span class="c1">#             0))</span>
+        <span class="c1">#         )</span>
+
+        <span class="n">incomeNetOfCommuting</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span>
+            <span class="n">ODflows</span><span class="p">[</span><span class="n">whichCenters</span><span class="p">,</span> <span class="p">:,</span> <span class="n">j</span><span class="p">]</span>
+            <span class="o">*</span> <span class="p">(</span><span class="n">incomeCentersGroup</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">-</span> <span class="n">transportCost</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
 
         <span class="c1"># Average income (not net of commuting costs) earned per worker</span>
         <span class="c1"># NB: here, we just take the weighted average as there is no error term</span>

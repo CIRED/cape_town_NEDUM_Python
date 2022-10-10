@@ -464,7 +464,7 @@ data_density = (
 
 # Import amenities at the SP level
 
-amenities_sp = calam.import_amenities(path_data, path_precalc_inp, 'SP')
+amenities_sp = calam.import_exog_amenities(path_data, path_precalc_inp, 'SP')
 # We select amenity variables to be used in regression from table C5
 # NB: choice has to do with relevance and exogenity of variables
 variables_regression = [
@@ -511,7 +511,7 @@ initUti4 = parametersScan[3]
 #  Generating the map of amenities?
 #  TODO: Note that this a problem with dummies
 
-amenities_grid = calam.import_amenities(path_data, path_precalc_inp, 'grid')
+amenities_grid = calam.import_exog_amenities(path_data, path_precalc_inp, 'grid')
 predictors_grid = amenities_grid.loc[:, variables_regression]
 predictors_grid = np.vstack(
     [np.ones(predictors_grid.shape[0]),

@@ -57,8 +57,8 @@ path_precalc_transp = path_folder + 'precalculated_transport/'
 path_scenarios = path_data + 'Scenarios/'
 path_outputs = path_code + '/Output/'
 path_floods = path_folder + "FATHOM/"
-path_input_plots = path_outputs + '/input_plots/'
-path_input_tables = path_outputs + '/input_tables/'
+path_input_plots = path_outputs + 'input_plots/'
+path_input_tables = path_outputs + 'input_tables/'
 
 # ### Create associated directories if needed
 
@@ -591,7 +591,8 @@ netincome_poor_2d_sim = outexp.export_map(
     netincome_poor, grid, geo_grid, path_input_plots, 'netincome_poor_2d_sim',
     "Expected annual income net of commuting costs for the poor, in rands (up to the 99% quantile)",
     path_input_tables,
-    ubnd=np.quantile(netincome_poor[~np.isnan(netincome_poor)], 0.99))
+    ubnd=np.quantile(netincome_poor[~np.isnan(netincome_poor)], 0.99),
+    lbnd=np.quantile(netincome_poor[~np.isnan(netincome_poor)], 0.01))
 
 Image(path_input_plots + 'netincome_poor_2d_sim.png')
 # endregion
@@ -605,7 +606,8 @@ netincome_midpoor_2d_sim = outexp.export_map(
     'netincome_midpoor_2d_sim',
     "Expected annual income net of commuting costs for the midpoor, in rands (up to the 99% quantile)",
     path_input_tables,
-    ubnd=np.quantile(netincome_midpoor[~np.isnan(netincome_midpoor)], 0.99))
+    ubnd=np.quantile(netincome_midpoor[~np.isnan(netincome_midpoor)], 0.99),
+    lbnd=np.quantile(netincome_midpoor[~np.isnan(netincome_midpoor)], 0.01))
 
 Image(path_input_plots + 'netincome_midpoor_2d_sim.png')
 # endregion
@@ -619,7 +621,8 @@ netincome_midrich_2d_sim = outexp.export_map(
     'netincome_midrich_2d_sim',
     "Expected annual income net of commuting costs for the midrich, in rands (up to the 99% quantile)",
     path_input_tables,
-    ubnd=np.quantile(netincome_midrich[~np.isnan(netincome_midrich)], 0.99))
+    ubnd=np.quantile(netincome_midrich[~np.isnan(netincome_midrich)], 0.99),
+    lbnd=np.quantile(netincome_midrich[~np.isnan(netincome_midrich)], 0.01))
 
 Image(path_input_plots + 'netincome_midrich_2d_sim.png')
 # endregion
@@ -632,7 +635,8 @@ netincome_rich_2d_sim = outexp.export_map(
     netincome_rich, grid, geo_grid, path_input_plots, 'netincome_rich_2d_sim',
     "Expected annual income net of commuting costs for the rich, in rands (up to the 99% quantile)",
     path_input_tables,
-    ubnd=np.quantile(netincome_rich[~np.isnan(netincome_rich)], 0.99))
+    ubnd=np.quantile(netincome_rich[~np.isnan(netincome_rich)], 0.99),
+    lbnd=np.quantile(netincome_rich[~np.isnan(netincome_rich)], 0.01))
 
 Image(path_input_plots + 'netincome_rich_2d_sim.png')
 # endregion

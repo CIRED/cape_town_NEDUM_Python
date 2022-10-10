@@ -92,9 +92,28 @@
 <span class="kn">import</span> <span class="nn">scipy.io</span>
 
 
-<div class="viewcode-block" id="import_amenities"><a class="viewcode-back" href="../../../api_ref.html#calibration.sub.import_amenities.import_amenities">[docs]</a><span class="k">def</span> <span class="nf">import_amenities</span><span class="p">(</span><span class="n">path_data</span><span class="p">,</span> <span class="n">path_precalc_inp</span><span class="p">,</span> <span class="n">dim</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Import relevant amenity data at SP level.&quot;&quot;&quot;</span>
-    <span class="c1"># Load amenity files</span>
+<div class="viewcode-block" id="import_exog_amenities"><a class="viewcode-back" href="../../../api_ref.html#calibration.sub.import_amenities.import_exog_amenities">[docs]</a><span class="k">def</span> <span class="nf">import_exog_amenities</span><span class="p">(</span><span class="n">path_data</span><span class="p">,</span> <span class="n">path_precalc_inp</span><span class="p">,</span> <span class="n">dim</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Import relevant amenity data at SP level.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path_data : str</span>
+<span class="sd">        Path towards data used in the model</span>
+<span class="sd">    path_precalc_inp : str</span>
+<span class="sd">        Path for precalcuted input data (calibrated parameters)</span>
+<span class="sd">    dim : str</span>
+<span class="sd">        Geographic level of analysis at which we want to run the commuting</span>
+<span class="sd">        choice model: should be set to &quot;grid&quot; or &quot;SP&quot;</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    table_amenities : DataFrame</span>
+<span class="sd">        Table yielding, for each selected geographic unit, a set of dummy</span>
+<span class="sd">        variables corresponding to available exogenous amenites</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Load amenity file</span>
     <span class="n">amenity_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path_data</span> <span class="o">+</span> <span class="n">dim</span> <span class="o">+</span> <span class="s1">&#39;_amenities.csv&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
 
     <span class="c1"># We replace values for airport cone amenities with a dummy for being</span>

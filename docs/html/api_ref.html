@@ -1614,25 +1614,230 @@ normalized yet.</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="calibration.sub.compute_income.EstimateIncome">
 <span class="sig-prename descclassname"><span class="pre">calibration.sub.compute_income.</span></span><span class="sig-name descname"><span class="pre">EstimateIncome</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeOutput</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distanceOutput</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">monetaryCost</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">costTime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job_centers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">average_income</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">income_distribution</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">list_lambda</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/calibration/sub/compute_income.html#EstimateIncome"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#calibration.sub.compute_income.EstimateIncome" title="Permalink to this definition"></a></dt>
-<dd><p>Solve for income per employment center for some values of lambda.</p>
+<dd><p>Estimate incomes per job center and number of commuters per distance bin.</p>
+<p>This function leverages the commutingSolve() function to iterate over
+income values until the target number of commuters for each job center is
+reached. This allows to compute incomes per job center (and income group)
+and to find the split of commuters across distance-from-CBD brackets, for
+several values of the gravity parameter (from commuting choice model).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>param</strong> (<em>dict</em>) – Dictionary of default options</p></li>
+<li><p><strong>timeOutput</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=3</em><em>)</em>) – Duration (in min) of a round trip for each transport mode (5) between
+each selected geographic unit and each selected job center (185)
+centroids</p></li>
+<li><p><strong>distanceOutput</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=3</em><em>)</em>) – Distance (in km) of a one-way trip for each transport mode (5) between
+each selected geographic unit and each selected job center (185)
+centroids. Note that distances actually do not change across transport
+modes.</p></li>
+<li><p><strong>monetaryCost</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=3</em><em>)</em>) – Annual monetary cost (in rands) of a round trip for each transport mode
+(5) between each selected geographic unit and each selected job center
+(185) centroids</p></li>
+<li><p><strong>costTime</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=3</em><em>)</em>) – Daily share of working time spent commuting for each transport mode
+(5) between each selected geographic unit and each selected job center
+(185) centroids. This will be multiplied by expected income to get the
+opportunity cost of time.</p></li>
+<li><p><strong>job_centers</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=2</em><em>)</em>) – Number of jobs in each selected job center (185) per income group (4).
+Remember that we rescale the number of individual jobs to reflect total
+household employment, as our income and population data are for
+households only: one job basically provides employment for two people.
+This simplification allows to model households as a single
+representative agent and to abstract from a two-body problem.
+Empirically, this holds on aggregate as households’ position on the
+labor market is often determined by one household head.</p></li>
+<li><p><strong>average_income</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>)</em>) – Average median income for each income group in the model (4)</p></li>
+<li><p><strong>income_distribution</strong> (<em>ndarray</em><em>(</em><em>uint16</em><em>, </em><em>ndim=2</em><em>)</em>) – Exogenous number of households in each Small Place (1,046) for each
+income group in the model (4)</p></li>
+<li><p><strong>list_lambda</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>)</em>) – List of values over which to scan for the gravity parameter used in
+the commuting choice model</p></li>
+<li><p><strong>options</strong> (<em>dict</em>) – Dictionary of default options</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>incomeCentersSave</strong> (<em>ndarary(float64, ndim=3)</em>) – Calibrated annual household income (in rands) for each income group (4)
+and each selected job center (185), for each scanned value of the
+gravity parameter</p></li>
+<li><p><strong>distanceDistribution</strong> (<em>ndarray(float64, ndim=2)</em>) – Share of residence-workplace distances in each 5-km from CBD bracket
+for each scanned value of the gravity parameter</p></li>
+<li><p><strong>scoreMatrix</strong> (<em>ndarray(float64, ndim=2)</em>) – Ratio of simulated over observed (rescaled) number of jobs for each
+income group (4) and each scanned value of the gravity parameter:
+defines an error metric for the quality of our calibration</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="calibration.sub.compute_income.commutingSolve">
+<span class="sig-prename descclassname"><span class="pre">calibration.sub.compute_income.</span></span><span class="sig-name descname"><span class="pre">commutingSolve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomeCentersTemp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">averageIncomeGroup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">popCenters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">popResidence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">monetaryCost</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">costTime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_lambda</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">householdSize</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">whichCenters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bracketsDistance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distanceOutput</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/calibration/sub/compute_income.html#commutingSolve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#calibration.sub.compute_income.commutingSolve" title="Permalink to this definition"></a></dt>
+<dd><p>Compute error and distribution for job allocation simulated from incomes.</p>
+<p>This function leverages the compute_ODflows() function to compute a
+theoretical equivalent to number of jobs in each (narrowly) selected job
+center, and the distribution of those jobs across pre-defined
+distance-from-CBD brackets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>incomeCentersTemp</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>)</em>) – Hourly household income (in rands) for some income group and some
+iteration, per selected job center</p></li>
+<li><p><strong>averageIncomeGroup</strong> (<em>float64</em>) – Average hourly median income (from data) for some income group</p></li>
+<li><p><strong>popCenters</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>)</em>) – Number of jobs in each (narrowly) selected job center for some income
+group. Remember that we further restrict the set of selected job
+centers when calibrating incomes per income group for the sake of
+numerical simplicity. Also remember that we rescale the number of
+individual jobs to reflect total household employment, as our income
+and population data are for households only: one job basically provides
+employment for two people.
+This simplification allows to model households as a single
+representative agent and to abstract from a two-body problem.
+Empirically, this holds on aggregate as households’ position on the
+labor market is often determined by one household head.</p></li>
+<li><p><strong>popResidence</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>)</em>) – Number of households living in each SP (1046), per income group (4):
+comes from census data and does not include people not working</p></li>
+<li><p><strong>monetaryCost</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=3</em><em>)</em>) – Hourly monetary cost (in rands) of a round trip for each transport mode
+(5) between each selected geographic unit and each selected job center
+(185) centroids</p></li>
+<li><p><strong>costTime</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=3</em><em>)</em>) – Daily share of working time spent commuting for each transport mode
+(5) between each selected geographic unit and each selected job center
+(185) centroids. This will be multiplied by expected income to get the
+opportunity cost of time.</p></li>
+<li><p><strong>param_lambda</strong> (<em>float64</em>) – Tested value for the gravity parameter used in the commuting choice
+model</p></li>
+<li><p><strong>householdSize</strong> (<em>float</em>) – Average number of employed workers per household for one income class
+(corresponds to 2 times the employment rate)</p></li>
+<li><p><strong>whichCenters</strong> (<em>ndarray</em><em>(</em><em>bool</em><em>)</em>) – Dummy variable allowing the narrow selection of job centers used for
+income calibration for a given income group, among pre-selected job
+centers (185)</p></li>
+<li><p><strong>bracketsDistance</strong> (<em>ndarray</em><em>(</em><em>int32</em><em>)</em>) – Array of floor values for distance brackets used to select the set of
+incomes + gravity parameter that best fit the distribution of
+residence-workplace distances according to those brackets</p></li>
+<li><p><strong>distanceOutput</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=3</em><em>)</em>) – Distance (in km) of a one-way trip for each transport mode (5) between
+each selected geographic unit and each selected job center (185)
+centroids. Note that distances actually do not change across transport
+modes.</p></li>
+<li><p><strong>options</strong> (<em>dict</em>) – Dictionary of default options</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>score</strong> (<em>ndarray(float64)</em>) – Difference between observed and simulated population working in each
+(narrowly) selected job center (for a given income group)</p></li>
+<li><p><strong>nbCommuters</strong> (<em>ndarray(float64)</em>) – Number of commuters in each pre-defined distance bracket, for a given
+income group</p></li>
+</ul>
+</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="calibration.sub.compute_income.compute_ODflows">
-<span class="sig-prename descclassname"><span class="pre">calibration.sub.compute_income.</span></span><span class="sig-name descname"><span class="pre">compute_ODflows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">householdSize</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">monetaryCost</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">costTime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">incomeCentersFull</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">whichCenters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_lambda</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/calibration/sub/compute_income.html#compute_ODflows"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#calibration.sub.compute_income.compute_ODflows" title="Permalink to this definition"></a></dt>
-<dd><p>Apply commuting formulas from working paper.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="calibration.sub.compute_income.funSolve">
-<span class="sig-prename descclassname"><span class="pre">calibration.sub.compute_income.</span></span><span class="sig-name descname"><span class="pre">funSolve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomeCentersTemp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">averageIncomeGroup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">popCenters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">popResidence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">monetaryCost</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">costTime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_lambda</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">householdSize</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">whichCenters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bracketsDistance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distanceOutput</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/calibration/sub/compute_income.html#funSolve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#calibration.sub.compute_income.funSolve" title="Permalink to this definition"></a></dt>
-<dd><p>Compute error in employment allocation.</p>
+<span class="sig-prename descclassname"><span class="pre">calibration.sub.compute_income.</span></span><span class="sig-name descname"><span class="pre">compute_ODflows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">householdSize</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">monetaryCost</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">costTime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">incomeCentersFull</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">whichCenters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_lambda</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/calibration/sub/compute_income.html#compute_ODflows"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#calibration.sub.compute_income.compute_ODflows" title="Permalink to this definition"></a></dt>
+<dd><p>Compute probability distribution and transport costs of commuting pairs.</p>
+<p>This function applies theoretical formulas from the commuting choice model,
+for a given income group and a given gravity parameter (see math appendix
+for more details).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>householdSize</strong> (<em>float</em>) – Average number of employed workers per household for one income class
+(corresponds to 2 times the employment rate)</p></li>
+<li><p><strong>monetaryCost</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=3</em><em>)</em>) – Hourly monetary cost (in rands) of a round trip for each transport mode
+(5) between each selected geographic unit and each selected job center
+(185) centroids</p></li>
+<li><p><strong>costTime</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=3</em><em>)</em>) – Daily share of working time spent commuting for each transport mode
+(5) between each selected geographic unit and each selected job center
+(185) centroids. This will be multiplied by expected income to get the
+opportunity cost of time.</p></li>
+<li><p><strong>incomeCentersFull</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>)</em>) – Hourly household income (in rands) for some income group and some
+iteration, per selected job center, rescaled to match income
+distribution across the overall population</p></li>
+<li><p><strong>whichCenters</strong> (<em>ndarray</em><em>(</em><em>bool</em><em>)</em>) – Dummy variable allowing the narrow selection of job centers used for
+income calibration for a given income group, among pre-selected job
+centers (185)</p></li>
+<li><p><strong>param_lambda</strong> (<em>float64</em>) – Tested value for the gravity parameter used in the commuting choice
+model</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>transportCostModes</strong> (<em>ndarray(float64, ndim=3)</em>) – Expected (hourly) total commuting cost (in rands) for one agent,
+for all (narrowly) selected job centers, all SPs of residence (1046),
+and all transport modes (5)</p></li>
+<li><p><strong>transportCost</strong> (<em>ndarray(float64, ndim=2)</em>) – Expected (hourly) total commuting cost (in rands) for one agent,
+for all (narrowly) selected job centers and all SPs of residence
+(1046): corresponds to min(transportCostModes) across transport modes.</p></li>
+<li><p><strong>ODflows</strong> (<em>ndarray(float64, ndim=2)</em>) – Probability, for a given income group, to work in each (narrowly)
+selected job center for each potential SP of residence (1046)</p></li>
+<li><p><strong>valueMax</strong> (<em>ndarray(float64, ndim=2)</em>) – Numerical parameter for each commuting pair that prevents logarithms
+and exponentials used in calculations from diverging towards infinity:
+it corresponds to the maximum argument for exponentials that appear in
+the formula for transportCost: this is not used as an input in other
+functions and is just included here for reference</p></li>
+<li><p><strong>minIncome</strong> (<em>ndarray(float64)</em>) – Numerical parameter for each SP of residence that prevents logarithms
+and exponentials used in calculations from diverging towards infinity:
+it corresponds to minus the minimum argument for exponentials that
+appear in the formula for ODflows: this is not used as an input in
+other functions and is just included here for reference</p></li>
+</ul>
+</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="calibration.sub.compute_income.import_transport_costs">
 <span class="sig-prename descclassname"><span class="pre">calibration.sub.compute_income.</span></span><span class="sig-name descname"><span class="pre">import_transport_costs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yearTraffic</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">households_per_income_class</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spline_inflation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spline_fuel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spline_population_income_distribution</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spline_income_distribution</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_precalc_inp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_precalc_transp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/calibration/sub/compute_income.html#import_transport_costs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#calibration.sub.compute_income.import_transport_costs" title="Permalink to this definition"></a></dt>
-<dd><p>Compute job center distribution, commuting and net income.</p>
+<dd><p>Compute monetary and time costs from commuting for some given year.</p>
+<p>This function leverages the CoCT’s EMME/2 transport model for inputs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>grid</strong> (<em>DataFrame</em>) – Table yielding, for each grid cell (24,014), its x and y
+(centroid) coordinates, and its distance (in km) to the city</p></li>
+<li><p><strong>param</strong> (<em>dict</em>) – Dictionary of default parameters</p></li>
+<li><p><strong>yearTraffic</strong> (<em>int</em>) – Year for which we want to run the function</p></li>
+<li><p><strong>households_per_income_class</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>)</em>) – Exogenous total number of households per income group (excluding people
+out of employment, for 4 groups)</p></li>
+<li><p><strong>spline_inflation</strong> (<em>interp1d</em>) – Linear interpolation for inflation rate (in base 100 relative to
+baseline year) over the years (baseline year set at 0)</p></li>
+<li><p><strong>spline_fuel</strong> (<em>interp1d</em>) – Linear interpolation for fuel price (in rands per km)
+over the years (baseline year set at 0)</p></li>
+<li><p><strong>spline_population_income_distribution</strong> (<em>interp1d</em>) – Linear interpolation for total population per income group in the data
+(12) over the years (baseline year set at 0)</p></li>
+<li><p><strong>spline_income_distribution</strong> (<em>interp1d</em>) – Linear interpolation for median annual income (in rands) per income
+group in the data (12) over the years (baseline year set at 0)</p></li>
+<li><p><strong>path_precalc_inp</strong> (<em>str</em>) – Path for precalcuted input data (calibrated parameters)</p></li>
+<li><p><strong>path_precalc_transp</strong> (<em>str</em>) – Path for precalcuted transport inputs (intermediate outputs from
+commuting choice model)</p></li>
+<li><p><strong>dim</strong> (<em>str</em>) – Geographic level of analysis at which we want to run the commuting
+choice model: should be set to “GRID” or “SP”</p></li>
+<li><p><strong>options</strong> (<em>dict</em>) – Dictionary of default options</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>timeOutput</strong> (<em>ndarray(float64, ndim=3)</em>) – Duration (in min) of a round trip for each transport mode (5) between
+each selected geographic unit and each selected job center (185)
+centroids</p></li>
+<li><p><strong>distanceOutput</strong> (<em>ndarray(float64, ndim=3)</em>) – Distance (in km) of a one-way trip for each transport mode (5) between
+each selected geographic unit and each selected job center (185)
+centroids. Note that distances actually do not change across transport
+modes.</p></li>
+<li><p><strong>monetaryCost</strong> (<em>ndarray(float64, ndim=3)</em>) – Annual monetary cost (in rands) of a round trip for each transport mode
+(5) between each selected geographic unit and each selected job center
+(185) centroids</p></li>
+<li><p><strong>costTime</strong> (<em>ndarray(float64, ndim=3)</em>) – Daily share of working time spent commuting for each transport mode
+(5) between each selected geographic unit and each selected job center
+(185) centroids. This will be multiplied by expected income to get the
+opportunity cost of time.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -1643,7 +1848,82 @@ normalized yet.</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="calibration.sub.estimate_parameters_by_optimization.EstimateParametersByOptimization">
 <span class="sig-prename descclassname"><span class="pre">calibration.sub.estimate_parameters_by_optimization.</span></span><span class="sig-name descname"><span class="pre">EstimateParametersByOptimization</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomeNetOfCommuting</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataRent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataDwellingSize</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataIncomeGroup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataHouseholdDensity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selectedDensity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selectedSP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tableAmenities</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variablesRegression</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initRho</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initBeta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initBasicQ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initUti2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initUti3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initUti4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/calibration/sub/estimate_parameters_by_optimization.html#EstimateParametersByOptimization"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#calibration.sub.estimate_parameters_by_optimization.EstimateParametersByOptimization" title="Permalink to this definition"></a></dt>
-<dd><p>Automatically estimate parameters by maximizing log likelihood.</p>
+<dd><p>Estimate parameters by maximizing log likelihood via gradient descent.</p>
+<p>This function runs an interior-point algoithm over values of endogenous
+parameters entering households’ utility function, and returns those which
+maximize a composite log-likelihood. The latter is defined as the sum of
+log-likelihoods measuring the fit of the model on several observed data
+moments, namely dwelling sizes, exogenous amenities, and income sorting.
+To compute those separate log-likelihoods, this function calls on the
+calibration.sub.loglikelihood module after providing sample and variable
+selection for the estimation, as well as theoretical partial relations
+from the structure of the model, used in regressions.
+It leverages initial guess from estimate_parameters_by_scanning module on
+parameter values to start within the set of feasible solutions, and to
+converge towards an interior (as opposed to corner) solution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>incomeNetOfCommuting</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=2</em><em>)</em>) – Expected annual income net of commuting costs (in rands, for
+one household), for SP (1,046), by income group (4)</p></li>
+<li><p><strong>dataRent</strong> (<em>Series</em>) – Theoretical average annual rent for formal private housing, computed
+from data on average land prices, for each SP (1,046)</p></li>
+<li><p><strong>dataDwellingSize</strong> (<em>Series</em>) – Average dwelling size (in m²) for each SP (1,046), from SP data</p></li>
+<li><p><strong>dataIncomeGroup</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>)</em>) – Categorical variable indicating, for each Small Place (1,046), the
+dominant income group (from 0 to 3)</p></li>
+<li><p><strong>dataHouseholdDensity</strong> (<em>Series</em>) – Household density (per km² of constructible land) computed from the
+number of formal private housing units considered in each SP (1,046)</p></li>
+<li><p><strong>selectedDensity</strong> (<em>Series</em>) – Dummy variable used to select SPs (1,046) with enough formal private
+housing to identify the regressions used in the function</p></li>
+<li><p><strong>xData</strong> (<em>Series</em>) – x-coordinate for each SP centroid (1,046), from SP data</p></li>
+<li><p><strong>yData</strong> (<em>Series</em>) – y-coordinate for each SP centroid (1,046), from SP data</p></li>
+<li><p><strong>selectedSP</strong> (<em>Series</em>) – Dummy variable used to select SPs (1,046) with enough formal private
+housing to identify the regressions used in the function (less
+stringent than selectedDensity)</p></li>
+<li><p><strong>tableAmenities</strong> (<em>DataFrame</em>) – Table yielding, for each selected geographic unit, a set of dummy
+variables corresponding to available exogenous amenites</p></li>
+<li><p><strong>variablesRegression</strong> (<em>list</em>) – List containing labels for exogenous amenity variables used in the
+final regressions</p></li>
+<li><p><strong>initRho</strong> (<em>int</em>) – Spatial autocorrelation parameter (not used in practice, as is set to
+zero)</p></li>
+<li><p><strong>initBeta</strong> (<em>float64</em>) – Initial guess for the surplus housing elasticity from households’
+utility function: comes from the estimate_parameters_by_scanning module</p></li>
+<li><p><strong>initBasicQ</strong> (<em>float64</em>) – Initial guess for the basic need in housing (in m²) from households’
+utility function: comes from the estimate_parameters_by_scanning module</p></li>
+<li><p><strong>initUti2</strong> (<em>int32</em>) – Target utility level of the second poorest income group</p></li>
+<li><p><strong>initUti3</strong> (<em>float64</em>) – Initial guess for the utility level of the second richest income group:
+comes from the estimate_parameters_by_scanning module</p></li>
+<li><p><strong>initUti4</strong> (<em>float64</em>) – Initial guess for the utility level of the richest income group:
+comes from the estimate_parameters_by_scanning module</p></li>
+<li><p><strong>options</strong> (<em>dict</em>) – Dictionary of default options</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>parameters</strong> (<em>ndarray(float64)</em>) – Vector of “calibrated parameters”. In the order: surplus housing
+elasticity, basic need in housing, and utility levels for income groups
+3 and 4</p></li>
+<li><p><strong>scoreTot</strong> (<em>float64</em>) – Maximum value of composite log-likelihood for the fit on observed
+amenities, dwelling sizes, and population sorting by income: provides
+a performance metric for the calibration process</p></li>
+<li><p><strong>parametersAmenities</strong> (<em>ndarray(float64)</em>) – List of estimates for the impact of exogenous (dummy) amenities on the
+calibrated amenity index (in log-form). In the order: intercept,
+distance to the ocean &lt;2km, distance to the ocean between 2 and 4km,
+slope between 1 and 5%, slope &gt;5%, being located within the airport
+cone, distance to district parks &lt;2km, distance to biosphere reserve
+&lt;2km, distance to train station &lt;2km, distance to urban heritage site
+&lt;2km</p></li>
+<li><p><strong>modelAmenities</strong> (<em>regression.linear_model.RegressionResultsWrapper</em>) – Object summarizing the results of the log-regressions of the
+theoretical amenity index over observed exogenous amenity dummies</p></li>
+<li><p><strong>parametersHousing</strong> (<em>int</em>) – List of estimates related to the fit of the model on building density
+/ housing supply: this is not included in this version of the model
+(vector is set equal to zero) as we already exploit this relation to
+estimate parameters of the construction function (compared to other
+versions where we use construction costs)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -1654,7 +1934,90 @@ normalized yet.</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="calibration.sub.estimate_parameters_by_scanning.EstimateParametersByScanning">
 <span class="sig-prename descclassname"><span class="pre">calibration.sub.estimate_parameters_by_scanning.</span></span><span class="sig-name descname"><span class="pre">EstimateParametersByScanning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomeNetOfCommuting</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataRent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataDwellingSize</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataIncomeGroup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataHouseholdDensity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selectedDensity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selectedSP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tableAmenities</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variablesRegression</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initRho</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listBeta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listBasicQ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initUti2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listUti3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listUti4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/calibration/sub/estimate_parameters_by_scanning.html#EstimateParametersByScanning"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#calibration.sub.estimate_parameters_by_scanning.EstimateParametersByScanning" title="Permalink to this definition"></a></dt>
-<dd><p>Estimate parameters by maximizing log likelihood.</p>
+<dd><p>Estimate parameters by maximizing log likelihood over scanned values.</p>
+<p>This function scans over values of endogenous parameters entering
+households’ utility function, and returns those which maximize a
+composite log-likelihood. The latter is defined as the sum of
+log-likelihoods measuring the fit of the model on several observed data
+moments, namely dwelling sizes, exogenous amenities, and income sorting.
+To compute those separate log-likelihoods, this function calls on the
+calibration.sub.loglikelihood module after providing sample and variable
+selection for the estimation, as well as theoretical partial relations
+from the structure of the model, used in regressions.
+Actually, we only use the fit on amenites to define the output of this
+function (as opposed to the estimate_parameters_by_optimization module).
+This is because the intrinsically rough nature of scanning does not allow
+us to define a fine enough set of feasible interior solutions, and
+theoretical formulas for the fit on dwelling sizes and income sorting
+always lead to corner solutions when the choice set is large enough. This
+does not threaten our identification strategy, as the purpose of this
+function is to provide an informed guess on initial values for the
+estimate_parameters_by_optimization module to run a proper gradient
+descent optimization (that accounts for all the likelihoods): it just needs
+to start within the set of feasible solutions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>incomeNetOfCommuting</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=2</em><em>)</em>) – Expected annual income net of commuting costs (in rands, for
+one household), for SP (1,046), by income group (4)</p></li>
+<li><p><strong>dataRent</strong> (<em>Series</em>) – Theoretical average annual rent for formal private housing, computed
+from data on average land prices, for each SP (1,046)</p></li>
+<li><p><strong>dataDwellingSize</strong> (<em>Series</em>) – Average dwelling size (in m²) for each SP (1,046), from SP data</p></li>
+<li><p><strong>dataIncomeGroup</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>)</em>) – Categorical variable indicating, for each Small Place (1,046), the
+dominant income group (from 0 to 3)</p></li>
+<li><p><strong>dataHouseholdDensity</strong> (<em>Series</em>) – Household density (per km² of constructible land) computed from the
+number of formal private housing units considered in each SP (1,046)</p></li>
+<li><p><strong>selectedDensity</strong> (<em>Series</em>) – Dummy variable used to select SPs (1,046) with enough formal private
+housing to identify the regressions used in the function</p></li>
+<li><p><strong>xData</strong> (<em>Series</em>) – x-coordinate for each SP centroid (1,046), from SP data</p></li>
+<li><p><strong>yData</strong> (<em>Series</em>) – y-coordinate for each SP centroid (1,046), from SP data</p></li>
+<li><p><strong>selectedSP</strong> (<em>Series</em>) – Dummy variable used to select SPs (1,046) with enough formal private
+housing to identify the regressions used in the function (less
+stringent than selectedDensity)</p></li>
+<li><p><strong>tableAmenities</strong> (<em>DataFrame</em>) – Table yielding, for each selected geographic unit, a set of dummy
+variables corresponding to available exogenous amenites</p></li>
+<li><p><strong>variablesRegression</strong> (<em>list</em>) – List containing labels for exogenous amenity variables used in the
+final regressions</p></li>
+<li><p><strong>initRho</strong> (<em>int</em>) – Spatial autocorrelation parameter (not used in practice, as is set to
+zero)</p></li>
+<li><p><strong>listBeta</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>)</em>) – List of values over which to scan for the surplus housing elasticity
+parameter from households’ utility function</p></li>
+<li><p><strong>listBasicQ</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>)</em>) – List of values over which to scan for the basic need in housing (in m²)
+from households’ utility function</p></li>
+<li><p><strong>initUti2</strong> (<em>int32</em>) – Target utility level of the second poorest income group</p></li>
+<li><p><strong>listUti3</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>)</em>) – List of values over which to scan for the utility level of the second
+richest income group</p></li>
+<li><p><strong>listUti4</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>)</em>) – List of values over which to scan for the utility level of the richest
+income group</p></li>
+<li><p><strong>options</strong> (<em>dict</em>) – Dictionary of default options</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>parameters</strong> (<em>ndarray(float64)</em>) – Vector of “calibrated parameters”. In the order: surplus housing
+elasticity, basic need in housing, and utility levels for income groups
+3 and 4</p></li>
+<li><p><strong>scoreTot</strong> (<em>float64</em>) – Maximum value of composite log-likelihood for the fit on observed
+amenities, dwelling sizes, and population sorting by income: provides
+a performance metric for the calibration process</p></li>
+<li><p><strong>parametersAmenities</strong> (<em>ndarray(float64)</em>) – List of estimates for the impact of exogenous (dummy) amenities on the
+calibrated amenity index (in log-form). In the order: intercept,
+distance to the ocean &lt;2km, distance to the ocean between 2 and 4km,
+slope between 1 and 5%, slope &gt;5%, being located within the airport
+cone, distance to district parks &lt;2km, distance to biosphere reserve
+&lt;2km, distance to train station &lt;2km, distance to urban heritage site
+&lt;2km</p></li>
+<li><p><strong>modelAmenities</strong> (<em>regression.linear_model.RegressionResultsWrapper</em>) – Object summarizing the results of the log-regressions of the
+theoretical amenity index over observed exogenous amenity dummies</p></li>
+<li><p><strong>parametersHousing</strong> (<em>int</em>) – List of estimates related to the fit of the model on building density
+/ housing supply: this is not included in this version of the model
+(vector is set equal to zero) as we already exploit this relation to
+estimate parameters of the construction function (compared to other
+versions where we use construction costs)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -1663,9 +2026,26 @@ normalized yet.</p></li>
 <p>Created on Wed Apr  6 16:55:17 2022.</p>
 <p>&#64;author: monni</p>
 <dl class="py function">
-<dt class="sig sig-object py" id="calibration.sub.import_amenities.import_amenities">
-<span class="sig-prename descclassname"><span class="pre">calibration.sub.import_amenities.</span></span><span class="sig-name descname"><span class="pre">import_amenities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_precalc_inp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/calibration/sub/import_amenities.html#import_amenities"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#calibration.sub.import_amenities.import_amenities" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="calibration.sub.import_amenities.import_exog_amenities">
+<span class="sig-prename descclassname"><span class="pre">calibration.sub.import_amenities.</span></span><span class="sig-name descname"><span class="pre">import_exog_amenities</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_precalc_inp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/calibration/sub/import_amenities.html#import_exog_amenities"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#calibration.sub.import_amenities.import_exog_amenities" title="Permalink to this definition"></a></dt>
 <dd><p>Import relevant amenity data at SP level.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path_data</strong> (<em>str</em>) – Path towards data used in the model</p></li>
+<li><p><strong>path_precalc_inp</strong> (<em>str</em>) – Path for precalcuted input data (calibrated parameters)</p></li>
+<li><p><strong>dim</strong> (<em>str</em>) – Geographic level of analysis at which we want to run the commuting
+choice model: should be set to “grid” or “SP”</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>table_amenities</strong> – Table yielding, for each selected geographic unit, a set of dummy
+variables corresponding to available exogenous amenites</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -1676,7 +2056,30 @@ normalized yet.</p></li>
 <dl class="py function">
 <dt class="sig sig-object py" id="calibration.sub.import_employment_data.import_employment_data">
 <span class="sig-prename descclassname"><span class="pre">calibration.sub.import_employment_data.</span></span><span class="sig-name descname"><span class="pre">import_employment_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">households_per_income_class</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/calibration/sub/import_employment_data.html#import_employment_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#calibration.sub.import_employment_data.import_employment_data" title="Permalink to this definition"></a></dt>
-<dd><p>Import number of jobs per selected employment center.</p>
+<dd><p>Import number of jobs per income group in each selected employment center.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>households_per_income_class</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>)</em>) – Exogenous total number of households per income group (excluding people
+out of employment, for 4 groups)</p></li>
+<li><p><strong>param</strong> (<em>dict</em>) – Dictionary of default parameters</p></li>
+<li><p><strong>path_data</strong> (<em>str</em>) – Path towards data used in the model</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>jobsCentersNGroupRescaled</strong> – Number of jobs in each selected job center (185) per income group (4).
+Remember that we rescale the number of individual jobs to reflect total
+household employment, as our income and population data are for
+households only: one job basically provides employment for two people.
+This simplification allows to model households as a single
+representative agent and to abstract from a two-body problem.
+Empirically, this holds on aggregate as households’ position on the
+labor market is often determined by one household head.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ndarray(float64, ndim=2)</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -1685,21 +2088,90 @@ normalized yet.</p></li>
 <p>Created on Tue Oct 20 11:46:13 2020.</p>
 <p>&#64;author: Charlotte Liotta</p>
 <dl class="py function">
-<dt class="sig sig-object py" id="calibration.sub.loglikelihood.InterpolateRents">
-<span class="sig-prename descclassname"><span class="pre">calibration.sub.loglikelihood.</span></span><span class="sig-name descname"><span class="pre">InterpolateRents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basicQ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">net_income</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/calibration/sub/loglikelihood.html#InterpolateRents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#calibration.sub.loglikelihood.InterpolateRents" title="Permalink to this definition"></a></dt>
-<dd><p>Interpolate log(rents) as a function of log(beta) and log(q0).</p>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="calibration.sub.loglikelihood.LogLikelihoodModel">
-<span class="sig-prename descclassname"><span class="pre">calibration.sub.loglikelihood.</span></span><span class="sig-name descname"><span class="pre">LogLikelihoodModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Uo2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">net_income</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groupLivingSpMatrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataDwellingSize</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selectedDwellingSize</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataRent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selectedRents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selectedDensity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predictorsAmenitiesMatrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tableRegression</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables_regression</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CalculateDwellingSize</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ComputeLogLikelihood</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optionRegression</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/calibration/sub/loglikelihood.html#LogLikelihoodModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#calibration.sub.loglikelihood.LogLikelihoodModel" title="Permalink to this definition"></a></dt>
-<dd><p>Estimate the total likelihood of the model given the parameters.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="calibration.sub.loglikelihood.utilityFromRents">
-<span class="sig-prename descclassname"><span class="pre">calibration.sub.loglikelihood.</span></span><span class="sig-name descname"><span class="pre">utilityFromRents</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">Ro</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">income</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basic_q</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/calibration/sub/loglikelihood.html#utilityFromRents"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#calibration.sub.loglikelihood.utilityFromRents" title="Permalink to this definition"></a></dt>
-<dd><p>Return utility / amenity index ratio.</p>
+<span class="sig-prename descclassname"><span class="pre">calibration.sub.loglikelihood.</span></span><span class="sig-name descname"><span class="pre">LogLikelihoodModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Uo2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">net_income</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groupLivingSpMatrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataDwellingSize</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selectedDwellingSize</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataRent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selectedRents</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">predictorsAmenitiesMatrix</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tableRegression</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables_regression</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CalculateDwellingSize</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ComputeLogLikelihood</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optionRegression</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/calibration/sub/loglikelihood.html#LogLikelihoodModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#calibration.sub.loglikelihood.LogLikelihoodModel" title="Permalink to this definition"></a></dt>
+<dd><p>Compute composite log-likelihood for model fit given scanned parameters.</p>
+<p>This function computes three separate log-likelihoods that capture the fit
+of the model along distinct data moments. Then, it sums them to give a
+composite log-likelihood that will be maximized to calibrate the utility
+function parameters (as part of scanning or smooth optimization process).
+More precisely, it starts by regressing theoretical values of the log
+amenity index on observed exogenous dummy amenity variables. The first
+log-likelihood is computed based on the value of residuals. Then, it
+defines a second log-likelihood for the fit on income sorting (matching
+observed rents with highest bid-rents from the dominant income group), and
+maximizes it across (unobserved) scale factors. Finally, it gets the
+residuals from the log-difference between theoretical and observed dwelling
+sizes, and computes the third log-likelihood from there.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X0</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>)</em>) – Set of inputs (namely, surplus housing elasticity, basic need in
+housing, utility levels for income groups 3 and 4) tested for a given
+iteration</p></li>
+<li><p><strong>Uo2</strong> (<em>int32</em>) – Target utility level for income group 2</p></li>
+<li><p><strong>net_income</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=2</em><em>)</em>) – Expected annual income net of commuting costs (in rands, for
+one household), for SP (1,046), by income group excluding the poorest
+(3)</p></li>
+<li><p><strong>groupLivingSpMatrix</strong> (<em>ndarray</em><em>(</em><em>bool</em><em>, </em><em>ndim=2</em><em>)</em>) – Dummy variable indicating, for each income group excluding the poorest
+(3) whether it is dominant in each SP (1,046)</p></li>
+<li><p><strong>dataDwellingSize</strong> (<em>Series</em>) – Average dwelling size (in m²) for each SP (1,046), from SP data</p></li>
+<li><p><strong>selectedDwellingSize</strong> (<em>Series</em>) – Dummy variable indicating, for each SP (1,046), whether it is selected
+into the sample used when regressing observed dwelling sizes on their
+theoretical equivalent</p></li>
+<li><p><strong>dataRent</strong> (<em>Series</em>) – Theoretical average annual rent for formal private housing, computed
+from data on average land prices, for each SP (1,046)</p></li>
+<li><p><strong>selectedRents</strong> (<em>Series</em>) – Dummy variable indicating, for each SP (1,046), whether it is selected
+into the sample used when estimating the discrete choice logit model
+associated with income sorting (identifying observed rents with highest
+bid-rents from the dominant income group)</p></li>
+<li><p><strong>predictorsAmenitiesMatrix</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=2</em><em>)</em>) – Values of selected exogenous dummy amenity variables (10, including the
+intercept) in each selected SP (according to selectedRents)</p></li>
+<li><p><strong>tableRegression</strong> (<em>DataFrame</em>) – Values of all exogenous dummy amenity variables (16, excluding the
+intercept) in each selected SP (according to selectedRents)</p></li>
+<li><p><strong>variables_regression</strong> (<em>list</em>) – List of labels for selected exogenous dummy amenity variables (9,
+excluding the intercept)</p></li>
+<li><p><strong>CalculateDwellingSize</strong> (<em>function</em>) – Function defining the relationship between rents and dwelling sizes
+in the formal private sector (see technical documentation)</p></li>
+<li><p><strong>ComputeLogLikelihood</strong> (<em>function</em>) – Log-likelihood function for a lognormal law of mean 0: we will assume
+that dwelling size and amenity residuals follow such a law</p></li>
+<li><p><strong>optionRegression</strong> (<em>int</em>) – Option to run GLM (instead of OLS) regression for the estimation of
+exogenous amenity estimates: default is set as zero as GLM is unstable</p></li>
+<li><p><strong>options</strong> (<em>dict</em>) – Dictionary of default options</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul>
+<li><p><strong>scoreTotal</strong> (<em>float64</em>) – Value of the composite log-likelihood for the set of parameters scanned</p></li>
+<li><p><strong>scoreAmenities</strong> (<em>float64</em>) – Value of the log-likelihood for the fit on exogenous amenities</p></li>
+<li><p><strong>scoreDwellingSize</strong> (<em>float64</em>) – Value of the log-likelihood for the fit on observed dwelling sizes</p></li>
+<li><p><strong>scoreIncomeSorting</strong> (<em>float64</em>) – Value of the log-likelihood for the fit on observed income sorting
+(matching observed rents to highest bid-rents from dominant income</p>
+<blockquote>
+<div><p>group)</p>
+</div></blockquote>
+</li>
+<li><p><strong>scoreHousing</strong> (<em>float64</em>) – Value of the log-likelihood for the fit on observed housing supply
+/ building density: this is not used in this version of the model as
+the relation is already used for the calibration of construction
+function parameters (hence is set equal to zero)</p></li>
+<li><p><strong>parametersAmenities</strong> (<em>ndarray(float64)</em>) – List of estimates for the impact of exogenous (dummy) amenities on the
+calibrated amenity index (in log-form). In the order: distance to the
+ocean &lt;2km, distance to the ocean between 2 and 4km, slope between
+1 and 5%, slope &gt;5%, being located within the airport cone, distance
+to district parks &lt;2km, distance to biosphere reserve &lt;2km, distance
+to train station &lt;2km, distance to urban heritage site &lt;2km</p></li>
+<li><p><strong>modelAmenities</strong> (<em>regression.linear_model.RegressionResultsWrapper</em>) – Object summarizing the results of the log-regressions of the
+theoretical amenity index over observed exogenous amenity dummies</p></li>
+<li><p><strong>parametersHousing</strong> (<em>int</em>) – List of estimates related to the fit of the model on building density
+/ housing supply: this is not included in this version of the model
+(vector is set equal to zero) as we already exploit this relation to
+estimate parameters of the construction function (compared to other
+versions where we use construction costs)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

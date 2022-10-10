@@ -243,6 +243,20 @@ def estim_incomes_and_gravity(param, grid, list_lambda,
         param, timeOutput, distanceOutput[:, :, 0], monetaryCost, costTime,
         job_centers, average_income, income_distribution, list_lambda, options)
 
+    # We also consider a selection based on the fit with observed aggregate
+    # average incomes, although this is likely to be more noisy
+    # NB: note that, in practice, it does not appear to change the final
+    # selection
+
+    # incomeCenters[incomeCenters < 0] = math.nan
+    # cal_avg_income = [np.nanmean(incomeCenters[:, :, k], 0)
+    #                   for k in np.arange(0, len(list_lambda))]
+    # err_avg_income = [np.abs(1 - cal_avg_income[i] / average_income)
+    #                   for i in np.arange(0, len(cal_avg_income))]
+    # list_err_avginc = [np.nanmean(err_avg_income[i])
+    #                    for i in np.arange(0, len(err_avg_income))]
+    # whichLambda_test = np.argmin(list_err_avginc)
+
     # Gives aggregate statistics for % of commuters per distance bracket
     # NB: bracketsDistance = np.array([0, 5, 10, 15, 20, 25, 30, 35, 40, 200])
     # with floor residence-workplace distances in km
@@ -368,10 +382,12 @@ def estim_util_func_param(data_number_formal, data_income_group,
         normalized yet.
 
     """
-    # We select in which areas we actually measure the likelihood
-    # NB: Again, there is a trade-off between empirical validity and
-    # statistical power, which is why we use a less stringent sample selection
-    # than for the calibration of construction function parameters
+    # We select in which areas we actually measure the likelihood.
+    # We use a less stringent definition as for the fit on building density
+    # (estimation of construction function parameters), as we are going to
+    # separately add conditions more specific to each regression used in the
+    # process.
+    # NB: There is a trade-off between empirical validity and statistical power
     selectedSP = (
         (data_number_formal > 0.90 * housing_types_sp.total_dwellings_SP_2011)
         & (data_income_group > 0)
@@ -382,17 +398,25 @@ def estim_util_func_param(data_number_formal, data_income_group,
     # For beta, we take a relatively wide acceptable range, as there is no
     # empirical counterpart (final value essentially depend on internal
     # validity) on which to base a priori knowledge, and it is the key
-    # parameter over which we want to optimize
-    listBeta = np.arange(0.23, 0.331, 0.01)
+    # parameter over which we want to optimize. We may refine it further,
+    # even though it is made unnecessary if we use an interior-point algorithm
+    # for later optimization
 
-    # For basic need in housing, we pin the value to the one estimated in
-    # Pfeiffer et al. Again, we could optimize over this value, but this would
-    # add a lot of numerical complexity, and we should not do it over a wide
-    # range of values to stay within feasible allocations. Besides, this
-    # parameter can be calibrated empirically (as is usually done in the
-    # literature), which makes more sense than relying on an optimization
-    # process made noisier by the number of parameters.
-    listBasicQ = np.array([param["q0"]])
+    # listBeta = np.arange(0.1, 0.51, 0.1)
+    listBeta = np.arange(0.25, 0.351, 0.01)
+
+    # We do the same for basic need in housing. Note that, contrary to
+    # elasticity parameter, we could find an empirical counterpart to this
+    # value (as is often done in the literature). This would allow to reduce
+    # the complexity of the problem by one dimension and to be more confident
+    # on the range for feasible solutions: we leave that for future
+    # implementations
+
+    # listBasicQ = np.arange(2, 10.1, 1)
+    listBasicQ = np.arange(5.5, 6.51, 0.1)
+    # listBasicQ = scipy.io.loadmat(
+    #             path_precalc_inp + 'calibratedUtility_q0.mat'
+    #             )["calibratedUtility_q0"].squeeze()
 
     # Coefficient for spatial autocorrelation (not used)
     listRho = 0
@@ -408,12 +432,8 @@ def estim_util_func_param(data_number_formal, data_income_group,
     # as it will in practice be crowded out of the formal private sector
     # (which drives most of our identification).
 
-    # NB: Again, we restrict ourselves to a quite narrow range as we have some
-    # a priori knowledge about welfare and we want to remain within feasible
-    # allocations (which would not be the case with richer income groups
-    # having a lower utility than poorer income groups, for instance)
-
-    listVariation = np.arange(0.96, 1.041, 0.02)
+    listVariation = np.arange(0.8, 1.21, 0.1)
+    # listVariation = 1
     initUti2 = utilityTarget[1]
     listUti3 = utilityTarget[2] * listVariation
     listUti4 = utilityTarget[3] * listVariation
@@ -456,7 +476,8 @@ def estim_util_func_param(data_number_formal, data_income_group,
         )
 
     # We import amenity data at the SP level
-    amenities_sp = calam.import_amenities(path_data, path_precalc_inp, 'SP')
+    amenities_sp = calam.import_exog_amenities(
+        path_data, path_precalc_inp, 'SP')
     # We select amenity variables to be used in regressions
     # NB: choice has to do with relevance and exogeneity of variables
     variables_regression = [
@@ -469,7 +490,7 @@ def estim_util_func_param(data_number_formal, data_income_group,
     # inputs: we need to make sure that the estimated parameters fall within
     # the predefined value ranges to exclude corner solutions.
     (parametersScan, scoreScan, parametersAmenitiesScan, modelAmenityScan,
-     parametersHousing, _) = calscan.EstimateParametersByScanning(
+     parametersHousing) = calscan.EstimateParametersByScanning(
          incomeNetOfCommuting, dataRent, data_sp["dwelling_size"],
          data_income_group, data_density, selected_density,
          housing_types_sp["x_sp"], housing_types_sp["y_sp"], selectedSP,
@@ -480,16 +501,9 @@ def estim_util_func_param(data_number_formal, data_income_group,
 
     # Now we run the optimization algorithm with identified value of the
     # parameters: this corresponds to an interior-point algorithm.
-
-    # Note that this may be long to run depending on the optimization programme
-
-    # Also note that this may not work: the optimization programme partly
-    # relies on interpolated inputs and may not be smooth enough for scipy's
-    # algorithm to run until the end. We have included some options to try
-    # other solvers that end up performing worse than the standard one:
-    # this is a complex numerical issue whose potential for model improvement
-    # we see as marginal, compared to parameter scanning. Hence, we leave that
-    # for future work.
+    # Note that this require above scanning process to be well-defined in
+    # order to converge to an interior solution: we provide the option of not
+    # running it in case this leads to absurd results.
 
     if options["param_optim"] == 1:
 
@@ -499,8 +513,7 @@ def estim_util_func_param(data_number_formal, data_income_group,
         initUti4 = parametersScan[3]
 
         (parameters, scoreTot, parametersAmenities, modelAmenity,
-         parametersHousing, selectedSPRent
-         ) = calopt.EstimateParametersByOptimization(
+         parametersHousing) = calopt.EstimateParametersByOptimization(
              incomeNetOfCommuting, dataRent, data_sp["dwelling_size"],
              data_income_group, data_density, selected_density,
              housing_types_sp["x_sp"], housing_types_sp["y_sp"], selectedSP,
@@ -511,8 +524,8 @@ def estim_util_func_param(data_number_formal, data_income_group,
 
     # Exporting and saving outputs
 
-    amenities_grid = calam.import_amenities(path_data, path_precalc_inp,
-                                            'grid')
+    amenities_grid = calam.import_exog_amenities(
+        path_data, path_precalc_inp, 'grid')
     predictors_grid = amenities_grid.loc[:, variables_regression]
     predictors_grid = np.vstack(
         [np.ones(predictors_grid.shape[0]),
