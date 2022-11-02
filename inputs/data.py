@@ -130,14 +130,13 @@ def import_income_classes_data(param, path_data):
         income (at baseline year)
     households_per_income_and_housing : ndarray(float64, ndim=2)
         Exogenous number of households per income group (4, from poorest to
-        richest) in each endogenous housing type (3: formal private,
+        # richest) in each endogenous housing type (3: formal private,
         informal backyards, informal settlements), from SP-level data
 
     """
     # Import population distribution according to housing type and income class
     # Note that RDP is included as formal housing in the data : we will correct
     # that in equilibrium.compute_equilibrium
-    # TODO: Might need to change name of raw data for later updates
     income_baseline = pd.read_csv(path_data + 'Income_distribution_2011.csv')
 
     # We only have data on median income per income group in the data (12),
@@ -256,7 +255,7 @@ def import_households_data(path_precalc_inp):
     #  Total surface of RDP units (in m²)
     data_rdp["area"] = data['gridAreaRDPfromGV'][0][0].squeeze()
 
-    # Get other data at grid-level
+    # Get other data at grid level
     #  Dummy indicating wheter pixel belongs to Mitchells Plain district
     mitchells_plain_grid_baseline = data['MitchellsPlain'][0][0].squeeze()
     #  Population density in formal housing (per m²)
@@ -283,7 +282,6 @@ def import_households_data(path_precalc_inp):
     data_sp["dwelling_size"] = data['spDwellingSize'][0][0].squeeze()
     #  Average price of real estate (per m²) for baseline year (2011)
     data_sp["price"] = data['spPrice'][0][0].squeeze()[2, :]
-    #  TODO: Might need to change variable names in raw data
     #  Annual average household income (in rands)
     data_sp["income"] = data['sp2011AverageIncome'][0][0].squeeze()
     #  Unconstrained area for construction (in m²)
@@ -357,10 +355,9 @@ def import_macro_data(param, path_scenarios, path_folder):
     # granular data sets so that the same overall population is indeed
     # considered along the model
 
-    # TODO: Might need to change name of raw data
     sal_data = pd.read_excel(
         path_folder
-        + "CT Dwelling type data validation workbook 20201204 v2.xlsx",
+        + "housing_types_sal_analysis.xlsx",
         header=6, nrows=5339)
 
     sal_data["informal"] = sal_data[
@@ -373,34 +370,33 @@ def import_macro_data(param, path_scenarios, path_folder):
     # others in formal (note that RDP is included for now)
     sal_data["formal"] = np.nansum(sal_data.iloc[:, [3, 5, 6, 7, 8]], 1)
 
-    # TODO: Might need to change name of raw data
     rdp_data = pd.read_excel(
         path_folder
-        + "CT Dwelling type data validation workbook 20201204 v2.xlsx",
+        + "housing_types_sal_analysis.xlsx",
         sheet_name='Analysis', header=None, names=None, usecols="A:B",
         skiprows=18, nrows=6)
     total_RDP = int(rdp_data.iloc[5, 1])
 
-    # Another way of doing is to take raw values for SR2 (incremental housing)
-    # properties according to 2012 General Valuation: this yields a total of
-    # 138,444. By adding approximately 40,000 council housing units (similar to
-    # RDP/BNG for our purpose), we get a close estimate to above method:
-    # total_RDP = 138444 + 40000
+    # Note that the underlying data inference process used to count formal
+    # subsidized housing units probably takes (older) council housing units
+    # into account. As this is also a form of social housing, they will be
+    # assimilated to RDP units in the analysis (and the terms formal subsidized
+    # and RDP will be used interchangeably).
+
+    # An external validation exercise indeed shows that we obtain a number of
+    # RDP/BNG units close enough to the one estimated using Cape Town's 2012
+    # General Valuation Roll (SR2 incremental housing) after substracting
+    # 40,000 council housing units
 
     # Here, we substract RDP from formal (no need to correct again in
-    # validation)
+    # validation exercises)
     total_formal = sal_data["formal"].sum() - total_RDP
 
     total_informal = sal_data["informal"].sum()
 
-    # Note that we only include informal backyards  by assumption in the model
+    # Note that we only include informal backyards (non-concrete structures,
+    # similar to informal "shacks") by assumption in the model
     total_backyard = sal_data["backyard_informal"].sum()
-
-    # Old raw numbers
-    # total_RDP = 194258
-    # total_formal = 626770
-    # total_informal = 143765
-    # total_backyard = 91132
 
     housing_type_data = np.array([total_formal, total_backyard, total_informal,
                                   total_RDP])
@@ -490,7 +486,7 @@ def import_land_use(grid, options, param, data_rdp, housing_types,
     # RDP population data
     #  We take total population in RDP at baseline year
     RDP_baseline = housing_type_data[3]
-    #  Also comes from general validation for 2001
+    #  Comes from 2001 General Valuation Roll
     RDP_restrospect = 1.1718e+05
 
     # Land cover for informal settlements
@@ -504,26 +500,25 @@ def import_land_use(grid, options, param, data_rdp, housing_types,
 
     # Surface data on scenarios for informal settlement building
     informal_risks_short = pd.read_csv(
-        path_folder + 'Land occupation/informal_settlements_risk_SHORT.csv',
+        path_folder + 'occupation_maps/informal_settlements_risk_SHORT.csv',
         sep=',')
     informal_risks_long = pd.read_csv(
-        path_folder + 'Land occupation/informal_settlements_risk_LONG.csv',
+        path_folder + 'occupation_maps/informal_settlements_risk_LONG.csv',
         sep=',')
     informal_risks_medium = pd.read_csv(
-        path_folder + 'Land occupation/informal_settlements_risk_MEDIUM.csv',
+        path_folder + 'occupation_maps/informal_settlements_risk_MEDIUM.csv',
         sep=',')
     informal_risks_HIGH = pd.read_csv(
-        path_folder + 'Land occupation/informal_settlements_risk_pHIGH.csv',
+        path_folder + 'occupation_maps/informal_settlements_risk_pHIGH.csv',
         sep=',')
     informal_risks_VERYHIGH = pd.read_csv(
         path_folder
-        + 'Land occupation/informal_settlements_risk_pVERYHIGH.csv',
+        + 'occupation_maps/informal_settlements_risk_pVERYHIGH.csv',
         sep=',')
 
     # Number of informal dwellings per pixel in 2020
-    # TODO: Might need to change name of raw data (and variable names)
     informal_settlements_nearfuture = pd.read_excel(
-        path_folder + 'Flood plains - from Claus/inf_dwellings_2020.xlsx')
+        path_data + 'inf_dwellings_2020.xlsx')
     # Here we correct by (1 / max_land_use) to make the area comparable with
     # other informal risks (this will be removed afterwards as it does not
     # correspond to reality)
@@ -540,7 +535,7 @@ def import_land_use(grid, options, param, data_rdp, housing_types,
     # We want to include pushback from farmers around Philipi, hence we delay
     # settlement of those areas compared to other short-term risks
     polygon_medium_timing = pd.read_excel(
-        path_folder + 'Land occupation/polygon_medium_timing.xlsx',
+        path_folder + 'occupation_maps/polygon_medium_timing.xlsx',
         header=None)
 
     # We take the selected pixels from medium scenario and make their risk
@@ -566,17 +561,18 @@ def import_land_use(grid, options, param, data_rdp, housing_types,
     # We compute linear regression spline for 4 years centered around baseline
     # Construction rate comes from Pfeiffer et al.'s median scenario, then we
     # apply a lower rate after the end of the programme in 2020
-    # TODO: Might need to change x-axis if underlying targets change
     spline_RDP = interp1d(
         [2001 - param["baseline_year"], 2011 - param["baseline_year"],
          2020 - param["baseline_year"], 2041 - param["baseline_year"]],
-        [RDP_restrospect, RDP_baseline, RDP_baseline + 9*5000,
-         RDP_baseline + 9*5000 + 21 * param["future_rate_public_housing"]],
+        [RDP_restrospect, RDP_baseline,
+         RDP_baseline + 9 * param["current_rate_public_housing"],
+         RDP_baseline + 9 * param["current_rate_public_housing"]
+         + 21 * param["future_rate_public_housing"]],
         'linear'
         )
 
     # We capture the output of the function to be used later on
-    #  Start of the programme
+    #  Start of the actual construction programme
     year_begin_RDP = 2015
     #  We "center" scenarios around baseline year until end of programme
     year_RDP = np.arange(year_begin_RDP, 2040) - param["baseline_year"]
@@ -601,8 +597,7 @@ def import_land_use(grid, options, param, data_rdp, housing_types,
     #  We just take size of the projection array for long-term horizon
     year_long_term = 30
 
-    #  We save the timeline into a list (same remark as before for
-    #  interpolation years)
+    #  We save the timeline into a list
     year_data_informal = [
         2000 - param["baseline_year"],
         year_begin_RDP - param["baseline_year"],
@@ -832,7 +827,6 @@ def import_land_use(grid, options, param, data_rdp, housing_types,
         informal_baseline)
 
     #  We also get area for high risk scenario retained in projections
-    #  TODO : could code as an option
     high_proba = informal_risks_VERYHIGH.area + informal_risks_HIGH.area
 
     #  We consider some scenario for 2023 and correct for RDP construction
@@ -871,7 +865,6 @@ def import_land_use(grid, options, param, data_rdp, housing_types,
     informal_long_fut[informal_long_fut < 0] = 0
 
     # Regression spline (with land constraints)
-    # TODO : same remark as before on interpolation
 
     if options["informal_land_constrained"] == 0:
         spline_land_informal = interp1d(
@@ -1101,7 +1094,11 @@ def import_init_floods_data(options, param, path_folder):
                       name + '_0010', name + '_0025', name + '_0050',
                       name + '_0100', name + '_0250']
 
-    path_data = path_folder + "FATHOM/"
+    path_data = path_folder + "flood_maps/"
+
+    # NB: FATHOM data has already been pre-processed to fit the CoCT's grid of
+    # analysis in previous work. The code used to pre-process DELTARES data
+    # is available under the _flood_processing folder
 
     d_pluvial = {}
     d_fluvial = {}
@@ -1169,28 +1166,6 @@ def import_init_floods_data(options, param, path_folder):
         [0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 10],
         [0, 0.2, 0.3, 0.4, 0.45, 0.5, 0.55, 0.6, 0.62, 0.64, 0.65, 0.65]
         )
-
-    # If WBUS2 is used, we take the max from the two sources to be conservative
-    if options["WBUS2"] == 1:
-        WBUS2_20yr = pd.read_excel(
-            path_folder + "Flood plains - from Claus/WBUS2_20yr.xlsx")
-        WBUS2_50yr = pd.read_excel(
-            path_folder + "Flood plains - from Claus/WBUS2_50yr.xlsx")
-        WBUS2_100yr = pd.read_excel(
-            path_folder + "Flood plains - from Claus/WBUS2_100yr.xlsx")
-        d_fluvial['FD_20yr'].prop_flood_prone = np.fmax(
-            d_fluvial['FD_20yr'].prop_flood_prone, WBUS2_20yr.prop_flood_prone)
-        d_fluvial['FD_50yr'].prop_flood_prone = np.fmax(
-            d_fluvial['FD_50yr'].prop_flood_prone, WBUS2_50yr.prop_flood_prone)
-        d_fluvial['FD_100yr'].prop_flood_prone = np.fmax(
-            d_fluvial['FD_100yr'].prop_flood_prone,
-            WBUS2_100yr.prop_flood_prone)
-        d_fluvial['FD_20yr'].flood_depth = np.maximum(
-            d_fluvial['FD_20yr'].prop_flood_prone, param["depth_WBUS2_20yr"])
-        d_fluvial['FD_50yr'].flood_depth = np.maximum(
-            d_fluvial['FD_50yr'].prop_flood_prone, param["depth_WBUS2_50yr"])
-        d_fluvial['FD_100yr'].flood_depth = np.maximum(
-            d_fluvial['FD_100yr'].prop_flood_prone, param["depth_WBUS2_100yr"])
 
     return (structural_damages_small_houses, structural_damages_medium_houses,
             structural_damages_large_houses, content_damages,
@@ -1354,7 +1329,7 @@ def compute_fraction_capital_destroyed(d, type_flood, damage_function,
 
     # NB: note that we do not use the same intervals for coastal as for
     # pluvial/fluvial since we do not have the same return periods available
-    # in Deltares and FATHOM data
+    # in DELTARES and FATHOM data
 
         name = type_flood + '_' + options["dem"] + '_' + str(options["slr"])
 
@@ -1845,12 +1820,11 @@ def import_full_floods_data(options, param, path_folder):
 
     # We take a weighted average for structures in bricks and shacks among
     # all backyard structures in case we include both in the model.
-    # To do so, we rely on SALhousing type data.
-    # TODO: Might need to rename raw data (but this part is deprecated anyway)
+    # To do so, we rely on SAL housing type data.
 
     sal_data = pd.read_excel(
         path_folder
-        + "CT Dwelling type data validation workbook 20201204 v2.xlsx",
+        + "housing_types_sal_analysis.xlsx",
         header=6, nrows=5339)
     sal_data["backyard_formal"] = sal_data["House/flat/room in backyard"]
     sal_data["backyard_informal"] = sal_data[
@@ -2069,8 +2043,8 @@ def import_transport_data(grid, param, yearTraffic,
 
         # Expected income net of commuting costs
         # NB: comments are a test for a log-sum specification that we dropped.
-        # Instead, we use a weighted average sum, as is standard in
-        # Pfeiffer et al.
+        # Instead, we use a weighted average sum, as is standard in the
+        # literature (see Ahlfeldt et al., 2015)
 
         # if options["prevent_exp_overflow"] == 1:
         #     incomeNetOfCommuting[j, :] = (
@@ -2147,10 +2121,9 @@ def import_sal_data(grid, path_folder, path_data, housing_type_data):
         estimates
 
     """
-    # TODO: Might need to change name of raw data
     sal_data = pd.read_excel(
         path_folder
-        + "CT Dwelling type data validation workbook 20201204 v2.xlsx",
+        + "housing_types_sal_analysis.xlsx",
         header=6, nrows=5339)
     sal_data["informal"] = sal_data[
         "Informal dwelling (shack; not in backyard; e.g. in an"
@@ -2164,7 +2137,7 @@ def import_sal_data(grid, path_folder, path_data, housing_type_data):
 
     sal_data = pd.read_excel(
         path_folder
-        + "CT Dwelling type data validation workbook 20201204 v2.xlsx",
+        + "housing_types_sal_analysis.xlsx",
         header=6, nrows=5339)
     sal_data["informal"] = sal_data[
         "Informal dwelling (shack; not in backyard; e.g. in an"

@@ -460,12 +460,12 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">path_code</span> <span class="o">=</span> <span class="s1">&#39;..&#39;</span>
 <span class="n">path_folder</span> <span class="o">=</span> <span class="n">path_code</span> <span class="o">+</span> <span class="s1">&#39;/Data/&#39;</span>
-<span class="n">path_precalc_inp</span> <span class="o">=</span> <span class="n">path_folder</span> <span class="o">+</span> <span class="s1">&#39;Precalculated inputs/&#39;</span>
+<span class="n">path_precalc_inp</span> <span class="o">=</span> <span class="n">path_folder</span> <span class="o">+</span> <span class="s1">&#39;precalculated_inputs/&#39;</span>
 <span class="n">path_data</span> <span class="o">=</span> <span class="n">path_folder</span> <span class="o">+</span> <span class="s1">&#39;data_Cape_Town/&#39;</span>
 <span class="n">path_precalc_transp</span> <span class="o">=</span> <span class="n">path_folder</span> <span class="o">+</span> <span class="s1">&#39;precalculated_transport/&#39;</span>
 <span class="n">path_scenarios</span> <span class="o">=</span> <span class="n">path_data</span> <span class="o">+</span> <span class="s1">&#39;Scenarios/&#39;</span>
 <span class="n">path_outputs</span> <span class="o">=</span> <span class="n">path_code</span> <span class="o">+</span> <span class="s1">&#39;/Output/&#39;</span>
-<span class="n">path_floods</span> <span class="o">=</span> <span class="n">path_folder</span> <span class="o">+</span> <span class="s2">&quot;FATHOM/&quot;</span>
+<span class="n">path_floods</span> <span class="o">=</span> <span class="n">path_folder</span> <span class="o">+</span> <span class="s2">&quot;flood_maps/&quot;</span>
 <span class="n">path_input_plots</span> <span class="o">=</span> <span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;input_plots/&#39;</span>
 <span class="n">path_input_tables</span> <span class="o">=</span> <span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;input_tables/&#39;</span>
 </pre></div>
@@ -748,17 +748,17 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># First for timing</span>
 <span class="n">informal_risks_short</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
-    <span class="n">path_folder</span> <span class="o">+</span> <span class="s1">&#39;Land occupation/informal_settlements_risk_SHORT.csv&#39;</span><span class="p">,</span>
+    <span class="n">path_folder</span> <span class="o">+</span> <span class="s1">&#39;occupation_maps/informal_settlements_risk_SHORT.csv&#39;</span><span class="p">,</span>
     <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
 <span class="n">informal_risks_short</span> <span class="o">=</span> <span class="n">informal_risks_short</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
     <span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;area&quot;</span><span class="p">:</span> <span class="s2">&quot;area_short&quot;</span><span class="p">})</span>
 <span class="n">informal_risks_medium</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
-    <span class="n">path_folder</span> <span class="o">+</span> <span class="s1">&#39;Land occupation/informal_settlements_risk_MEDIUM.csv&#39;</span><span class="p">,</span>
+    <span class="n">path_folder</span> <span class="o">+</span> <span class="s1">&#39;occupation_maps/informal_settlements_risk_MEDIUM.csv&#39;</span><span class="p">,</span>
     <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
 <span class="n">informal_risks_medium</span> <span class="o">=</span> <span class="n">informal_risks_medium</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
     <span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;area&quot;</span><span class="p">:</span> <span class="s2">&quot;area_medium&quot;</span><span class="p">})</span>
 <span class="n">informal_risks_long</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
-    <span class="n">path_folder</span> <span class="o">+</span> <span class="s1">&#39;Land occupation/informal_settlements_risk_LONG.csv&#39;</span><span class="p">,</span>
+    <span class="n">path_folder</span> <span class="o">+</span> <span class="s1">&#39;occupation_maps/informal_settlements_risk_LONG.csv&#39;</span><span class="p">,</span>
     <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
 <span class="n">informal_risks_long</span> <span class="o">=</span> <span class="n">informal_risks_long</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
     <span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;area&quot;</span><span class="p">:</span> <span class="s2">&quot;area_long&quot;</span><span class="p">})</span>
@@ -820,22 +820,22 @@ div.rendered_html tbody tr:hover {
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Then for probability</span>
 
 <span class="n">informal_risks_LOW</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
-    <span class="n">path_folder</span> <span class="o">+</span> <span class="s1">&#39;Land occupation/informal_settlements_risk_pLOW.csv&#39;</span><span class="p">,</span>
+    <span class="n">path_folder</span> <span class="o">+</span> <span class="s1">&#39;occupation_maps/informal_settlements_risk_pLOW.csv&#39;</span><span class="p">,</span>
     <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
 <span class="n">informal_risks_LOW</span> <span class="o">=</span> <span class="n">informal_risks_LOW</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
     <span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;area&quot;</span><span class="p">:</span> <span class="s2">&quot;area_LOW&quot;</span><span class="p">})</span>
 <span class="n">informal_risks_MEDIUM</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
-    <span class="n">path_folder</span> <span class="o">+</span> <span class="s1">&#39;Land occupation/informal_settlements_risk_pMEDIUM.csv&#39;</span><span class="p">,</span>
+    <span class="n">path_folder</span> <span class="o">+</span> <span class="s1">&#39;occupation_maps/informal_settlements_risk_pMEDIUM.csv&#39;</span><span class="p">,</span>
     <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
 <span class="n">informal_risks_MEDIUM</span> <span class="o">=</span> <span class="n">informal_risks_MEDIUM</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
     <span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;area&quot;</span><span class="p">:</span> <span class="s2">&quot;area_MEDIUM&quot;</span><span class="p">})</span>
 <span class="n">informal_risks_HIGH</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
-    <span class="n">path_folder</span> <span class="o">+</span> <span class="s1">&#39;Land occupation/informal_settlements_risk_pHIGH.csv&#39;</span><span class="p">,</span>
+    <span class="n">path_folder</span> <span class="o">+</span> <span class="s1">&#39;occupation_maps/informal_settlements_risk_pHIGH.csv&#39;</span><span class="p">,</span>
     <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
 <span class="n">informal_risks_HIGH</span> <span class="o">=</span> <span class="n">informal_risks_HIGH</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
     <span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;area&quot;</span><span class="p">:</span> <span class="s2">&quot;area_HIGH&quot;</span><span class="p">})</span>
 <span class="n">informal_risks_VERYHIGH</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
-    <span class="n">path_folder</span> <span class="o">+</span> <span class="s1">&#39;Land occupation/informal_settlements_risk_pVERYHIGH.csv&#39;</span><span class="p">,</span>
+    <span class="n">path_folder</span> <span class="o">+</span> <span class="s1">&#39;occupation_maps/informal_settlements_risk_pVERYHIGH.csv&#39;</span><span class="p">,</span>
     <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
 <span class="n">informal_risks_VERYHIGH</span> <span class="o">=</span> <span class="n">informal_risks_VERYHIGH</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
     <span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;area&quot;</span><span class="p">:</span> <span class="s2">&quot;area_VERYHIGH&quot;</span><span class="p">})</span>

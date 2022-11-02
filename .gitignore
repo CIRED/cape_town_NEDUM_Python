@@ -1,5 +1,10 @@
+# Specific file extensions
 .spyproject
+.vscode
 *.bak
+
+# Specific directories
+_old/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

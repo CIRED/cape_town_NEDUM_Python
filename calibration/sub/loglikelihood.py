@@ -27,10 +27,10 @@ def LogLikelihoodModel(X0, Uo2, net_income, groupLivingSpMatrix,
     amenity index on observed exogenous dummy amenity variables. The first
     log-likelihood is computed based on the value of residuals. Then, it
     defines a second log-likelihood for the fit on income sorting (matching
-    observed rents with highest bid-rents from the dominant income group), and
-    maximizes it across (unobserved) scale factors. Finally, it gets the
-    residuals from the log-difference between theoretical and observed dwelling
-    sizes, and computes the third log-likelihood from there.
+    the observed dominant income group with the highest bidding income group).
+    Finally, it gets the residuals from the log-difference between theoretical
+    and observed dwelling sizes, and computes the third log-likelihood from
+    there.
 
     Parameters
     ----------
@@ -139,8 +139,8 @@ def LogLikelihoodModel(X0, Uo2, net_income, groupLivingSpMatrix,
     # the regression
     logAmenityIndex = np.nansum(
         logAmenityIndex * groupLivingSpMatrix[:, selectedRents], 0)
-    logAmenityIndex[np.abs(logAmenityIndex.imag) > 0] = np.nan
-    logAmenityIndex[logAmenityIndex == 0] = np.nan
+    # logAmenityIndex[np.abs(logAmenityIndex.imag) > 0] = np.nan
+    # logAmenityIndex[logAmenityIndex == -np.inf] = np.nan
 
     # We get residuals for the regression of log amenity index on exogenous
     # dummy variables.
@@ -149,21 +149,21 @@ def LogLikelihoodModel(X0, Uo2, net_income, groupLivingSpMatrix,
 
     # OLS estimation
     if (optionRegression == 0):
-        A = predictorsAmenitiesMatrix[~np.isnan(logAmenityIndex), :]
+        A = predictorsAmenitiesMatrix  # [~np.isnan(logAmenityIndex), :]
         y = (logAmenityIndex[~np.isnan(logAmenityIndex)]).real
         # parametersAmenities, residuals, rank, s = np.linalg.lstsq(A, y,
         #                                                           rcond=None)
         # res = scipy.optimize.lsq_linear(A, y)
         # parametersAmenities = res.x
         # residuals = res.fun
-        modelSpecification = sm.OLS(y, A)
+        modelSpecification = sm.OLS(y, A, missing='drop')
         modelAmenities = modelSpecification.fit()
         parametersAmenities = modelAmenities.params
         errorAmenities = modelAmenities.resid_pearson
         # errorAmenities = y - np.nansum(A * parametersAmenities, 1)
         # modelAmenities = 0
 
-    # GLM estimation (deprecated)
+    # GLM estimation (unstable)
     elif (optionRegression == 1):
         residu = logAmenityIndex.real
         A = predictorsAmenitiesMatrix[~np.isnan(logAmenityIndex), :]
@@ -192,7 +192,7 @@ def LogLikelihoodModel(X0, Uo2, net_income, groupLivingSpMatrix,
     bidRents = (
         (net_income_select * (1 - beta) ** (1 - beta) * beta ** beta)
         / (utility_over_amenity
-           - basicQ * (1 - beta) ** (1 - beta) * beta ** beta)
+            - basicQ * (1 - beta) ** (1 - beta) * beta ** beta)
         )
 
     # We select SPs where at least some income group makes a positive bid
@@ -281,6 +281,7 @@ def LogLikelihoodModel(X0, Uo2, net_income, groupLivingSpMatrix,
     # The sum of logs is the same as the log of a product, hence we can define
     # our composite log-likelihood function as the sum of our separate
     # log-likelihoods
+
     scoreTotal = scoreAmenities + scoreDwellingSize + scoreIncomeSorting
     # scoreTotal = scoreAmenities
 

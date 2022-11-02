@@ -5,6 +5,7 @@ import numpy.matlib
 import statsmodels.api as sm
 import os
 import math
+import scipy
 
 import calibration.sub.compute_income as calcmp
 import calibration.sub.import_employment_data as calemp
@@ -122,18 +123,6 @@ def estim_construct_func_param(options, param, data_sp,
     np.save(path_precalc_inp + 'calibratedHousing_b.npy', coeff_b)
     np.save(path_precalc_inp + 'calibratedHousing_kappa.npy', coeffKappa)
 
-    # We add the option in case we want to reverse estimated elasticties to
-    # stick closer to the literature (this is just a test)
-    if options["reverse_elasticities"] == 1:
-        coeff_a = coeff_b
-        coeff_b = 1 - coeff_a
-        if options["correct_kappa"] == 1:
-            coeffKappa = ((1 / (coeff_b / coeff_a) ** coeff_b)
-                          * np.exp(model_construction.intercept_))
-        elif options["correct_kappa"] == 0:
-            coeffKappa = ((1 / (coeff_b) ** coeff_b)
-                          * np.exp(model_construction.intercept_))
-
     return coeff_b, coeff_a, coeffKappa
 
 
@@ -240,28 +229,22 @@ def estim_incomes_and_gravity(param, grid, list_lambda,
     # Here again, we are considering rescaled income data.
     (incomeCenters, distanceDistribution, scoreMatrix
      ) = calcmp.EstimateIncome(
-        param, timeOutput, distanceOutput[:, :, 0], monetaryCost, costTime,
-        job_centers, average_income, income_distribution, list_lambda, options)
-
-    # We also consider a selection based on the fit with observed aggregate
-    # average incomes, although this is likely to be more noisy
-    # NB: note that, in practice, it does not appear to change the final
-    # selection
-
-    # incomeCenters[incomeCenters < 0] = math.nan
-    # cal_avg_income = [np.nanmean(incomeCenters[:, :, k], 0)
-    #                   for k in np.arange(0, len(list_lambda))]
-    # err_avg_income = [np.abs(1 - cal_avg_income[i] / average_income)
-    #                   for i in np.arange(0, len(cal_avg_income))]
-    # list_err_avginc = [np.nanmean(err_avg_income[i])
-    #                    for i in np.arange(0, len(err_avg_income))]
-    # whichLambda_test = np.argmin(list_err_avginc)
+         param, timeOutput, distanceOutput[:, :, 0], monetaryCost, costTime,
+         job_centers, average_income, income_distribution, list_lambda,
+         options)
 
     # Gives aggregate statistics for % of commuters per distance bracket
     # NB: bracketsDistance = np.array([0, 5, 10, 15, 20, 25, 30, 35, 40, 200])
     # with floor residence-workplace distances in km
     # (see calibration.sub.compute_income)
-    # TODO: need to include a data reference
+
+    # NB: we could check differential mobility patterns as a robustness check
+    # by estimating a distinct gravity parameter for each income group if we
+    # get access to a breakdown of residence-workplace distance distribution
+    # per income group
+
+    # Residence-workplace distance distribution comes from the CoCT's 2013
+    # Transport Survey
     data_distance_distribution = np.array(
         [45.6174222, 18.9010734, 14.9972971, 9.6725616, 5.9425438, 2.5368754,
          0.9267125, 0.3591011, 1.0464129])
@@ -283,7 +266,8 @@ def estim_incomes_and_gravity(param, grid, list_lambda,
     incomeCentersKeep = incomeCenters[:, :, whichLambda]
 
     # We also keep the associated error metric
-    scoreKeep = scoreMatrix[whichLambda, :]
+    # scoreKeep = scoreMatrix[whichLambda, :]
+    scoreKeep = scoreMatrix
 
     # Note that income is set to -inf for job centers and income groups in
     # which it could not be calibrated
@@ -306,7 +290,7 @@ def estim_incomes_and_gravity(param, grid, list_lambda,
 def estim_util_func_param(data_number_formal, data_income_group,
                           housing_types_sp, data_sp,
                           coeff_a, coeff_b, coeffKappa, interest_rate,
-                          incomeNetOfCommuting, selected_density,
+                          incomeNetOfCommuting,
                           path_data, path_precalc_inp,
                           options, param):
     """
@@ -353,10 +337,6 @@ def estim_util_func_param(data_number_formal, data_income_group,
     incomeNetOfCommuting : ndarray(float64, ndim=2)
         Expected annual income net of commuting costs (in rands, for
         one household), for each geographic unit, by income group (4)
-    selected_density : Series
-        Dummy variable allowing for sample selection across Small Places
-        (1,046) for regressions that are only valid in the formal private
-        housing sector
     path_data : str
         Path towards data used in the model
     path_precalc_inp : str
@@ -395,35 +375,36 @@ def estim_util_func_param(data_number_formal, data_income_group,
 
     # We are going to scan over values on which to optimize
 
-    # For beta, we take a relatively wide acceptable range, as there is no
-    # empirical counterpart (final value essentially depend on internal
-    # validity) on which to base a priori knowledge, and it is the key
-    # parameter over which we want to optimize. We may refine it further,
-    # even though it is made unnecessary if we use an interior-point algorithm
-    # for later optimization
+    # As explained in the parameters_and_options module, we consider that
+    # benchmark value from Finlay and Williams (2022) is more robust than
+    # our own estimation for the elasticity of housing demand. We therefore
+    # pin this value down as default. Note that we can define a range of
+    # acceptable values for sensitivity checks.
 
-    # listBeta = np.arange(0.1, 0.51, 0.1)
-    listBeta = np.arange(0.25, 0.351, 0.01)
+    listBeta = scipy.io.loadmat(
+                path_precalc_inp + 'calibratedUtility_beta.mat'
+                )["calibratedUtility_beta"].squeeze()
+    # listBeta = 0.25
+    # listBeta = np.arange(0.1, 0.41, 0.02)
 
-    # We do the same for basic need in housing. Note that, contrary to
-    # elasticity parameter, we could find an empirical counterpart to this
-    # value (as is often done in the literature). This would allow to reduce
-    # the complexity of the problem by one dimension and to be more confident
-    # on the range for feasible solutions: we leave that for future
-    # implementations
+    # Again, we pin the value of basic need in housing to the one estimated
+    # in Pfeiffer et al., to serve as a placeholder for later empirical
+    # calibration (see parameters_and_options module) and to reduce the
+    # numerical complexity of the optimization process (that may converge
+    # towards multiple optima)
 
-    # listBasicQ = np.arange(2, 10.1, 1)
-    listBasicQ = np.arange(5.5, 6.51, 0.1)
-    # listBasicQ = scipy.io.loadmat(
-    #             path_precalc_inp + 'calibratedUtility_q0.mat'
-    #             )["calibratedUtility_q0"].squeeze()
+    listBasicQ = scipy.io.loadmat(
+                path_precalc_inp + 'calibratedUtility_q0.mat'
+                )["calibratedUtility_q0"].squeeze()
+    # listBasicQ = 4
 
     # Coefficient for spatial autocorrelation (not used)
     listRho = 0
 
-    # Utilities for simulations: we take levels close to what we expect
-    # in equilibrium
-    utilityTarget = np.array([1000, 3000, 15000, 70000])
+    # Target utility levels used to define amenity score: we take levels close
+    # to what we expect in equilibrium
+    # utilityTarget = np.array([400, 900, 5400, 26000])
+    utilityTarget = np.array([1200, 4800, 16000, 77000])
 
     # Then, we only allow utilities for the two richest income groups to vary,
     # for the sake of numerical simplicity and as they will drive most of the
@@ -432,8 +413,46 @@ def estim_util_func_param(data_number_formal, data_income_group,
     # as it will in practice be crowded out of the formal private sector
     # (which drives most of our identification).
 
-    listVariation = np.arange(0.8, 1.21, 0.1)
-    # listVariation = 1
+    # Compared to Pfeiffer et al., we only fit the data moment on exogenous
+    # amenities when pinning down the values of beta and q0 (see definition
+    # of the composite log-likelihood in the estimate_parameters modules).
+    # This is because the amenity score is the only parameter left to
+    # calibrate, and we want it to be predicted in the most acurrate way
+    # by our explanatory covariates. Consequently, the selected values for the
+    # utility levels will not necessarily match the endogenous values we get as
+    # an equilibrium outcome: this is because they are selected so as to
+    # minimize the component of the theoretical amenity score that is left
+    # unexplained by chosen exogenous covariates. Indeed, we will keep the
+    # explained component for the definition of the amenity score used in our
+    # simulations.
+
+    # Alternatively, we could obtain this score from model inversion (as we do
+    # later with the disamenity factor from living in informal backyards
+    # / settlements), implicitly defining it as a residual that allows the
+    # model to fit the data better. In more intuitive terms, this boils down to
+    # optimizing over the value of the amenity score at the same time as
+    # utility levels when solving the equilibrium (remember that we consider
+    # a closed-city model where total population per income group is exogenous
+    # and utility levels are endogenous). This approach is standard in
+    # quantitative spatial economic models (see Redding and Rossi-Hansberg,
+    # 2017 for more details). However, we choose to model the score explicitly,
+    # defining it a priori as a calibrated parameter, and only solving for
+    # utility levels (and disamenity factors) in equilibrium.
+    # NB: The approach taken in Pfeiffer et al., where the score is calibrated
+    # a priori, but along other data moments, can be seen as an intermediate
+    # between the two approaches presented above.
+
+    # This approach comes with the risk of a poorer overall fit. However, if
+    # validation shows that model predictions are good enough for use in spite
+    # of this limitation, the approach also brings clear benefits. First,
+    # it prevents the model from overfitting, which increases its external
+    # validity when assessing counterfactuals. Then, the amenity score has a
+    # clear empirical interpretation, which allows to assess more specifically
+    # policies directed towards amenities (translating into a change of values
+    # for some exogenous covariates, that can be direcly mapped to a change in
+    # equilibrium outcomes).
+
+    listVariation = np.arange(0.5, 1.5, 0.01)
     initUti2 = utilityTarget[1]
     listUti3 = utilityTarget[2] * listVariation
     listUti4 = utilityTarget[3] * listVariation
@@ -469,21 +488,24 @@ def estim_util_func_param(data_number_formal, data_income_group,
             / (coeffKappa * coeff_b ** coeff_b)
             )
 
-    # We get the built density in associated constructible land (per km²)
-    data_density = (
-        data_number_formal
-        / (data_sp["unconstrained_area"] * param["max_land_use"] / 1000000)
-        )
+    # Note that the above formulas consider that we observe land prices in the
+    # data, hence the conversion to housing rents through the zero profit
+    # condition for formal private developers. If we observe housing prices
+    # instead, we should use to below formula, expressing rents as the annual
+    # coupon associated with an infinite bond valued at housing price
+    dataRent = data_sp["price"] * interest_rate
 
     # We import amenity data at the SP level
     amenities_sp = calam.import_exog_amenities(
         path_data, path_precalc_inp, 'SP')
     # We select amenity variables to be used in regressions
     # NB: choice has to do with relevance and exogeneity of variables
+    # Choice set is relevant but may only refer to a small subset of locations
+    # (train stations are often dysfunctional, for instance)
     variables_regression = [
-        'distance_ocean', 'distance_ocean_2_4', 'slope_1_5', 'slope_5',
-        'airport_cone2', 'distance_distr_parks', 'distance_biosphere_reserve',
-        'distance_train', 'distance_urban_herit']
+        'distance_distr_parks', 'distance_ocean', 'distance_ocean_2_4',
+        'distance_urban_herit', 'airport_cone2', 'slope_1_5', 'slope_5',
+        'distance_biosphere_reserve', 'distance_train']
 
     # We run the parameter scanning.
     # Note that this may be long to run as it depends on the combination of all
@@ -492,10 +514,8 @@ def estim_util_func_param(data_number_formal, data_income_group,
     (parametersScan, scoreScan, parametersAmenitiesScan, modelAmenityScan,
      parametersHousing) = calscan.EstimateParametersByScanning(
          incomeNetOfCommuting, dataRent, data_sp["dwelling_size"],
-         data_income_group, data_density, selected_density,
-         housing_types_sp["x_sp"], housing_types_sp["y_sp"], selectedSP,
-         amenities_sp, variables_regression, listRho, listBeta, listBasicQ,
-         initUti2, listUti3, listUti4, options)
+         data_income_group, selectedSP, amenities_sp, variables_regression,
+         listRho, listBeta, listBasicQ, initUti2, listUti3, listUti4, options)
 
     print(modelAmenityScan.summary())
 
@@ -515,10 +535,9 @@ def estim_util_func_param(data_number_formal, data_income_group,
         (parameters, scoreTot, parametersAmenities, modelAmenity,
          parametersHousing) = calopt.EstimateParametersByOptimization(
              incomeNetOfCommuting, dataRent, data_sp["dwelling_size"],
-             data_income_group, data_density, selected_density,
-             housing_types_sp["x_sp"], housing_types_sp["y_sp"], selectedSP,
-             amenities_sp, variables_regression, listRho, initBeta, initBasicQ,
-             initUti2, initUti3, initUti4, options)
+             data_income_group, selectedSP, amenities_sp, variables_regression,
+             listRho, initBeta, initBasicQ, initUti2, initUti3, initUti4,
+             options)
 
         print(modelAmenity.summary())
 
@@ -527,25 +546,33 @@ def estim_util_func_param(data_number_formal, data_income_group,
     amenities_grid = calam.import_exog_amenities(
         path_data, path_precalc_inp, 'grid')
     predictors_grid = amenities_grid.loc[:, variables_regression]
-    predictors_grid = np.vstack(
-        [np.ones(predictors_grid.shape[0]),
-         predictors_grid.T]
-        ).T
+    predictors_grid = sm.add_constant(predictors_grid)
+    # predictors_grid = np.vstack(
+    #     [np.ones(predictors_grid.shape[0]),
+    #      predictors_grid.T]
+    #     ).T
 
+    # NB: we only retain the explained component of the theoretical amenity
+    # score
     if options["param_optim"] == 1:
         cal_amenities = np.exp(
             np.nansum(predictors_grid * parametersAmenities, 1))
         calibratedUtility_beta = parameters[0]
         calibratedUtility_q0 = parameters[1]
+        calibratedUtility_u3 = parameters[2]
+        calibratedUtility_u4 = parameters[3]
     elif options["param_optim"] == 0:
         cal_amenities = np.exp(
             np.nansum(predictors_grid * parametersAmenitiesScan, 1))
         calibratedUtility_beta = parametersScan[0]
         calibratedUtility_q0 = parametersScan[1]
+        calibratedUtility_u3 = parametersScan[2]
+        calibratedUtility_u4 = parametersScan[3]
 
     np.save(path_precalc_inp + 'calibratedUtility_beta',
             calibratedUtility_beta)
     np.save(path_precalc_inp + 'calibratedUtility_q0', calibratedUtility_q0)
     np.save(path_precalc_inp + 'calibratedAmenities', cal_amenities)
 
-    return (calibratedUtility_beta, calibratedUtility_q0, cal_amenities)
+    return (calibratedUtility_beta, calibratedUtility_q0, cal_amenities,
+            calibratedUtility_u3, calibratedUtility_u4)

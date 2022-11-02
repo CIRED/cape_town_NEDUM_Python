@@ -24,32 +24,44 @@ def import_options():
     """
     # STRUCTURAL ASSUMPTIONS
     # Dummy for formal private developers adjusting housing supply to demand
+    # (used to compute constrained vs. unconstrained equilibria in dynamic
+    # simulations)
     options = {"adjust_housing_supply": 1}
-    # Dummy for agents taking floods into account in their choices
+    # Dummy for agents taking floods into account in their choices (to compare
+    # the no-insurance vs. perfect risk-based insurance scenarios)
     options["agents_anticipate_floods"] = 1
 
     # LAND USE ASSUMPTIONS
-    # Dummy for coding green belt
+    # Dummy for coding green belt (for urban edge scenarios)
     options["urban_edge"] = 0
-    # Dummy for forbidding new informal housing construction
+    # Dummy for forbidding new informal housing construction (for eviction
+    # scenarios)
     options["informal_land_constrained"] = 0
 
     # FLOOD DATA OPTIONS
-    # Dummy for using flood data from WBUS2 on top of FATHOM + DELTARES data
-    # (deprecated)
-    options["WBUS2"] = 0
     # Dummy for considering pluvial floods on top of fluvial floods
+    # NB: FATHOM data is less reliable for pluvial than for fluvial flood risks
     options["pluvial"] = 1
     # Dummy for reducing pluvial risk for (better protected) formal structures
+    # (ad hoc correction)
     options["correct_pluvial"] = 1
     # Dummy for working with defended (vs. undefended) fluvial flood maps
+    # NB: FATHOM data is less reliable for defended than for undefended flood
+    # risks (hence the need for custom flood maps to properly asses public
+    # flood protection investments)
     options["defended"] = 0
     # Dummy for taking coastal floods into account (on top of fluvial floods)
+    # NB: this comes from another data source (DELTARES) than the one used for
+    # pluvial and fluvial flood risks (FATHOM)
     options["coastal"] = 1
     # Digital elevation model to be used with coastal flood data
     # (set to "MERITDEM" or "NASADEM")
+    # NB: DEM used in fluvial/pluvial flood data is MERITDEM
     options["dem"] = "MERITDEM"
     # Dummy for taking sea-level rise into account in coastal flood data
+    # NB: Deltares provides flood risk values under the IPCC AR5 assessment for
+    # the RCP 8.5 climate change scenario, taken at year 2050 (pessimistic
+    # projections)
     options["slr"] = 1
 
     # REPROCESSING OPTIONS
@@ -64,14 +76,16 @@ def import_options():
     # group (for every period)
     options["compute_net_income"] = 0
 
-    # CALIBRATION OPTIONS
+    # MAIN CALIBRATION OPTIONS
     # Dummy for loading pre-calibrated parameters (from Pfeiffer et al.),
     # as opposed to newly calibrated paramaters
     options["load_precal_param"] = 0
     # Dummy for fitting informal housing disamenity parameter to grid level
     # NB: doing so is a matter of choice. It yields more accurate results on
     # spatial sorting, but also increases the risk of overfitting the model.
-    options["location_based_calib"] = 0
+    options["location_based_calib"] = 1
+
+    # TECHNICAL CALIBRATION OPTIONS
     # Dummy for defining dominant income group based on number of people
     # instead of median income at SP level
     options["correct_dominant_incgrp"] = 0
@@ -94,35 +108,19 @@ def import_options():
     # transport costs (compared to original code)
     options["correct_round_trip"] = 1
     # Dummy for taking unemployment into account in the formula for
-    # the number of commuters (deprecated)
+    # the number of commuters
     options["correct_eq3"] = 0
     # Resolution of the scanning to be used in calibration
     # (for commuting gravity and utility function parameters)
     # NB: should be set to "rough", "normal", or "fine"
     options["scan_type"] = "fine"
-    # Dummy for reversing calibrated capital and land elasticities in
-    # construction cost function (deprecated)
-    # NB: estimate is not in line with the literature and we might want to
-    # check how this affects the model
-    options["reverse_elasticities"] = 0
     # Dummy for using GLM (instead of OLS) for the estimation of exogenous
-    # amenity parameters (deprecated)
+    # amenity parameters (unstable)
     options["glm"] = 0
-    # Dummy for using RBFInterpolator instead of interp2d for 2D interpolation
-    # of rents based on incomes and utilities (deprecated)
-    options["griddata"] = 0
-    # Number of neighbours to be used if RBFInterpolator is chosen (deprecated)
-    options["interpol_neighbors"] = 50
-    # Dummy for improving rent interpolation in calibration by assuming away
-    # basic need in housing from maximum rent estimation (deprecated)
-    options["test_maxrent"] = 0
     # Dummy for using scipy solver to refine utility function parameter
-    # estimates from scanning (requires well-defined interior starting values
-    # for algorithm not to converge towards a corner solution): not stable
+    # estimates from scanning (only relevant when we allow all parameters to
+    # vary, not just the amenity score)
     options["param_optim"] = 0
-    # Dummy for taking log form into account in rent interpolation for utility
-    # function parameter estimation (deprecated)
-    options["log_form"] = 1
     # Dummy for adding numerical terms that prevent exponential overflow
     # when solving the commuting choice model, without changing results
     options["prevent_exp_overflow"] = 1
@@ -151,7 +149,7 @@ def import_options():
     #  can just be plugged direcly into the scenario table.
     #  Same goes for inflation.
     #  However, price of fuel should be defined independently to be of interest
-    #  We define dummy scenarios for the time being...
+    #  We define dummy scenarios for the time being.
     #  Code corresponds to low/medium/high
     options["fuel_price_scenario"] = 1
 
@@ -185,8 +183,10 @@ def import_param(path_precalc_inp, options):
     # Define baseline year
     param = {"baseline_year": 2011}
 
+    # CALIBRATED PARAMETERS
+
     # Utility function parameters, as calibrated in Pfeiffer et al. (table C7)
-    #  Surplus housing elasticity
+    #  Elasticity of surplus housing
     if options["load_precal_param"] == 1:
         param["beta"] = scipy.io.loadmat(
             path_precalc_inp + 'calibratedUtility_beta.mat'
@@ -194,6 +194,38 @@ def import_param(path_precalc_inp, options):
     elif options["load_precal_param"] == 0:
         param["beta"] = np.load(
             path_precalc_inp + 'calibratedUtility_beta.npy')
+    # param["beta"] = 0.25
+
+    #  Note that, although this parameter value could be re-estimated, we
+    #  choose to pin it down to its value in Pfeiffer et al. (0.25) by default.
+    #  This is because this value corresponds to the benchmark estimated
+    #  in Finlay and Williams (2022), table B.3: as this term is supposed
+    #  to reflect households' real expenditure share on housing, its proper
+    #  estimation is rendered difficult by biases coming from variation in
+    #  local housing prices, notably (see Diamond and Gaubert, 2022,
+    #  section 2.3.3 for more details).
+
+    #  For sensitivity checks, we suggest an acceptable range of values going
+    #  from 0.1 (weighted average from expenditure survey data) to 0.4
+    #  (estimated in Avner et al., 2021, which is closely related to our
+    #  framework). Those are also the bounds given by Rosenthal (2014) for
+    #  renters vs. owner-occcupiers: remember that in our framework, all
+    #  households are supposed to be renters, as the choice to rent or to buy
+    #  is equivalent as long as housing prices reflect the capitalized value of
+    #  an infinite flow of rents. The reality is, of course, more complex, and
+    #  the choice of an intermediate value allows to capture that fact.
+
+    # NB: For sensitivity checks, alternative input values of beta should be
+    # tested directly in the calibration.calib_main_func module
+    # (estim_util_func_param function) as the estimated value of the local
+    # amenity score will depend on this parameter: we do not expect results
+    # to vary significantly when keeping the benchmark (dis)amenity score
+    # (imported in the data module), but the fit may slightly improve when
+    # re-calibrating it.
+
+    #  Composite good elasticity
+    param["alpha"] = 1 - param["beta"]
+
     #  Basic need in housing
     if options["load_precal_param"] == 1:
         param["q0"] = scipy.io.loadmat(
@@ -202,8 +234,54 @@ def import_param(path_precalc_inp, options):
     elif options["load_precal_param"] == 0:
         param["q0"] = np.load(
             path_precalc_inp + 'calibratedUtility_q0.npy')
-    #  Composite good elasticity
-    param["alpha"] = 1 - param["beta"]
+    # param["q0"] = 4
+
+    #  Again, we use estimate from Pfeiffer et al. as our default, but not for
+    #  the same reasons. Indeed, there is a clear empirical counterpart to such
+    #  parameter, which should be set equal to the first decile/percentile of
+    #  the dwelling size distribution (including informal housing).
+    #  As we do not observe such data, we set the value at 4 m² (typo in the
+    #  working paper), which is a plausible value, as a placeholder before
+    #  finding a more precise estimate.
+
+    #  NB: this parameter sets the degree of non-homotheticity of housing
+    #  demand, meaning by how much the real expenditure share that households
+    #  spend on housing decrease with their income: the bigger, the stronger
+    #  spatial sorting across income groups. This specification allows to
+    #  micro-found heterogeneous housing demands as a single utility function.
+
+    # Disamenity parameter for informal settlements and backyard shacks
+    # NB: This is a (location-based) array of multiplicative terms between 0
+    # and 1 that account for unobserved disamenity factors when living in
+    # informal backyards or informal settlements (eviction probability, lack
+    # of access to sanitation, etc.)
+
+    if (options["location_based_calib"] == 0
+       and options["load_precal_param"] == 1):
+        disamenity_param = scipy.io.loadmat(
+            path_precalc_inp + 'calibratedParamAmenities.mat'
+            )["calibratedParamAmenities"].squeeze()
+        param["informal_pockets"] = np.matlib.repmat(
+            disamenity_param[1], 24014, 1).squeeze()
+        param["backyard_pockets"] = np.matlib.repmat(
+            disamenity_param[0], 24014, 1).squeeze()
+
+    elif (options["location_based_calib"] == 0
+          and options["load_precal_param"] == 0):
+        param_amenity_settlement = np.load(
+            path_precalc_inp + 'param_amenity_settlement.npy')
+        param["informal_pockets"] = np.matlib.repmat(
+            param_amenity_settlement, 24014, 1).squeeze()
+        param_amenity_backyard = np.load(
+            path_precalc_inp + 'param_amenity_backyard.npy')
+        param["backyard_pockets"] = np.matlib.repmat(
+            param_amenity_backyard, 24014, 1).squeeze()
+
+    elif options["location_based_calib"] == 1:
+        param["informal_pockets"] = np.load(
+            path_precalc_inp + 'param_pockets.npy')
+        param["backyard_pockets"] = np.load(
+            path_precalc_inp + 'param_backyards.npy')
 
     # Housing production function parameters, as calibrated in Pfeiffer et al.
     # (table C7)
@@ -214,8 +292,16 @@ def import_param(path_precalc_inp, options):
     elif options["load_precal_param"] == 0:
         param["coeff_b"] = np.load(
             path_precalc_inp + 'calibratedHousing_b.npy')
+    #  Note that estimated value of 0.25 differs from standard values in the
+    #  literature: Combes et al. (2021) find a value that is closer to 0.65.
+    #  This captures the low capital-intensivity of the construction sector
+    #  in Cape Town: more specifically, we may think of "formal" and "informal"
+    #  regulations on building height, and high cost of capital relative to
+    #  land (with small artisanal entrepreneurs, etc.).
+
     # Land elasticity
     param["coeff_a"] = 1 - param["coeff_b"]
+
     #  Scale parameter
     if options["load_precal_param"] == 1:
         param["coeff_A"] = scipy.io.loadmat(
@@ -224,6 +310,9 @@ def import_param(path_precalc_inp, options):
     elif options["load_precal_param"] == 0:
         param["coeff_A"] = np.load(
             path_precalc_inp + 'calibratedHousing_kappa.npy')
+    #  Estimated default value of 0.04 does not have a straightforward
+    #  interpretation: it is just a multiplicative constant up to which
+    #  elasticity parameters are identified, that allows to fit the data.
 
     # Gravity parameter of the minimum Gumbel distribution (see Pfeiffer et
     # al.), as calibrated in appendix C3 (typo in original paper)
@@ -232,82 +321,105 @@ def import_param(path_precalc_inp, options):
                                            )["lambdaKeep"].squeeze()
     elif options["load_precal_param"] == 0:
         param["lambda"] = np.load(path_precalc_inp + 'lambdaKeep.npy')
+    # NB: this parameter is not identified separately from incomes. It governs
+    # the variance of the Gumbel distribution underlying idiosyncratic
+    # preferences for commuting choice. In more intuitive terms, the bigger
+    # its value, the stronger the gravity in commuting choice, meaning the less
+    # households will be willing to live far from their chosen employment
+    # center (all things equal)
 
-    # Threshold above which we retain transport zone (TAZ) as a job center
-    # (for calibration)
+    # OTHER PARAMETERS
+
+    # Number of jobs above which we retain transport zone (TAZ) as an
+    # employment center (for calibration)
     param["job_center_threshold"] = 2500
 
-    # Discount factors (typo in original paper)
+    # Discount factors (typo in working paper)
     #  From Viguié et al. (2014)
     param["depreciation_rate"] = 0.025
 
     #  From World Development Indicator database (World Bank, 2016)
     #  NB: Note that this will not be used in practice as we will prefer
-    #  interpolation from historical interest rates
+    #  interpolation from historical interest rates to smooth variability in
+    #  annual values
     # param["interest_rate"] = 0.025
 
     # Housing parameters
     #  Size of an informal dwelling unit in m² (wrong value in Pfeiffer et al.)
     param["shack_size"] = 14
-    #  Size of a social housing dwelling unit (m²),
-    #  see table C6 (Pfeiffer et al.)
+    #  Size of a social housing dwelling unit (m²), see table C6
+    #  (Pfeiffer et al.)
     param["RDP_size"] = 40
     #  Size of backyards in RDP (m²), see table C6 (Pfeiffer et al.)
     #  NB: in theory, a backyard can therefore host up to 5 households
-    #  TODO: does this need to be updated given Claus' research note?
     param["backyard_size"] = 70
-    #  Number of formal subsidized housing units built per year
-    #  (cf. Housing Pipeline from CoCT used in Pfeiffer et al.)
+    #  Number of formal subsidized housing units built per year from 2011 until
+    #  2020, from the CoCT's Housing Pipeline (Pfeiffer et al.)
+    param["current_rate_public_housing"] = 5000
+    #  Number of formal subsidized housing units built per year after 2020
     param["future_rate_public_housing"] = 1000
     #  Cost of inputs for building an informal dwelling unit (in rands)
     #  This is used to account for potential destructions from floods
-    #  TODO: ask Claus for reference
     param["informal_structure_value"] = 3000
 
     #  Fraction of the composite good that is kept inside the house and that
     #  can possibly be destroyed by floods (food, furniture, etc.)
-    #  Correspond to average share of such goods in total household budget
-    #  (excluding rent): comes from Quantec data
-
-    #  Import from original data
-    # quantec_data = pd.read_excel(
-    #     path_folder + 'Aux data/HH Income per DU - CL.xlsx',
-    #     sheet_name='Quantec HH Budgets', header=6)
-    # param["fraction_z_dwellings"] = quantec_data.iloc[77, 11]
-
-    #  Equivalent raw number import
-    #  TODO: discuss the need to adjust non-durable goods taken into account
-    #  in the budget, as in research note for informal settlements
-    param["fraction_z_dwellings"] = 0.53
+    #  Corresponds to average share of such goods in total household budget
+    #  (excluding rent): comes from Quantec expenditure data
+    #  (see HH-budget-floods.xlsx in Aux data directory)
+    param["fraction_z_dwellings"] = 0.27
+    #  NB: by default, we consider only spending on durable and semi-durable
+    #  goods, as a fraction of compensation (excluding unearned income) net
+    #  of commuting and housing costs. We invite the user to run sensitivity
+    #  checks based on alternative assumptions.
 
     #  Value of a formal subsidized housing dwelling unit (in rands):
     #  again needed for flood damage estimation
     param["subsidized_structure_value"] = 127000
 
-    # Max % of land that can be built for housing (to take roads into account),
-    # by housing type: comes from analogy with Viguié et al., 2014 (table B1).
-    # More precisely, maximum fraction of ground surface devoted to housing
-    # where building is possible is 62% in Paris
-    # TODO: discuss alternative specifications
+    # Max % of available land that can be built for housing (to take roads and
+    # open space into account): benchmark value comes from Viguié et al., 2014
+    # (table B1). More precisely, maximum fraction of available ground surface
+    # devoted to building is 62% in Paris: we round this value to the upper
+    # decile to account for the fact that Cape Town is more horizontally dense
+    # (as are most cities in developing countries). This value will be used
+    # in areas dedicated to formal private housing (formal subsidized housing
+    # is exogenous).
+
+    # For informal backyards, we set this value to 45% (of total backyard area)
+    # This corresponds to 2.25 times the size of an informal "shack": we assume
+    # that people that rent out part of their backyards are not willing to host
+    # more than two households, with some space between the two.
+    # For informal settlements, we set the parameter to roughly half the value
+    # used for formal private housing, to reflect the interstitial nature of
+    # most settlements.
+
+    # Note that such selection does not exclude specific areas that would be
+    # dedicated to commercial real estate from the analysis.
+    # NB: we invite the user to run sensitivity checks based on alternative
+    # assumptions
+
     param["max_land_use"] = 0.7
     param["max_land_use_backyard"] = 0.45
     param["max_land_use_settlement"] = 0.4
 
     # Constraints on housing supply (in meters): a priori not binding
+    # Radius (in km) defining the extent of the city centre
     param["historic_radius"] = 6
-    # Note that we allow for higher construction in the core center, compared
-    # to previous version
+    # Note that we allow for higher construction in the centre vs. the rest of
+    # the city
     param["limit_height_center"] = 80
     param["limit_height_out"] = 10
 
     # Agricultural land prices (in rands)
     #  Corresponds to the ninth decile in the sales data sets for 2011, when
-    #  selecting only agricultural properties in rural areas (Pfeiffer et al.)
+    #  selecting only agricultural properties in rural areas (Pfeiffer et al.).
+    #  There, it is assumed that "housing" prices equal land prices
     param["agricultural_price_baseline"] = 807.2
-    #  Estimated the same way for 2001
+    #  Estimated the same way for 2001 (used for validation)
     param["agricultural_price_retrospect"] = 70.7
 
-    # Year urban edge constraint kicks in
+    # Year urban edge constraint kicks in (when option is used)
     param["year_urban_edge"] = 2015
 
     # Labor parameters
@@ -315,14 +427,22 @@ def import_param(path_precalc_inp, options):
     param["nb_of_income_classes"] = 4
     #  Equivalence between income classes in the data (12) and in the model
     #  (4), from poorest to richest. Note that we exclude people earning no
-    #  income from the analysis
+    #  income from the analysis (they will be recovered later)
     param["income_distribution"] = np.array(
         [0, 1, 1, 1, 1, 2, 3, 3, 4, 4, 4, 4])
+
     #  Average number of employed workers per household of each income class
-    #  (see appendix B1 in Pfeiffer et al.: corresponds to 2 * \ksi):
-    #  we need to take into account monetary cost for both members of the
-    #  household (used in import_transport_data function below)
-    #  NB: we consider population in the labour force all along
+    #  (see appendix B1 in Pfeiffer et al.: corresponds to 2 times the
+    #  annual employment rate): all representative households (made up of two
+    #  working people) are assumed to work part of the year.
+    #  Structural (as opposed to conjonctural) is therefore out of the scope of
+    #  this model
+
+    #  NB: we consider population in the labour force all along (no inactive
+    #  people)
+    #  NB: The exogenous employment rate is calibrated using educational
+    #  attainment as a proxy for income level
+
     param["household_size"] = [1.14, 1.94, 1.92, 1.94]
 
     # Transportation cost parameters
@@ -332,64 +452,30 @@ def import_param(path_precalc_inp, options):
     # Parameters used in equilibrium.compute_equilibrium: iteration stops when
     # the error in the computed number of households per income bracket falls
     # below some precision level, or when the number of iterations reaches some
-    #  threshold (to limit processing time)
-    param["max_iter"] = 2000
-    param["precision"] = 0.02
+    # threshold (to limit processing time)
+    param["max_iter"] = 500
+    param["precision"] = 0.01
 
-    # We also allow for customisation of convergence factor for disamenity
-    # parameter calibration (see calibration.calib_main_func)
-    param["disamenity_cvfactor"] = 20000
-
-    # Dynamic parameters (from Viguié et al., 2014, table B1)
-    #  Lag in housing building
-    #  NB: this parameter varies through time in models such as Gomtsyan's
+    # Dynamic parameters
+    #  Lag in housing building in years (from Viguié et al., 2014, table B1)
     param["time_invest_housing"] = 3
-    #  Time (in years) for the full depreciation of a housing unit (deprecated)
-    #  In practice, we rather use the inverse value of capital depreciation.
-    param["time_depreciation_buildings"] = 100
-    #  Set the number of simulations per year (do not change!)
+    #  Set the number of simulations per year
     param["iter_calc_lite"] = 1
+
+    # Miscellaneous parameters
 
     # Size (in m²) above which we need to switch flood damage functions for
     # formal housing: corresponds to existence of a 2nd floor
-    # TODO: Where from?
+    # NB: in the absence of relevant information, we set a default value
+    # roughly equal to the median in validation data aggregated at the SP level
     param["threshold"] = 130
 
-    # Make copies of parameters that may change over time
-    # (to be used in simulations)
+    # Make copies of parameters that may change over time (to be used in
+    # simulations)
     param["informal_structure_value_ref"] = copy.deepcopy(
         param["informal_structure_value"])
     param["subsidized_structure_value_ref"] = copy.deepcopy(
         param["subsidized_structure_value"])
-
-    # Disamenity parameters for informal settlements and backyard shacks
-
-    if (options["location_based_calib"] == 0
-       and options["load_precal_param"] == 1):
-        disamenity_param = scipy.io.loadmat(
-            path_precalc_inp + 'calibratedParamAmenities.mat'
-            )["calibratedParamAmenities"].squeeze()
-        param["pockets"] = np.matlib.repmat(
-            disamenity_param[1], 24014, 1).squeeze()
-        param["backyard_pockets"] = np.matlib.repmat(
-            disamenity_param[0], 24014, 1).squeeze()
-
-    elif (options["location_based_calib"] == 0
-          and options["load_precal_param"] == 0):
-        param_amenity_settlement = np.load(
-            path_precalc_inp + 'param_amenity_settlement.npy')
-        param["pockets"] = np.matlib.repmat(
-            param_amenity_settlement, 24014, 1).squeeze()
-        param_amenity_backyard = np.load(
-            path_precalc_inp + 'param_amenity_backyard.npy')
-        param["backyard_pockets"] = np.matlib.repmat(
-            param_amenity_backyard, 24014, 1).squeeze()
-
-    elif options["location_based_calib"] == 1:
-        param["pockets"] = np.load(
-            path_precalc_inp + 'param_pockets.npy')
-        param["backyard_pockets"] = np.load(
-            path_precalc_inp + 'param_backyards.npy')
 
     return param
 
@@ -452,7 +538,7 @@ def import_construction_parameters(param, grid, housing_types_sp,
 
     """
     # We define housing supply per unit of land for simulations where
-    # formal private developers do not adjust to demand (deprecated)
+    # formal private developers do not adjust to demand
     param["housing_in"] = np.empty(len(grid_formal_density_HFA))
     param["housing_in"][:] = np.nan
     # Fill vector with population density in formal housing divided by the
@@ -497,7 +583,6 @@ def import_construction_parameters(param, grid, housing_types_sp,
     # We take minimum dwelling size of built areas where the share of informal
     # and backyard is smaller than 10% of the overall number of dwellings.
     # See Pfeiffer et al., section 4.2 (formal neighborhoods)
-    # TODO: Might need to update variable names in raw data
     param["mini_lot_size"] = np.nanmin(
         dwelling_size_sp[housing_types_sp.total_dwellings_SP_2011 != 0][
             (housing_types_sp.informal_SP_2011[
@@ -512,9 +597,15 @@ def import_construction_parameters(param, grid, housing_types_sp,
 
     # We define agricultural (annual) rent to put a floor on formal private
     # housing market rents (and endogenously limit urban expansion).
-    # Comes from zero profit condition for formal private developer: allows to
+    # Comes from zero profit condition for formal private developers: allows to
     # convert land prices into housing prices
     # (cf. Pfeiffer et al., footnote 16)
+
+    # NB: although we could compute agricultural rent as the constant annual
+    # coupon associated with the observed agricultural land price, this would
+    # not capture the opportunity cost associated with developing the land,
+    # but would just yield an equivalence for an agricultural use: we need to
+    # refer to developers' profit function to determine a relevant value
 
     agricultural_rent = compute_agricultural_rent(
         param["agricultural_price_baseline"], param["coeff_A"], interest_rate,

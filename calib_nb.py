@@ -29,7 +29,8 @@ import os
 import geopandas as gpd
 import matplotlib.pyplot as plt
 from IPython.display import Image
-import scipy
+# import scipy
+# import statsmodels.api as sm
 
 # We also import our own packages
 import inputs.data as inpdt
@@ -49,12 +50,12 @@ import outputs.export_outputs as outexp
 
 path_code = '..'
 path_folder = path_code + '/Data/'
-path_precalc_inp = path_folder + 'Precalculated inputs/'
+path_precalc_inp = path_folder + 'precalculated_inputs/'
 path_data = path_folder + 'data_Cape_Town/'
 path_precalc_transp = path_folder + 'precalculated_transport/'
 path_scenarios = path_data + 'Scenarios/'
 path_outputs = path_code + '/Output/'
-path_floods = path_folder + "FATHOM/"
+path_floods = path_folder + "flood_maps/"
 path_input_plots = path_outputs + 'input_plots/'
 path_input_tables = path_outputs + 'input_tables/'
 
@@ -74,7 +75,7 @@ except OSError as error:
 
 # ## Import parameters and options
 
-# ### We import default parameter and options
+# ### We import default parameters and options
 
 import inputs.parameters_and_options as inpprm
 options = inpprm.import_options()
@@ -369,6 +370,11 @@ elif options["substract_RDP_from_formal"] == 0:
 # very specific) and far-away land (where SPs are too big for aggregates to
 # be representative of micro conditions).
 
+# NB: This sample will be used as such for the calibration of construction
+# function parameters. The regression used comes from the definition of
+# housing supply / building density in equilibrium, hence the name of the
+# variable
+
 # region
 if options["correct_selected_density"] == 0:
     selected_density = (
@@ -410,7 +416,6 @@ elif (options["correct_selected_density"] == 1
 
 # We pick the second choice as our default since it is more conservative than
 # the first, and less ad hoc than the third one.
-
 
 # ## Calibrate construction function parameters
 
@@ -463,29 +468,15 @@ np.save(path_precalc_inp + 'calibratedHousing_kappa.npy',
 
 # We start by selecting the range over which we want to scan
 if options["scan_type"] == "rough":
-    # list_lambda = 10 ** np.arange(1.1, 1.31, 0.05)
-    list_lambda = 10 ** np.arange(1.1, 1.31, 0.1)
+    list_lambda = [13, 14, 15]
 if options["scan_type"] == "normal":
-    # list_lambda = 10 ** np.arange(1.13, 1.171, 0.01)
-    list_lambda = 10 ** np.arange(1.36, 1.401, 0.02)
+    list_lambda = np.arange(13.8, 14.3, 0.2)
 if options["scan_type"] == "fine":
-    list_lambda = 10 ** np.arange(1.150, 1.1541, 0.001)
-
-# As a matter of fact, when adjusting numerical parameters to minimize error
-# terms, the algorithm seems to always converge towards the highest value
-# possible for the gravity parameter. For the time being, we therefore fix it
-# to be equal to value found in Pfeiffer et al. In fact, the identification of
-# the parameter per se is not a threat to the identification of our model: it
-# is mostly a matter of internal validity regarding the computation of income
-# net of commuting costs, which works for any value of the parameter (but may
-# be more or less noisy).
-
-import scipy
-list_lambda = np.array([
-    scipy.io.loadmat(path_precalc_inp + 'lambda.mat')["lambdaKeep"].squeeze()
-    ])
+    list_lambda = np.arange(13.94, 14.07, 0.02)
 
 # We then run the function that returns the calibrated outputs
+# Note that depending on the precision level and the maximum number of
+# iterations, this may take a while
 import calibration.calib_main_func as calmain
 (incomeCentersKeep, lambdaKeep, cal_avg_income, scoreKeep,
  bhattacharyyaDistances) = (
@@ -744,11 +735,11 @@ import inputs.data as inpdt
 # NB: Here, we also have an impact from construction parameters and sample
 # selection (+ number of formal units)
 import calibration.calib_main_func as calmain
-(calibratedUtility_beta, calibratedUtility_q0, cal_amenities
+(calibratedUtility_beta, calibratedUtility_q0, cal_amenities, u3, u4
  ) = calmain.estim_util_func_param(
      data_number_formal, data_income_group, housing_types_sp, data_sp,
      coeff_a, coeff_b, coeffKappa, interest_rate,
-     incomeNetOfCommuting, selected_density, path_data, path_precalc_inp,
+     incomeNetOfCommuting, path_data, path_precalc_inp,
      options, param)
 
 # region
@@ -814,8 +805,9 @@ Image(path_input_plots + "amenity_map.png")
 
 # We define a range of disamenity values which we would like to scan,
 # and arrange them in a grid
-list_amenity_backyard = np.arange(0.58, 0.621, 0.02)
-list_amenity_settlement = np.arange(0.48, 0.521, 0.02)
+# NB: as for gravity parameter, we set the range by trial and error
+list_amenity_backyard = np.arange(0.55, 0.601, 0.01)
+list_amenity_settlement = np.arange(0.55, 0.601, 0.01)
 # list_amenity_backyard = [1]
 # list_amenity_settlement = [1]
 housing_type_total = pd.DataFrame(np.array(np.meshgrid(
@@ -849,7 +841,7 @@ for i in range(0, len(list_amenity_backyard)):
         # We set input values
         param["amenity_backyard"] = list_amenity_backyard[i]
         param["amenity_settlement"] = list_amenity_settlement[j]
-        param["pockets"] = np.ones(24014) * param["amenity_settlement"]
+        param["informal_pockets"] = np.ones(24014) * param["amenity_settlement"]
         param["backyard_pockets"] = (np.ones(24014)
                                      * param["amenity_backyard"])
 
@@ -919,7 +911,8 @@ calibrated_amenities = housing_type_total.iloc[which, 0:2]
 # endregion
 
 # region
-# We update parameter vector
+# We update parameter vector (after ensuring that param["amenity_backyard"] is
+# bigger than param["amenity_settlement"])
 param["amenity_backyard"] = calibrated_amenities[0]
 param["amenity_settlement"] = calibrated_amenities[1]
 
@@ -949,7 +942,7 @@ if options["location_based_calib"] == 1:
     index_max = 50
     metrics = np.zeros(index_max)
 
-    param["pockets"] = np.zeros(24014) + param["amenity_settlement"]
+    param["informal_pockets"] = np.zeros(24014) + param["amenity_settlement"]
     save_param_informal_settlements = np.zeros((index_max, 24014))
     metrics_is = np.zeros(index_max)
     param["backyard_pockets"] = np.zeros(24014) + param["amenity_backyard"]
@@ -1015,16 +1008,16 @@ if options["location_based_calib"] == 1:
                           - initial_state_households_housing_types[2, :][i]
                           )
             # We apply an empirical reweighting that helps convergence
-            adj = (diff_is[i] / 150000)
+            adj = (diff_is[i] / (np.nanmax(diff_is) * 100))
             # We increase the amenity score when we underestimate the nb of
             # households
-            param["pockets"][i] = param["pockets"][i] + adj
+            param["informal_pockets"][i] = param["informal_pockets"][i] + adj
         # We store iteration outcome and prevent extreme sorting from
         # happening due to the amenity score
         metrics_is[index] = sum(np.abs(diff_is))
-        param["pockets"][param["pockets"] < 0.05] = 0.05
-        param["pockets"][param["pockets"] > 0.99] = 0.99
-        save_param_informal_settlements[index, :] = param["pockets"]
+        param["informal_pockets"][param["informal_pockets"] < 0.05] = 0.05
+        param["informal_pockets"][param["informal_pockets"] > 0.99] = 0.99
+        save_param_informal_settlements[index, :] = param["informal_pockets"]
 
         # INFORMAL BACKYARDS
 
@@ -1045,7 +1038,7 @@ if options["location_based_calib"] == 1:
                     housing_types.backyard_informal_grid[i]
                     - initial_state_households_housing_types[1, :][i])
             # We help convergence and update parameter
-            adj = (diff_ib[i] / 75000)
+            adj = (diff_ib[i] / (np.nanmax(diff_ib) * 100))
             param["backyard_pockets"][i] = (
                 param["backyard_pockets"][i] + adj)
         # We store iteration output and prevent extreme sorting
@@ -1088,12 +1081,12 @@ score_min = np.min(metrics)
 index_min = np.argmin(metrics)
 
 # We update the parameter vector
-param["pockets"] = save_param_informal_settlements[index_min]
+param["informal_pockets"] = save_param_informal_settlements[index_min]
 param["backyard_pockets"] = save_param_backyards[index_min]
 
 # We save values
 np.save(path_precalc_inp + 'param_pockets.npy',
-        param["pockets"])
+        param["informal_pockets"])
 np.save(path_precalc_inp + 'param_backyards.npy',
         param["backyard_pockets"])
 # endregion
@@ -1102,9 +1095,9 @@ np.save(path_precalc_inp + 'param_backyards.npy',
 # Let us visualize the calibrated disamenity index for informal settlements
 import outputs.export_outputs as outexp
 disamenity_IS_map = outexp.export_map(
-    param["pockets"], grid, geo_grid, path_input_plots, 'disamenity_IS_map',
+    param["informal_pockets"], grid, geo_grid, path_input_plots, 'disamenity_IS_map',
     "Map of average disamenity index for informal settlements",
-    path_input_tables, ubnd=np.nanmax(param["pockets"]))
+    path_input_tables, ubnd=np.nanmax(param["informal_pockets"]))
 
 Image(path_input_plots + "disamenity_IS_map.png")
 # endregion
@@ -1119,5 +1112,3 @@ disamenity_IB_map = outexp.export_map(
 
 Image(path_input_plots + "disamenity_IB_map.png")
 # endregion
-
-

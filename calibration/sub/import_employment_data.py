@@ -37,7 +37,6 @@ def import_employment_data(households_per_income_class, param, path_data):
 
     """
     # We import number of jobs per Transport Zone (1,787)
-    # TODO: We may need to rename underlying data
     TAZ = pd.read_csv(path_data + 'TAZ_amp_2013_proj_centro2.csv')
 
     # Number of employees in each TAZ for the 12 income classes from data
@@ -45,7 +44,6 @@ def import_employment_data(households_per_income_class, param, path_data):
     # from census data. Then, we will apply the proper allocation to go to the
     # 4 income classes used in the model (do not correspond to the 4 income
     # classes used in TAZ data)
-    # TODO: should document where the split comes from
     jobsCenters12Class = np.array(
         [np.zeros(len(TAZ.Ink1)), TAZ.Ink1/3, TAZ.Ink1/3, TAZ.Ink1/3,
          TAZ.Ink2/2, TAZ.Ink2/2, TAZ.Ink3/3, TAZ.Ink3/3, TAZ.Ink3/3,

@@ -187,7 +187,7 @@ def compute_equilibrium(fraction_capital_destroyed, amenities, param,
     amenities = amenities[selected_pixels]
     fraction_capital_destroyed = fraction_capital_destroyed.iloc[
         selected_pixels, :]
-    param_pockets = param["pockets"][selected_pixels]
+    param_pockets = param["informal_pockets"][selected_pixels]
     param_backyards_pockets = param["backyard_pockets"][selected_pixels]
 
     # Useful variables for the solver
@@ -217,7 +217,8 @@ def compute_equilibrium(fraction_capital_destroyed, amenities, param,
     utility = np.zeros((param["max_iter"], param["nb_of_income_classes"]))
     #  We take arbitrary utility levels, not too far from what we would expect,
     #  to make computation quicker
-    utility[0, :] = np.array([1501, 4819, 16947, 79809])
+    utility[0, :] = np.array([1200, 4800, 16000, 77000])
+    # utility[0, :] = np.array([400, 900, 5400, 26000])
     index_iteration = 0
     #  We need to apply some convergence factor to our error terms to make them
     #  converge in our optimization: the formula comes from trial and error,
@@ -226,7 +227,7 @@ def compute_equilibrium(fraction_capital_destroyed, amenities, param,
     #  housing supply and resulting population distribution
 
     param["convergence_factor"] = (
-        0.02 * (np.nanmean(average_income) / mean_income) ** 0.4
+        0.01 * (np.nanmean(average_income) / mean_income) ** 0.01
         )
 
     # Compute outputs solver (for each housing type, no RDP)
@@ -434,6 +435,7 @@ def compute_equilibrium(fraction_capital_destroyed, amenities, param,
             erreur_temp = (total_simulated_jobs[index_iteration, :]
                            / households_per_income_class - 1)
             error_max[index_iteration] = erreur_temp[m]
+            # TODO: print error_mean?
             error_mean[index_iteration] = np.mean(np.abs(
                 total_simulated_jobs[index_iteration, :]
                 / (households_per_income_class + 0.001) - 1))

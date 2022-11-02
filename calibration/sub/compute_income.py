@@ -179,7 +179,7 @@ def import_transport_costs(grid, param, yearTraffic,
     #     # Note that we do have some negative durations: their number is small
     #     # so we just convert them to zero
     #     timeOutput[:, :, 0] = (transport_times["distanceCar"]
-    #                            / param["walking_speed"] * 60 * 1.2 * 2)
+    #                            / param["walking_speed"] * 60 * 60 * 1.2 * 2)
     #     timeOutput[:, :, 0][np.isnan(transport_times["durationCar"])
     #                         ] = np.nan
     #     timeOutput[:, :, 1] = (
@@ -196,7 +196,7 @@ def import_transport_costs(grid, param, yearTraffic,
     # Note that we do have some negative durations: their number is small,
     # so we just convert them to zero
     timeOutput[:, :, 0] = (transport_times["distanceCar"]
-                           / param["walking_speed"] * 60 * 1.2 * 2)
+                           / param["walking_speed"] * 60 * 60 * 1.2 * 2)
     timeOutput[:, :, 0][np.isnan(transport_times["durationCar"])] = 0
     timeOutput[:, :, 1] = copy.deepcopy(transport_times["durationTrain"])
     timeOutput[:, :, 1][transport_times["durationTrain"] < 0] = 0
@@ -417,15 +417,27 @@ def EstimateIncome(param, timeOutput, distanceOutput, monetaryCost, costTime,
             # Numeric parameters come from trial and error and do not change
             # results a priori: they just help convergence
             maxIter = 1000
-            tolerance = 0.1
+            tolerance = 0.01
             if j == 0:
-                factorConvergenge = 0.006
+                factorConvergenge = (
+                    0.01 / 100
+                    * (np.log(param_lambda**10 / 10**10) + np.log(10**10))
+                    )
             elif j == 1:
-                factorConvergenge = 0.003
+                factorConvergenge = (
+                    0.002 / 100
+                    * (np.log(param_lambda**10 / 10**10) + np.log(10**10))
+                    )
             elif j == 2:
-                factorConvergenge = 0.001
+                factorConvergenge = (
+                    0.001 / 100
+                    * (np.log(param_lambda**10 / 10**10) + np.log(10**10))
+                    )
             elif j == 3:
-                factorConvergenge = 0.0002
+                factorConvergenge = (
+                    0.0008 / 100
+                    * (np.log(param_lambda**10 / 10**10) + np.log(10**10))
+                    )
 
             iter = 0
             error = np.zeros((len(popCenters), maxIter))
@@ -476,6 +488,11 @@ def EstimateIncome(param, timeOutput, distanceOutput, monetaryCost, costTime,
 
                 iter = iter + 1
 
+                # print(iter)
+                # print("errorMax = " + str(errorMax))
+                # print("errorMean = "
+                #       + str(np.nanmean(np.abs(error[:, iter] / popCenters))))
+
             # At the end of the process, we keep the minimum score, and define
             # the corresponding best solution for some lambda and income group
             if (iter > maxIter - 1):
@@ -492,6 +509,7 @@ def EstimateIncome(param, timeOutput, distanceOutput, monetaryCost, costTime,
                 scoreBest = scoreIter[iter-1]
                 scoreMatrix[i, j] = scoreBest
                 print(' - computed - max error', errorMax)
+                # print(str(iter-1))
 
             # We also get (for the given income group) the number of commuters
             # for all job centers in given distance brackets
@@ -505,7 +523,7 @@ def EstimateIncome(param, timeOutput, distanceOutput, monetaryCost, costTime,
             # scale: remember that we only computed them for a subset of the
             # population. This allows income levels to be more representative
             # (although this does not change anything in relative terms)
-            # TODO: note that here, the way we define "average" income from the
+            # NB: note that here, the way we define "average" income from the
             # data actually impact the rescaling
             incomeCentersRescaled = (
                 incomeCenters[:, iter-1]

@@ -7,14 +7,14 @@ Created on Tue Oct 20 10:50:37 2020.
 
 import numpy as np
 import math
+import statsmodels.api as sm
 
 import calibration.sub.loglikelihood as callog
 
 
 def EstimateParametersByScanning(incomeNetOfCommuting, dataRent,
                                  dataDwellingSize, dataIncomeGroup,
-                                 dataHouseholdDensity, selectedDensity,
-                                 xData, yData, selectedSP, tableAmenities,
+                                 selectedSP, tableAmenities,
                                  variablesRegression, initRho, listBeta,
                                  listBasicQ, initUti2, listUti3, listUti4,
                                  options):
@@ -30,17 +30,17 @@ def EstimateParametersByScanning(incomeNetOfCommuting, dataRent,
     calibration.sub.loglikelihood module after providing sample and variable
     selection for the estimation, as well as theoretical partial relations
     from the structure of the model, used in regressions.
-    Actually, we only use the fit on amenites to define the output of this
-    function (as opposed to the estimate_parameters_by_optimization module).
-    This is because the intrinsically rough nature of scanning does not allow
-    us to define a fine enough set of feasible interior solutions, and
-    theoretical formulas for the fit on dwelling sizes and income sorting
-    always lead to corner solutions when the choice set is large enough. This
-    does not threaten our identification strategy, as the purpose of this
-    function is to provide an informed guess on initial values for the
-    estimate_parameters_by_optimization module to run a proper gradient
-    descent optimization (that accounts for all the likelihoods): it just needs
-    to start within the set of feasible solutions.
+    The purpose of this function is to provide an informed guess on initial
+    values for the estimate_parameters_by_optimization module to run a proper
+    gradient descent optimization, by starting within the set of interior
+    feasible solutions.
+    By default, we only fit the data moment on exogenous amenities (and forget
+    about the other dimensions of the composite likelihood) when beta and q0
+    are pinned down, as it is the only relevant moment for the amenity score
+    calibration. The other dimensions can be recovered by commenting out the
+    cancelling out terms at the end of the script, if we want to recalibrate
+    beta and q0 internally (and potentially improve the fit of the model at
+    the price of empirical validity).
 
     Parameters
     ----------
@@ -55,16 +55,6 @@ def EstimateParametersByScanning(incomeNetOfCommuting, dataRent,
     dataIncomeGroup : ndarray(float64)
         Categorical variable indicating, for each Small Place (1,046), the
         dominant income group (from 0 to 3)
-    dataHouseholdDensity : Series
-        Household density (per km² of constructible land) computed from the
-        number of formal private housing units considered in each SP (1,046)
-    selectedDensity : Series
-        Dummy variable used to select SPs (1,046) with enough formal private
-        housing to identify the regressions used in the function
-    xData : Series
-        x-coordinate for each SP centroid (1,046), from SP data
-    yData : Series
-        y-coordinate for each SP centroid (1,046), from SP data
     selectedSP : Series
         Dummy variable used to select SPs (1,046) with enough formal private
         housing to identify the regressions used in the function (less
@@ -157,10 +147,11 @@ def EstimateParametersByScanning(incomeNetOfCommuting, dataRent,
     # rents do enter the theoretical formula for the amenity index
     tableRegression = tableAmenities.loc[selectedRents, :]
     predictorsAmenitiesMatrix = tableRegression.loc[:, variablesRegression]
-    predictorsAmenitiesMatrix = np.vstack(
-        [np.ones(predictorsAmenitiesMatrix.shape[0]),
-         predictorsAmenitiesMatrix.T]
-        ).T
+    predictorsAmenitiesMatrix = sm.add_constant(predictorsAmenitiesMatrix)
+    # predictorsAmenitiesMatrix = np.vstack(
+    #     [np.ones(predictorsAmenitiesMatrix.shape[0]),
+    #      predictorsAmenitiesMatrix.T]
+    #     ).T
 
     # %% FUNCTIONS USED FOR THE FIT ON DWELLING SIZE AND AMENITIES
 
@@ -226,23 +217,13 @@ def EstimateParametersByScanning(incomeNetOfCommuting, dataRent,
     # Note that scoreHousing is set as zero and does not impact parameter
     # selection.
 
-    # NB: Trial and error show that such ad hoc scanning is not fine enough
-    # to remain in the interior of the feasible solution set.
-    # More specifically, the theoretical formulas for the scores on dwelling
-    # size and income sorting will always bring utility levels and surplus
-    # housing elasticity to their lowest level, and basic need in housing to
-    # its highest level, if given a large enough feasible choice set.
-
-    # We therefore kill those channels to keep only the score on amenities to
-    # define our scanned parameters. Remember that this function only provides
-    # initial values for a proper unrestricted optimization algorithm to be
-    # run. It is therefore only a sophisticated way of making a reasonable
-    # guess on feasible values, that allows the algorithm converge to an
-    # interior solution.
-
-    # scoreAmenities = 0
+    # By default, we cancel out the scores associated with observed dwelling
+    # sizes and income sorting: this is because the fit on exogenous amenities
+    # is the only relevant dimension when beta and q0 are pinned down and the
+    # amenity score is the only parameter left to calibrate
     scoreDwellingSize = 0
     scoreIncomeSorting = 0
+
     scoreVect = (scoreAmenities + scoreDwellingSize + scoreIncomeSorting
                  + scoreHousing)
     scoreTot = np.amax(scoreVect)

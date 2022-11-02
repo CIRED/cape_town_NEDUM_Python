@@ -8,15 +8,16 @@ Created on Tue Oct 20 10:49:58 2020.
 import numpy as np
 import math
 import scipy
+import statsmodels.api as sm
+import warnings
 
 import calibration.sub.loglikelihood as callog
 
 
 def EstimateParametersByOptimization(
         incomeNetOfCommuting, dataRent, dataDwellingSize, dataIncomeGroup,
-        dataHouseholdDensity, selectedDensity, xData, yData, selectedSP,
-        tableAmenities, variablesRegression, initRho, initBeta, initBasicQ,
-        initUti2, initUti3, initUti4, options):
+        selectedSP, tableAmenities, variablesRegression, initRho, initBeta,
+        initBasicQ, initUti2, initUti3, initUti4, options):
     """
     Estimate parameters by maximizing log likelihood via gradient descent.
 
@@ -32,6 +33,9 @@ def EstimateParametersByOptimization(
     It leverages initial guess from estimate_parameters_by_scanning module on
     parameter values to start within the set of feasible solutions, and to
     converge towards an interior (as opposed to corner) solution.
+    The algorithm only converges when considering the fit along all dimensions
+    (not only exogenous amenities). This function is therefore not appropriate
+    when we want to focus calibration on the amenity score only.
 
     Parameters
     ----------
@@ -46,16 +50,6 @@ def EstimateParametersByOptimization(
     dataIncomeGroup : ndarray(float64)
         Categorical variable indicating, for each Small Place (1,046), the
         dominant income group (from 0 to 3)
-    dataHouseholdDensity : Series
-        Household density (per km² of constructible land) computed from the
-        number of formal private housing units considered in each SP (1,046)
-    selectedDensity : Series
-        Dummy variable used to select SPs (1,046) with enough formal private
-        housing to identify the regressions used in the function
-    xData : Series
-        x-coordinate for each SP centroid (1,046), from SP data
-    yData : Series
-        y-coordinate for each SP centroid (1,046), from SP data
     selectedSP : Series
         Dummy variable used to select SPs (1,046) with enough formal private
         housing to identify the regressions used in the function (less
@@ -148,10 +142,11 @@ def EstimateParametersByOptimization(
     # rents do enter the theoretical formula for the amenity index
     tableRegression = tableAmenities.loc[selectedRents, :]
     predictorsAmenitiesMatrix = tableRegression.loc[:, variablesRegression]
-    predictorsAmenitiesMatrix = np.vstack(
-        [np.ones(predictorsAmenitiesMatrix.shape[0]),
-         predictorsAmenitiesMatrix.T]
-        ).T
+    predictorsAmenitiesMatrix = sm.add_constant(predictorsAmenitiesMatrix)
+    # predictorsAmenitiesMatrix = np.vstack(
+    #     [np.ones(predictorsAmenitiesMatrix.shape[0]),
+    #      predictorsAmenitiesMatrix.T]
+    #     ).T
 
     # %% FUNCTIONS USED FOR THE FIT ON DWELLING SIZE AND AMENITIES
 
@@ -200,26 +195,28 @@ def EstimateParametersByOptimization(
 
     # Now, we optimize using interior-point minimization algorithm
 
-    # We define relatively wide bounds for our parameters.
-    # This is supposed to reflect empirical grounds on the acceptable range
-    # of parameter values. In the order: surplus housing elasticity, basic
-    # need in housing, utility levels for second richest and richest income
-    # groups
-    bnds = ((0.1, 0.5),
-            (2, 8),
-            (initUti3 / 2, initUti4),
-            (initUti3, initUti4 * 2))
+    # By default, we pin down values for beta and q0. Then, we allow utility
+    # levels for the two richest income groups (making the most part of
+    # formal private housing) to vary widely: this should converge towards an
+    # interior solution for a good initial guess on those values
+    # NB: again, this can be changed if needed
+    bnds = ((initBeta, initBeta),
+            (initBasicQ, initBasicQ),
+            (0, 10**4),
+            (0, 10**5))
 
-    # We run the algorithm and store the output
-    res = scipy.optimize.minimize(
-        minusLogLikelihoodModel, initialVector, bounds=bnds
-        )
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        # We run the algorithm and store the output
+        res = scipy.optimize.minimize(
+            minusLogLikelihoodModel, initialVector, bounds=bnds
+            )
     parameters = res.x
     scoreTot = res.fun
     exitFlag = res.success
     print(exitFlag)
 
-    # Estimate the function to get the parameters for amenities
+    # Estimate the function to get the associated amenity parameters
     if options["glm"] == 1:
         optionRegression = 1
         (*_, parametersAmenities, modelAmenity, parametersHousing

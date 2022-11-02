@@ -35,12 +35,12 @@ print("Import information to be used in the simulation")
 
 path_code = '..'
 path_folder = path_code + '/Data/'
-path_precalc_inp = path_folder + 'Precalculated inputs/'
+path_precalc_inp = path_folder + 'precalculated_inputs/'
 path_data = path_folder + 'data_Cape_Town/'
 path_precalc_transp = path_folder + 'precalculated_transport/'
 path_scenarios = path_data + 'Scenarios/'
 path_outputs = path_code + '/Output/'
-path_floods = path_folder + "FATHOM/"
+path_floods = path_folder + "flood_maps/"
 
 
 # IMPORT PARAMETERS AND OPTIONS
@@ -745,17 +745,17 @@ plt.close()
 
 #  First for timing
 informal_risks_short = pd.read_csv(
-    path_folder + 'Land occupation/informal_settlements_risk_SHORT.csv',
+    path_folder + 'occupation_maps/informal_settlements_risk_SHORT.csv',
     sep=',')
 informal_risks_short = informal_risks_short.rename(
     columns={"area": "area_short"})
 informal_risks_medium = pd.read_csv(
-    path_folder + 'Land occupation/informal_settlements_risk_MEDIUM.csv',
+    path_folder + 'occupation_maps/informal_settlements_risk_MEDIUM.csv',
     sep=',')
 informal_risks_medium = informal_risks_medium.rename(
     columns={"area": "area_medium"})
 informal_risks_long = pd.read_csv(
-    path_folder + 'Land occupation/informal_settlements_risk_LONG.csv',
+    path_folder + 'occupation_maps/informal_settlements_risk_LONG.csv',
     sep=',')
 informal_risks_long = informal_risks_long.rename(
     columns={"area": "area_long"})
@@ -801,22 +801,22 @@ informal_risks_timing.to_csv(path_tables
 # Then for probability
 
 informal_risks_LOW = pd.read_csv(
-    path_folder + 'Land occupation/informal_settlements_risk_pLOW.csv',
+    path_folder + 'occupation_maps/informal_settlements_risk_pLOW.csv',
     sep=',')
 informal_risks_LOW = informal_risks_LOW.rename(
     columns={"area": "area_LOW"})
 informal_risks_MEDIUM = pd.read_csv(
-    path_folder + 'Land occupation/informal_settlements_risk_pMEDIUM.csv',
+    path_folder + 'occupation_maps/informal_settlements_risk_pMEDIUM.csv',
     sep=',')
 informal_risks_MEDIUM = informal_risks_MEDIUM.rename(
     columns={"area": "area_MEDIUM"})
 informal_risks_HIGH = pd.read_csv(
-    path_folder + 'Land occupation/informal_settlements_risk_pHIGH.csv',
+    path_folder + 'occupation_maps/informal_settlements_risk_pHIGH.csv',
     sep=',')
 informal_risks_HIGH = informal_risks_HIGH.rename(
     columns={"area": "area_HIGH"})
 informal_risks_VERYHIGH = pd.read_csv(
-    path_folder + 'Land occupation/informal_settlements_risk_pVERYHIGH.csv',
+    path_folder + 'occupation_maps/informal_settlements_risk_pVERYHIGH.csv',
     sep=',')
 informal_risks_VERYHIGH = informal_risks_VERYHIGH.rename(
     columns={"area": "area_VERYHIGH"})
