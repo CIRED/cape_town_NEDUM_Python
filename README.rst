@@ -31,7 +31,7 @@ Installation
 	code capetown python (name of the repo)
 	├── _doc_source (source code for documentation)
 	├── _flood_processing (notebook used to pre-process Deltares coastal flood maps)
-	├── _research (research articles referenced in the code and the documentation)
+	├── _research (research articles referenced in the code)
 	├── calibration (package used for calibration)
 	├── docs (html output for documentation)
 	├── equilibrium (package used to compute equilibrium outcomes)

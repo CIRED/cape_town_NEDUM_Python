@@ -420,7 +420,7 @@ coeff_land_FS_map = outexp.export_map(
 Image(path_input_plots + "coeff_land_subsidized.png")
 # endregion
 
-# We also import housing heigth limits
+# We also import housing height limits
 import inputs.data as inpdt
 housing_limit = inpdt.import_housing_limit(grid, param)
 
@@ -723,6 +723,10 @@ import equilibrium.compute_equilibrium as eqcmp
 # initial_state_limit_city = indicator dummy for having strictly more
 #   than one household per housing type and income group in each pixel
 
+print(initial_state_simulated_jobs)
+
+# We observe that the poorest income group is crowded out of the formal private sector, and is the only one living in informal settlements and informal backyards.
+
 # We create the associated output directory
 try:
     os.mkdir(path_outputs + name)
@@ -778,10 +782,10 @@ Image(path_output_plots + 'formal_sim.png')
 
 # Here are a few caveats on how to interpret those results:
 #
-# - For a given housing type, residential locations only vary a priori according to their (dis)amenity index, income net of commuting costs, and exposure to flood risks. We do not account for other location-specific exogenous factors, which explains the overall smooth aspect (compared to reality) of our spatial sorting. Besides, land availability is defined negatively by the share of land not available for other housing types, but in reality, this land may also be allocated to other uses, such as commercial real estate. Therefore, even though we do simulate the model at the grid-cell level, it makes more sense to interpret results at the scale of the neighbourhood.
+# - For a given housing type, residential locations only vary a priori according to their (dis)amenity index, income net of commuting costs, and exposure to flood risks. We do not account for other location-specific exogenous factors. Besides, land availability is defined negatively by the share of land not available for other housing types, but in reality, this land may also be allocated to other uses, such as commercial real estate. Therefore, even though we do simulate the model at the grid-cell level, it makes more sense to interpret results at the scale of the neighbourhood.
 # <br>
 #
-# - The fact that we are not able to replicate some stylized facts for the CoCT should be interpreted in this regard. For instance, we are not able to reproduce the high density on the Atlantic Seaboard, as its amenities do not appear sufficient to offset its distance to the CBD. Likewise, the higher disamenity or higher uncertainty in income calibration for specific areas (such as Khayelitsha or Mitchell's Plain) could explain why we are not able to reproduce the (formal) density in those areas.
+# - The fact that we are not able to replicate some stylized facts for the CoCT should be interpreted in this regard.
 
 # region
 # For informal backyards
@@ -812,7 +816,7 @@ informal_sim = outexp.export_map(
 Image(path_output_plots + 'informal_sim.png')
 # endregion
 
-# Contrary to formal private housing, we do observe here a granular spatial distribution more in line with the data, that accounts for the fact that informal settlement locations are exogenously set.
+# Again, remember that informal settlement locations (not their population) are exogenously set.
 
 # region
 # For formal subsidized housing
@@ -982,7 +986,7 @@ land_price_formal_2d_sim = outexp.export_map(
 Image(path_output_plots + 'landrent_formal_2d_sim.png')
 # endregion
 
-# Our results conform to the standard urban economics predictions about the overall shape of the housing/land rent/price gradient.
+# Our results conform to the standard urban economics predictions about the overall shape of the housing/land rent/price gradient, modulated by the value of the amenity score.
 
 # Note that, although we also simulate the average annual rents for informal backyards and settlements, it is not absolutely rigorous to apply the above formula to recover land prices in those areas, as they are considered unfit for development. We still include the plots for reference, that can be interpreted as land prices should such areas become fit for development, keeping constant housing supply and demand (not very realistic).
 
@@ -1156,9 +1160,9 @@ outexp.export_map(coastal_formal_structure_2d_sim, grid, geo_grid,
 Image(path_output_plots + "coastal_formal_structure_2d_sim.png")
 # endregion
 
-# As could have been expected from the flood maps, fluvial damages are more acute but also more localized than pluvial damages. Households seem to avoid the worst-affected areas, but are willing to trade off some flood exposure for good locations nearby the CBD (especially regarding fluvial risks). It is worth noting that the biggest pluvial damages occur in such places where flood exposure is not the highest: it is rather the increase in capital value (driven by a relaxed trade-off) that causes the impact.
+# As could have been expected from the flood maps, fluvial damages are more acute but also more localized than pluvial damages. When superimposing the maps above with what we obtained above on population spatial distribution, households appear to avoid the worst-affected areas, but are willing to trade off some flood exposure for good locations nearby the CBD (especially regarding fluvial flood risks). When superimposing them with the flood maps, we remark that the biggest pluvial damages occur in such places where flood exposure is not the highest: it is rather the increase in (housing supply) capital value (driven by a relaxed trade-off) that causes the impact.
 #
-# The same mechanism seems at play regarding coastal damages, but the estimated damages are well above standard estimates from the literature. This reflects the fact that we use sea-level rise projections based upon the (pessimistic) RCP 8.5 climate change scenario, but also the methodology we use: capital values are determined endogenously through the housing market, and not calibrated to reflect some maximum share of exposed capital at the city-level. As values are typically high near the CBD, so are damages when floods hit such areas.
+# The same mechanism seems at play regarding coastal damages, but the estimated damages are well above standard estimates from the literature. This reflects the fact that we use sea-level rise projections based upon the (pessimistic) RCP 8.5 climate change scenario, but also the methodology we adopt: destroyed capital values are determined endogenously through the housing market, and not calibrated to reflect some maximum share of exposed capital at the city-level. As values are typically high near the CBD and in high-amenity areas, so are damages when floods hit such areas.
 
 # ## Run simulations for subsequent periods (time depends on timeline length)
 
@@ -1210,6 +1214,8 @@ import equilibrium.run_simulations as eqsim
      income_baseline
      )
 
+print(np.nansum(simulation_deriv_housing, 1))
+
 # We save the output
 np.save(path_simul + '/simulation_households_center.npy',
         simulation_households_center)
@@ -1245,30 +1251,6 @@ np.save(path_simul + '/simulation_T.npy',
 # We set the x-axis of our plots
 years_simul = np.arange(2011, 2011 + 30)
 
-# #### Evolution of utility levels over the years
-
-# region
-fig, ax = plt.subplots(figsize=(10, 7))
-ax.plot(years_simul, simulation_utility[:, 0],
-        color="maroon", label="Poor")
-ax.plot(years_simul, simulation_utility[:, 1],
-        color="red", label="Mid-poor")
-ax.plot(years_simul, simulation_utility[:, 2],
-        color="darkorange", label="Mid-rich")
-ax.plot(years_simul, simulation_utility[:, 3],
-        color="gold", label="Rich")
-ax.set_ylim(0)
-ax.yaxis.set_major_formatter(
-    mpl.ticker.StrMethodFormatter('{x:,.0f}'))
-plt.legend()
-plt.tick_params(labelbottom=True)
-plt.ylabel("Utility levels", labelpad=15)
-plt.savefig(path_output_plots + 'evol_util_levels.png')
-plt.close()
-
-Image(path_output_plots + "evol_util_levels.png")
-# endregion
-
 # #### Evolution of population sorting across housing types
 
 # region
@@ -1282,6 +1264,7 @@ ax.plot(years_simul, np.nansum(simulation_households_housing_type, 2)[:, 2],
 ax.plot(years_simul, np.nansum(simulation_households_housing_type, 2)[:, 3],
         color="maroon", label="Subsidized")
 ax.set_ylim(0)
+ax.set_xlim(right=2035)
 ax.yaxis.set_major_formatter(
     mpl.ticker.StrMethodFormatter('{x:,.0f}'))
 plt.legend()
@@ -1292,3 +1275,15 @@ plt.close()
 
 Image(path_output_plots + "evol_nb_households_htype.png")
 # endregion
+
+# The graph above can direcly be interpreted given the land-use scenarios we provided.
+#
+# From 2011 to 2020, formal subsidized housing construction follows the trend discribed in the Housing Pipeline, and population grows along with income inequality and other time-moving variables. Due to increased competition from the two richest income groups, some mid-poor households are in effect crowded out of the formal private sector (which can explain the fall before 2015) and redirect themselves towards informal backyards, and informal settlements to a lesser extent. Those absorb most of population growth. Those trends hold until 2020, except for the blip in 2015, which we suspect to be linked with a jump in computed housing supply inertia (see above).
+#
+# In 2020, the construction rate of formal subdized housing decreases, and a first round of areas become available for informal settlements: as expected, informal settlements begin to play a more substantial role compared to informal backyards, that even decrease until 2025: this is due to the new commuting opportunities on offer (it may become profitable to switch from settlements to backyards when they are located closer to job centres). Formal private units also start increasing again as the last mid-poor income groups leave the submarket.
+#
+# New areas for informal settlements become available in 2023, 2025, and 2030. The most significant break in trends occur in 2025, as the areas on offer do not seem anymore to be interesting enough to keep sucking in households from informal backyards (whose number starts increasing again).
+#
+# We cap the analysis at 2035 as we get a big simulation error metric, and such low precision risks to take simulations out of equilibrium path. This (and other estimation errors) can be corrected by fine-tuning the numerical parameters in the compute_equilibrium function.
+
+# The quick analysis above shows the kind of interpretation we can make with NEDUM-2D. Dynamic paths can be simulated for other outcomes and other underlying scenarios, and the results can also be compared across cross-sections to get comparative statics (regarding structural assumptions such as flood anticipations, for instance).

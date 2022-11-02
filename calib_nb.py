@@ -472,7 +472,7 @@ if options["scan_type"] == "rough":
 if options["scan_type"] == "normal":
     list_lambda = np.arange(13.8, 14.3, 0.2)
 if options["scan_type"] == "fine":
-    list_lambda = np.arange(13.94, 14.07, 0.02)
+    list_lambda = np.arange(13.94, 14.00, 0.02)
 
 # We then run the function that returns the calibrated outputs
 # Note that depending on the precision level and the maximum number of
@@ -659,7 +659,7 @@ income_centers_2d_select = income_centers_2d[
 # We then visualize calibrated incomes for income group 1
 fig, ax = plt.subplots(figsize=(8, 10))
 ax.set_axis_off()
-plt.title("Average calibrated incomes per job center for poor households")
+plt.title("Annual incomes (in R) per job center for poor households")
 income_centers_2d_select.plot(column='poor_income', ax=ax,
                               cmap='Reds', legend=True)
 plt.savefig(path_input_plots + 'poor_income_in_selected_centers')
@@ -672,7 +672,7 @@ Image(path_input_plots + "poor_income_in_selected_centers.png")
 # For income group 2
 fig, ax = plt.subplots(figsize=(8, 10))
 ax.set_axis_off()
-plt.title("Average calibrated incomes per job center for mid-poor households")
+plt.title("Annual incomes (in R) per job center for midpoor households")
 income_centers_2d_select.plot(column='midpoor_income', ax=ax,
                               cmap='Reds', legend=True)
 plt.savefig(path_input_plots + 'midpoor_income_in_selected_centers')
@@ -685,7 +685,7 @@ Image(path_input_plots + "midpoor_income_in_selected_centers.png")
 # For income group 3
 fig, ax = plt.subplots(figsize=(8, 10))
 ax.set_axis_off()
-plt.title("Average calibrated incomes per job center for mid-rich households")
+plt.title("Annual incomes (in R) per job center for midrich households")
 income_centers_2d_select.plot(column='midrich_income', ax=ax,
                               cmap='Reds', legend=True)
 plt.savefig(path_input_plots + 'midrich_income_in_selected_centers')
@@ -698,7 +698,7 @@ Image(path_input_plots + "midrich_income_in_selected_centers.png")
 # For income group 4
 fig, ax = plt.subplots(figsize=(8, 10))
 ax.set_axis_off()
-plt.title("Average calibrated incomes per job center for rich households")
+plt.title("Annual incomes (in R) per job center for rich households")
 income_centers_2d_select.plot(column='rich_income', ax=ax,
                               cmap='Reds', legend=True)
 plt.savefig(path_input_plots + 'rich_income_in_selected_centers')
@@ -788,7 +788,7 @@ amenities = inpdt.import_amenities(path_precalc_inp, options)
 import outputs.export_outputs as outexp
 amenity_map = outexp.export_map(
     amenities, grid, geo_grid, path_input_plots, 'amenity_map',
-    "Map of average amenity index per location",
+    "Amenity score map (from .01 to .99 percentile)",
     path_input_tables,
     ubnd=np.quantile(amenities, 0.9999),
     lbnd=np.quantile(amenities, 0.0001))
@@ -1096,8 +1096,8 @@ np.save(path_precalc_inp + 'param_backyards.npy',
 import outputs.export_outputs as outexp
 disamenity_IS_map = outexp.export_map(
     param["informal_pockets"], grid, geo_grid, path_input_plots, 'disamenity_IS_map',
-    "Map of average disamenity index for informal settlements",
-    path_input_tables, ubnd=np.nanmax(param["informal_pockets"]))
+    "Location-specific informal settlement disamenity score",
+    path_input_tables, ubnd=1)
 
 Image(path_input_plots + "disamenity_IS_map.png")
 # endregion
@@ -1107,8 +1107,8 @@ Image(path_input_plots + "disamenity_IS_map.png")
 import outputs.export_outputs as outexp
 disamenity_IB_map = outexp.export_map(
     param["backyard_pockets"], grid, geo_grid, path_input_plots, 'disamenity_IB_map',
-    "Map of average disamenity index for informal backyards",
-    path_input_tables, ubnd=np.nanmax(param["backyard_pockets"]))
+    "Location-specific informal backyard disamenity score",
+    path_input_tables, ubnd=1)
 
 Image(path_input_plots + "disamenity_IB_map.png")
 # endregion
