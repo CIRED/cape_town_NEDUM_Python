@@ -118,7 +118,6 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># We import number of jobs per Transport Zone (1,787)</span>
-    <span class="c1"># TODO: We may need to rename underlying data</span>
     <span class="n">TAZ</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path_data</span> <span class="o">+</span> <span class="s1">&#39;TAZ_amp_2013_proj_centro2.csv&#39;</span><span class="p">)</span>
 
     <span class="c1"># Number of employees in each TAZ for the 12 income classes from data</span>
@@ -126,7 +125,6 @@
     <span class="c1"># from census data. Then, we will apply the proper allocation to go to the</span>
     <span class="c1"># 4 income classes used in the model (do not correspond to the 4 income</span>
     <span class="c1"># classes used in TAZ data)</span>
-    <span class="c1"># TODO: should document where the split comes from</span>
     <span class="n">jobsCenters12Class</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
         <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">TAZ</span><span class="o">.</span><span class="n">Ink1</span><span class="p">)),</span> <span class="n">TAZ</span><span class="o">.</span><span class="n">Ink1</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="n">TAZ</span><span class="o">.</span><span class="n">Ink1</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="n">TAZ</span><span class="o">.</span><span class="n">Ink1</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span>
          <span class="n">TAZ</span><span class="o">.</span><span class="n">Ink2</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">TAZ</span><span class="o">.</span><span class="n">Ink2</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">TAZ</span><span class="o">.</span><span class="n">Ink3</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="n">TAZ</span><span class="o">.</span><span class="n">Ink3</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="n">TAZ</span><span class="o">.</span><span class="n">Ink3</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span>

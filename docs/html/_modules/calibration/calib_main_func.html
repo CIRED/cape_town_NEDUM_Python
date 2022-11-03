@@ -86,6 +86,7 @@
 <span class="kn">import</span> <span class="nn">statsmodels.api</span> <span class="k">as</span> <span class="nn">sm</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">scipy</span>
 
 <span class="kn">import</span> <span class="nn">calibration.sub.compute_income</span> <span class="k">as</span> <span class="nn">calcmp</span>
 <span class="kn">import</span> <span class="nn">calibration.sub.import_employment_data</span> <span class="k">as</span> <span class="nn">calemp</span>
@@ -203,18 +204,6 @@
     <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path_precalc_inp</span> <span class="o">+</span> <span class="s1">&#39;calibratedHousing_b.npy&#39;</span><span class="p">,</span> <span class="n">coeff_b</span><span class="p">)</span>
     <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path_precalc_inp</span> <span class="o">+</span> <span class="s1">&#39;calibratedHousing_kappa.npy&#39;</span><span class="p">,</span> <span class="n">coeffKappa</span><span class="p">)</span>
 
-    <span class="c1"># We add the option in case we want to reverse estimated elasticties to</span>
-    <span class="c1"># stick closer to the literature (this is just a test)</span>
-    <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;reverse_elasticities&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">coeff_a</span> <span class="o">=</span> <span class="n">coeff_b</span>
-        <span class="n">coeff_b</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">coeff_a</span>
-        <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;correct_kappa&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">coeffKappa</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">coeff_b</span> <span class="o">/</span> <span class="n">coeff_a</span><span class="p">)</span> <span class="o">**</span> <span class="n">coeff_b</span><span class="p">)</span>
-                          <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">model_construction</span><span class="o">.</span><span class="n">intercept_</span><span class="p">))</span>
-        <span class="k">elif</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;correct_kappa&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">coeffKappa</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">coeff_b</span><span class="p">)</span> <span class="o">**</span> <span class="n">coeff_b</span><span class="p">)</span>
-                          <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">model_construction</span><span class="o">.</span><span class="n">intercept_</span><span class="p">))</span>
-
     <span class="k">return</span> <span class="n">coeff_b</span><span class="p">,</span> <span class="n">coeff_a</span><span class="p">,</span> <span class="n">coeffKappa</span></div>
 
 
@@ -321,28 +310,22 @@
     <span class="c1"># Here again, we are considering rescaled income data.</span>
     <span class="p">(</span><span class="n">incomeCenters</span><span class="p">,</span> <span class="n">distanceDistribution</span><span class="p">,</span> <span class="n">scoreMatrix</span>
      <span class="p">)</span> <span class="o">=</span> <span class="n">calcmp</span><span class="o">.</span><span class="n">EstimateIncome</span><span class="p">(</span>
-        <span class="n">param</span><span class="p">,</span> <span class="n">timeOutput</span><span class="p">,</span> <span class="n">distanceOutput</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">monetaryCost</span><span class="p">,</span> <span class="n">costTime</span><span class="p">,</span>
-        <span class="n">job_centers</span><span class="p">,</span> <span class="n">average_income</span><span class="p">,</span> <span class="n">income_distribution</span><span class="p">,</span> <span class="n">list_lambda</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
-
-    <span class="c1"># We also consider a selection based on the fit with observed aggregate</span>
-    <span class="c1"># average incomes, although this is likely to be more noisy</span>
-    <span class="c1"># NB: note that, in practice, it does not appear to change the final</span>
-    <span class="c1"># selection</span>
-
-    <span class="c1"># incomeCenters[incomeCenters &lt; 0] = math.nan</span>
-    <span class="c1"># cal_avg_income = [np.nanmean(incomeCenters[:, :, k], 0)</span>
-    <span class="c1">#                   for k in np.arange(0, len(list_lambda))]</span>
-    <span class="c1"># err_avg_income = [np.abs(1 - cal_avg_income[i] / average_income)</span>
-    <span class="c1">#                   for i in np.arange(0, len(cal_avg_income))]</span>
-    <span class="c1"># list_err_avginc = [np.nanmean(err_avg_income[i])</span>
-    <span class="c1">#                    for i in np.arange(0, len(err_avg_income))]</span>
-    <span class="c1"># whichLambda_test = np.argmin(list_err_avginc)</span>
+         <span class="n">param</span><span class="p">,</span> <span class="n">timeOutput</span><span class="p">,</span> <span class="n">distanceOutput</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">monetaryCost</span><span class="p">,</span> <span class="n">costTime</span><span class="p">,</span>
+         <span class="n">job_centers</span><span class="p">,</span> <span class="n">average_income</span><span class="p">,</span> <span class="n">income_distribution</span><span class="p">,</span> <span class="n">list_lambda</span><span class="p">,</span>
+         <span class="n">options</span><span class="p">)</span>
 
     <span class="c1"># Gives aggregate statistics for % of commuters per distance bracket</span>
     <span class="c1"># NB: bracketsDistance = np.array([0, 5, 10, 15, 20, 25, 30, 35, 40, 200])</span>
     <span class="c1"># with floor residence-workplace distances in km</span>
     <span class="c1"># (see calibration.sub.compute_income)</span>
-    <span class="c1"># TODO: need to include a data reference</span>
+
+    <span class="c1"># NB: we could check differential mobility patterns as a robustness check</span>
+    <span class="c1"># by estimating a distinct gravity parameter for each income group if we</span>
+    <span class="c1"># get access to a breakdown of residence-workplace distance distribution</span>
+    <span class="c1"># per income group</span>
+
+    <span class="c1"># Residence-workplace distance distribution comes from the CoCT&#39;s 2013</span>
+    <span class="c1"># Transport Survey</span>
     <span class="n">data_distance_distribution</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
         <span class="p">[</span><span class="mf">45.6174222</span><span class="p">,</span> <span class="mf">18.9010734</span><span class="p">,</span> <span class="mf">14.9972971</span><span class="p">,</span> <span class="mf">9.6725616</span><span class="p">,</span> <span class="mf">5.9425438</span><span class="p">,</span> <span class="mf">2.5368754</span><span class="p">,</span>
          <span class="mf">0.9267125</span><span class="p">,</span> <span class="mf">0.3591011</span><span class="p">,</span> <span class="mf">1.0464129</span><span class="p">])</span>
@@ -364,7 +347,8 @@
     <span class="n">incomeCentersKeep</span> <span class="o">=</span> <span class="n">incomeCenters</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">whichLambda</span><span class="p">]</span>
 
     <span class="c1"># We also keep the associated error metric</span>
-    <span class="n">scoreKeep</span> <span class="o">=</span> <span class="n">scoreMatrix</span><span class="p">[</span><span class="n">whichLambda</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="c1"># scoreKeep = scoreMatrix[whichLambda, :]</span>
+    <span class="n">scoreKeep</span> <span class="o">=</span> <span class="n">scoreMatrix</span>
 
     <span class="c1"># Note that income is set to -inf for job centers and income groups in</span>
     <span class="c1"># which it could not be calibrated</span>
@@ -387,7 +371,7 @@
 <div class="viewcode-block" id="estim_util_func_param"><a class="viewcode-back" href="../../api_ref.html#calibration.calib_main_func.estim_util_func_param">[docs]</a><span class="k">def</span> <span class="nf">estim_util_func_param</span><span class="p">(</span><span class="n">data_number_formal</span><span class="p">,</span> <span class="n">data_income_group</span><span class="p">,</span>
                           <span class="n">housing_types_sp</span><span class="p">,</span> <span class="n">data_sp</span><span class="p">,</span>
                           <span class="n">coeff_a</span><span class="p">,</span> <span class="n">coeff_b</span><span class="p">,</span> <span class="n">coeffKappa</span><span class="p">,</span> <span class="n">interest_rate</span><span class="p">,</span>
-                          <span class="n">incomeNetOfCommuting</span><span class="p">,</span> <span class="n">selected_density</span><span class="p">,</span>
+                          <span class="n">incomeNetOfCommuting</span><span class="p">,</span>
                           <span class="n">path_data</span><span class="p">,</span> <span class="n">path_precalc_inp</span><span class="p">,</span>
                           <span class="n">options</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -434,10 +418,6 @@
 <span class="sd">    incomeNetOfCommuting : ndarray(float64, ndim=2)</span>
 <span class="sd">        Expected annual income net of commuting costs (in rands, for</span>
 <span class="sd">        one household), for each geographic unit, by income group (4)</span>
-<span class="sd">    selected_density : Series</span>
-<span class="sd">        Dummy variable allowing for sample selection across Small Places</span>
-<span class="sd">        (1,046) for regressions that are only valid in the formal private</span>
-<span class="sd">        housing sector</span>
 <span class="sd">    path_data : str</span>
 <span class="sd">        Path towards data used in the model</span>
 <span class="sd">    path_precalc_inp : str</span>
@@ -476,35 +456,36 @@
 
     <span class="c1"># We are going to scan over values on which to optimize</span>
 
-    <span class="c1"># For beta, we take a relatively wide acceptable range, as there is no</span>
-    <span class="c1"># empirical counterpart (final value essentially depend on internal</span>
-    <span class="c1"># validity) on which to base a priori knowledge, and it is the key</span>
-    <span class="c1"># parameter over which we want to optimize. We may refine it further,</span>
-    <span class="c1"># even though it is made unnecessary if we use an interior-point algorithm</span>
-    <span class="c1"># for later optimization</span>
+    <span class="c1"># As explained in the parameters_and_options module, we consider that</span>
+    <span class="c1"># benchmark value from Finlay and Williams (2022) is more robust than</span>
+    <span class="c1"># our own estimation for the elasticity of housing demand. We therefore</span>
+    <span class="c1"># pin this value down as default. Note that we can define a range of</span>
+    <span class="c1"># acceptable values for sensitivity checks.</span>
 
-    <span class="c1"># listBeta = np.arange(0.1, 0.51, 0.1)</span>
-    <span class="n">listBeta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.351</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+    <span class="n">listBeta</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span>
+                <span class="n">path_precalc_inp</span> <span class="o">+</span> <span class="s1">&#39;calibratedUtility_beta.mat&#39;</span>
+                <span class="p">)[</span><span class="s2">&quot;calibratedUtility_beta&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+    <span class="c1"># listBeta = 0.25</span>
+    <span class="c1"># listBeta = np.arange(0.1, 0.41, 0.02)</span>
 
-    <span class="c1"># We do the same for basic need in housing. Note that, contrary to</span>
-    <span class="c1"># elasticity parameter, we could find an empirical counterpart to this</span>
-    <span class="c1"># value (as is often done in the literature). This would allow to reduce</span>
-    <span class="c1"># the complexity of the problem by one dimension and to be more confident</span>
-    <span class="c1"># on the range for feasible solutions: we leave that for future</span>
-    <span class="c1"># implementations</span>
+    <span class="c1"># Again, we pin the value of basic need in housing to the one estimated</span>
+    <span class="c1"># in Pfeiffer et al., to serve as a placeholder for later empirical</span>
+    <span class="c1"># calibration (see parameters_and_options module) and to reduce the</span>
+    <span class="c1"># numerical complexity of the optimization process (that may converge</span>
+    <span class="c1"># towards multiple optima)</span>
 
-    <span class="c1"># listBasicQ = np.arange(2, 10.1, 1)</span>
-    <span class="n">listBasicQ</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">5.5</span><span class="p">,</span> <span class="mf">6.51</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
-    <span class="c1"># listBasicQ = scipy.io.loadmat(</span>
-    <span class="c1">#             path_precalc_inp + &#39;calibratedUtility_q0.mat&#39;</span>
-    <span class="c1">#             )[&quot;calibratedUtility_q0&quot;].squeeze()</span>
+    <span class="n">listBasicQ</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span>
+                <span class="n">path_precalc_inp</span> <span class="o">+</span> <span class="s1">&#39;calibratedUtility_q0.mat&#39;</span>
+                <span class="p">)[</span><span class="s2">&quot;calibratedUtility_q0&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+    <span class="c1"># listBasicQ = 4</span>
 
     <span class="c1"># Coefficient for spatial autocorrelation (not used)</span>
     <span class="n">listRho</span> <span class="o">=</span> <span class="mi">0</span>
 
-    <span class="c1"># Utilities for simulations: we take levels close to what we expect</span>
-    <span class="c1"># in equilibrium</span>
-    <span class="n">utilityTarget</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">3000</span><span class="p">,</span> <span class="mi">15000</span><span class="p">,</span> <span class="mi">70000</span><span class="p">])</span>
+    <span class="c1"># Target utility levels used to define amenity score: we take levels close</span>
+    <span class="c1"># to what we expect in equilibrium</span>
+    <span class="c1"># utilityTarget = np.array([400, 900, 5400, 26000])</span>
+    <span class="n">utilityTarget</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1200</span><span class="p">,</span> <span class="mi">4800</span><span class="p">,</span> <span class="mi">16000</span><span class="p">,</span> <span class="mi">77000</span><span class="p">])</span>
 
     <span class="c1"># Then, we only allow utilities for the two richest income groups to vary,</span>
     <span class="c1"># for the sake of numerical simplicity and as they will drive most of the</span>
@@ -513,8 +494,46 @@
     <span class="c1"># as it will in practice be crowded out of the formal private sector</span>
     <span class="c1"># (which drives most of our identification).</span>
 
-    <span class="n">listVariation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">1.21</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
-    <span class="c1"># listVariation = 1</span>
+    <span class="c1"># Compared to Pfeiffer et al., we only fit the data moment on exogenous</span>
+    <span class="c1"># amenities when pinning down the values of beta and q0 (see definition</span>
+    <span class="c1"># of the composite log-likelihood in the estimate_parameters modules).</span>
+    <span class="c1"># This is because the amenity score is the only parameter left to</span>
+    <span class="c1"># calibrate, and we want it to be predicted in the most acurrate way</span>
+    <span class="c1"># by our explanatory covariates. Consequently, the selected values for the</span>
+    <span class="c1"># utility levels will not necessarily match the endogenous values we get as</span>
+    <span class="c1"># an equilibrium outcome: this is because they are selected so as to</span>
+    <span class="c1"># minimize the component of the theoretical amenity score that is left</span>
+    <span class="c1"># unexplained by chosen exogenous covariates. Indeed, we will keep the</span>
+    <span class="c1"># explained component for the definition of the amenity score used in our</span>
+    <span class="c1"># simulations.</span>
+
+    <span class="c1"># Alternatively, we could obtain this score from model inversion (as we do</span>
+    <span class="c1"># later with the disamenity factor from living in informal backyards</span>
+    <span class="c1"># / settlements), implicitly defining it as a residual that allows the</span>
+    <span class="c1"># model to fit the data better. In more intuitive terms, this boils down to</span>
+    <span class="c1"># optimizing over the value of the amenity score at the same time as</span>
+    <span class="c1"># utility levels when solving the equilibrium (remember that we consider</span>
+    <span class="c1"># a closed-city model where total population per income group is exogenous</span>
+    <span class="c1"># and utility levels are endogenous). This approach is standard in</span>
+    <span class="c1"># quantitative spatial economic models (see Redding and Rossi-Hansberg,</span>
+    <span class="c1"># 2017 for more details). However, we choose to model the score explicitly,</span>
+    <span class="c1"># defining it a priori as a calibrated parameter, and only solving for</span>
+    <span class="c1"># utility levels (and disamenity factors) in equilibrium.</span>
+    <span class="c1"># NB: The approach taken in Pfeiffer et al., where the score is calibrated</span>
+    <span class="c1"># a priori, but along other data moments, can be seen as an intermediate</span>
+    <span class="c1"># between the two approaches presented above.</span>
+
+    <span class="c1"># This approach comes with the risk of a poorer overall fit. However, if</span>
+    <span class="c1"># validation shows that model predictions are good enough for use in spite</span>
+    <span class="c1"># of this limitation, the approach also brings clear benefits. First,</span>
+    <span class="c1"># it prevents the model from overfitting, which increases its external</span>
+    <span class="c1"># validity when assessing counterfactuals. Then, the amenity score has a</span>
+    <span class="c1"># clear empirical interpretation, which allows to assess more specifically</span>
+    <span class="c1"># policies directed towards amenities (translating into a change of values</span>
+    <span class="c1"># for some exogenous covariates, that can be direcly mapped to a change in</span>
+    <span class="c1"># equilibrium outcomes).</span>
+
+    <span class="n">listVariation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
     <span class="n">initUti2</span> <span class="o">=</span> <span class="n">utilityTarget</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">listUti3</span> <span class="o">=</span> <span class="n">utilityTarget</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">listVariation</span>
     <span class="n">listUti4</span> <span class="o">=</span> <span class="n">utilityTarget</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="n">listVariation</span>
@@ -550,21 +569,24 @@
             <span class="o">/</span> <span class="p">(</span><span class="n">coeffKappa</span> <span class="o">*</span> <span class="n">coeff_b</span> <span class="o">**</span> <span class="n">coeff_b</span><span class="p">)</span>
             <span class="p">)</span>
 
-    <span class="c1"># We get the built density in associated constructible land (per km²)</span>
-    <span class="n">data_density</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">data_number_formal</span>
-        <span class="o">/</span> <span class="p">(</span><span class="n">data_sp</span><span class="p">[</span><span class="s2">&quot;unconstrained_area&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;max_land_use&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000000</span><span class="p">)</span>
-        <span class="p">)</span>
+    <span class="c1"># Note that the above formulas consider that we observe land prices in the</span>
+    <span class="c1"># data, hence the conversion to housing rents through the zero profit</span>
+    <span class="c1"># condition for formal private developers. If we observe housing prices</span>
+    <span class="c1"># instead, we should use to below formula, expressing rents as the annual</span>
+    <span class="c1"># coupon associated with an infinite bond valued at housing price</span>
+    <span class="n">dataRent</span> <span class="o">=</span> <span class="n">data_sp</span><span class="p">[</span><span class="s2">&quot;price&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">interest_rate</span>
 
     <span class="c1"># We import amenity data at the SP level</span>
     <span class="n">amenities_sp</span> <span class="o">=</span> <span class="n">calam</span><span class="o">.</span><span class="n">import_exog_amenities</span><span class="p">(</span>
         <span class="n">path_data</span><span class="p">,</span> <span class="n">path_precalc_inp</span><span class="p">,</span> <span class="s1">&#39;SP&#39;</span><span class="p">)</span>
     <span class="c1"># We select amenity variables to be used in regressions</span>
     <span class="c1"># NB: choice has to do with relevance and exogeneity of variables</span>
+    <span class="c1"># Choice set is relevant but may only refer to a small subset of locations</span>
+    <span class="c1"># (train stations are often dysfunctional, for instance)</span>
     <span class="n">variables_regression</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="s1">&#39;distance_ocean&#39;</span><span class="p">,</span> <span class="s1">&#39;distance_ocean_2_4&#39;</span><span class="p">,</span> <span class="s1">&#39;slope_1_5&#39;</span><span class="p">,</span> <span class="s1">&#39;slope_5&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;airport_cone2&#39;</span><span class="p">,</span> <span class="s1">&#39;distance_distr_parks&#39;</span><span class="p">,</span> <span class="s1">&#39;distance_biosphere_reserve&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;distance_train&#39;</span><span class="p">,</span> <span class="s1">&#39;distance_urban_herit&#39;</span><span class="p">]</span>
+        <span class="s1">&#39;distance_distr_parks&#39;</span><span class="p">,</span> <span class="s1">&#39;distance_ocean&#39;</span><span class="p">,</span> <span class="s1">&#39;distance_ocean_2_4&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;distance_urban_herit&#39;</span><span class="p">,</span> <span class="s1">&#39;airport_cone2&#39;</span><span class="p">,</span> <span class="s1">&#39;slope_1_5&#39;</span><span class="p">,</span> <span class="s1">&#39;slope_5&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;distance_biosphere_reserve&#39;</span><span class="p">,</span> <span class="s1">&#39;distance_train&#39;</span><span class="p">]</span>
 
     <span class="c1"># We run the parameter scanning.</span>
     <span class="c1"># Note that this may be long to run as it depends on the combination of all</span>
@@ -573,10 +595,8 @@
     <span class="p">(</span><span class="n">parametersScan</span><span class="p">,</span> <span class="n">scoreScan</span><span class="p">,</span> <span class="n">parametersAmenitiesScan</span><span class="p">,</span> <span class="n">modelAmenityScan</span><span class="p">,</span>
      <span class="n">parametersHousing</span><span class="p">)</span> <span class="o">=</span> <span class="n">calscan</span><span class="o">.</span><span class="n">EstimateParametersByScanning</span><span class="p">(</span>
          <span class="n">incomeNetOfCommuting</span><span class="p">,</span> <span class="n">dataRent</span><span class="p">,</span> <span class="n">data_sp</span><span class="p">[</span><span class="s2">&quot;dwelling_size&quot;</span><span class="p">],</span>
-         <span class="n">data_income_group</span><span class="p">,</span> <span class="n">data_density</span><span class="p">,</span> <span class="n">selected_density</span><span class="p">,</span>
-         <span class="n">housing_types_sp</span><span class="p">[</span><span class="s2">&quot;x_sp&quot;</span><span class="p">],</span> <span class="n">housing_types_sp</span><span class="p">[</span><span class="s2">&quot;y_sp&quot;</span><span class="p">],</span> <span class="n">selectedSP</span><span class="p">,</span>
-         <span class="n">amenities_sp</span><span class="p">,</span> <span class="n">variables_regression</span><span class="p">,</span> <span class="n">listRho</span><span class="p">,</span> <span class="n">listBeta</span><span class="p">,</span> <span class="n">listBasicQ</span><span class="p">,</span>
-         <span class="n">initUti2</span><span class="p">,</span> <span class="n">listUti3</span><span class="p">,</span> <span class="n">listUti4</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+         <span class="n">data_income_group</span><span class="p">,</span> <span class="n">selectedSP</span><span class="p">,</span> <span class="n">amenities_sp</span><span class="p">,</span> <span class="n">variables_regression</span><span class="p">,</span>
+         <span class="n">listRho</span><span class="p">,</span> <span class="n">listBeta</span><span class="p">,</span> <span class="n">listBasicQ</span><span class="p">,</span> <span class="n">initUti2</span><span class="p">,</span> <span class="n">listUti3</span><span class="p">,</span> <span class="n">listUti4</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
 
     <span class="nb">print</span><span class="p">(</span><span class="n">modelAmenityScan</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
 
@@ -596,10 +616,9 @@
         <span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="n">scoreTot</span><span class="p">,</span> <span class="n">parametersAmenities</span><span class="p">,</span> <span class="n">modelAmenity</span><span class="p">,</span>
          <span class="n">parametersHousing</span><span class="p">)</span> <span class="o">=</span> <span class="n">calopt</span><span class="o">.</span><span class="n">EstimateParametersByOptimization</span><span class="p">(</span>
              <span class="n">incomeNetOfCommuting</span><span class="p">,</span> <span class="n">dataRent</span><span class="p">,</span> <span class="n">data_sp</span><span class="p">[</span><span class="s2">&quot;dwelling_size&quot;</span><span class="p">],</span>
-             <span class="n">data_income_group</span><span class="p">,</span> <span class="n">data_density</span><span class="p">,</span> <span class="n">selected_density</span><span class="p">,</span>
-             <span class="n">housing_types_sp</span><span class="p">[</span><span class="s2">&quot;x_sp&quot;</span><span class="p">],</span> <span class="n">housing_types_sp</span><span class="p">[</span><span class="s2">&quot;y_sp&quot;</span><span class="p">],</span> <span class="n">selectedSP</span><span class="p">,</span>
-             <span class="n">amenities_sp</span><span class="p">,</span> <span class="n">variables_regression</span><span class="p">,</span> <span class="n">listRho</span><span class="p">,</span> <span class="n">initBeta</span><span class="p">,</span> <span class="n">initBasicQ</span><span class="p">,</span>
-             <span class="n">initUti2</span><span class="p">,</span> <span class="n">initUti3</span><span class="p">,</span> <span class="n">initUti4</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+             <span class="n">data_income_group</span><span class="p">,</span> <span class="n">selectedSP</span><span class="p">,</span> <span class="n">amenities_sp</span><span class="p">,</span> <span class="n">variables_regression</span><span class="p">,</span>
+             <span class="n">listRho</span><span class="p">,</span> <span class="n">initBeta</span><span class="p">,</span> <span class="n">initBasicQ</span><span class="p">,</span> <span class="n">initUti2</span><span class="p">,</span> <span class="n">initUti3</span><span class="p">,</span> <span class="n">initUti4</span><span class="p">,</span>
+             <span class="n">options</span><span class="p">)</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="n">modelAmenity</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
 
@@ -608,28 +627,36 @@
     <span class="n">amenities_grid</span> <span class="o">=</span> <span class="n">calam</span><span class="o">.</span><span class="n">import_exog_amenities</span><span class="p">(</span>
         <span class="n">path_data</span><span class="p">,</span> <span class="n">path_precalc_inp</span><span class="p">,</span> <span class="s1">&#39;grid&#39;</span><span class="p">)</span>
     <span class="n">predictors_grid</span> <span class="o">=</span> <span class="n">amenities_grid</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">variables_regression</span><span class="p">]</span>
-    <span class="n">predictors_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span>
-        <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">predictors_grid</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
-         <span class="n">predictors_grid</span><span class="o">.</span><span class="n">T</span><span class="p">]</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">predictors_grid</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">add_constant</span><span class="p">(</span><span class="n">predictors_grid</span><span class="p">)</span>
+    <span class="c1"># predictors_grid = np.vstack(</span>
+    <span class="c1">#     [np.ones(predictors_grid.shape[0]),</span>
+    <span class="c1">#      predictors_grid.T]</span>
+    <span class="c1">#     ).T</span>
 
+    <span class="c1"># NB: we only retain the explained component of the theoretical amenity</span>
+    <span class="c1"># score</span>
     <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;param_optim&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">cal_amenities</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>
             <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">predictors_grid</span> <span class="o">*</span> <span class="n">parametersAmenities</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
         <span class="n">calibratedUtility_beta</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">calibratedUtility_q0</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">calibratedUtility_u3</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">calibratedUtility_u4</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
     <span class="k">elif</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;param_optim&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">cal_amenities</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>
             <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">predictors_grid</span> <span class="o">*</span> <span class="n">parametersAmenitiesScan</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
         <span class="n">calibratedUtility_beta</span> <span class="o">=</span> <span class="n">parametersScan</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">calibratedUtility_q0</span> <span class="o">=</span> <span class="n">parametersScan</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">calibratedUtility_u3</span> <span class="o">=</span> <span class="n">parametersScan</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">calibratedUtility_u4</span> <span class="o">=</span> <span class="n">parametersScan</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
 
     <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path_precalc_inp</span> <span class="o">+</span> <span class="s1">&#39;calibratedUtility_beta&#39;</span><span class="p">,</span>
             <span class="n">calibratedUtility_beta</span><span class="p">)</span>
     <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path_precalc_inp</span> <span class="o">+</span> <span class="s1">&#39;calibratedUtility_q0&#39;</span><span class="p">,</span> <span class="n">calibratedUtility_q0</span><span class="p">)</span>
     <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path_precalc_inp</span> <span class="o">+</span> <span class="s1">&#39;calibratedAmenities&#39;</span><span class="p">,</span> <span class="n">cal_amenities</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="p">(</span><span class="n">calibratedUtility_beta</span><span class="p">,</span> <span class="n">calibratedUtility_q0</span><span class="p">,</span> <span class="n">cal_amenities</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="p">(</span><span class="n">calibratedUtility_beta</span><span class="p">,</span> <span class="n">calibratedUtility_q0</span><span class="p">,</span> <span class="n">cal_amenities</span><span class="p">,</span>
+            <span class="n">calibratedUtility_u3</span><span class="p">,</span> <span class="n">calibratedUtility_u4</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

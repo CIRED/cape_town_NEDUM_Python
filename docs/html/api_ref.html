@@ -591,7 +591,7 @@ endogenous housing type (3), their total number at baseline year (2011)
 in retrospect (2001), as well as the distribution of their average
 income (at baseline year)</p></li>
 <li><p><strong>households_per_income_and_housing</strong> (<em>ndarray(float64, ndim=2)</em>) – Exogenous number of households per income group (4, from poorest to
-richest) in each endogenous housing type (3: formal private,
+# richest) in each endogenous housing type (3: formal private,
 informal backyards, informal settlements), from SP-level data</p></li>
 </ul>
 </p>
@@ -1548,7 +1548,7 @@ incomes), and is only given as an output of the function for reference.</p></li>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="calibration.calib_main_func.estim_util_func_param">
-<span class="sig-prename descclassname"><span class="pre">calibration.calib_main_func.</span></span><span class="sig-name descname"><span class="pre">estim_util_func_param</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_number_formal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_income_group</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">housing_types_sp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_sp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeff_a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeff_b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeffKappa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interest_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">incomeNetOfCommuting</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selected_density</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_precalc_inp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/calibration/calib_main_func.html#estim_util_func_param"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#calibration.calib_main_func.estim_util_func_param" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">calibration.calib_main_func.</span></span><span class="sig-name descname"><span class="pre">estim_util_func_param</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data_number_formal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_income_group</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">housing_types_sp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_sp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeff_a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeff_b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeffKappa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interest_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">incomeNetOfCommuting</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_precalc_inp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/calibration/calib_main_func.html#estim_util_func_param"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#calibration.calib_main_func.estim_util_func_param" title="Permalink to this definition"></a></dt>
 <dd><p>Calibrate utility function parameters.</p>
 <p>This function leverages the following modules: import_amenities,
 estimate_parameters_by_scanning, and estimate_parameters_by_optimization.
@@ -1582,9 +1582,6 @@ location belongs to Mitchells Plain, and the SP code</p></li>
 over past years</p></li>
 <li><p><strong>incomeNetOfCommuting</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=2</em><em>)</em>) – Expected annual income net of commuting costs (in rands, for
 one household), for each geographic unit, by income group (4)</p></li>
-<li><p><strong>selected_density</strong> (<em>Series</em>) – Dummy variable allowing for sample selection across Small Places
-(1,046) for regressions that are only valid in the formal private
-housing sector</p></li>
 <li><p><strong>path_data</strong> (<em>str</em>) – Path towards data used in the model</p></li>
 <li><p><strong>path_precalc_inp</strong> (<em>str</em>) – Path for precalcuted input data (calibrated parameters)</p></li>
 <li><p><strong>options</strong> (<em>dict</em>) – Dictionary of default options</p></li>
@@ -1847,7 +1844,7 @@ opportunity cost of time.</p></li>
 <p>&#64;author: Charlotte Liotta</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="calibration.sub.estimate_parameters_by_optimization.EstimateParametersByOptimization">
-<span class="sig-prename descclassname"><span class="pre">calibration.sub.estimate_parameters_by_optimization.</span></span><span class="sig-name descname"><span class="pre">EstimateParametersByOptimization</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomeNetOfCommuting</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataRent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataDwellingSize</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataIncomeGroup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataHouseholdDensity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selectedDensity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selectedSP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tableAmenities</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variablesRegression</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initRho</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initBeta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initBasicQ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initUti2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initUti3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initUti4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/calibration/sub/estimate_parameters_by_optimization.html#EstimateParametersByOptimization"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#calibration.sub.estimate_parameters_by_optimization.EstimateParametersByOptimization" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">calibration.sub.estimate_parameters_by_optimization.</span></span><span class="sig-name descname"><span class="pre">EstimateParametersByOptimization</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomeNetOfCommuting</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataRent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataDwellingSize</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataIncomeGroup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selectedSP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tableAmenities</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variablesRegression</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initRho</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initBeta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initBasicQ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initUti2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initUti3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initUti4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/calibration/sub/estimate_parameters_by_optimization.html#EstimateParametersByOptimization"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#calibration.sub.estimate_parameters_by_optimization.EstimateParametersByOptimization" title="Permalink to this definition"></a></dt>
 <dd><p>Estimate parameters by maximizing log likelihood via gradient descent.</p>
 <p>This function runs an interior-point algoithm over values of endogenous
 parameters entering households’ utility function, and returns those which
@@ -1860,7 +1857,10 @@ selection for the estimation, as well as theoretical partial relations
 from the structure of the model, used in regressions.
 It leverages initial guess from estimate_parameters_by_scanning module on
 parameter values to start within the set of feasible solutions, and to
-converge towards an interior (as opposed to corner) solution.</p>
+converge towards an interior (as opposed to corner) solution.
+The algorithm only converges when considering the fit along all dimensions
+(not only exogenous amenities). This function is therefore not appropriate
+when we want to focus calibration on the amenity score only.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1871,12 +1871,6 @@ from data on average land prices, for each SP (1,046)</p></li>
 <li><p><strong>dataDwellingSize</strong> (<em>Series</em>) – Average dwelling size (in m²) for each SP (1,046), from SP data</p></li>
 <li><p><strong>dataIncomeGroup</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>)</em>) – Categorical variable indicating, for each Small Place (1,046), the
 dominant income group (from 0 to 3)</p></li>
-<li><p><strong>dataHouseholdDensity</strong> (<em>Series</em>) – Household density (per km² of constructible land) computed from the
-number of formal private housing units considered in each SP (1,046)</p></li>
-<li><p><strong>selectedDensity</strong> (<em>Series</em>) – Dummy variable used to select SPs (1,046) with enough formal private
-housing to identify the regressions used in the function</p></li>
-<li><p><strong>xData</strong> (<em>Series</em>) – x-coordinate for each SP centroid (1,046), from SP data</p></li>
-<li><p><strong>yData</strong> (<em>Series</em>) – y-coordinate for each SP centroid (1,046), from SP data</p></li>
 <li><p><strong>selectedSP</strong> (<em>Series</em>) – Dummy variable used to select SPs (1,046) with enough formal private
 housing to identify the regressions used in the function (less
 stringent than selectedDensity)</p></li>
@@ -1933,7 +1927,7 @@ versions where we use construction costs)</p></li>
 <p>&#64;author: Charlotte Liotta</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="calibration.sub.estimate_parameters_by_scanning.EstimateParametersByScanning">
-<span class="sig-prename descclassname"><span class="pre">calibration.sub.estimate_parameters_by_scanning.</span></span><span class="sig-name descname"><span class="pre">EstimateParametersByScanning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomeNetOfCommuting</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataRent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataDwellingSize</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataIncomeGroup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataHouseholdDensity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selectedDensity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yData</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selectedSP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tableAmenities</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variablesRegression</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initRho</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listBeta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listBasicQ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initUti2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listUti3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listUti4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/calibration/sub/estimate_parameters_by_scanning.html#EstimateParametersByScanning"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#calibration.sub.estimate_parameters_by_scanning.EstimateParametersByScanning" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">calibration.sub.estimate_parameters_by_scanning.</span></span><span class="sig-name descname"><span class="pre">EstimateParametersByScanning</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">incomeNetOfCommuting</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataRent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataDwellingSize</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataIncomeGroup</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selectedSP</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tableAmenities</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variablesRegression</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initRho</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listBeta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listBasicQ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initUti2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listUti3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">listUti4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/calibration/sub/estimate_parameters_by_scanning.html#EstimateParametersByScanning"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#calibration.sub.estimate_parameters_by_scanning.EstimateParametersByScanning" title="Permalink to this definition"></a></dt>
 <dd><p>Estimate parameters by maximizing log likelihood over scanned values.</p>
 <p>This function scans over values of endogenous parameters entering
 households’ utility function, and returns those which maximize a
@@ -1944,17 +1938,17 @@ To compute those separate log-likelihoods, this function calls on the
 calibration.sub.loglikelihood module after providing sample and variable
 selection for the estimation, as well as theoretical partial relations
 from the structure of the model, used in regressions.
-Actually, we only use the fit on amenites to define the output of this
-function (as opposed to the estimate_parameters_by_optimization module).
-This is because the intrinsically rough nature of scanning does not allow
-us to define a fine enough set of feasible interior solutions, and
-theoretical formulas for the fit on dwelling sizes and income sorting
-always lead to corner solutions when the choice set is large enough. This
-does not threaten our identification strategy, as the purpose of this
-function is to provide an informed guess on initial values for the
-estimate_parameters_by_optimization module to run a proper gradient
-descent optimization (that accounts for all the likelihoods): it just needs
-to start within the set of feasible solutions.</p>
+The purpose of this function is to provide an informed guess on initial
+values for the estimate_parameters_by_optimization module to run a proper
+gradient descent optimization, by starting within the set of interior
+feasible solutions.
+By default, we only fit the data moment on exogenous amenities (and forget
+about the other dimensions of the composite likelihood) when beta and q0
+are pinned down, as it is the only relevant moment for the amenity score
+calibration. The other dimensions can be recovered by commenting out the
+cancelling out terms at the end of the script, if we want to recalibrate
+beta and q0 internally (and potentially improve the fit of the model at
+the price of empirical validity).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1965,12 +1959,6 @@ from data on average land prices, for each SP (1,046)</p></li>
 <li><p><strong>dataDwellingSize</strong> (<em>Series</em>) – Average dwelling size (in m²) for each SP (1,046), from SP data</p></li>
 <li><p><strong>dataIncomeGroup</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>)</em>) – Categorical variable indicating, for each Small Place (1,046), the
 dominant income group (from 0 to 3)</p></li>
-<li><p><strong>dataHouseholdDensity</strong> (<em>Series</em>) – Household density (per km² of constructible land) computed from the
-number of formal private housing units considered in each SP (1,046)</p></li>
-<li><p><strong>selectedDensity</strong> (<em>Series</em>) – Dummy variable used to select SPs (1,046) with enough formal private
-housing to identify the regressions used in the function</p></li>
-<li><p><strong>xData</strong> (<em>Series</em>) – x-coordinate for each SP centroid (1,046), from SP data</p></li>
-<li><p><strong>yData</strong> (<em>Series</em>) – y-coordinate for each SP centroid (1,046), from SP data</p></li>
 <li><p><strong>selectedSP</strong> (<em>Series</em>) – Dummy variable used to select SPs (1,046) with enough formal private
 housing to identify the regressions used in the function (less
 stringent than selectedDensity)</p></li>
@@ -2099,10 +2087,10 @@ More precisely, it starts by regressing theoretical values of the log
 amenity index on observed exogenous dummy amenity variables. The first
 log-likelihood is computed based on the value of residuals. Then, it
 defines a second log-likelihood for the fit on income sorting (matching
-observed rents with highest bid-rents from the dominant income group), and
-maximizes it across (unobserved) scale factors. Finally, it gets the
-residuals from the log-difference between theoretical and observed dwelling
-sizes, and computes the third log-likelihood from there.</p>
+the observed dominant income group with the highest bidding income group).
+Finally, it gets the residuals from the log-difference between theoretical
+and observed dwelling sizes, and computes the third log-likelihood from
+there.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

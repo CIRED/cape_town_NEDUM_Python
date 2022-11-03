@@ -260,7 +260,7 @@
     <span class="c1">#     # Note that we do have some negative durations: their number is small</span>
     <span class="c1">#     # so we just convert them to zero</span>
     <span class="c1">#     timeOutput[:, :, 0] = (transport_times[&quot;distanceCar&quot;]</span>
-    <span class="c1">#                            / param[&quot;walking_speed&quot;] * 60 * 1.2 * 2)</span>
+    <span class="c1">#                            / param[&quot;walking_speed&quot;] * 60 * 60 * 1.2 * 2)</span>
     <span class="c1">#     timeOutput[:, :, 0][np.isnan(transport_times[&quot;durationCar&quot;])</span>
     <span class="c1">#                         ] = np.nan</span>
     <span class="c1">#     timeOutput[:, :, 1] = (</span>
@@ -277,7 +277,7 @@
     <span class="c1"># Note that we do have some negative durations: their number is small,</span>
     <span class="c1"># so we just convert them to zero</span>
     <span class="n">timeOutput</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;distanceCar&quot;</span><span class="p">]</span>
-                           <span class="o">/</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;walking_speed&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mf">1.2</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+                           <span class="o">/</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;walking_speed&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mf">1.2</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">timeOutput</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">][</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;durationCar&quot;</span><span class="p">])]</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">timeOutput</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;durationTrain&quot;</span><span class="p">])</span>
     <span class="n">timeOutput</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">][</span><span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;durationTrain&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
@@ -498,15 +498,27 @@
             <span class="c1"># Numeric parameters come from trial and error and do not change</span>
             <span class="c1"># results a priori: they just help convergence</span>
             <span class="n">maxIter</span> <span class="o">=</span> <span class="mi">1000</span>
-            <span class="n">tolerance</span> <span class="o">=</span> <span class="mf">0.1</span>
+            <span class="n">tolerance</span> <span class="o">=</span> <span class="mf">0.01</span>
             <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-                <span class="n">factorConvergenge</span> <span class="o">=</span> <span class="mf">0.006</span>
+                <span class="n">factorConvergenge</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="mf">0.01</span> <span class="o">/</span> <span class="mi">100</span>
+                    <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">param_lambda</span><span class="o">**</span><span class="mi">10</span> <span class="o">/</span> <span class="mi">10</span><span class="o">**</span><span class="mi">10</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">10</span><span class="o">**</span><span class="mi">10</span><span class="p">))</span>
+                    <span class="p">)</span>
             <span class="k">elif</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-                <span class="n">factorConvergenge</span> <span class="o">=</span> <span class="mf">0.003</span>
+                <span class="n">factorConvergenge</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="mf">0.002</span> <span class="o">/</span> <span class="mi">100</span>
+                    <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">param_lambda</span><span class="o">**</span><span class="mi">10</span> <span class="o">/</span> <span class="mi">10</span><span class="o">**</span><span class="mi">10</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">10</span><span class="o">**</span><span class="mi">10</span><span class="p">))</span>
+                    <span class="p">)</span>
             <span class="k">elif</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-                <span class="n">factorConvergenge</span> <span class="o">=</span> <span class="mf">0.001</span>
+                <span class="n">factorConvergenge</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="mf">0.001</span> <span class="o">/</span> <span class="mi">100</span>
+                    <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">param_lambda</span><span class="o">**</span><span class="mi">10</span> <span class="o">/</span> <span class="mi">10</span><span class="o">**</span><span class="mi">10</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">10</span><span class="o">**</span><span class="mi">10</span><span class="p">))</span>
+                    <span class="p">)</span>
             <span class="k">elif</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-                <span class="n">factorConvergenge</span> <span class="o">=</span> <span class="mf">0.0002</span>
+                <span class="n">factorConvergenge</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="mf">0.0008</span> <span class="o">/</span> <span class="mi">100</span>
+                    <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">param_lambda</span><span class="o">**</span><span class="mi">10</span> <span class="o">/</span> <span class="mi">10</span><span class="o">**</span><span class="mi">10</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">10</span><span class="o">**</span><span class="mi">10</span><span class="p">))</span>
+                    <span class="p">)</span>
 
             <span class="nb">iter</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="n">error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">popCenters</span><span class="p">),</span> <span class="n">maxIter</span><span class="p">))</span>
@@ -557,6 +569,11 @@
 
                 <span class="nb">iter</span> <span class="o">=</span> <span class="nb">iter</span> <span class="o">+</span> <span class="mi">1</span>
 
+                <span class="c1"># print(iter)</span>
+                <span class="c1"># print(&quot;errorMax = &quot; + str(errorMax))</span>
+                <span class="c1"># print(&quot;errorMean = &quot;</span>
+                <span class="c1">#       + str(np.nanmean(np.abs(error[:, iter] / popCenters))))</span>
+
             <span class="c1"># At the end of the process, we keep the minimum score, and define</span>
             <span class="c1"># the corresponding best solution for some lambda and income group</span>
             <span class="k">if</span> <span class="p">(</span><span class="nb">iter</span> <span class="o">&gt;</span> <span class="n">maxIter</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
@@ -573,6 +590,7 @@
                 <span class="n">scoreBest</span> <span class="o">=</span> <span class="n">scoreIter</span><span class="p">[</span><span class="nb">iter</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
                 <span class="n">scoreMatrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">scoreBest</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39; - computed - max error&#39;</span><span class="p">,</span> <span class="n">errorMax</span><span class="p">)</span>
+                <span class="c1"># print(str(iter-1))</span>
 
             <span class="c1"># We also get (for the given income group) the number of commuters</span>
             <span class="c1"># for all job centers in given distance brackets</span>
@@ -586,7 +604,7 @@
             <span class="c1"># scale: remember that we only computed them for a subset of the</span>
             <span class="c1"># population. This allows income levels to be more representative</span>
             <span class="c1"># (although this does not change anything in relative terms)</span>
-            <span class="c1"># TODO: note that here, the way we define &quot;average&quot; income from the</span>
+            <span class="c1"># NB: note that here, the way we define &quot;average&quot; income from the</span>
             <span class="c1"># data actually impact the rescaling</span>
             <span class="n">incomeCentersRescaled</span> <span class="o">=</span> <span class="p">(</span>
                 <span class="n">incomeCenters</span><span class="p">[:,</span> <span class="nb">iter</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>

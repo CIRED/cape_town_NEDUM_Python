@@ -88,14 +88,14 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">statsmodels.api</span> <span class="k">as</span> <span class="nn">sm</span>
 
 <span class="kn">import</span> <span class="nn">calibration.sub.loglikelihood</span> <span class="k">as</span> <span class="nn">callog</span>
 
 
 <div class="viewcode-block" id="EstimateParametersByScanning"><a class="viewcode-back" href="../../../api_ref.html#calibration.sub.estimate_parameters_by_scanning.EstimateParametersByScanning">[docs]</a><span class="k">def</span> <span class="nf">EstimateParametersByScanning</span><span class="p">(</span><span class="n">incomeNetOfCommuting</span><span class="p">,</span> <span class="n">dataRent</span><span class="p">,</span>
                                  <span class="n">dataDwellingSize</span><span class="p">,</span> <span class="n">dataIncomeGroup</span><span class="p">,</span>
-                                 <span class="n">dataHouseholdDensity</span><span class="p">,</span> <span class="n">selectedDensity</span><span class="p">,</span>
-                                 <span class="n">xData</span><span class="p">,</span> <span class="n">yData</span><span class="p">,</span> <span class="n">selectedSP</span><span class="p">,</span> <span class="n">tableAmenities</span><span class="p">,</span>
+                                 <span class="n">selectedSP</span><span class="p">,</span> <span class="n">tableAmenities</span><span class="p">,</span>
                                  <span class="n">variablesRegression</span><span class="p">,</span> <span class="n">initRho</span><span class="p">,</span> <span class="n">listBeta</span><span class="p">,</span>
                                  <span class="n">listBasicQ</span><span class="p">,</span> <span class="n">initUti2</span><span class="p">,</span> <span class="n">listUti3</span><span class="p">,</span> <span class="n">listUti4</span><span class="p">,</span>
                                  <span class="n">options</span><span class="p">):</span>
@@ -111,17 +111,17 @@
 <span class="sd">    calibration.sub.loglikelihood module after providing sample and variable</span>
 <span class="sd">    selection for the estimation, as well as theoretical partial relations</span>
 <span class="sd">    from the structure of the model, used in regressions.</span>
-<span class="sd">    Actually, we only use the fit on amenites to define the output of this</span>
-<span class="sd">    function (as opposed to the estimate_parameters_by_optimization module).</span>
-<span class="sd">    This is because the intrinsically rough nature of scanning does not allow</span>
-<span class="sd">    us to define a fine enough set of feasible interior solutions, and</span>
-<span class="sd">    theoretical formulas for the fit on dwelling sizes and income sorting</span>
-<span class="sd">    always lead to corner solutions when the choice set is large enough. This</span>
-<span class="sd">    does not threaten our identification strategy, as the purpose of this</span>
-<span class="sd">    function is to provide an informed guess on initial values for the</span>
-<span class="sd">    estimate_parameters_by_optimization module to run a proper gradient</span>
-<span class="sd">    descent optimization (that accounts for all the likelihoods): it just needs</span>
-<span class="sd">    to start within the set of feasible solutions.</span>
+<span class="sd">    The purpose of this function is to provide an informed guess on initial</span>
+<span class="sd">    values for the estimate_parameters_by_optimization module to run a proper</span>
+<span class="sd">    gradient descent optimization, by starting within the set of interior</span>
+<span class="sd">    feasible solutions.</span>
+<span class="sd">    By default, we only fit the data moment on exogenous amenities (and forget</span>
+<span class="sd">    about the other dimensions of the composite likelihood) when beta and q0</span>
+<span class="sd">    are pinned down, as it is the only relevant moment for the amenity score</span>
+<span class="sd">    calibration. The other dimensions can be recovered by commenting out the</span>
+<span class="sd">    cancelling out terms at the end of the script, if we want to recalibrate</span>
+<span class="sd">    beta and q0 internally (and potentially improve the fit of the model at</span>
+<span class="sd">    the price of empirical validity).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -136,16 +136,6 @@
 <span class="sd">    dataIncomeGroup : ndarray(float64)</span>
 <span class="sd">        Categorical variable indicating, for each Small Place (1,046), the</span>
 <span class="sd">        dominant income group (from 0 to 3)</span>
-<span class="sd">    dataHouseholdDensity : Series</span>
-<span class="sd">        Household density (per km² of constructible land) computed from the</span>
-<span class="sd">        number of formal private housing units considered in each SP (1,046)</span>
-<span class="sd">    selectedDensity : Series</span>
-<span class="sd">        Dummy variable used to select SPs (1,046) with enough formal private</span>
-<span class="sd">        housing to identify the regressions used in the function</span>
-<span class="sd">    xData : Series</span>
-<span class="sd">        x-coordinate for each SP centroid (1,046), from SP data</span>
-<span class="sd">    yData : Series</span>
-<span class="sd">        y-coordinate for each SP centroid (1,046), from SP data</span>
 <span class="sd">    selectedSP : Series</span>
 <span class="sd">        Dummy variable used to select SPs (1,046) with enough formal private</span>
 <span class="sd">        housing to identify the regressions used in the function (less</span>
@@ -238,10 +228,11 @@
     <span class="c1"># rents do enter the theoretical formula for the amenity index</span>
     <span class="n">tableRegression</span> <span class="o">=</span> <span class="n">tableAmenities</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">selectedRents</span><span class="p">,</span> <span class="p">:]</span>
     <span class="n">predictorsAmenitiesMatrix</span> <span class="o">=</span> <span class="n">tableRegression</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">variablesRegression</span><span class="p">]</span>
-    <span class="n">predictorsAmenitiesMatrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span>
-        <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">predictorsAmenitiesMatrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
-         <span class="n">predictorsAmenitiesMatrix</span><span class="o">.</span><span class="n">T</span><span class="p">]</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">predictorsAmenitiesMatrix</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">add_constant</span><span class="p">(</span><span class="n">predictorsAmenitiesMatrix</span><span class="p">)</span>
+    <span class="c1"># predictorsAmenitiesMatrix = np.vstack(</span>
+    <span class="c1">#     [np.ones(predictorsAmenitiesMatrix.shape[0]),</span>
+    <span class="c1">#      predictorsAmenitiesMatrix.T]</span>
+    <span class="c1">#     ).T</span>
 
     <span class="c1"># %% FUNCTIONS USED FOR THE FIT ON DWELLING SIZE AND AMENITIES</span>
 
@@ -307,23 +298,13 @@
     <span class="c1"># Note that scoreHousing is set as zero and does not impact parameter</span>
     <span class="c1"># selection.</span>
 
-    <span class="c1"># NB: Trial and error show that such ad hoc scanning is not fine enough</span>
-    <span class="c1"># to remain in the interior of the feasible solution set.</span>
-    <span class="c1"># More specifically, the theoretical formulas for the scores on dwelling</span>
-    <span class="c1"># size and income sorting will always bring utility levels and surplus</span>
-    <span class="c1"># housing elasticity to their lowest level, and basic need in housing to</span>
-    <span class="c1"># its highest level, if given a large enough feasible choice set.</span>
-
-    <span class="c1"># We therefore kill those channels to keep only the score on amenities to</span>
-    <span class="c1"># define our scanned parameters. Remember that this function only provides</span>
-    <span class="c1"># initial values for a proper unrestricted optimization algorithm to be</span>
-    <span class="c1"># run. It is therefore only a sophisticated way of making a reasonable</span>
-    <span class="c1"># guess on feasible values, that allows the algorithm converge to an</span>
-    <span class="c1"># interior solution.</span>
-
-    <span class="c1"># scoreAmenities = 0</span>
+    <span class="c1"># By default, we cancel out the scores associated with observed dwelling</span>
+    <span class="c1"># sizes and income sorting: this is because the fit on exogenous amenities</span>
+    <span class="c1"># is the only relevant dimension when beta and q0 are pinned down and the</span>
+    <span class="c1"># amenity score is the only parameter left to calibrate</span>
     <span class="n">scoreDwellingSize</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">scoreIncomeSorting</span> <span class="o">=</span> <span class="mi">0</span>
+
     <span class="n">scoreVect</span> <span class="o">=</span> <span class="p">(</span><span class="n">scoreAmenities</span> <span class="o">+</span> <span class="n">scoreDwellingSize</span> <span class="o">+</span> <span class="n">scoreIncomeSorting</span>
                  <span class="o">+</span> <span class="n">scoreHousing</span><span class="p">)</span>
     <span class="n">scoreTot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">scoreVect</span><span class="p">)</span>

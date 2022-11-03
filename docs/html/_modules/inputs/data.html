@@ -211,14 +211,13 @@
 <span class="sd">        income (at baseline year)</span>
 <span class="sd">    households_per_income_and_housing : ndarray(float64, ndim=2)</span>
 <span class="sd">        Exogenous number of households per income group (4, from poorest to</span>
-<span class="sd">        richest) in each endogenous housing type (3: formal private,</span>
+<span class="sd">        # richest) in each endogenous housing type (3: formal private,</span>
 <span class="sd">        informal backyards, informal settlements), from SP-level data</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Import population distribution according to housing type and income class</span>
     <span class="c1"># Note that RDP is included as formal housing in the data : we will correct</span>
     <span class="c1"># that in equilibrium.compute_equilibrium</span>
-    <span class="c1"># TODO: Might need to change name of raw data for later updates</span>
     <span class="n">income_baseline</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path_data</span> <span class="o">+</span> <span class="s1">&#39;Income_distribution_2011.csv&#39;</span><span class="p">)</span>
 
     <span class="c1"># We only have data on median income per income group in the data (12),</span>
@@ -337,7 +336,7 @@
     <span class="c1">#  Total surface of RDP units (in m²)</span>
     <span class="n">data_rdp</span><span class="p">[</span><span class="s2">&quot;area&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;gridAreaRDPfromGV&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
 
-    <span class="c1"># Get other data at grid-level</span>
+    <span class="c1"># Get other data at grid level</span>
     <span class="c1">#  Dummy indicating wheter pixel belongs to Mitchells Plain district</span>
     <span class="n">mitchells_plain_grid_baseline</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;MitchellsPlain&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
     <span class="c1">#  Population density in formal housing (per m²)</span>
@@ -364,7 +363,6 @@
     <span class="n">data_sp</span><span class="p">[</span><span class="s2">&quot;dwelling_size&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;spDwellingSize&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
     <span class="c1">#  Average price of real estate (per m²) for baseline year (2011)</span>
     <span class="n">data_sp</span><span class="p">[</span><span class="s2">&quot;price&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;spPrice&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span>
-    <span class="c1">#  TODO: Might need to change variable names in raw data</span>
     <span class="c1">#  Annual average household income (in rands)</span>
     <span class="n">data_sp</span><span class="p">[</span><span class="s2">&quot;income&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;sp2011AverageIncome&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
     <span class="c1">#  Unconstrained area for construction (in m²)</span>
@@ -438,7 +436,6 @@
     <span class="c1"># granular data sets so that the same overall population is indeed</span>
     <span class="c1"># considered along the model</span>
 
-    <span class="c1"># TODO: Might need to change name of raw data</span>
     <span class="n">sal_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span>
         <span class="n">path_folder</span>
         <span class="o">+</span> <span class="s2">&quot;housing_types_sal_analysis.xlsx&quot;</span><span class="p">,</span>
@@ -454,7 +451,6 @@
     <span class="c1"># others in formal (note that RDP is included for now)</span>
     <span class="n">sal_data</span><span class="p">[</span><span class="s2">&quot;formal&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">sal_data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">]],</span> <span class="mi">1</span><span class="p">)</span>
 
-    <span class="c1"># TODO: Might need to change name of raw data</span>
     <span class="n">rdp_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span>
         <span class="n">path_folder</span>
         <span class="o">+</span> <span class="s2">&quot;housing_types_sal_analysis.xlsx&quot;</span><span class="p">,</span>
@@ -462,26 +458,26 @@
         <span class="n">skiprows</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
     <span class="n">total_RDP</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">rdp_data</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
 
-    <span class="c1"># Another way of doing is to take raw values for SR2 (incremental housing)</span>
-    <span class="c1"># properties according to 2012 General Valuation: this yields a total of</span>
-    <span class="c1"># 138,444. By adding approximately 40,000 council housing units (similar to</span>
-    <span class="c1"># RDP/BNG for our purpose), we get a close estimate to above method:</span>
-    <span class="c1"># total_RDP = 138444 + 40000</span>
+    <span class="c1"># Note that the underlying data inference process used to count formal</span>
+    <span class="c1"># subsidized housing units probably takes (older) council housing units</span>
+    <span class="c1"># into account. As this is also a form of social housing, they will be</span>
+    <span class="c1"># assimilated to RDP units in the analysis (and the terms formal subsidized</span>
+    <span class="c1"># and RDP will be used interchangeably).</span>
+
+    <span class="c1"># An external validation exercise indeed shows that we obtain a number of</span>
+    <span class="c1"># RDP/BNG units close enough to the one estimated using Cape Town&#39;s 2012</span>
+    <span class="c1"># General Valuation Roll (SR2 incremental housing) after substracting</span>
+    <span class="c1"># 40,000 council housing units</span>
 
     <span class="c1"># Here, we substract RDP from formal (no need to correct again in</span>
-    <span class="c1"># validation)</span>
+    <span class="c1"># validation exercises)</span>
     <span class="n">total_formal</span> <span class="o">=</span> <span class="n">sal_data</span><span class="p">[</span><span class="s2">&quot;formal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">-</span> <span class="n">total_RDP</span>
 
     <span class="n">total_informal</span> <span class="o">=</span> <span class="n">sal_data</span><span class="p">[</span><span class="s2">&quot;informal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
 
-    <span class="c1"># Note that we only include informal backyards  by assumption in the model</span>
+    <span class="c1"># Note that we only include informal backyards (non-concrete structures,</span>
+    <span class="c1"># similar to informal &quot;shacks&quot;) by assumption in the model</span>
     <span class="n">total_backyard</span> <span class="o">=</span> <span class="n">sal_data</span><span class="p">[</span><span class="s2">&quot;backyard_informal&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-
-    <span class="c1"># Old raw numbers</span>
-    <span class="c1"># total_RDP = 194258</span>
-    <span class="c1"># total_formal = 626770</span>
-    <span class="c1"># total_informal = 143765</span>
-    <span class="c1"># total_backyard = 91132</span>
 
     <span class="n">housing_type_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">total_formal</span><span class="p">,</span> <span class="n">total_backyard</span><span class="p">,</span> <span class="n">total_informal</span><span class="p">,</span>
                                   <span class="n">total_RDP</span><span class="p">])</span>
@@ -571,7 +567,7 @@
     <span class="c1"># RDP population data</span>
     <span class="c1">#  We take total population in RDP at baseline year</span>
     <span class="n">RDP_baseline</span> <span class="o">=</span> <span class="n">housing_type_data</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
-    <span class="c1">#  Also comes from general validation for 2001</span>
+    <span class="c1">#  Comes from 2001 General Valuation Roll</span>
     <span class="n">RDP_restrospect</span> <span class="o">=</span> <span class="mf">1.1718e+05</span>
 
     <span class="c1"># Land cover for informal settlements</span>
@@ -602,9 +598,8 @@
         <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
 
     <span class="c1"># Number of informal dwellings per pixel in 2020</span>
-    <span class="c1"># TODO: Might need to change name of raw data (and variable names)</span>
     <span class="n">informal_settlements_nearfuture</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span>
-        <span class="n">path_folder</span> <span class="o">+</span> <span class="s1">&#39;Flood plains - from Claus/inf_dwellings_2020.xlsx&#39;</span><span class="p">)</span>
+        <span class="n">path_data</span> <span class="o">+</span> <span class="s1">&#39;inf_dwellings_2020.xlsx&#39;</span><span class="p">)</span>
     <span class="c1"># Here we correct by (1 / max_land_use) to make the area comparable with</span>
     <span class="c1"># other informal risks (this will be removed afterwards as it does not</span>
     <span class="c1"># correspond to reality)</span>
@@ -647,17 +642,18 @@
     <span class="c1"># We compute linear regression spline for 4 years centered around baseline</span>
     <span class="c1"># Construction rate comes from Pfeiffer et al.&#39;s median scenario, then we</span>
     <span class="c1"># apply a lower rate after the end of the programme in 2020</span>
-    <span class="c1"># TODO: Might need to change x-axis if underlying targets change</span>
     <span class="n">spline_RDP</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span>
         <span class="p">[</span><span class="mi">2001</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;baseline_year&quot;</span><span class="p">],</span> <span class="mi">2011</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;baseline_year&quot;</span><span class="p">],</span>
          <span class="mi">2020</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;baseline_year&quot;</span><span class="p">],</span> <span class="mi">2041</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;baseline_year&quot;</span><span class="p">]],</span>
-        <span class="p">[</span><span class="n">RDP_restrospect</span><span class="p">,</span> <span class="n">RDP_baseline</span><span class="p">,</span> <span class="n">RDP_baseline</span> <span class="o">+</span> <span class="mi">9</span><span class="o">*</span><span class="mi">5000</span><span class="p">,</span>
-         <span class="n">RDP_baseline</span> <span class="o">+</span> <span class="mi">9</span><span class="o">*</span><span class="mi">5000</span> <span class="o">+</span> <span class="mi">21</span> <span class="o">*</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;future_rate_public_housing&quot;</span><span class="p">]],</span>
+        <span class="p">[</span><span class="n">RDP_restrospect</span><span class="p">,</span> <span class="n">RDP_baseline</span><span class="p">,</span>
+         <span class="n">RDP_baseline</span> <span class="o">+</span> <span class="mi">9</span> <span class="o">*</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;current_rate_public_housing&quot;</span><span class="p">],</span>
+         <span class="n">RDP_baseline</span> <span class="o">+</span> <span class="mi">9</span> <span class="o">*</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;current_rate_public_housing&quot;</span><span class="p">]</span>
+         <span class="o">+</span> <span class="mi">21</span> <span class="o">*</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;future_rate_public_housing&quot;</span><span class="p">]],</span>
         <span class="s1">&#39;linear&#39;</span>
         <span class="p">)</span>
 
     <span class="c1"># We capture the output of the function to be used later on</span>
-    <span class="c1">#  Start of the programme</span>
+    <span class="c1">#  Start of the actual construction programme</span>
     <span class="n">year_begin_RDP</span> <span class="o">=</span> <span class="mi">2015</span>
     <span class="c1">#  We &quot;center&quot; scenarios around baseline year until end of programme</span>
     <span class="n">year_RDP</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">year_begin_RDP</span><span class="p">,</span> <span class="mi">2040</span><span class="p">)</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;baseline_year&quot;</span><span class="p">]</span>
@@ -682,8 +678,7 @@
     <span class="c1">#  We just take size of the projection array for long-term horizon</span>
     <span class="n">year_long_term</span> <span class="o">=</span> <span class="mi">30</span>
 
-    <span class="c1">#  We save the timeline into a list (same remark as before for</span>
-    <span class="c1">#  interpolation years)</span>
+    <span class="c1">#  We save the timeline into a list</span>
     <span class="n">year_data_informal</span> <span class="o">=</span> <span class="p">[</span>
         <span class="mi">2000</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;baseline_year&quot;</span><span class="p">],</span>
         <span class="n">year_begin_RDP</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;baseline_year&quot;</span><span class="p">],</span>
@@ -913,7 +908,6 @@
         <span class="n">informal_baseline</span><span class="p">)</span>
 
     <span class="c1">#  We also get area for high risk scenario retained in projections</span>
-    <span class="c1">#  TODO : could code as an option</span>
     <span class="n">high_proba</span> <span class="o">=</span> <span class="n">informal_risks_VERYHIGH</span><span class="o">.</span><span class="n">area</span> <span class="o">+</span> <span class="n">informal_risks_HIGH</span><span class="o">.</span><span class="n">area</span>
 
     <span class="c1">#  We consider some scenario for 2023 and correct for RDP construction</span>
@@ -952,7 +946,6 @@
     <span class="n">informal_long_fut</span><span class="p">[</span><span class="n">informal_long_fut</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="c1"># Regression spline (with land constraints)</span>
-    <span class="c1"># TODO : same remark as before on interpolation</span>
 
     <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;informal_land_constrained&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">spline_land_informal</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span>
@@ -1184,6 +1177,10 @@
 
     <span class="n">path_data</span> <span class="o">=</span> <span class="n">path_folder</span> <span class="o">+</span> <span class="s2">&quot;flood_maps/&quot;</span>
 
+    <span class="c1"># NB: FATHOM data has already been pre-processed to fit the CoCT&#39;s grid of</span>
+    <span class="c1"># analysis in previous work. The code used to pre-process DELTARES data</span>
+    <span class="c1"># is available under the _flood_processing folder</span>
+
     <span class="n">d_pluvial</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">d_fluvial</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">d_coastal</span> <span class="o">=</span> <span class="p">{}</span>
@@ -1250,28 +1247,6 @@
         <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
         <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.45</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.55</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.62</span><span class="p">,</span> <span class="mf">0.64</span><span class="p">,</span> <span class="mf">0.65</span><span class="p">,</span> <span class="mf">0.65</span><span class="p">]</span>
         <span class="p">)</span>
-
-    <span class="c1"># If WBUS2 is used, we take the max from the two sources to be conservative</span>
-    <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;WBUS2&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">WBUS2_20yr</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span>
-            <span class="n">path_folder</span> <span class="o">+</span> <span class="s2">&quot;Flood plains - from Claus/WBUS2_20yr.xlsx&quot;</span><span class="p">)</span>
-        <span class="n">WBUS2_50yr</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span>
-            <span class="n">path_folder</span> <span class="o">+</span> <span class="s2">&quot;Flood plains - from Claus/WBUS2_50yr.xlsx&quot;</span><span class="p">)</span>
-        <span class="n">WBUS2_100yr</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span>
-            <span class="n">path_folder</span> <span class="o">+</span> <span class="s2">&quot;Flood plains - from Claus/WBUS2_100yr.xlsx&quot;</span><span class="p">)</span>
-        <span class="n">d_fluvial</span><span class="p">[</span><span class="s1">&#39;FD_20yr&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">prop_flood_prone</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fmax</span><span class="p">(</span>
-            <span class="n">d_fluvial</span><span class="p">[</span><span class="s1">&#39;FD_20yr&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">prop_flood_prone</span><span class="p">,</span> <span class="n">WBUS2_20yr</span><span class="o">.</span><span class="n">prop_flood_prone</span><span class="p">)</span>
-        <span class="n">d_fluvial</span><span class="p">[</span><span class="s1">&#39;FD_50yr&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">prop_flood_prone</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fmax</span><span class="p">(</span>
-            <span class="n">d_fluvial</span><span class="p">[</span><span class="s1">&#39;FD_50yr&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">prop_flood_prone</span><span class="p">,</span> <span class="n">WBUS2_50yr</span><span class="o">.</span><span class="n">prop_flood_prone</span><span class="p">)</span>
-        <span class="n">d_fluvial</span><span class="p">[</span><span class="s1">&#39;FD_100yr&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">prop_flood_prone</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fmax</span><span class="p">(</span>
-            <span class="n">d_fluvial</span><span class="p">[</span><span class="s1">&#39;FD_100yr&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">prop_flood_prone</span><span class="p">,</span>
-            <span class="n">WBUS2_100yr</span><span class="o">.</span><span class="n">prop_flood_prone</span><span class="p">)</span>
-        <span class="n">d_fluvial</span><span class="p">[</span><span class="s1">&#39;FD_20yr&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">flood_depth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span>
-            <span class="n">d_fluvial</span><span class="p">[</span><span class="s1">&#39;FD_20yr&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">prop_flood_prone</span><span class="p">,</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;depth_WBUS2_20yr&quot;</span><span class="p">])</span>
-        <span class="n">d_fluvial</span><span class="p">[</span><span class="s1">&#39;FD_50yr&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">flood_depth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span>
-            <span class="n">d_fluvial</span><span class="p">[</span><span class="s1">&#39;FD_50yr&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">prop_flood_prone</span><span class="p">,</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;depth_WBUS2_50yr&quot;</span><span class="p">])</span>
-        <span class="n">d_fluvial</span><span class="p">[</span><span class="s1">&#39;FD_100yr&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">flood_depth</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span>
-            <span class="n">d_fluvial</span><span class="p">[</span><span class="s1">&#39;FD_100yr&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">prop_flood_prone</span><span class="p">,</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;depth_WBUS2_100yr&quot;</span><span class="p">])</span>
 
     <span class="k">return</span> <span class="p">(</span><span class="n">structural_damages_small_houses</span><span class="p">,</span> <span class="n">structural_damages_medium_houses</span><span class="p">,</span>
             <span class="n">structural_damages_large_houses</span><span class="p">,</span> <span class="n">content_damages</span><span class="p">,</span>
@@ -1435,7 +1410,7 @@
 
     <span class="c1"># NB: note that we do not use the same intervals for coastal as for</span>
     <span class="c1"># pluvial/fluvial since we do not have the same return periods available</span>
-    <span class="c1"># in Deltares and FATHOM data</span>
+    <span class="c1"># in DELTARES and FATHOM data</span>
 
         <span class="n">name</span> <span class="o">=</span> <span class="n">type_flood</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;dem&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;slr&quot;</span><span class="p">])</span>
 
@@ -1926,8 +1901,7 @@
 
     <span class="c1"># We take a weighted average for structures in bricks and shacks among</span>
     <span class="c1"># all backyard structures in case we include both in the model.</span>
-    <span class="c1"># To do so, we rely on SALhousing type data.</span>
-    <span class="c1"># TODO: Might need to rename raw data (but this part is deprecated anyway)</span>
+    <span class="c1"># To do so, we rely on SAL housing type data.</span>
 
     <span class="n">sal_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span>
         <span class="n">path_folder</span>
@@ -2150,8 +2124,8 @@
 
         <span class="c1"># Expected income net of commuting costs</span>
         <span class="c1"># NB: comments are a test for a log-sum specification that we dropped.</span>
-        <span class="c1"># Instead, we use a weighted average sum, as is standard in</span>
-        <span class="c1"># Pfeiffer et al.</span>
+        <span class="c1"># Instead, we use a weighted average sum, as is standard in the</span>
+        <span class="c1"># literature (see Ahlfeldt et al., 2015)</span>
 
         <span class="c1"># if options[&quot;prevent_exp_overflow&quot;] == 1:</span>
         <span class="c1">#     incomeNetOfCommuting[j, :] = (</span>
@@ -2228,7 +2202,6 @@
 <span class="sd">        estimates</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># TODO: Might need to change name of raw data</span>
     <span class="n">sal_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span>
         <span class="n">path_folder</span>
         <span class="o">+</span> <span class="s2">&quot;housing_types_sal_analysis.xlsx&quot;</span><span class="p">,</span>

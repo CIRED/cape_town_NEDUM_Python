@@ -89,15 +89,16 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">scipy</span>
+<span class="kn">import</span> <span class="nn">statsmodels.api</span> <span class="k">as</span> <span class="nn">sm</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
 
 <span class="kn">import</span> <span class="nn">calibration.sub.loglikelihood</span> <span class="k">as</span> <span class="nn">callog</span>
 
 
 <div class="viewcode-block" id="EstimateParametersByOptimization"><a class="viewcode-back" href="../../../api_ref.html#calibration.sub.estimate_parameters_by_optimization.EstimateParametersByOptimization">[docs]</a><span class="k">def</span> <span class="nf">EstimateParametersByOptimization</span><span class="p">(</span>
         <span class="n">incomeNetOfCommuting</span><span class="p">,</span> <span class="n">dataRent</span><span class="p">,</span> <span class="n">dataDwellingSize</span><span class="p">,</span> <span class="n">dataIncomeGroup</span><span class="p">,</span>
-        <span class="n">dataHouseholdDensity</span><span class="p">,</span> <span class="n">selectedDensity</span><span class="p">,</span> <span class="n">xData</span><span class="p">,</span> <span class="n">yData</span><span class="p">,</span> <span class="n">selectedSP</span><span class="p">,</span>
-        <span class="n">tableAmenities</span><span class="p">,</span> <span class="n">variablesRegression</span><span class="p">,</span> <span class="n">initRho</span><span class="p">,</span> <span class="n">initBeta</span><span class="p">,</span> <span class="n">initBasicQ</span><span class="p">,</span>
-        <span class="n">initUti2</span><span class="p">,</span> <span class="n">initUti3</span><span class="p">,</span> <span class="n">initUti4</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
+        <span class="n">selectedSP</span><span class="p">,</span> <span class="n">tableAmenities</span><span class="p">,</span> <span class="n">variablesRegression</span><span class="p">,</span> <span class="n">initRho</span><span class="p">,</span> <span class="n">initBeta</span><span class="p">,</span>
+        <span class="n">initBasicQ</span><span class="p">,</span> <span class="n">initUti2</span><span class="p">,</span> <span class="n">initUti3</span><span class="p">,</span> <span class="n">initUti4</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Estimate parameters by maximizing log likelihood via gradient descent.</span>
 
@@ -113,6 +114,9 @@
 <span class="sd">    It leverages initial guess from estimate_parameters_by_scanning module on</span>
 <span class="sd">    parameter values to start within the set of feasible solutions, and to</span>
 <span class="sd">    converge towards an interior (as opposed to corner) solution.</span>
+<span class="sd">    The algorithm only converges when considering the fit along all dimensions</span>
+<span class="sd">    (not only exogenous amenities). This function is therefore not appropriate</span>
+<span class="sd">    when we want to focus calibration on the amenity score only.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -127,16 +131,6 @@
 <span class="sd">    dataIncomeGroup : ndarray(float64)</span>
 <span class="sd">        Categorical variable indicating, for each Small Place (1,046), the</span>
 <span class="sd">        dominant income group (from 0 to 3)</span>
-<span class="sd">    dataHouseholdDensity : Series</span>
-<span class="sd">        Household density (per km² of constructible land) computed from the</span>
-<span class="sd">        number of formal private housing units considered in each SP (1,046)</span>
-<span class="sd">    selectedDensity : Series</span>
-<span class="sd">        Dummy variable used to select SPs (1,046) with enough formal private</span>
-<span class="sd">        housing to identify the regressions used in the function</span>
-<span class="sd">    xData : Series</span>
-<span class="sd">        x-coordinate for each SP centroid (1,046), from SP data</span>
-<span class="sd">    yData : Series</span>
-<span class="sd">        y-coordinate for each SP centroid (1,046), from SP data</span>
 <span class="sd">    selectedSP : Series</span>
 <span class="sd">        Dummy variable used to select SPs (1,046) with enough formal private</span>
 <span class="sd">        housing to identify the regressions used in the function (less</span>
@@ -229,10 +223,11 @@
     <span class="c1"># rents do enter the theoretical formula for the amenity index</span>
     <span class="n">tableRegression</span> <span class="o">=</span> <span class="n">tableAmenities</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">selectedRents</span><span class="p">,</span> <span class="p">:]</span>
     <span class="n">predictorsAmenitiesMatrix</span> <span class="o">=</span> <span class="n">tableRegression</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="n">variablesRegression</span><span class="p">]</span>
-    <span class="n">predictorsAmenitiesMatrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span>
-        <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">predictorsAmenitiesMatrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
-         <span class="n">predictorsAmenitiesMatrix</span><span class="o">.</span><span class="n">T</span><span class="p">]</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">predictorsAmenitiesMatrix</span> <span class="o">=</span> <span class="n">sm</span><span class="o">.</span><span class="n">add_constant</span><span class="p">(</span><span class="n">predictorsAmenitiesMatrix</span><span class="p">)</span>
+    <span class="c1"># predictorsAmenitiesMatrix = np.vstack(</span>
+    <span class="c1">#     [np.ones(predictorsAmenitiesMatrix.shape[0]),</span>
+    <span class="c1">#      predictorsAmenitiesMatrix.T]</span>
+    <span class="c1">#     ).T</span>
 
     <span class="c1"># %% FUNCTIONS USED FOR THE FIT ON DWELLING SIZE AND AMENITIES</span>
 
@@ -281,26 +276,28 @@
 
     <span class="c1"># Now, we optimize using interior-point minimization algorithm</span>
 
-    <span class="c1"># We define relatively wide bounds for our parameters.</span>
-    <span class="c1"># This is supposed to reflect empirical grounds on the acceptable range</span>
-    <span class="c1"># of parameter values. In the order: surplus housing elasticity, basic</span>
-    <span class="c1"># need in housing, utility levels for second richest and richest income</span>
-    <span class="c1"># groups</span>
-    <span class="n">bnds</span> <span class="o">=</span> <span class="p">((</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span>
-            <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span>
-            <span class="p">(</span><span class="n">initUti3</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">initUti4</span><span class="p">),</span>
-            <span class="p">(</span><span class="n">initUti3</span><span class="p">,</span> <span class="n">initUti4</span> <span class="o">*</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="c1"># By default, we pin down values for beta and q0. Then, we allow utility</span>
+    <span class="c1"># levels for the two richest income groups (making the most part of</span>
+    <span class="c1"># formal private housing) to vary widely: this should converge towards an</span>
+    <span class="c1"># interior solution for a good initial guess on those values</span>
+    <span class="c1"># NB: again, this can be changed if needed</span>
+    <span class="n">bnds</span> <span class="o">=</span> <span class="p">((</span><span class="n">initBeta</span><span class="p">,</span> <span class="n">initBeta</span><span class="p">),</span>
+            <span class="p">(</span><span class="n">initBasicQ</span><span class="p">,</span> <span class="n">initBasicQ</span><span class="p">),</span>
+            <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="o">**</span><span class="mi">4</span><span class="p">),</span>
+            <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="o">**</span><span class="mi">5</span><span class="p">))</span>
 
-    <span class="c1"># We run the algorithm and store the output</span>
-    <span class="n">res</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">optimize</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span>
-        <span class="n">minusLogLikelihoodModel</span><span class="p">,</span> <span class="n">initialVector</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">bnds</span>
-        <span class="p">)</span>
+    <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+        <span class="c1"># We run the algorithm and store the output</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">optimize</span><span class="o">.</span><span class="n">minimize</span><span class="p">(</span>
+            <span class="n">minusLogLikelihoodModel</span><span class="p">,</span> <span class="n">initialVector</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="n">bnds</span>
+            <span class="p">)</span>
     <span class="n">parameters</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">x</span>
     <span class="n">scoreTot</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">fun</span>
     <span class="n">exitFlag</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">success</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">exitFlag</span><span class="p">)</span>
 
-    <span class="c1"># Estimate the function to get the parameters for amenities</span>
+    <span class="c1"># Estimate the function to get the associated amenity parameters</span>
     <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;glm&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">optionRegression</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="p">(</span><span class="o">*</span><span class="n">_</span><span class="p">,</span> <span class="n">parametersAmenities</span><span class="p">,</span> <span class="n">modelAmenity</span><span class="p">,</span> <span class="n">parametersHousing</span>

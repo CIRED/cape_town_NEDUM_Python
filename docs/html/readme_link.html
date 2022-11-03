@@ -41,7 +41,6 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Introducing NEDUM-2D</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#disclaimer">Disclaimer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#resources">Resources</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
@@ -115,10 +114,6 @@
 </style>
 <div class="section" id="introducing-nedum-2d">
 <h1>Introducing NEDUM-2D<a class="headerlink" href="#introducing-nedum-2d" title="Permalink to this heading"></a></h1>
-<div class="section" id="disclaimer">
-<h2>Disclaimer<a class="headerlink" href="#disclaimer" title="Permalink to this heading"></a></h2>
-<p><strong>The contents of this repository are all in-progress and should not be expected to be free of errors or to perform any specific functions. Use only with care and caution</strong>.</p>
-</div>
 <div class="section" id="overview">
 <h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading"></a></h2>
 <p><strong>NEDUM-2D</strong> (Non-Equilibrium Dynamic Urban Model) is a tool for simulating land-use patterns across a city in two dimensions. The initial rationale for its development was to make urban simulations more realistic by modelling deviations from theoretical static equilibria caused by inertia in the adaptive behaviour of households and developers over time. The current version developed for the <em>City of Cape Town</em> (CoCT) incorporates several transportation modes, employment centres, income groups, and housing types, to provide even more realistic prospective scenarios, while remaining tractable in terms of causal mechanisms at play. It allows to model the spatial impact of policies with a special interest for cities in developing countries, such as informal housing regulation and localized flood protection investments.</p>
@@ -127,51 +122,63 @@
 <h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading"></a></h2>
 <p>Documentation is freely available <a class="reference external" href="https://cired.github.io/cape_town_NEDUM_Python/html/index.html">here</a>.</p>
 <p>A simple user interface is available <a class="reference external" href="https://kristoffpotgieter-nedumapp-app-f2rto5.streamlitapp.com/">here</a>.</p>
-<p>The reference paper used along the documentation is available <a class="reference external" href="https://openknowledge.worldbank.org/handle/10986/31987?locale-attribute=fr">here</a>.</p>
+<p>The reference working paper used along the documentation is available <a class="reference external" href="https://openknowledge.worldbank.org/handle/10986/31987?locale-attribute=fr">here</a>.</p>
 </div>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h2>
 <p><strong>Step 1</strong>: Git clone <strong>NEDUM-2D</strong> repository in your computer</p>
-<ul class="simple">
+<ul>
 <li><p>Use your terminal and go to a location where you want to store the <strong>NEDUM-2D</strong> model</p></li>
 <li><p>Type: <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">https://github.com/CIRED/cape_town_NEDUM_Python.git</span></code></p></li>
+<li><p>The tree structure of the repository should correspond to (comments in parentheses):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>code capetown python (name of the repo)
+├── _doc_source (source code for documentation)
+├── _flood_processing (notebook used to pre-process Deltares coastal flood maps)
+├── _research (research articles referenced in the code)
+├── calibration (package used for calibration)
+├── docs (html output for documentation)
+├── equilibrium (package used to compute equilibrium outcomes)
+├── inputs (package used to import and process inputs)
+├── outputs (package used for output plots and tables)
+├── .gitignore (defines files to ignore when pushing commits online)
+├── LICENSE (open source license file)
+├── README.rst (introduction file)
+├── calib_nb.ipynb (Jupyter notebook that runs calibration)
+├── calib_nb.py (paired Python script that runs calibration)
+├── main_nb.ipynb (Jupyter notebook that runs the model)
+├── main_nb.py (paired Python script that runs the model)
+├── plots_equil.py (exports plots and tables for initial state static equilibrium)
+├── plots_inputs.py (exports plots and tables for input data)
+└── plots_simul.py (exports plots and tables for subsequent dynamic simulations)
+</pre></div>
+</div>
+</li>
 </ul>
-<p><strong>Step 2</strong>: Create a conda environment from the <em>nedum-2d-env.yml</em> file</p>
-<ul class="simple">
-<li><p>The <em>nedum-2d-env.yml</em> file is in the <strong>NEDUM-2D</strong> repository</p></li>
-<li><p>Use the terminal and go to the <strong>NEDUM-2D</strong> repository stored on your computer</p></li>
-<li><p>Type: <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">env</span> <span class="pre">create</span> <span class="pre">-f</span> <span class="pre">nedum-2d-env.yml</span></code></p></li>
-</ul>
-<p><strong>Step 3</strong>: Activate the new environment</p>
-<ul class="simple">
-<li><p>The first line of the <em>.yml</em> file sets the new environment’s name</p></li>
-<li><p>Type: <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">activate</span> <span class="pre">NEDUM-2D</span></code></p></li>
-</ul>
-<p><strong>Step 4</strong>: Set project directory</p>
+<p><strong>Step 2</strong>: Set project directory</p>
 <ul>
-<li><p>To run properly, the <strong>NEDUM-2D</strong> repository (here, <code class="docutils literal notranslate"><span class="pre">code</span> <span class="pre">capetown</span> <span class="pre">python</span></code>) should be included in a project folder that also contains input data, according to the following tree structure (to be updated):</p>
+<li><p>To run properly, the <strong>NEDUM-2D</strong> repository (here, <code class="docutils literal notranslate"><span class="pre">code</span> <span class="pre">capetown</span> <span class="pre">python</span></code>) should be included in a project folder that also contains input data (and an empty output folder), according to the following tree structure (comments in parentheses):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>.
 ├── Data
-│   ├── precalculated_inputs
-│   ├── Aux data
-│   ├── data_Cape_Town
-│   ├── Flood plains - from Claus
-│   ├── occupation_maps
-│   ├── precalculated_transport
-│   ├── housing_types_sal_analysis.xlsx
-│   └── housing_types_grid_sal.xlsx
+│   ├── Aux data (auxiliary data used to reference raw inputs in the code)
+│   ├── data_Cape_Town (input data provided by the CoCT)
+│   ├── flood_maps (pre-processed flood maps)
+│   ├── occupation_maps (maps for informal settlement expansion scenarios)
+│   ├── precalculated_inputs (calibrated parameters and data)
+│   ├── precalculated_transport (intermediate outputs of commuting choice model)
+│   ├── housing_types_sal_analysis.xlsx (Small-Area-Level data on housing types)
+│   └── housing_types_grid_sal.xlsx (SAL data transposed to CoCT&#39;s grid level)
 ├── Output
 └── code capetown python
 </pre></div>
 </div>
 </li>
 </ul>
-<p><strong>Step 5</strong>: Launch <strong>NEDUM-2D</strong></p>
+<p><strong>Step 3</strong>: Launch <strong>NEDUM-2D</strong></p>
 <ul class="simple">
-<li><p>From <strong>NEDUM-2D</strong> root folder, execute the <code class="docutils literal notranslate"><span class="pre">main_nb</span></code> notebook (either in .py or .ipynb format) to run the simulations and obtain a preview of results. A non-interactive copy is shown in the documentation for illustrative purposes</p></li>
-<li><p>Run one of the plots scripts to export tables and figures in dedicated subfolders under the <code class="docutils literal notranslate"><span class="pre">Output</span></code> folder</p></li>
-<li><p>If needed, run the calibration script to calibrate parameters again if undelrying data has changed</p></li>
-<li><p>See <a class="reference internal" href="technical_doc.html"><span class="doc">Technical documentation</span></a> for more details on running custom simulations / calibration</p></li>
+<li><p>From <code class="docutils literal notranslate"><span class="pre">code</span> <span class="pre">capetown</span> <span class="pre">python</span></code> root, execute the <code class="docutils literal notranslate"><span class="pre">main_nb</span></code> notebook (either in .py or .ipynb format) to run the simulations and obtain a preview of results. A non-interactive copy is shown in the documentation for illustrative purposes</p></li>
+<li><p>Run one of the <code class="docutils literal notranslate"><span class="pre">plots</span></code> scripts to export tables and figures in dedicated subfolders (under the <code class="docutils literal notranslate"><span class="pre">Output</span></code> directory)</p></li>
+<li><p>If needed, run the <code class="docutils literal notranslate"><span class="pre">calib_nb</span></code> notebook (either in .py or .ipynb format) to calibrate parameters again if underlying data has changed</p></li>
+<li><p>See <a class="reference internal" href="technical_doc.html"><span class="doc">Technical documentation</span></a> for more details on running custom simulations / calibration. Note that when modifying <code class="docutils literal notranslate"><span class="pre">main_nb</span></code> or <code class="docutils literal notranslate"><span class="pre">calib_nb</span></code> notebooks (either in .py or .ipynb format), the associated paired file needs to be updated using Jupytext.</p></li>
 </ul>
 </div>
 <div class="section" id="versioning">
@@ -182,7 +189,6 @@
 <li><p>The <code class="docutils literal notranslate"><span class="pre">TLM-edits</span></code> branch contains some code and folder reorganization without rewriting anything</p></li>
 <li><p>The <code class="docutils literal notranslate"><span class="pre">TLM-write</span></code> branch contains some rewriting and commenting</p></li>
 <li><p>The branches ending in <code class="docutils literal notranslate"><span class="pre">_specif</span></code> are tests for several specifications of the code</p></li>
-<li><p>The <code class="docutils literal notranslate"><span class="pre">new_benchmark</span></code> branch contains the latest specification before adding the documentation</p></li>
 <li><p>All other branches are deprecated</p></li>
 </ul>
 </div>

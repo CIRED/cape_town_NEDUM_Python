@@ -74,14 +74,14 @@ It has displayed good performance, as shown by the validation plots below:
 
    Allocation of households to housing types and spatial distributions (*Source*: :cite:t:`pfeiffer`)
 
-Ongoing work at the *World Bank* has been focusing on incorporating vulnerability to flood risks in this version of the model, by distinguishing between fluvial, pluvial, and coastal floods. Typically, fluvial floods are one-off, hard-to-predict water overflows from rivers, whereas pluvial floods designate rather seasonal surface water floods or flash floods, caused by extreme rainfall independently of an overflowing water body. Coastal floods correspond to hard-to-predict storm surges, with the added uncertainty of sea-level rise. The associated risks that we consider include:
+Ongoing work at the *World Bank* has been focusing on incorporating vulnerability to flood risks in this version of the model, by distinguishing between fluvial, pluvial, and coastal floods. Typically, fluvial floods are one-off, hard-to-predict water overflows from rivers, whereas pluvial floods designate rather seasonal surface water floods or flash floods, caused by extreme rainfall independently of an overflowing water body. Coastal floods encompass hard-to-predict storm surges, periodic tides, and gradual, if uncertain, sea-level rise. The associated risks that we consider include:
 
 * Structural damages: building depreciation caused by flood damages
 * Contents damages: destruction of part of households’ belongings due to floods
 
-We believe that those are the main channels through which flood risks affect the city patterns :cite:p:`pharoah` [#fQSE]_. Agents internalize those risks by considering the annualized value of those damages (based on probabilistic flood maps) as an added term in the depreciation of their housing capital and of their quantity of goods consumed (assimilated to a composite good) [#fmyopic]_.
+We believe that those are the main channels through which flood risks directly affect the city patterns :cite:p:`pharoah` [#fQSE]_. Agents internalize those risks (or not) by considering the annualized value of those damages (based on probabilistic flood maps) as an added term in the depreciation of their housing capital and of their quantity of goods consumed (assimilated to a composite good) [#fmyopic]_.
 
-As before, the model allows to simulate how these trade-offs might be affected by future demographic, climate, and policy scenarios.
+As before, the model allows to simulate how their behaviour might be affected by future demographic, climate, and policy scenarios.
 
 |
 
