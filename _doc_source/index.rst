@@ -20,7 +20,6 @@ Welcome to NEDUM-2D's documentation!
    math_appendix
    bibliography
    api_ref
-   install_help
 
 
 

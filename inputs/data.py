@@ -1994,8 +1994,8 @@ def import_transport_data(grid, param, yearTraffic,
             householdSize, monetaryCost, costTime, incomeCentersGroup,
             whichCenters, param_lambda, options)
 
-        # NB: we compute origin-destination flows again later to get the full
-        # matrix
+        # NB: the value returned for ODflows would in fact correspond to
+        # ODflows[whichCenters, :, j], which we define explictly below
 
         # Modal shares: this comes from the multinomial model resulting from
         # extreme value theory with a Gumbel distribution

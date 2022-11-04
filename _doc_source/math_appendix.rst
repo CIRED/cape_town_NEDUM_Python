@@ -26,12 +26,24 @@ Then, commuters choose the mode that **minimizes their transport cost** (accordi
 
 * :math:`\textcolor{orange}{\eta_{xcij}}` also follows a Gumbel minimum distribution of mean :math:`0` and scale parameter :math:`\frac{1}{\lambda}`.
 
-In ``data.py``, this is imported with:
+In the ``import_transport_data`` function (``inputs.data`` module), for a given income group, this is imported with:
 
 .. literalinclude:: ../inputs/data.py
    :language: python
-   :lines: 1475-1478
-   :lineno-start: 1475
+   :lines: 1992-1995
+   :lineno-start: 1992
+
+Looking into the body of the ``compute_ODflows`` function (``calibration.sub.compute_income`` module), we see that the definitions of the ``transportCostModes`` and ``transportCost`` variables correspond to the above definitions of :math:`t_{mj}(x,c,w_{ic})` and :math:`min_m t_{mj}(x,c,w_{ic})`
+
+.. literalinclude:: ../calibration/sub/compute_income.py
+   :language: python
+   :lines: 615-623
+   :lineno-start: 615
+
+.. literalinclude:: ../calibration/sub/compute_income.py
+   :language: python
+   :lines: 647-651
+   :lineno-start: 647
 
 Given their residential location :math:`x`, workers choose the workplace location :math:`c` that **maximizes their income net of commuting costs**:
 
@@ -47,12 +59,12 @@ This yields the **probability to choose to work** in location :math:`c` given re
 
     \pi_{c|ix} = \frac{exp[\lambda y_{ic} + log(\sum_{m=1}^{M}exp[-\lambda\chi_i(\tau_m(x,c) + \delta_m(x,c)w_{ic})])]}{\sum_{k=1}^{C} exp[\lambda y_{ik} + log(\sum_{m=1}^{M}exp[-\lambda\chi_i(\tau_m(x,k) + \delta_m(x,k)w_{ik})])]}
 
-In ``data.py``, this corresponds to:
+In the ``import_transport_data`` function, this corresponds to:
 
 .. literalinclude:: ../inputs/data.py
    :language: python
-   :lines: 1494-1500
-   :lineno-start: 1494
+   :lines: 2034-2042
+   :lineno-start: 2034
 
 From there, we calculate the **expected income net of commuting costs** for residents of group :math:`i` living in location :math:`x`:
 
@@ -60,9 +72,9 @@ From there, we calculate the **expected income net of commuting costs** for resi
 
     \tilde{y}_i(x) = E[y_{ic} - min_m(t_m(x,c,w_{ic}))|x]
 
-In ``data.py``, this corresponds to:
+In the ``import_transport_data`` function, this corresponds to:
 
 .. literalinclude:: ../inputs/data.py
    :language: python
-   :lines: 1505-1510
-   :lineno-start: 1505
+   :lines: 2067-2069
+   :lineno-start: 2067

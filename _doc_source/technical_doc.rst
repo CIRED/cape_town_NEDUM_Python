@@ -161,7 +161,7 @@ Finally, the ``import_full_floods_data`` function uses those outputs to define t
 Transport data
 """"""""""""""
 
-Transport data is processed through the ``import_transport_data`` function. It imports monetary and time transport costs and pre-calibrated incomes (``income_centers_init`` parameter) per income group and job center (more on that in :ref:`calibration_process`), for a given dimension (grid-cell level or Small Place level) and a given simulation year (zero at initial state):
+Transport data is processed through the ``import_transport_data`` function. It imports monetary and time transport costs and pre-calibrated incomes (``income_centers_init`` parameter) per income group and job center (more on that in :ref:`transport_costs`), for a given dimension (grid-cell level or Small Place level) and a given simulation year (zero at initial state):
 
 .. literalinclude:: ../inputs/data.py
    :language: python
@@ -626,6 +626,8 @@ We update the parameter vector with the newly calculated values and go on with t
 In practice, we scan a set of predefined values for the parameter :math:`\lambda` over which we determine the value of :math:`y_{ic}`. We then aggregate the total distribution of residence-workplace distances, and compare it with the data aggregated from Cape Town’s Transport Survey 2013. We select the value of :math:`\lambda`, and the associated :math:`y_{ic}`, that minimizes a distance score between the coùputed distribution of commuting distances and aggregates from the data.
 
 In the code, this is done through the ``estim_incomes_and_gravity`` function. First, it imports the number of workers per income group in each selected job center (defined at the Transport Zone level) through the ``import_employment_data`` function (from the module of the same name).
+
+.. _transport_costs:
 
 """""""""""""""
 Transport costs
