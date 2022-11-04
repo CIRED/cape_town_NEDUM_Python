@@ -519,7 +519,7 @@
 <span class="sd">        the number of households in each grid cell (24,014), from SAL data.</span>
 <span class="sd">        Note that the notion of formal backyards correspond to backyards with</span>
 <span class="sd">        a concrete structure (as opposed to informal &quot;shacks&quot;), and not to</span>
-<span class="sd">        backyards located within the preccints of formal private homes. In any</span>
+<span class="sd">        backyards located within the premises of formal private homes. In any</span>
 <span class="sd">        case, we abstract from both of those definitions for the sake of</span>
 <span class="sd">        simplicity and as they account for a marginal share of overall</span>
 <span class="sd">        backyarding.</span>
@@ -721,7 +721,7 @@
 
     <span class="c1">#  % of the pixel area dedicated to RDP (after accounting for backyards)</span>
     <span class="c1">#  NB : we get the share of RDP dwelling size over size of whole RDP</span>
-    <span class="c1">#  preccints (dwelling + backyard) that we multiply by total RDP area</span>
+    <span class="c1">#  premises (dwelling + backyard) that we multiply by total RDP area</span>
     <span class="c1">#  per pixel over pixel area (correcting for max_land_use)</span>
     <span class="n">area_RDP</span> <span class="o">=</span> <span class="p">(</span><span class="n">data_rdp</span><span class="p">[</span><span class="s2">&quot;area&quot;</span><span class="p">]</span>
                 <span class="o">*</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;RDP_size&quot;</span><span class="p">]</span>

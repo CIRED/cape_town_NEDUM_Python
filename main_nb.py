@@ -800,7 +800,7 @@ backyard_sim = outexp.export_map(
 Image(path_output_plots + 'backyard_sim.png')
 # endregion
 
-# Remember that backyarding essentially occurs within (exogenous) formal subsidized housing preccints, hence the observed spatial distribution.
+# Remember that backyarding essentially occurs within (exogenous) formal subsidized housing premises, hence the observed spatial distribution.
 
 # region
 # For informal settlements

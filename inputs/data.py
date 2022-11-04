@@ -438,7 +438,7 @@ def import_land_use(grid, options, param, data_rdp, housing_types,
         the number of households in each grid cell (24,014), from SAL data.
         Note that the notion of formal backyards correspond to backyards with
         a concrete structure (as opposed to informal "shacks"), and not to
-        backyards located within the preccints of formal private homes. In any
+        backyards located within the premises of formal private homes. In any
         case, we abstract from both of those definitions for the sake of
         simplicity and as they account for a marginal share of overall
         backyarding.
@@ -640,7 +640,7 @@ def import_land_use(grid, options, param, data_rdp, housing_types,
 
     #  % of the pixel area dedicated to RDP (after accounting for backyards)
     #  NB : we get the share of RDP dwelling size over size of whole RDP
-    #  preccints (dwelling + backyard) that we multiply by total RDP area
+    #  premises (dwelling + backyard) that we multiply by total RDP area
     #  per pixel over pixel area (correcting for max_land_use)
     area_RDP = (data_rdp["area"]
                 * param["RDP_size"]

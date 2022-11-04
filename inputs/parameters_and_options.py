@@ -131,7 +131,7 @@ def import_options():
     options["actual_backyards"] = 0
     # Dummy for allocating no-income population to each income group based on
     # their respective unemployment rates, instead of applying a unique rate
-    # (deprecated)
+    # (to be used when population data is given for active households only)
     options["unempl_reweight"] = 0
     # Dummy for correcting the formula for agricultural rent
     # (compared to original version of the code)

@@ -93,7 +93,7 @@ def LogLikelihoodModel(X0, Uo2, net_income, groupLivingSpMatrix,
     scoreIncomeSorting : float64
         Value of the log-likelihood for the fit on observed income sorting
         (matching observed rents to highest bid-rents from dominant income
-         group)
+        group)
     scoreHousing : float64
         Value of the log-likelihood for the fit on observed housing supply
         / building density: this is not used in this version of the model as

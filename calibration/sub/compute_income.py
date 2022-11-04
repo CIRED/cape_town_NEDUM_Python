@@ -234,7 +234,7 @@ def import_transport_costs(grid, param, yearTraffic,
     pricePerKM[3] = priceTaxiPerKM*numberDaysPerYear
     pricePerKM[4] = priceBusPerKM*numberDaysPerYear
 
-    # Simple distances (not useful to calculate price but interesting output)
+    # Simple distances (useful for residence-workplace distance distribution)
     distanceOutput = np.empty((timeOutput.shape))
     distanceOutput[:] = np.nan
     distanceOutput[:, :, 0] = transport_times["distanceCar"]
