@@ -16,7 +16,6 @@ Welcome to NEDUM-2D's documentation!
    input_tables
    data_bases
    data_sets
-   plots_table
    math_appendix
    bibliography
    api_ref

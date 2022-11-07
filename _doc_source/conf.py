@@ -30,7 +30,8 @@ author = 'Thomas Monnier'
 extensions = ['sphinxcontrib.bibtex', 'sphinx.ext.autodoc', 'sphinx.ext.coverage', 'sphinx.ext.napoleon',
 'sphinx.ext.viewcode', 'myst_parser', 'nbsphinx', 'nbsphinx_link']
 bibtex_bibfiles = ['refs.bib']
-bibtex_default_style = 'plain'
+bibtex_encoding = 'latin'
+# bibtex_default_style = 'plain'
 bibtex_reference_style = 'author_year'
 nbsphinx_execute = 'never'
 nbsphinx_codecell_lexer = 'python3'
