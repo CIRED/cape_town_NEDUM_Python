@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Oct 19 12:22:55 2020.
 
-@author: Charlotte Liotta
+
+
 """
 
 import numpy as np

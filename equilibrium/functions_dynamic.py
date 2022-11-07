@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Nov  3 14:16:26 2020.
 
-@author: Charlotte Liotta
+
+
 """
 
 import pandas as pd

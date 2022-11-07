@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Nov  6 16:23:16 2020.
 
-@author: Charlotte Liotta
+
+
 """
 
 import copy

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Apr  6 16:55:17 2022.
 
-@author: monni
+
+
 """
 
 import numpy as np

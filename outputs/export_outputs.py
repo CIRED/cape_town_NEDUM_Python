@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Nov  2 11:32:48 2020.
-
-@author: Charlotte Liotta
-"""
-
 # import scipy
 import pandas as pd
 import numpy as np
