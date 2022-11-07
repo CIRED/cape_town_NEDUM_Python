@@ -6,6 +6,7 @@
   <title>Notebook: run calibration &mdash; NEDUM-2D for CoCT  documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -98,11 +99,10 @@
 <li class="toctree-l1"><a class="reference internal" href="technical_doc.html">Technical documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="input_tables.html">Input tables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="data_bases.html">Data bases</a></li>
-<li class="toctree-l1"><a class="reference internal" href="data_sets.html">Data sets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_sets.html">Key data sets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="math_appendix.html">Math appendix</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bibliography.html">Bibliography</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_ref.html">API reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="install_help.html">Installation help</a></li>
 </ul>
 
         </div>
@@ -1662,7 +1662,8 @@ amenity_map done
 <img alt="_images/calib_nb_83_1.png" src="_images/calib_nb_83_1.png" />
 </div>
 </div>
-<p>NB: Since disamenity index calibration relies on the model fit and is not computed a priori (contrary to other parameters), the options set in the preamble should be the same as the ones used in the main script, so that the calibrated values are in line with the structural assumptions used</p>
+<p>Note the the local amenity index is only as good as the underlying exogenous amenity covariates used for prediction: this can be updated in future work.</p>
+<p>NB: In what follows, since disamenity index calibration relies on the model fit and is not computed a priori (contrary to other parameters), the options set in the preamble should be the same as the ones used in the main script, so that the calibrated values are in line with the structural assumptions used</p>
 <div class="section" id="We-start-with-a-general-(not-location-specific)-calibration">
 <h3>We start with a general (not location-specific) calibration<a class="headerlink" href="#We-start-with-a-general-(not-location-specific)-calibration" title="Permalink to this heading"></a></h3>
 <div class="nbinput nblast docutils container">
@@ -3431,7 +3432,7 @@ disamenity_IS_map done
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/calib_nb_96_1.png" src="_images/calib_nb_96_1.png" />
+<img alt="_images/calib_nb_97_1.png" src="_images/calib_nb_97_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -3462,7 +3463,7 @@ disamenity_IB_map done
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/calib_nb_97_1.png" src="_images/calib_nb_97_1.png" />
+<img alt="_images/calib_nb_98_1.png" src="_images/calib_nb_98_1.png" />
 </div>
 </div>
 </div>

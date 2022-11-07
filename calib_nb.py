@@ -796,7 +796,9 @@ amenity_map = outexp.export_map(
 Image(path_input_plots + "amenity_map.png")
 # endregion
 
-# NB: Since disamenity index calibration relies on the model fit and is not
+# Note the the local amenity index is only as good as the underlying exogenous amenity covariates used for prediction: this can be updated in future work.
+
+# NB: In what follows, since disamenity index calibration relies on the model fit and is not
 # computed a priori (contrary to other parameters), the options set in the
 # preamble should be the same as the ones used in the main script, so that
 # the calibrated values are in line with the structural assumptions used

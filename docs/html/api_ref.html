@@ -6,6 +6,7 @@
   <title>API reference &mdash; NEDUM-2D for CoCT  documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
   <!--[if lt IE 9]>
     <script src="_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -19,7 +20,6 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Installation help" href="install_help.html" />
     <link rel="prev" title="Bibliography" href="bibliography.html" /> 
 </head>
 
@@ -49,7 +49,7 @@
 <li class="toctree-l1"><a class="reference internal" href="technical_doc.html">Technical documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="input_tables.html">Input tables</a></li>
 <li class="toctree-l1"><a class="reference internal" href="data_bases.html">Data bases</a></li>
-<li class="toctree-l1"><a class="reference internal" href="data_sets.html">Data sets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_sets.html">Key data sets</a></li>
 <li class="toctree-l1"><a class="reference internal" href="math_appendix.html">Math appendix</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bibliography.html">Bibliography</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API reference</a><ul>
@@ -84,7 +84,6 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="install_help.html">Installation help</a></li>
 </ul>
 
         </div>
@@ -2129,16 +2128,13 @@ exogenous amenity estimates: default is set as zero as GLM is unstable</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul>
+<dd class="field-even"><p><ul class="simple">
 <li><p><strong>scoreTotal</strong> (<em>float64</em>) – Value of the composite log-likelihood for the set of parameters scanned</p></li>
 <li><p><strong>scoreAmenities</strong> (<em>float64</em>) – Value of the log-likelihood for the fit on exogenous amenities</p></li>
 <li><p><strong>scoreDwellingSize</strong> (<em>float64</em>) – Value of the log-likelihood for the fit on observed dwelling sizes</p></li>
 <li><p><strong>scoreIncomeSorting</strong> (<em>float64</em>) – Value of the log-likelihood for the fit on observed income sorting
-(matching observed rents to highest bid-rents from dominant income</p>
-<blockquote>
-<div><p>group)</p>
-</div></blockquote>
-</li>
+(matching observed rents to highest bid-rents from dominant income
+group)</p></li>
 <li><p><strong>scoreHousing</strong> (<em>float64</em>) – Value of the log-likelihood for the fit on observed housing supply
 / building density: this is not used in this version of the model as
 the relation is already used for the calibration of construction
@@ -2411,7 +2407,6 @@ versions where we use construction costs)</p></li>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="bibliography.html" class="btn btn-neutral float-left" title="Bibliography" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="install_help.html" class="btn btn-neutral float-right" title="Installation help" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -1,8 +1,8 @@
-=========
-Data sets
-=========
+=============
+Key data sets
+=============
 
    .. csv-table::
       :file: tables/data_sets.csv
-      :widths: auto
+      :class: tight-table
       :header-rows: 1

@@ -641,6 +641,8 @@ netincome_rich_2d_sim = outexp.export_map(
 Image(path_input_plots + 'netincome_rich_2d_sim.png')
 # endregion
 
+# As expected, we observe a gravity-like structure with maximum income net of commuting costs around selected job centers.
+
 # ## Compute initial state equilibrium
 
 # We run the algorithm

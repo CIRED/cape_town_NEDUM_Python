@@ -8,8 +8,8 @@ Compulsory data
 
    .. csv-table::
       :file: tables/compulsory_db.csv
-      :widths: auto
       :header-rows: 1
+      :class: tight-table
 
 --------------
 Important data
@@ -17,8 +17,8 @@ Important data
 
    .. csv-table::
       :file: tables/important_db.csv
-      :widths: auto
       :header-rows: 1
+      :class: tight-table
 
 -------------
 Optional data
@@ -26,5 +26,5 @@ Optional data
 
    .. csv-table::
       :file: tables/optional_db.csv
-      :widths: auto
       :header-rows: 1
+      :class: tight-table

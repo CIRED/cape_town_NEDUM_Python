@@ -51,7 +51,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../math_appendix.html">Math appendix</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../bibliography.html">Bibliography</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api_ref.html">API reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../install_help.html">Installation help</a></li>
 </ul>
 
         </div>
@@ -2075,8 +2074,8 @@
             <span class="n">householdSize</span><span class="p">,</span> <span class="n">monetaryCost</span><span class="p">,</span> <span class="n">costTime</span><span class="p">,</span> <span class="n">incomeCentersGroup</span><span class="p">,</span>
             <span class="n">whichCenters</span><span class="p">,</span> <span class="n">param_lambda</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
 
-        <span class="c1"># NB: we compute origin-destination flows again later to get the full</span>
-        <span class="c1"># matrix</span>
+        <span class="c1"># NB: the value returned for ODflows would in fact correspond to</span>
+        <span class="c1"># ODflows[whichCenters, :, j], which we define explictly below</span>
 
         <span class="c1"># Modal shares: this comes from the multinomial model resulting from</span>
         <span class="c1"># extreme value theory with a Gumbel distribution</span>

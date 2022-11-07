@@ -22,7 +22,7 @@ Then, commuters choose the mode that **minimizes their transport cost** (accordi
 
 .. math::
 
-    min_m t_{mj}(x,c,w_{ic}) = -\frac{1}{\lambda}log(\sum_{m=1}^{M}exp[-\lambda\chi_i(\tau_m(x,c) + \delta_m(x,c)w_{ic})]) + \textcolor{orange}{\eta_{xcij}}
+    min_m [t_{mj}(x,c,w_{ic})] = -\frac{1}{\lambda}log(\sum_{m=1}^{M}exp[-\lambda\chi_i(\tau_m(x,c) + \delta_m(x,c)w_{ic})]) + \textcolor{orange}{\eta_{xcij}}
 
 * :math:`\textcolor{orange}{\eta_{xcij}}` also follows a Gumbel minimum distribution of mean :math:`0` and scale parameter :math:`\frac{1}{\lambda}`.
 
@@ -33,7 +33,7 @@ In the ``import_transport_data`` function (``inputs.data`` module), for a given 
    :lines: 1992-1995
    :lineno-start: 1992
 
-Looking into the body of the ``compute_ODflows`` function (``calibration.sub.compute_income`` module), we see that the definitions of the ``transportCostModes`` and ``transportCost`` variables correspond to the above definitions of :math:`t_{mj}(x,c,w_{ic})` and :math:`min_m t_{mj}(x,c,w_{ic})`
+Looking into the body of the ``compute_ODflows`` function (``calibration.sub.compute_income`` module), we see that the definitions of the ``transportCostModes`` and ``transportCost`` variables correspond to the above definitions of :math:`t_{mj}(x,c,w_{ic})` and :math:`min_m [t_{mj}(x,c,w_{ic})]`
 
 .. literalinclude:: ../calibration/sub/compute_income.py
    :language: python
@@ -49,7 +49,7 @@ Given their residential location :math:`x`, workers choose the workplace locatio
 
 .. math::
 
-	max_c [y_{ic} - min_m t_{mj}(x,c,w_{ic})]
+	max_c [y_{ic} - min_m [t_{mj}(x,c,w_{ic})]]
 
 * :math:`y_{ic} = \chi_i w_{ic}` (``income_centers_init`` parameter)
 

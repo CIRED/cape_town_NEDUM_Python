@@ -1,4 +1,5 @@
-﻿Long term interest rate for mortgage or equivalent,"World Bank, World Development Indicator database (2016)",Equilibrium and scenarios
+﻿Type,Database,Use
+Long term interest rate for mortgage or equivalent,"World Bank, World Development Indicator database (2016)",Equilibrium
 Aggregate statistics on transport modal shares,General Household Transport Survey (2013),Calibration
 Evolution of rents/real estate prices over time,CoCT’s housing sales registry (2001/2006/2011),Validation
 "Average construction costs per m², as a function of building type",/,Calibration

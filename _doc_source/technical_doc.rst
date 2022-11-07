@@ -7,7 +7,7 @@ Technical documentation
 Code walk-through
 -----------------
 
-The project repository is composed of a ``main_nb`` script, a ``calib_nb`` script (a static version of which is shown in :doc:`../main_nb.nblink` and :doc:`../calib_nb.nblink`), and ``plots`` scripts [#plots_scripts]_, themselves calling on several secondary scripts and custom packages. Those packages in turn include modules that are used at different steps of the code:
+The project repository is composed of a ``main_nb`` script, a ``calib_nb`` script (a static version of which is shown in :doc:`main_nb` and :doc:`calib_nb`), and ``plots`` scripts [#plots_scripts]_, themselves calling on several secondary scripts and custom packages. Those packages in turn include modules that are used at different steps of the code:
 
 * ``inputs``: contains the modules used to import default parameters and options, as well as pre-treated data
 * ``equilibrium``: contains the modules used to compute the static equilibrium allocation, as well as the dynamic simulations
@@ -101,14 +101,14 @@ As :math:`L^h(x)` is going to vary across time periods, the first part of the ``
    :align: center
    :alt: map for estimated timing of future informal settlements
 
-   Estimated timing of future new informal settlements
+   Estimated timing of future new informal settlements (*Source*: :cite:t:`pfeiffer`)
 
 .. figure:: images/WBUS2_Land_occupation_probability.png 
    :scale: 15% 
    :align: center
    :alt: map for estimated probability of future informal settlements
 
-   Estimated probability of future new informal settlements
+   Estimated probability of future new informal settlements (*Source*: :cite:t:`pfeiffer`)
 
 The ``import_coeff_land`` function then takes those outputs as arguments and reweight them by a housing-specific maximum land-use parameter. This parameter allows to reduce the development potential of each area to its housing component (accounting for roads, for instance). The share of pixel area available for formal private housing (in a given period) is simply defined as the share of pixel area available for unconstrained development, minus the shares dedicated to the other housing types, times its own maximum land use parameter:
 
@@ -307,7 +307,7 @@ Underlying those functional forms are structural assumptions about the maximizat
 * In the informal backyard sector, households rent a fraction of backyard (not directly housing) owned by formal subsidized housing residents and are responsible for building their own "shack" (owner-occupiers). Then, they pay for overall capital depreciation (general and from structural and content damages) and interest over construction costs too.
 * In the informal settlement sector, households rent land from absentee landlords (not directly housing) and are responsible for building their own "shack" (owner-occupiers). Then, they pay for overall capital depreciation (general and from structural and content damages) and interest over construction costs too.
 
-Note that both optimization programmes are concave, hence they can be maximized using first-order optimality conditions (setting the partial derivatives to zero), as detailed in cite:t:`pfeiffer`.
+Note that both optimization programmes are concave, hence they can be maximized using first-order optimality conditions (setting the partial derivatives to zero), as detailed in :cite:t:`pfeiffer`.
 
 """""""""""""""""""""""""
 Equilibrium dwelling size
@@ -380,7 +380,7 @@ In the ``compute_outputs`` function, this corresponds to:
    :lines: 210-225
    :lineno-start: 210
 
-Bid rents :math:`\psi^i_h(x,u)` correspond to the maximum amount households of type :math:`i` are willing to pay for a unit (1 m²) of housing of type :math:`h` in a certain location :math:`x` for a given utility level :math:`u` (over one year). Assuming that households bid their true valuation and that there are no strategic interactions, housing / land [#fhland]_ is allocated to the highest bidder. This is why we retain the bid rents from the highest bidding income groups, and the associated dwelling sizes, as the equilibrium output values for rents and dwelling sizes. In the code, this corresponds to:
+Bid rents :math:`\Psi^i_h(x,u)` correspond to the maximum amount households of type :math:`i` are willing to pay for a unit (1 m²) of housing of type :math:`h` in a certain location :math:`x` for a given utility level :math:`u` (over one year). Assuming that households bid their true valuation and that there are no strategic interactions, housing / land [#fhland]_ is allocated to the highest bidder. This is why we retain the bid rents from the highest bidding income groups, and the associated dwelling sizes, as the equilibrium output values for rents and dwelling sizes. In the code, this corresponds to:
 
 .. literalinclude:: ../equilibrium/sub/compute_outputs.py
    :language: python
@@ -507,7 +507,7 @@ This leads to the update of, among others, number of households per income class
 
 .. literalinclude:: ../equilibrium/run_simulations.py
    :language: python
-   :lines:228-247
+   :lines: 228-247
    :lineno-start: 228
 
 Note that we also update the scale factor of the Cobb-Douglas housing production function so as to neutralize the impact that the inflation of incomes would have on housing supply through the rent [#fmoney_illus]_:
@@ -601,12 +601,12 @@ Log-linearizing it (and using the relation between price and rent that we alread
 
    log(N_s^{FP}) = \gamma_1 + \gamma_2 log(P_s) + \gamma_3 log(Q_s) + \gamma_4 log(L_s^{FP}) + \epsilon_s
 
-* :math:`\gamma_1 = log(\kappa \frac{1-a}{a}^{1-a})`
+* :math:`\gamma_1 = log(\kappa (\frac{1-a}{a})^{1-a})`
 * :math:`\gamma_2 = 1-a`
 * :math:`\gamma_3 = -1`
 * :math:`\gamma_4 = 1`
 
-We therefore have :math:`a = 1 - \gamma_2` and :math:`\kappa = \frac{a}{1-a}^{1-a} exp(\gamma_1)`.
+We therefore have :math:`a = 1 - \gamma_2` and :math:`\kappa = (\frac{a}{1-a})^{1-a} exp(\gamma_1)`.
 
 In the code, this translates into:
 
@@ -673,7 +673,7 @@ Essentially, this function relies on the following equation (that can be recover
 * :math:`\pi_{c|is}` is the probability to choose to work in location :math:`c` given residential location :math:`s` (SP level) and income group :math:`i`
 * :math:`N_{is}` is the number of households of income group :math:`i` living in residential location :math:`s`
 
-All the terms in the above equation are observed, except for incomes :math:`y_{ic}` (implicit in the definition of :math:`\pi_{c|is} `). For each scanned value of :math:`lambda` and each income group, the value of incomes will therefore be updated in accordance to an error term until it falls below a given precision level:
+All the terms in the above equation are observed, except for incomes :math:`y_{ic}` (implicit in the definition of :math:`\pi_{c|is}`). For each scanned value of :math:`\lambda` and each income group, the value of incomes will therefore be updated in accordance to an error term until it falls below a given precision level:
 
 .. literalinclude:: ../calibration/sub/compute_income.py
    :language: python
@@ -702,7 +702,7 @@ Parameter selection
 
 Back to the body of the ``estim_incomes_and_gravity`` function, we import the residence-workplace distance distribution observed in the data, and define Bhattacharyya distance as our score. Then, we simply select the gravity-income pair that minimizes this metric:
 
-.. literalinclude:: ../calibration/sub/calib_main_func.py
+.. literalinclude:: ../calibration/calib_main_func.py
    :language: python
    :lines: 246-266
    :lineno-start: 246
@@ -713,7 +713,7 @@ Note that we rely on this two-step computation-selection procedure as a simplifi
 Utility function parameters
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Again, we update the parameter vector with the newly calculated values and go on with the calibration of utility function parameters through the ``estim_util_func_param`` function. It allows to optimize over the parameters :math:`\beta`, :math:`q_0`, and the utility levels of various income groups (hence, indirectly, the local amenity index :math:`A(x)`[#disam_index]_). To do so, it fits three data moments where those variables enter, as they cannot be identified separately from the model structure otherwise. More precisely, it is going to maximize a composite log-likelihood that sums one log-likelihood for the fit of the predicted local amenity index on exogenous amenities, one for the fit of predicted income sorting, and one for the fit of predicted dwelling sizes [#mle]_.
+Again, we update the parameter vector with the newly calculated values and go on with the calibration of utility function parameters through the ``estim_util_func_param`` function. It allows to optimize over the parameters :math:`\beta`, :math:`q_0`, and the utility levels of various income groups (hence, indirectly, the local amenity index :math:`A(x)` [#disam_index]_). To do so, it fits three data moments where those variables enter, as they cannot be identified separately from the model structure otherwise. More precisely, it is going to maximize a composite log-likelihood that sums one log-likelihood for the fit of the predicted local amenity index on exogenous amenities, one for the fit of predicted income sorting, and one for the fit of predicted dwelling sizes [#mle]_.
 
 We are going to describe this process in more details, as it is the one followed in :cite:t`pfeiffer`, but before that, we are going to explain why we actually only use the first data moment in our benchmark.
 
@@ -725,9 +725,9 @@ First of all, note that the procedure we just described is a complex optimizatio
 
 For a start, the parameter :math:`q_0` has a direct empirical interpretation: it can just be set to be equal to the bottom decile, or bottom percentile, of observed dwelling sizes. Since we do not have access to such data (but only to average dwelling sizes aggregated at the SP level), we just keep the value calibrated in :cite:t:`pfeiffer`, which is plausible enough, to be substituted later with a more robust value: although this approach may seem more rudimentary than the full one, it requires no structural assumptions whatsoever.
 
-It is different for the :math:`beta` parameter. Its empirical counterpart would be the expenditure share of households on housing (at purchasing power parity). However, direct measurement of such quantity in expenditure survey data suffers from numerous biases, as we do not observe annual spending by owner-occupiers (as opposed to renters), and we do not observe variation in local housing prices either (see :cite:t:`review` for more details). Then, due to non-homotheticity, this share is expected to vary across income groups. Yet, it is the whole point of using a Stone-Geary (as opposed to Cobb-Douglas) specification to micro-found such non-homotheticity with a single elasticity parameter [#heterog]_.
+It is different for the :math:`\beta` parameter. Its empirical counterpart would be the expenditure share of households on housing (at purchasing power parity). However, direct measurement of such quantity in expenditure survey data suffers from numerous biases, as we do not observe annual spending by owner-occupiers (as opposed to renters), and we do not observe variation in local housing prices either (see :cite:t:`review` for more details). Then, due to non-homotheticity, this share is expected to vary across income groups. Yet, it is the whole point of using a Stone-Geary (as opposed to Cobb-Douglas) specification to micro-found such non-homotheticity with a single elasticity parameter [#heterog]_.
 
-For all those reasons, we need to leverage some theoretical structure to estimate this parameter. However, whereas the Cobb-Douglas specification used for the housing production function has been shown to be empirically robust :cite:p`combes`, it is not the case for Stone-Geary preferences, which should rather be thought of as a first-order approximation for nonhomothetic constant elasticity of substitution (NHCES) preferences or price independent generalized linear (PIGL) preferences [#ces]_ :cite:p:`finlay`. Therefore, we think it is more empirically robust to use their benchmark estimate for the :math:`beta` parameter (which also controls for the aforementioned biases). Luckily for us, it is almost the same as the value estimated by :cite:t`pfeiffer`. We therefore keep that value in the code, and do not contradict previous findings (even though we criticize the method).
+For all those reasons, we need to leverage some theoretical structure to estimate this parameter. However, whereas the Cobb-Douglas specification used for the housing production function has been shown to be empirically robust :cite:p:`combes`, it is not the case for Stone-Geary preferences, which should rather be thought of as a first-order approximation for nonhomothetic constant elasticity of substitution (NHCES) preferences or price independent generalized linear (PIGL) preferences [#ces]_ :cite:p:`finlay`. Therefore, we think it is more empirically robust to use their benchmark estimate for the :math:`\beta` parameter (which also controls for the aforementioned biases). Luckily for us, it is almost the same as the value estimated by :cite:t:`pfeiffer`. We therefore keep that value in the code, and do not contradict previous findings (even though we criticize the method).
 
 Then, we are simply left with the estimation of the local amenity score :math:`A(x)`, that we are going to detail below. A last general comment we want to make is that, even for a well-identified model, it is important to run sensitivity checks on the value of parameters: for internal calibration, this implies checking alternative data processing and sample selection ; for external calibration, this implies scanning through acceptable ranges of values (more on that in the code). Running the calibration with data from previous years is also a good robustness check to determine how close our estimates are to long-term equilibrium values we are targeting.
 
@@ -742,7 +742,7 @@ Back to the body of the ``estim_util_func_param`` function, we define a less str
    :lines: 371-374
    :lineno-start: 371
 
-After pinning down the values of :math:`beta` and :math:`q0`, we define target utility levels close to what is expected as an equilibrium outcome:
+After pinning down the values of :math:`\beta` and :math:`q_0`, we define target utility levels close to what is expected as an equilibrium outcome:
 
 .. literalinclude:: ../calibration/calib_main_func.py
    :language: python
@@ -760,7 +760,7 @@ Indeed, based on households' first-order optimality conditions, the predicted va
 
 .. math::
 
-   A_s = \frac{u_{i(s)}}{(1 - \beta)^{1 - \beta} \beta^{\beta} \frac{\tilde{y}_s - q_0 R_s}{R_s^{\beta}}
+   A_s = \frac{u_{i(s)}}{(1 - \beta)^{1 - \beta} \beta ^{\beta}} \frac{\tilde{y}_s - q_0 R_s}{R_s ^{\beta}}
 
 * :math:`u_{i(s)}` is the utility level of the dominant income group :math:`i` in Small Place :math:`s`
 * :math:`\tilde{y}_s` is the expected income net of commuting costs of the dominant income group in Small Place :math:`s`
@@ -773,7 +773,7 @@ Note that, since we only observe housing prices in transaction data, we define :
    :lines: 496
    :lineno-start: 496
 
-Also note that we are not interested in the value of the utility levels per se at this stage, but only in the value of the amenity score. We could therefore directly optimize over that value. The reason why we keep the above specification is that it becomes important when we also want to optimize over :math:`beta` and :math:`q0`. Then, if we are only interested in the calibration of the amenity score, we believe it is more robust to estimate only the fit with regard to exogenous amenities. Indeed, this implies very light structural assumptions compared to other moments, and it ensures that the amenity score is well-identified. The score has an impact on the other two moments, but if we allow them to enter the calibration, then it would also capture part of the residual fit of the model, that is the part not strictly explained by amenity factors. Therefore, sticking with the first data moment allows the amenity score to have a clear empirical interpretation, which can also be leveraged for policy evaluation (studying how a change in exogenous coviarates eventually impacts spatial sorting). Again, using more moments becomes important to avoid underidentification when we want to estimate more interacting parameters, even if it comes at the price of tractability.
+Also note that we are not interested in the value of the utility levels per se at this stage, but only in the value of the amenity score. We could therefore directly optimize over that value. The reason why we keep the above specification is that it becomes important when we also want to optimize over :math:`\beta` and :math:`q_0`. Then, if we are only interested in the calibration of the amenity score, we believe it is more robust to estimate only the fit with regard to exogenous amenities. Indeed, this implies very light structural assumptions compared to other moments, and it ensures that the amenity score is well-identified. The score has an impact on the other two moments, but if we allow them to enter the calibration, then it would also capture part of the residual fit of the model, that is the part not strictly explained by amenity factors. Therefore, sticking with the first data moment allows the amenity score to have a clear empirical interpretation, which can also be leveraged for policy evaluation (studying how a change in exogenous coviarates eventually impacts spatial sorting). Again, using more moments becomes important to avoid underidentification when we want to estimate more interacting parameters, even if it comes at the price of tractability.
 
 Then, we just import amenity data with the ``import_exog_amenities`` function and select exogenous covariates before calling on the ``EstimateParametersByScanning`` function that runs the discrete parameter scan. This function runs some additional sample and variable selection, then defines useful function for the optimization algorithm, before running the algorithm per se:
 
@@ -788,7 +788,7 @@ As part of the ``LogLikelihoodModel`` function, we finally define the log-likeli
 
 .. math::
 
-   A_s = (\prod_{n} a_{n,s} ^ \mathcal{v}_i) \epsilon_{A,s}
+   A_s = (\prod_{n} (a_{n,s})^{\mathcal{v}_i}) \epsilon_{A,s}
 
 * :math:`a_{n,s}` are exogenous amenity covariates at the SP level
 * :math:`\mathcal{v}_i` are elasticity parameters to be estimated (conditional on the dominant income group at the SP level)
@@ -805,7 +805,7 @@ This also allows us to recover the value of the :math:`\log(\epsilon_{A,s})` res
 
 .. math::
 
-   \calmath{L} = - \sum_n [\frac{\log(2 \pi \sigma ^2)}{2} + \frac{\epsilon ^2}{2 \sigma ^2}]
+   \mathcal{L} = - \sum_n [\frac{\log(2 \pi \sigma ^2)}{2} + \frac{\epsilon ^2}{2 \sigma ^2}]
 
 The calibration of the amenity score will then be completed in two steps. First, we will select the appropriate statistical model by selecting the maximum log-likelihood. Then, we will define the amenity score as the explained part of the model, that is the value predicted by the regressors, taking residuals out. Back to the body of the ``estim_util_func_param`` function, this corresponds to:
 
@@ -823,15 +823,15 @@ The calibration of the amenity score will then be completed in two steps. First,
 Fit on income sorting
 """""""""""""""""""""
 
-Now, suppose we also want to optimize over the :math:`beta` and :math:`q0` parameters. We will need to comment out the part of the code where we set the scores associated with the two remaining data moments to zero. Then, let us comment on those data moments.
+Now, suppose we also want to optimize over the :math:`\beta` and :math:`q_0` parameters. We will need to comment out the part of the code where we set the scores associated with the two remaining data moments to zero. Then, let us comment on those data moments.
 
 Observed income sorting can be rationalized through a discrete-choice logit model (similar to the approach we take for modelling commuting choice in :doc:`../math_appendix`). According to bid-rent theory, we consider that households bid their true valuation and that land is allocated to the highest bidder. Identifying the group with the highest bids as the dominant group in the data, we can write the log-likelihood for income sorting as:
 
 .. math::
 
-   \calmath{l} = \sum_s (\frac{\Psi_{i(s)}(s)}{\lambda_{inc}}) - \sum_s \log(\sum_j e^{\frac{\Psi_{j}(s)}{\lambda_{inc}}})
+   \mathcal{l} = \sum_s (\frac{\Psi_{i(s)}(s)}{\lambda_{inc}}) - \sum_s \log(\sum_j e^{\frac{\Psi_{j}(s)}{\lambda_{inc}}})
 
-We recall that :math:`\Psi_{j}(s)` stand for the bid rent of some income group :math:`j` in Small Place :math:`s`. :math:`lambda_{inc}` is a scale factor associated with the underlying Gumbel distribution of idiosyncratic tastes, and that is going to increase the log-likelihood when it goes up. Note however that this impact is marginal above 10. To be conservative, while keeping the same order of magnitude as for gravity parameter  :math:`lambda`, we pin down this value in the code. We do not go below as it would signficantly reduce the value of the log-likelihood, and we want all the likelihoods to be of the same order so as not to overweight some data moments compared to others.
+We recall that :math:`\Psi_{j}(s)` stands for the bid rent of some income group :math:`j` in Small Place :math:`s`. :math:`\lambda_{inc}` is a scale factor associated with the underlying Gumbel distribution of idiosyncratic tastes, and that is going to increase the log-likelihood when it goes up. Note however that this impact is marginal above 10. To be conservative, while keeping the same order of magnitude as for gravity parameter  :math:`\lambda`, we pin down this value in the code. We do not go below as it would signficantly reduce the value of the log-likelihood, and we want all the likelihoods to be of the same order so as not to overweight some data moments compared to others.
 
 In the ``LogLikelihoodModel`` function, we simply recover the values of bid rents :math:`\Psi_{j}(s)` by inverting the theoretical formula for the amenity score, with the slight modification that we allow the utility level to adapt to the income group considered (and do not fix it to the level of the dominant income group): that way, the predicted rent :math:`R_s` will now reflect a distinct (unobserved) bid rent for each income group :math:`j`. Then, we define the log-likelihood as stated above.
 
@@ -850,7 +850,7 @@ This is exactly the formula given by the ``CalculateDwellingSize`` lambda functi
 Smooth optimization
 """""""""""""""""""
 
-After running discrete parameter scanning in the ``estim_util_func_param`` function, the ``param_optim`` option allows the user to run a smooth optimization procedure based on the same composite log-likelihood, starting with the estimates we just computed as initial guess. This is done by calling the ``EstimateParametersByOptimization`` function. Note that, when pinning down the values of :math:`beta` and :math:`q_0`, the algorithm does not converge when setting the scores associated to dwelling sizes and income sorting to zero (directly into the ``LogLikelihoodModel`` function). For that reason, we set the default value of the ``param_optim`` option at zero and run a discrete scanning that we consider to be granular enough to estimate an amenity index that is precise enough. We therefore onlu recommend to use that option when allowing the :math:`beta` and :math:`q_0` parameters to vary.
+After running discrete parameter scanning in the ``estim_util_func_param`` function, the ``param_optim`` option allows the user to run a smooth optimization procedure based on the same composite log-likelihood, starting with the estimates we just computed as initial guess. This is done by calling the ``EstimateParametersByOptimization`` function. Note that, when pinning down the values of :math:`beta` and :math:`q_0`, the algorithm does not converge when setting the scores associated to dwelling sizes and income sorting to zero (directly into the ``LogLikelihoodModel`` function). For that reason, we set the default value of the ``param_optim`` option at zero and run a discrete scanning that we consider to be granular enough to estimate an amenity index that is precise enough. We therefore onlu recommend to use that option when allowing the :math:`\beta` and :math:`q_0` parameters to vary.
 
 ^^^^^^^^^^^^^^^^
 Disamenity index
@@ -922,8 +922,8 @@ Of course, even if we define values for all locations on the map, this parameter
 
 .. [#mle] We recall that, conditional on some error term distribution, maximum likelihood estimation (MLE) consists in estimating parameters such as they maximize the probability that the posited statistical model indeed predicts the value of outcome variables. This probability is expressed as a likelihood function, which is log-linearized in practice for optimization purposes, hence our focus on log-likelihoods. Note that, contrary to MLE, OLS does not require any assumption on the error term distribution (but may be less efficient or misspecified in some cases).
 
-.. [#heterog] We could also adopt simpler Cobb-Douglas preferences, and calibrate the parameters separately for each income group, as in :cite:t`review`. The problem with such approach is that it is not properly micro-founded: we assume that different households have different income elasticities where, in fact, they just differ in income levels. The Stone-Geary specification allows to recover the observed heterogeneous expenditure shares with a single elasticity parameter, by considering housing as a necessity good. It is not only of theoretical, but also practical importance: the expenditure shares will be allowed to adapt continuously with income levels, not just across discrete income groups. More generally, adding heterogeneity dimensions increases the risk of overfitting the model, threatening its external validity for counterfactuals. In fact, we could also heterogenize the gravity parameter :math:`\lambda` and the amenity score :math:`A(x)` with respect to income groups, as we expect them to have different mobilities and tastes: we only recommend doing so with a strong theoretical and empirical ground.
+.. [#heterog] We could also adopt simpler Cobb-Douglas preferences, and calibrate the parameters separately for each income group, as in :cite:t:`review`. The problem with such approach is that it is not properly micro-founded: we assume that different households have different income elasticities where, in fact, they just differ in income levels. The Stone-Geary specification allows to recover the observed heterogeneous expenditure shares with a single elasticity parameter, by considering housing as a necessity good. It is not only of theoretical, but also practical importance: the expenditure shares will be allowed to adapt continuously with income levels, not just across discrete income groups. More generally, adding heterogeneity dimensions increases the risk of overfitting the model, threatening its external validity for counterfactuals. In fact, we could also heterogenize the gravity parameter :math:`\lambda` and the amenity score :math:`A(x)` with respect to income groups, as we expect them to have different mobilities and tastes: we only recommend doing so with a strong theoretical and empirical ground.
 
-.. [#ces] Note that the Cobb-Douglas specification used for the housing production function is also a particular case of a more general CES function with an elasticity of substitution equal to 1. The difference with Stone-Geary preferences is that, whereas :cite:t`combes` do not reject a unit elasticity of substitution for housing production, :cite:t:`finlay` do so for preferences. This is the reason why we are more confident with our structural estimation of housing production elasticities than utility function elasticities.
+.. [#ces] Note that the Cobb-Douglas specification used for the housing production function is also a particular case of a more general CES function with an elasticity of substitution equal to 1. The difference with Stone-Geary preferences is that, whereas :cite:t:`combes` do not reject a unit elasticity of substitution for housing production, :cite:t:`finlay` do so for preferences. This is the reason why we are more confident with our structural estimation of housing production elasticities than utility function elasticities.
 
 .. [#mle_ols] We could alternatively run a MLE (instead of OLS estimation) and directly store the associated maximum log-likelihood, but this is equivalent for normally distributed error terms of mean zero.

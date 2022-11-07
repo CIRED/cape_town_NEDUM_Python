@@ -51,7 +51,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../math_appendix.html">Math appendix</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../bibliography.html">Bibliography</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../api_ref.html">API reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../install_help.html">Installation help</a></li>
 </ul>
 
         </div>
@@ -315,7 +314,7 @@
     <span class="n">pricePerKM</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">priceTaxiPerKM</span><span class="o">*</span><span class="n">numberDaysPerYear</span>
     <span class="n">pricePerKM</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">priceBusPerKM</span><span class="o">*</span><span class="n">numberDaysPerYear</span>
 
-    <span class="c1"># Simple distances (not useful to calculate price but interesting output)</span>
+    <span class="c1"># Simple distances (useful for residence-workplace distance distribution)</span>
     <span class="n">distanceOutput</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">timeOutput</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
     <span class="n">distanceOutput</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
     <span class="n">distanceOutput</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;distanceCar&quot;</span><span class="p">]</span>
