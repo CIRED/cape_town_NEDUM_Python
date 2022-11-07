@@ -713,9 +713,9 @@ Note that we rely on this two-step computation-selection procedure as a simplifi
 Utility function parameters
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Again, we update the parameter vector with the newly calculated values and go on with the calibration of utility function parameters through the ``estim_util_func_param`` function. It allows to optimize over the parameters :math:`\beta`, :math:`q_0`, and the utility levels of various income groups (hence, indirectly, the local amenity index :math:`A(x)` [#disam_index]_). To do so, it fits three data moments where those variables enter, as they cannot be identified separately from the model structure otherwise. More precisely, it is going to maximize a composite log-likelihood that sums one log-likelihood for the fit of the predicted local amenity index on exogenous amenities, one for the fit of predicted income sorting, and one for the fit of predicted dwelling sizes [#mle]_.
+Again, we update the parameter vector with the newly calculated values and go on with the calibration of utility function parameters through the ``estim_util_func_param`` function. It allows to optimize over the parameters :math:`\beta`, :math:`q_0`, and the utility levels of various income groups (hence, indirectly, the local amenity index :math:`A(x)`) [#disam_index]_. To do so, it fits three data moments where those variables enter, as they cannot be identified separately from the model structure otherwise. More precisely, it is going to maximize a composite log-likelihood that sums one log-likelihood for the fit of the predicted local amenity index on exogenous amenities, one for the fit of predicted income sorting, and one for the fit of predicted dwelling sizes [#mle]_.
 
-We are going to describe this process in more details, as it is the one followed in :cite:t`pfeiffer`, but before that, we are going to explain why we actually only use the first data moment in our benchmark.
+We are going to describe this process in more details, as it is the one followed in :cite:t:`pfeiffer`, but before that, we are going to explain why we actually only use the first data moment in our benchmark.
 
 """"""""""""""""""""
 External calibration
@@ -794,9 +794,9 @@ As part of the ``LogLikelihoodModel`` function, we finally define the log-likeli
 * :math:`\mathcal{v}_i` are elasticity parameters to be estimated (conditional on the dominant income group at the SP level)
 * :math:`\epsilon_{A,s}` is an error term that is log-normally distributed with mean zero
 
-Log-linearizing this relation, we can regress the predicted value of the log-amenity score on log-values of exogenous amenities that we proxy as dummy variables (pre-processing that is already done as part of the ``import_exog_amenities`` function), and estimate the parameters :math:``\mathcal{v}_i`` by ordinary least squares (OLS). In the code, this yields:
+Log-linearizing this relation, we can regress the predicted value of the log-amenity score on log-values of exogenous amenities that we proxy as dummy variables (pre-processing that is already done as part of the ``import_exog_amenities`` function), and estimate the parameters :math:`\mathcal{v}_i` by ordinary least squares (OLS). In the code, this yields:
 
-.. literalinclude:: ../calibration/sub/estimate_parameters_by_scanning.py
+.. literalinclude:: ../calibration/sub/loglikelihood.py
    :language: python
    :lines: 127-162
    :lineno-start: 127
@@ -858,7 +858,7 @@ Disamenity index
 
 The last part of the calibration procedure is done directly in the body of the ``calib_nb`` notebook. As we stated before, the local disamenity index associated with informal backyards and informal settlements is going to be recovered from model inversion, to proxy for unobserved disamenity factors. In other words, we are going to optimize over the value of this parameter to capture most of the residual (unexplained) component of spatial sorting into those places. This clearly improves the fit of the model, but comes at the price of empirical tractability and increases the risk of overfitting: this is the reason why we do not follow this method for other parameters when an alternative approach is available. To back up this choice, let us just say that this is not a critical factor in our simulations, and that this also common in the literature.
 
-We start by considering a constant value for each of the index (one per informal housing type). This is also the approach taken by :cite:t`pfeiffer`. We range over a discrete set of values for those parameters and select the pair that minimizes the sum of differences between total number of households in the data vs. simulation, for each housing sector of interest.
+We start by considering a constant value for each of the index (one per informal housing type). This is also the approach taken by :cite:t:`pfeiffer`. We range over a discrete set of values for those parameters and select the pair that minimizes the sum of differences between total number of households in the data vs. simulation, for each housing sector of interest.
 
 Then, we propose a procedure to improve the model fit further by allowing those parameters to vary with residential location. By default, we choose to run it with the ``location_based_calib`` option, but as we face a standard variance-bias trade-off when considering model fit, we allow the user to switch it off. To do so, we just define the error metric at the grid level and start with the calibrated constant values as initial guesses for all locations. Then, we update them iteratively in proportion with the error term. We allow for a number of iterations that is large enough to reach a minimum score before the end of the algorithm.
 
