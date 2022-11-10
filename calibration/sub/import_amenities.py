@@ -83,5 +83,9 @@ def import_exog_amenities(path_data, path_precalc_inp, dim):
                  'distance_protected_envir_2_4', 'RDP_proximity',
                  'distance_power_station', 'distance_biosphere_reserve']
         )
+    # these new columns have been added to the amenities for testing
+    newAmmenities=['publicHealthCare', 'privateHealthcare', 'sportsgrounds',
+       'publicHighSchool', 'independentHighSchool', 'HighmastLight']
+    table_amenities[newAmmenities]=amenity_data[newAmmenities].astype(int)
 
     return table_amenities
