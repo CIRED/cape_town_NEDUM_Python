@@ -797,7 +797,7 @@ for year_temp in np.arange(0, 30):
         simulation_dwelling_size[year_temp, :, :], interest_rate)
 
     # NOTE THAT CAPITAL IS IN MONETARY VALUES
-    formal_structure_cost = outfld.compute_formal_structure_cost_method2(
+    formal_structure_cost = outfld.compute_formal_structure_cost(
         simulation_rent[year_temp, :, :], param, interest_rate, coeff_land,
         simulation_households_housing_type[year_temp, :, :], param["coeff_A"])
 

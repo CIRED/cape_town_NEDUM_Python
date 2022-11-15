@@ -132,6 +132,10 @@ If you find **NEDUM-2D** useful, please kindly cite our last paper:
 	  url         = {https://openknowledge.worldbank.org/handle/10986/31987}
 	}
 
+For internal reference within the CoCT, please contact kristoff.potgieter@capetown.gov.za
+
+|
+
 Thomas Monnier - `tlmonnier.github.io <https://tlmonnier.github.io>`_ - `Github <https://github.com/TLMonnier>`_ - `@TLMonnier <https://twitter.com/TLMonnier>`_ - thomas.monnier@ensae.fr
 
 Distributed under the GNU GENERAL PUBLIC LICENSE.

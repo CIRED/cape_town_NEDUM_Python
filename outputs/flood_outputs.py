@@ -9,7 +9,47 @@ def compute_stats_per_housing_type(
         floods, path_floods, nb_households_formal, nb_households_subsidized,
         nb_households_informal, nb_households_backyard, path_tables,
         flood_categ, threshold=0.1):
-    """Summarize flood-risk area and flood depth per housing and flood type."""
+    """
+    Compute aggregate flood exposure statistics for a given flood type.
+
+    More specifically, the function returns for each available return period
+    and each housing type, an estimated total number of households exposed and
+    associated average maximum flood depth level. The output is used as an
+    argument by the validation_flood function (export_outputs_floods module)
+
+    Parameters
+    ----------
+    floods : list
+        List of file names for available flood maps per return period and flood
+        type
+    path_floods : str
+        Path towards flood maps directory
+    nb_households_formal : Series
+        Number of households living in formal private housing, per grid cell
+    nb_households_subsidized : Series
+        Number of households living in formal subsidized housing, per grid cell
+    nb_households_informal : Series
+        Number of households living in informal settlements, per grid cell
+    nb_households_backyard : Series
+        Number of households living in informal backyards, per grid cell
+    path_tables : str
+        Path for saving output plots
+    flood_categ : str
+        Category of flood risks considered, used in name of output file
+    threshold : float64, optional
+        Maximum flood depth level (in m) below which we choose to discard flood
+        risks. The default is 0.1, but is not used in benchmark version of the
+        function.
+
+    Returns
+    -------
+    stats_per_housing_type : DataFrame
+        Table summarizing, for a given flood type and each associated return
+        period, the estimated total number of households per housing type
+        living in flood-prone areas, and the associated average maximum flood
+        depth level
+
+    """
     stats_per_housing_type = pd.DataFrame(
         columns=['flood', 'fraction_formal_in_flood_prone_area',
                  'fraction_subsidized_in_flood_prone_area',
@@ -141,12 +181,50 @@ def compute_stats_per_housing_type(
     return stats_per_housing_type
 
 
-# TODO: to be used if needed
 def compute_stats_per_income_group(
         floods, path_floods, nb_households_rich, nb_households_midrich,
         nb_households_midpoor, nb_households_poor, path_tables,
         flood_categ, threshold=0.1):
-    """Summarize flood-risk area and flood depth per income and flood type."""
+    """
+    Compute aggregate flood exposure statistics for a given flood type.
+
+    More specifically, the function returns for each available return period
+    and each income group, an estimated total number of households exposed and
+    associated average maximum flood depth level.
+
+    Parameters
+    ----------
+    floods : list
+        List of file names for available flood maps per return period and flood
+        type
+    path_floods : str
+        Path towards flood maps directory
+    nb_households_rich : Series
+        Number of rich households, per grid cell
+    nb_households_midrich : Series
+        Number of mid-rich households, per grid cell
+    nb_households_midpoor : Series
+        Number of mid-poor households, per grid cell
+    nb_households_poor : Series
+        Number of poor households, per grid cell
+    path_tables : str
+        Path for saving output plots
+    flood_categ : str
+        Category of flood risks considered, used in name of output file
+    threshold : float64, optional
+        Maximum flood depth level (in m) below which we choose to discard flood
+        risks. The default is 0.1, but is not used in benchmark version of the
+        function.
+
+    Returns
+    -------
+    stats_per_income_group : DataFrame
+        Table summatizing, for a given flood type and each associated return
+        period, the estimated total number of households per income group
+        living in flood-prone areas, and the associated average maximum flood
+        depth level
+
+    """
     stats_per_income_group = pd.DataFrame(
         columns=['flood', 'fraction_rich_in_flood_prone_area',
                  'fraction_midrich_in_flood_prone_area',
@@ -214,7 +292,84 @@ def compute_damages(floods, path_data, param, content_cost,
                     structural_damages_type2, structural_damages_type3a,
                     options, spline_inflation, year_temp,
                     path_tables, flood_categ):
-    """Summarize flood damages per housing and flood type."""
+    """
+    Compute total structure and content damages per housing type.
+
+    This function leverages the depth-damage functions from the literature
+    to estimate the monetary value lost to floods based on the estimated total
+    value of the underlying asset, per available return period. The logic is
+    the same as in inputs.data.import_full_floods_data.
+
+    Parameters
+    ----------
+    floods : list
+        List of file names for available flood maps per return period and flood
+        type
+    path_data : str
+        Path towards data used in the model
+    param : dict
+        Dictionary of default parameters
+    content_cost : DataFrame
+        Estimated value of composite good consumption that is considered as
+        flood-prone, for each grid cell (24,014) and each housing type (4)
+    nb_households_formal : Series
+        Number of households living in formal private housing, per grid cell
+    nb_households_subsidized : Series
+        Number of households living in formal subsidized housing, per grid cell
+    nb_households_informal : Series
+        Number of households living in informal settlements, per grid cell
+    nb_households_backyard : Series
+        Number of households living in informal backyards, per grid cell
+        DESCRIPTION.
+    dwelling_size : ndarray(float64, ndim=2)
+        Average dwelling size (in m²) per grid cell in each housing
+        type (4)
+    formal_structure_cost : ndarray(float64)
+        Estimated construction cost of formal private housing structures, based
+        on their market capital values, per grid cell (24,014)
+    content_damages : interp1d
+        Linear interpolation for fraction of capital destroyed (house
+        contents) over maximum flood depth (in m) in a given area,
+        from de Villiers et al., 2007
+    structural_damages_type4b : interp1d
+        Linear interpolation for fraction of capital destroyed (type-4b house
+        structures) over maximum flood depth (in m) in a given area,
+        from de Englhardt et al., 2019 (two-floor reinforced masonry/concrete
+        and steel buildings)
+    structural_damages_type4a : interp1d
+        Linear interpolation for fraction of capital destroyed (type-4a house
+        structures) over maximum flood depth (in m) in a given area,
+        from de Englhardt et al., 2019 (one-floor reinforced masonry/concrete
+        and steel buildings)
+    structural_damages_type2 : interp1d
+        Linear interpolation for fraction of capital destroyed (type-2 house
+        structures) over maximum flood depth (in m) in a given area,
+        from de Englhardt et al., 2019 (wooden buildings)
+    structural_damages_type3a : interp1d
+        Linear interpolation for fraction of capital destroyed (type-3a house
+        structures) over maximum flood depth (in m) in a given area,
+        from de Englhardt et al., 2019 (one-floor unreinforced masonry/concrete
+        buildings)
+    options : dict
+        Dictionary of default options
+    spline_inflation : interp1d
+        Linear interpolation for inflation rate (in base 100 relative to
+        baseline year) over the years (baseline year set at 0)
+    year_temp : int
+        Year (relative to baseline year set at 0) for which we want to
+        run the function
+    path_tables : str
+        Path for saving output plots
+    flood_categ : str
+        Category of flood risks considered, used in name of output file
+
+    Returns
+    -------
+    damages : DataFrame
+        Table yielding, for each return period and housing types, the estimated
+        total damages in terms of housing structures and contents
+
+    """
     damages = pd.DataFrame(columns=['flood',
                                     'formal_structure_damages',
                                     'subsidized_structure_damages',
@@ -325,7 +480,86 @@ def compute_damages_2d(floods, path_data, param, content_cost,
                        structural_damages_type2, structural_damages_type3a,
                        options, spline_inflation, year_temp,
                        path_tables, flood_categ):
-    """Compute full flood damages per housing and flood type."""
+    """
+    Compute structure and content damages per housing type across space.
+
+    This function leverages the depth-damage functions from the literature
+    to estimate the monetary value lost to floods based on the estimated total
+    value of the underlying asset, per available return period. Here, we get
+    spatial, and not aggregate, data. The use of this function instead of its
+    1D counterpart depends on the plots we are interested in.
+
+    Parameters
+    ----------
+    floods : list
+        List of file names for available flood maps per return period and flood
+        type
+    path_data : str
+        Path towards data used in the model
+    param : dict
+        Dictionary of default parameters
+    content_cost : DataFrame
+        Estimated value of composite good consumption that is considered as
+        flood-prone, for each grid cell (24,014) and each housing type (4)
+    nb_households_formal : Series
+        Number of households living in formal private housing, per grid cell
+    nb_households_subsidized : Series
+        Number of households living in formal subsidized housing, per grid cell
+    nb_households_informal : Series
+        Number of households living in informal settlements, per grid cell
+    nb_households_backyard : Series
+        Number of households living in informal backyards, per grid cell
+        DESCRIPTION.
+    dwelling_size : ndarray(float64, ndim=2)
+        Average dwelling size (in m²) per grid cell in each housing
+        type (4)
+    formal_structure_cost : ndarray(float64)
+        Estimated construction cost of formal private housing structures, based
+        on their market capital values, per grid cell (24,014)
+    content_damages : interp1d
+        Linear interpolation for fraction of capital destroyed (house
+        contents) over maximum flood depth (in m) in a given area,
+        from de Villiers et al., 2007
+    structural_damages_type4b : interp1d
+        Linear interpolation for fraction of capital destroyed (type-4b house
+        structures) over maximum flood depth (in m) in a given area,
+        from de Englhardt et al., 2019 (two-floor reinforced masonry/concrete
+        and steel buildings)
+    structural_damages_type4a : interp1d
+        Linear interpolation for fraction of capital destroyed (type-4a house
+        structures) over maximum flood depth (in m) in a given area,
+        from de Englhardt et al., 2019 (one-floor reinforced masonry/concrete
+        and steel buildings)
+    structural_damages_type2 : interp1d
+        Linear interpolation for fraction of capital destroyed (type-2 house
+        structures) over maximum flood depth (in m) in a given area,
+        from de Englhardt et al., 2019 (wooden buildings)
+    structural_damages_type3a : interp1d
+        Linear interpolation for fraction of capital destroyed (type-3a house
+        structures) over maximum flood depth (in m) in a given area,
+        from de Englhardt et al., 2019 (one-floor unreinforced masonry/concrete
+        buildings)
+    options : dict
+        Dictionary of default options
+    spline_inflation : interp1d
+        Linear interpolation for inflation rate (in base 100 relative to
+        baseline year) over the years (baseline year set at 0)
+    year_temp : int
+        Year (relative to baseline year set at 0) for which we want to
+        run the function
+    path_tables : str
+        Path for saving output plots
+    flood_categ : str
+        Category of flood risks considered, used in name of output file
+
+    Returns
+    -------
+    dict_damages : dict
+        Dictionary yielding, for each return period, the estimated damages per
+        grid cell (24,014) and housing type (4) in terms of housing structures
+        and contents
+
+    """
     dict_damages = {}
 
     for item in floods:
@@ -416,7 +650,32 @@ def compute_damages_2d(floods, path_data, param, content_cost,
 
 
 def annualize_damages(array_init, type_flood, housing_type, options):
-    """Annualize damages from floods."""
+    """
+    Return expected value of flood damages for given location and housing type.
+
+    The logic is the same as in inputs.data.compute_fraction_capital_destroyed.
+
+    Parameters
+    ----------
+    array_init : ndarray(float64)
+        Array containing estimated damage values per available return period,
+        for a given flood type, housing type, and grid cell
+    type_flood : str
+        Type of flood risk considered, used to determine the number of return
+        periods available (depends on FATHOM/DELTARES data source)
+    housing_type : str
+        Housing type considered, used to determine which corrections to apply
+        for pluvial flood risks
+    options : dict
+        Dictionary of default options
+
+    Returns
+    -------
+    float64
+        Annualized / expected value of future damage flows for a given flood
+        type, housing type, and grid cell
+
+    """
     array = array_init.copy()
     if type_flood == 'pluvial' and options["correct_pluvial"] == 1:
         if housing_type == 'formal':
@@ -485,30 +744,51 @@ def annualize_damages(array_init, type_flood, housing_type, options):
                     + (interval6 * damages6) + (interval7 * damages7)))
 
 
-# def compute_formal_structure_cost_method1(
-#         sp_price, dwelling_size_sp, SP_code, grid):
-#     """d."""
-#     formal_structure_cost = sp_price * dwelling_size_sp
-#     # TODO: check if deprecated
-#     formal_structure_cost = inpdt.SP_to_grid_2011_1(
-#         formal_structure_cost, SP_code, grid)
-#     formal_structure_cost[np.isinf(formal_structure_cost)] = np.nan
-#     formal_structure_cost[(formal_structure_cost) > 2000000] = 2000000
-
-#     return formal_structure_cost
-
-
-def compute_formal_structure_cost_method2(
+def compute_formal_structure_cost(
         initial_state_rent, param, interest_rate, coeff_land,
         initial_state_households_housing_types, construction_coeff):
-    """Compute value of damaged formal structure capital."""
+    """
+    Estimate construction costs of formal private housing structures in space.
+
+    Note that the estimation process relies on a theoretical relation linking
+    market prices to capital values. The value obtained is therefore an
+    outcome of the model, and may not correspond to accounting estimates that
+    are common in the impact evaluation literature.
+
+    Parameters
+    ----------
+    initial_state_rent : ndarray(float64, ndim=2)
+        Average annual rent (in rands) per grid cell for each housing type (4)
+    param : dict
+        Dictionary of default parameters
+    interest_rate : float64
+        Real interest rate for the overall economy, corresponding to an average
+        over past years
+    coeff_land : ndarray(float64, ndim=2)
+        Updated land availability for each grid cell (24,014) and each
+        housing type (4: formal private, informal backyards, informal
+        settlements, formal subsidized)
+    initial_state_households_housing_types : ndarray(float64, ndim=2)
+        Number of households per grid cell in each housing type (4)
+    construction_coeff : ndarray(float64)
+        (Calibrated) scale factor for the construction function of formal
+        private developers
+
+    Returns
+    -------
+    formal_structure_cost : ndarray(float64)
+        Estimated construction cost of formal private housing structures, based
+        on their market capital values, per grid cell (24,014)
+
+    """
     # We convert price to capital per unit of land
     price_simul = (
         initial_state_rent[0, :] * construction_coeff * param["coeff_b"]
         / (interest_rate + param["depreciation_rate"])
         ) ** (1/param["coeff_a"])
-    # TODO: use corrected version of equilibrium output
+    # TODO: Difference with variable below?
     # price_simul = initial_state_capital_land[0, :]
+
     # We multiply by available land area, and average the output across
     # households
     np.seterr(divide='ignore', invalid='ignore')
@@ -516,8 +796,6 @@ def compute_formal_structure_cost_method2(
         price_simul * (250000) * coeff_land[0, :]
         / initial_state_households_housing_types[0, :])
     formal_structure_cost[np.isinf(formal_structure_cost)] = np.nan
-    # TODO: Should we put a cap? Are there negative values?
-    # formal_structure_cost[(formal_structure_cost) > 2000000] = 2000000
 
     return formal_structure_cost
 
@@ -527,19 +805,48 @@ def compute_content_cost(
         income_net_of_commuting_costs, param,
         fraction_capital_destroyed, initial_state_rent,
         initial_state_dwelling_size, interest_rate):
-    """Compute value of damaged composite good."""
+    """
+    Estimate value of flood-prone composite good consumption in space.
+
+    Again, this is based on model outcomes. Since cost estimates are specific
+    to housing type, we rely on an estimation of average income per housing
+    type that we plug into households' budget constraint.
+
+    Parameters
+    ----------
+    initial_state_household_centers : ndarray(float64, ndim=2)
+        Number of households per grid cell in each income group (4)
+    initial_state_housing_supply : ndarray(float64, ndim=2)
+        Housing supply per unit of available land (in m² per km²)
+        for each housing type (4) in each grid cell
+    income_net_of_commuting_costs : ndarray(float64, ndim=2)
+        Expected annual income net of commuting costs (in rands, for
+        one household), for each geographic unit, by income group (4)
+    param : dict
+        Dictionary of default parameters
+    fraction_capital_destroyed : DataFrame
+        Data frame of expected fractions of capital destroyed, for housing
+        structures and contents in different housing types, in each
+        grid cell (24,014)
+    initial_state_rent : ndarray(float64, ndim=2)
+        Average annual rent (in rands) per grid cell for each housing type (4)
+    initial_state_dwelling_size : ndarray(float64, ndim=2)
+        Average dwelling size (in m²) per grid cell in each housing type (4)
+    interest_rate : float64
+        Real interest rate for the overall economy, corresponding to an average
+        over past years
+
+    Returns
+    -------
+    content_cost : DataFrame
+        Estimated value of composite good consumption that is considered as
+        flood-prone, for each grid cell (24,014) and each housing type (4)
+
+    """
     content_cost = pd.DataFrame()
 
-    # We recover net income for dominant income group
-    # TODO: should we?
-    # income_class = np.nanargmax(initial_state_household_centers, 0)
-    # income_temp = np.empty(24014)
-    # income_temp[:] = np.nan
-    # for i in range(0, 24014):
-    #     income_temp[i] = income_net_of_commuting_costs[
-    #         int(income_class[i]), i]
-    # income_temp[income_temp < 0] = np.nan
-
+    # We estimate average incomes net of commuting costs in space, per housing
+    # type
     np.seterr(divide='ignore', invalid='ignore')
     income_formal = np.nansum(
         income_net_of_commuting_costs * initial_state_household_centers
@@ -554,9 +861,10 @@ def compute_content_cost(
     income_subsidized = income_net_of_commuting_costs[0, :]
     income_subsidized[income_subsidized < 0] = np.nan
 
-    # We define fraction of capital destroyed for formal subsidized in zones
-    # where relevant?
-    # TODO: put nans?
+    # We also define other useful variables
+
+    # First, the fraction of capital destroyed in formal subsidized housing
+    # (that pops up in those households' budget constraint)
     capital_destroyed = np.zeros(
         len(fraction_capital_destroyed.structure_formal_2))
     # capital_destroyed[:] = np.nan
@@ -567,27 +875,14 @@ def compute_content_cost(
      ) = fraction_capital_destroyed.structure_subsidized_1[
          initial_state_dwelling_size[3, :] <= param["threshold"]]
 
-    # TODO: replace with housing supply
-    # fraction_backyard = (
-    #     param["alpha"]
-    #     * (param["RDP_size"] + param["backyard_size"] - param["q0"])
-    #     / (param["backyard_size"])
-    #     - param["beta"]
-    #     * (income_net_of_commuting_costs[0, :]
-    #         - (capital_destroyed + param["depreciation_rate"])
-    #         * param["subsidized_structure_value"])
-    #     / (param["backyard_size"] * initial_state_rent[1, :])
-    #     )
+    # Then, the fraction of RDP backyard (per grid cell) that is rented out
+    # in equilibrium (in m²/m²). We remind that this corresponds to the
+    # housing supply per unit of available land for informal backyards.
     fraction_backyard = initial_state_housing_supply[1, :] / 1000000
-    # TODO: do we want to keep nans?
-    # fraction_backyard[initial_state_rent[1, :] == 0] = 0
-    # fraction_backyard[fraction_backyard < 0] = np.nan
-    # fraction_backyard[fraction_backyard == np.inf] = np.nan
-    # fraction_backyard = np.minimum(fraction_backyard, 1)
-    # fraction_backyard = np.maximum(fraction_backyard, 0)
 
     # We just multiply the amount of composite good from the budget constraint
-    # by the share parameter
+    # by the share parameter to obtain cost estimates
+
     content_cost["formal"] = (
         param["fraction_z_dwellings"]
         / (1 + param["fraction_z_dwellings"]
@@ -595,13 +890,7 @@ def compute_content_cost(
         * (income_formal
            - initial_state_rent[0, :] * initial_state_dwelling_size[0, :])
         )
-    # TODO: is it useful given that we correct in the end?
-    # content_cost.formal[
-    #     income_temp
-    #     - initial_state_rent[0, :] * initial_state_dwelling_size[0, :] < 0
-    #     ] = np.nan
-    # TODO: should we put a floor on damage values?
-    # content_cost.formal[content_cost.formal < (0.2 * income_temp)] = np.nan
+
     content_cost["informal"] = (
         param["fraction_z_dwellings"]
         / (1 + param["fraction_z_dwellings"]
@@ -613,6 +902,7 @@ def compute_content_cost(
            - (interest_rate + param["depreciation_rate"])
            * param["informal_structure_value"])
         )
+
     content_cost["subsidized"] = (
         param["fraction_z_dwellings"]
         / (1 + param["fraction_z_dwellings"]
@@ -623,6 +913,7 @@ def compute_content_cost(
            - (capital_destroyed + param["depreciation_rate"])
            * param["subsidized_structure_value"])
         )
+
     content_cost["backyard"] = (
         param["fraction_z_dwellings"] /
         (1 + param["fraction_z_dwellings"]
@@ -634,19 +925,53 @@ def compute_content_cost(
            - (interest_rate + param["depreciation_rate"])
            * param["informal_structure_value"])
         )
+
     content_cost[content_cost < 0] = np.nan
 
     return content_cost
 
 
-def create_flood_dict(flood_type, path_floods, path_tables,
+def create_flood_dict(floods, path_floods, path_tables,
                       sim_nb_households_poor, sim_nb_households_midpoor,
                       sim_nb_households_midrich, sim_nb_households_rich):
-    """Create dictionary for household distribution in each flood maps."""
+    """
+    Create dictionary for household distribution in a given set of flood maps.
+
+    The spatial distribution is broken into income groups, as this is the
+    relevant dimension in the plot_flood_severity_distrib function
+    (export_outputs_floods module) that takes the output of this function as an
+    argument.
+
+    Parameters
+    ----------
+    floods : list
+        List of file names for available flood maps per return period and flood
+        type
+    path_floods : str
+        Path towards flood maps directory
+    path_tables : str
+        Path for saving output plots
+    sim_nb_households_poor : Series
+        Number of poor households, per grid cell
+    sim_nb_households_midpoor : Series
+        Number of mid-poor households, per grid cell
+    sim_nb_households_midrich : Series
+        Number of mid-rich households, per grid cell
+    sim_nb_households_rich : Series
+        Number of rich households, per grid cell
+
+    Returns
+    -------
+    dictio : dict
+        Dictionary yielding, for each return period of a given flood type, the
+        spatial distribution of households broken into income groups, along
+        with the maximum flood depth level and fraction of flood-prone area in
+        their residential location
+
+    """
     dictio = {}
-    for flood in flood_type:
+    for flood in floods:
         print(flood)
-        # TODO: could add housing types if needed
         flood_data = np.squeeze(pd.read_excel(path_floods + flood + ".xlsx"))
         sim_poor_index = pd.DataFrame(sim_nb_households_poor)
         sim_midpoor_index = pd.DataFrame(sim_nb_households_midpoor)

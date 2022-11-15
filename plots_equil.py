@@ -514,23 +514,12 @@ FAR_rdp_2d_sim = outexp.export_map(
 # %% HOUSING PRICE OUTPUTS
 
 # First in one dimension
-# housing_price_1d, data_land_price = outexp.validation_housing_price(
-#     grid, initial_state_rent, interest_rate, param, center,
-#     housing_types_sp, data_sp, path_plots, path_tables,
-#     land_price=1)
-# housing_price_1d, data_housing_price = outexp.validation_housing_price(
-#     grid, initial_state_rent, interest_rate, param, center,
-#     housing_types_sp, data_sp, path_plots, path_tables,
-#     land_price=0)
-
-land_price_1d, data_land_price = outexp.validation_housing_price_test(
-    grid, initial_state_rent, initial_state_households_housing_types,
-    interest_rate, param, center,
+housing_price_1d, data_land_price = outexp.validation_housing_price(
+    grid, initial_state_rent, interest_rate, param, center,
     housing_types_sp, data_sp, path_plots, path_tables,
     land_price=1)
-housing_price_1d, data_housing_price = outexp.validation_housing_price_test(
-    grid, initial_state_rent, initial_state_households_housing_types,
-    interest_rate, param, center,
+housing_price_1d, data_housing_price = outexp.validation_housing_price(
+    grid, initial_state_rent, interest_rate, param, center,
     housing_types_sp, data_sp, path_plots, path_tables,
     land_price=0)
 
@@ -838,7 +827,7 @@ content_cost = outfld.compute_content_cost(
     initial_state_dwelling_size, interest_rate)
 
 # NB: note that capital is in monetary values
-formal_structure_cost = outfld.compute_formal_structure_cost_method2(
+formal_structure_cost = outfld.compute_formal_structure_cost(
         initial_state_rent, param, interest_rate, coeff_land,
         initial_state_households_housing_types, param["coeff_A"])
 

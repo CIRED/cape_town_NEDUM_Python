@@ -130,7 +130,7 @@ def import_income_classes_data(param, path_data):
         income (at baseline year)
     households_per_income_and_housing : ndarray(float64, ndim=2)
         Exogenous number of households per income group (4, from poorest to
-        # richest) in each endogenous housing type (3: formal private,
+        richest) in each endogenous housing type (3: formal private,
         informal backyards, informal settlements), from SP-level data
 
     """

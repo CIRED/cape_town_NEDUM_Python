@@ -1058,7 +1058,7 @@ content_cost = outfld.compute_content_cost(
     fraction_capital_destroyed, initial_state_rent,
     initial_state_dwelling_size, interest_rate)
 
-formal_structure_cost = outfld.compute_formal_structure_cost_method2(
+formal_structure_cost = outfld.compute_formal_structure_cost(
         initial_state_rent, param, interest_rate, coeff_land,
         initial_state_households_housing_types, param["coeff_A"])
 # endregion

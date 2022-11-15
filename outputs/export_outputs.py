@@ -10,7 +10,23 @@ from scipy.interpolate import griddata
 
 
 def retrieve_name(var, depth):
-    """Retrieve name of a variable."""
+    """
+    Return a string for the name of a variable.
+
+    Parameters
+    ----------
+    var :
+        Any variable
+    depth : int
+        Depth level of the function call (indicates how deep it should go to
+        retrieve the original name of the variable): from 0 to 2
+
+    Returns
+    -------
+    str
+        Name of input variable
+
+    """
     if depth == 0:
         (callers_local_vars
          ) = inspect.currentframe().f_back.f_back.f_locals.items()
@@ -26,7 +42,22 @@ def retrieve_name(var, depth):
 
 
 def from_df_to_gdf(array, geo_grid):
-    """Convert map array/series inputs into grid-level GeoDataFrames."""
+    """
+    Convert map array/series inputs into grid-level GeoDataFrames.
+
+    Parameters
+    ----------
+    array : ndarray
+        Any array with a grid geographic dimension
+    geo_grid : GeoDataFrames
+        Data frame with geometry for the analysis grid (24,014 points)
+
+    Returns
+    -------
+    gdf : GeoDataFrame
+        Data frame with geolocalized observations from input array
+
+    """
     # Convert array or series to data frame
     df = pd.DataFrame(array)
     str_array = retrieve_name(array, depth=1)
@@ -39,7 +70,40 @@ def from_df_to_gdf(array, geo_grid):
 def export_map(value, grid, geo_grid, path_plots, export_name, title,
                path_tables,
                ubnd, lbnd=0, cmap='Reds'):
-    """Generate 2D heat maps of any spatial input."""
+    """
+    Generate 2D heat maps of any spatial input.
+
+    Parameters
+    ----------
+    value : ndarray
+        Any one-dimensional array with values given at grid level
+    grid : DataFrame
+        Table yielding, for each grid cell (24,014), its x and y
+        (centroid) coordinates, and its distance (in km) to the city centre
+    geo_grid : GeoDataFrames
+        Data frame with geometry for the analysis grid (24,014 points)
+    path_plots : str
+        Path for saving output plots
+    export_name : str
+        Name given to saved output file
+    title : str
+        Title given tou output plot
+    path_tables : str
+        Path for saving output plots
+    ubnd : float64
+        Upper bound for plotted values
+    lbnd : float64, optional
+        Lower bound for plotted values. The default is 0.
+    cmap : str, optional
+        Type of choropleth map to be plotted (see pyplot options). The default
+        is 'Reds'.
+
+    Returns
+    -------
+    gdf : GeoDataFrame
+        Data frame with geolocalized observations from input array
+
+    """
     plt.figure(figsize=(10, 7))
     Map = plt.scatter(grid.x,
                       grid.y,
@@ -72,7 +136,29 @@ def export_map(value, grid, geo_grid, path_plots, export_name, title,
 
 
 def import_employment_geodata(households_per_income_class, param, path_data):
-    """Import number of jobs per selected employment center."""
+    """
+    Import number of jobs per selected employment center.
+
+    Parameters
+    ----------
+    households_per_income_class : ndarray(float64)
+        Exogenous total number of households per income group (excluding people
+        out of employment, for 4 groups)
+    param : dict
+        Dictionary of default parameters
+    path_data : str
+        Path towards data used in the model
+
+    Returns
+    -------
+    jobsTable : DataFrame
+        Number of jobs in each selected job center (185) per income group (4),
+        with x and y coordinates
+    selected_centers : ndarray(bool)
+        Array of dummies for selecting employment centers above some number of
+        jobs threshold (185), out of the total set of transport zones (1787)
+
+    """
     # Number of jobs per Transport Zone (TZ)
     TAZ = pd.read_csv(path_data + 'TAZ_amp_2013_proj_centro2.csv')
 
@@ -136,7 +222,30 @@ def import_employment_geodata(households_per_income_class, param, path_data):
 def export_housing_types(
         housing_type_1, housing_type_2,
         legend1, legend2, path_plots, path_tables):
-    """Bar plot for equilibrium output across housing types."""
+    """
+    Validation bar plot for number of simulated households per housing type.
+
+    Parameters
+    ----------
+    housing_type_1 : ndarray(float64, ndim=2)
+        Number of simulated households per grid cell in each housing type (4)
+    housing_type_2 : ndarray(float64, ndim=2)
+        Number of households from data per grid cell in each housing type (4)
+    legend1 : str
+        Legend for first array
+    legend2 : str
+        Legend for second array
+    path_plots : str
+        Path for saving output plots
+    path_tables : str
+        Path for saving output plots
+
+    Returns
+    -------
+    data : DataFrame
+        Validation table for number of simulated households per housing type
+
+    """
     figure, axis = plt.subplots(1, 1, figsize=(10, 7))
     # figure.tight_layout()
     data = pd.DataFrame(
@@ -160,9 +269,41 @@ def export_housing_types(
 def export_households(
         initial_state_households, households_per_income_and_housing,
         legend1, legend2, path_plots, path_tables):
-    """Bar plot for equilibrium output across housing and income groups."""
-    # We apply same reweighting as in equilibrium to match aggregate
-    # SAL data
+    """
+    Validation bar plot for nb of households across housing and income groups.
+
+    Parameters
+    ----------
+    initial_state_households : ndarray(float64, ndim=3)
+        Number of households per grid cell in each income group (4) and
+        each housing type (4)
+    households_per_income_and_housing : ndarray(float64, ndim=2)
+        Exogenous number of households per income group (4, from poorest to
+        richest) in each endogenous housing type (3: formal private,
+    legend1 : str
+        Legend for first array
+    legend2 : str
+        Legend for second array
+    path_plots : str
+        Path for saving output plots
+    path_tables : str
+        Path for saving output plots
+
+    Returns
+    -------
+    data0 : DataFrame
+        Validation table for simulated number of households across income
+        groups in formal private housing
+    data1 : DataFrame
+        Validation table for simulated number of households across income
+        groups in informal backyards
+    data2 : DataFrame
+        Validation table for simulated number of households across income
+        groups in informal settlements
+
+    """
+    # We apply same reweighting as in equilibrium to match aggregates
+    # from SAL data
     ratio = (np.nansum(initial_state_households)
              / np.nansum(households_per_income_and_housing))
     households_per_income_and_housing = (
@@ -175,7 +316,6 @@ def export_households(
         0)
     # NB: note that we do not plot RDP as we do not have its breakdown
     # across income groups (and we assumed only the poorest were eligible)
-    # TODO: make sure that formal private does not contain formal backyards
 
     data0 = pd.DataFrame(
         {legend1: np.nansum(initial_state_households[0, :, :], 1),
@@ -232,13 +372,37 @@ def export_households(
 def validation_density(
         grid, initial_state_households_housing_types, housing_types,
         path_plots, path_tables):
-    """Line plot for household density across space in 1D."""
+    """
+    Validation line plot for household density across space in 1D.
+
+    Parameters
+    ----------
+    grid : DataFrame
+        Table yielding, for each grid cell (24,014), its x and y
+        (centroid) coordinates, and its distance (in km) to the city centre
+    initial_state_households_housing_types : ndarray(float64, ndim=2)
+        Number of households per grid cell in each housing type (4)
+    housing_types : DataFrame
+        Table yielding, for 4 different housing types (informal settlements,
+        formal backyards, informal backyards, and formal private housing),
+        the number of households in each grid cell (24,014), from SAL data.
+    path_plots : str
+        Path for saving output plots
+    path_tables : str
+        Path for saving output plots
+
+    Returns
+    -------
+    df : DataFrame
+        Validation table for household density across space in 1D.
+
+    """
     # Note that formal data here includes RDP
     sum_housing_types = (housing_types.informal_grid
                          + housing_types.formal_grid
                          + housing_types.backyard_informal_grid)
 
-    # Population
+    # Population density (per km²)
     xData = grid.dist
     yData = sum_housing_types / 0.25
     ySimul = np.nansum(
@@ -285,7 +449,32 @@ def validation_density(
 def validation_density_housing_types(
         grid, initial_state_households_housing_types, housing_types,
         path_plots, path_tables):
-    """Line plot for number of households per housing type across 1D-space."""
+    """
+    Validation line plot for nb of households per housing type across 1D-space.
+
+    Parameters
+    ----------
+    grid : DataFrame
+        Table yielding, for each grid cell (24,014), its x and y
+        (centroid) coordinates, and its distance (in km) to the city centre
+    initial_state_households_housing_types : ndarray(float64, ndim=2)
+        Number of households per grid cell in each housing type (4)
+    housing_types : DataFrame
+        Table yielding, for 4 different housing types (informal settlements,
+        formal backyards, informal backyards, and formal private housing),
+        the number of households in each grid cell (24,014), from SAL data.
+    path_plots : str
+        Path for saving output plots
+    path_tables : str
+        Path for saving output plots
+
+    Returns
+    -------
+    df : DataFrame
+        Validation table for number of households (no density) per housing type
+        across 1D-space.
+
+    """
     # Housing types
     xData = grid.dist
     #  Here, we take RDP out of formal housing to plot formal private
@@ -393,7 +582,31 @@ def validation_density_housing_types(
 def simulation_density_housing_types(
         grid, initial_state_households_housing_types,
         path_plots, path_tables):
-    """Line plot for number of households per housing type across 1D-space."""
+    """
+    Line plot for number of households per housing type across 1D-space.
+
+    This is used specifically for subsequent periods where no validation data
+    is available.
+
+    Parameters
+    ----------
+    grid : DataFrame
+        Table yielding, for each grid cell (24,014), its x and y
+        (centroid) coordinates, and its distance (in km) to the city centre
+    initial_state_households_housing_types : ndarray(float64, ndim=2)
+        Number of households per grid cell in each housing type (4)
+    path_plots : str
+        Path for saving output plots
+    path_tables : str
+        Path for saving output plots
+
+    Returns
+    -------
+    df : DataFrame
+        Table for number of households (no density) per housing type across
+        1D-space.
+
+    """
     # Housing types
     xData = grid.dist
     formal_simul = initial_state_households_housing_types[0, :]
@@ -444,7 +657,32 @@ def simulation_density_housing_types(
 def validation_density_income_groups(
         grid, initial_state_household_centers, income_distribution_grid,
         path_plots, path_tables):
-    """Line plot for number of households per income group across 1D-space."""
+    """
+    Validation line plot for nb of households per income group across 1D-space.
+
+    Parameters
+    ----------
+    grid : DataFrame
+        Table yielding, for each grid cell (24,014), its x and y
+        (centroid) coordinates, and its distance (in km) to the city centre
+    initial_state_household_centers : ndarray(float64, ndim=2)
+        Number of households per grid cell in each income group (4)
+        at baseline year (2011)
+    income_distribution_grid : ndarray(uint16, ndim=2)
+        Exogenous number of households in each grid cell (24,014) for each
+        income group in the model (4)
+    path_plots : str
+        Path for saving output plots
+    path_tables : str
+        Path for saving output plots
+
+    Returns
+    -------
+    df : DataFrame
+        Validation table for nb of households per income group across 1D-space
+        (no density)
+
+    """
     # We apply same reweighting as in equilibrium to match aggregate
     # SAL data
     ratio = (np.nansum(initial_state_household_centers)
@@ -548,7 +786,32 @@ def validation_density_income_groups(
 def simulation_density_income_groups(
         grid, initial_state_household_centers,
         path_plots, path_tables):
-    """Line plot for number of households per income group across 1D-space."""
+    """
+    Line plot for number of households per income group across 1D-space.
+
+    This is used specifically for subsequent periods when validation data is
+    not available.
+
+    Parameters
+    ----------
+    grid : DataFrame
+        Table yielding, for each grid cell (24,014), its x and y
+        (centroid) coordinates, and its distance (in km) to the city centre
+    initial_state_household_centers : ndarray(float64, ndim=2)
+        Number of households per grid cell in each income group (4)
+        at baseline year (2011)
+    path_plots : str
+        Path for saving output plots
+    path_tables : str
+        Path for saving output plots
+
+    Returns
+    -------
+    df : DataFrame
+        Table for number of households per income group across 1D-space (no
+        density)
+
+    """
     # Income groups
     xData = grid.dist
     poor_simul = initial_state_household_centers[0, :]
@@ -596,7 +859,29 @@ def simulation_density_income_groups(
 
 def validation_density_housing_and_income_groups(
         grid, initial_state_households, path_plots, path_tables):
-    """Plot number of HHs per housing and income group across 1D-space."""
+    """
+    Line plot per housing and income groups across 1D-space (no validation).
+
+    Parameters
+    ----------
+    grid : DataFrame
+        Table yielding, for each grid cell (24,014), its x and y
+        (centroid) coordinates, and its distance (in km) to the city centre
+    initial_state_households : ndarray(float64, ndim=3)
+        Number of households per grid cell in each income group (4) and
+        each housing type (4)
+    path_plots : str
+        Path for saving output plots
+    path_tables : str
+        Path for saving output plots
+
+    Returns
+    -------
+    df : Dataframe
+        Validation table for number of households (no density) per housing and
+        income groups across 1D-space
+
+    """
     # Housing and income groups
     xData = grid.dist
 
@@ -687,7 +972,28 @@ def validation_density_housing_and_income_groups(
 
 def plot_income_net_of_commuting_costs(
         grid, income_net_of_commuting_costs, path_plots, path_tables):
-    """Plot avg income net of commuting costs across 1D-space."""
+    """
+    Line plot for average income net of commuting costs across 1D-space.
+
+    Parameters
+    ----------
+    grid : DataFrame
+        Table yielding, for each grid cell (24,014), its x and y
+        (centroid) coordinates, and its distance (in km) to the city centre
+    income_net_of_commuting_costs : ndarray(float64, ndim=2)
+        Expected annual income net of commuting costs (in rands, for
+        one household), for each geographic unit, by income group (4)
+    path_plots : str
+        Path for saving output plots
+    path_tables : str
+        Path for saving output plots
+
+    Returns
+    -------
+    df : DataFrame
+        Table for average income net of commuting costs across 1D-space
+
+    """
     # Housing and income groups
     xData = grid.dist
 
@@ -735,7 +1041,27 @@ def plot_income_net_of_commuting_costs(
 
 def plot_average_income(
         grid, average_income, path_plots, path_tables):
-    """Plot average income across 1D-space."""
+    """
+    Line plot for average income across 1D-space.
+
+    Parameters
+    ----------
+    grid : DataFrame
+        Table yielding, for each grid cell (24,014), its x and y
+        (centroid) coordinates, and its distance (in km) to the city centre
+    average_income : ndarray(float64)
+        Average median income for each income group in the model (4)
+    path_plots : str
+        Path for saving output plots
+    path_tables : str
+        Path for saving output plots
+
+    Returns
+    -------
+    df : DataFrame
+        Table for average income across 1D-space.
+
+    """
     # Housing and income groups
     xData = grid.dist
 
@@ -784,7 +1110,31 @@ def plot_average_income(
 def validate_average_income(
         grid, overall_avg_income, data_avg_income,
         path_plots, path_tables):
-    """Validate overall average income across 1D-space."""
+    """
+    Validation line plot for overall average income across 1D-space.
+
+    Parameters
+    ----------
+    grid : DataFrame
+        Table yielding, for each grid cell (24,014), its x and y
+        (centroid) coordinates, and its distance (in km) to the city centre
+    overall_avg_income : ndarray(float64)
+        Average income per grid cell (24,014) weighted across income groups,
+        obtained from calibrated incomes
+    data_avg_income : ndarray(float64)
+        Average income per grid cell (24,014) weighted across income groups,
+        obtained from validation data
+    path_plots : str
+        Path for saving output plots
+    path_tables : str
+        Path for saving output plots
+
+    Returns
+    -------
+    df : DataFrame
+        Validation table for overall average income across 1D-space
+
+    """
     # Housing and income groups
     xData = grid.dist
 
@@ -821,7 +1171,30 @@ def validate_average_income(
 
 def plot_housing_supply(grid, initial_state_housing_supply, path_plots,
                         path_tables):
-    """Line plot of avg housing supply per type and unit of available land."""
+    """
+    Line plot for housing supply per unit of available land across 1D-space.
+
+    Breakdown is given per housing type.
+
+    Parameters
+    ----------
+    grid : DataFrame
+        Table yielding, for each grid cell (24,014), its x and y
+        (centroid) coordinates, and its distance (in km) to the city centre
+    initial_state_housing_supply : ndarray(float64, ndim=2)
+        Housing supply per unit of available land (in m² per km²)
+        for each housing type (4) in each grid cell
+    path_plots : str
+        Path for saving output plots
+    path_tables : str
+        Path for saving output plots
+
+    Returns
+    -------
+    df : DataFrame
+        Table for housing supply per unit of available land across 1D-space
+
+    """
     xData = grid.dist
     formal_simul = initial_state_housing_supply[0, :]
     backyard_simul = initial_state_housing_supply[1, :]
@@ -868,14 +1241,37 @@ def plot_housing_supply(grid, initial_state_housing_supply, path_plots,
     return df
 
 
-def plot_housing_supply_noland(grid, housing_supply, path_plots,
+def plot_housing_supply_noland(grid, initial_state_housing_supply, path_plots,
                                path_tables):
-    """Line plot of total housing supply per type across 1D-space."""
+    """
+    Line plot for housing supply (no land availability) across 1D-space.
+
+    Breakdown is given per housing type.
+
+    Parameters
+    ----------
+    grid : DataFrame
+        Table yielding, for each grid cell (24,014), its x and y
+        (centroid) coordinates, and its distance (in km) to the city centre
+    initial_state_housing_supply : ndarray(float64, ndim=2)
+        Housing supply per unit of available land (in m² per km²)
+        for each housing type (4) in each grid cell
+    path_plots : str
+        Path for saving output plots
+    path_tables : str
+        Path for saving output plots
+
+    Returns
+    -------
+    df : DataFrame
+        Table for housing supply (no land availability) across 1D-space
+
+    """
     xData = grid.dist
-    formal_simul = housing_supply[0, :]
-    backyard_simul = housing_supply[1, :]
-    informal_simul = housing_supply[2, :]
-    rdp_simul = housing_supply[3, :]
+    formal_simul = initial_state_housing_supply[0, :]
+    backyard_simul = initial_state_housing_supply[1, :]
+    informal_simul = initial_state_housing_supply[2, :]
+    rdp_simul = initial_state_housing_supply[3, :]
 
     df = pd.DataFrame(
         data=np.transpose(np.array(
@@ -917,107 +1313,48 @@ def plot_housing_supply_noland(grid, housing_supply, path_plots,
     return df
 
 
-def validation_housing_price(
-        grid, initial_state_rent, interest_rate, param, center,
-        housing_types_sp, data_sp,
-        path_plots, path_tables, land_price):
-    """Plot land price per housing type across space."""
-    sp_x = housing_types_sp["x_sp"]
-    sp_y = housing_types_sp["y_sp"]
-    sp_price = data_sp["price"]
-
-    if land_price == 1:
-        priceSimul = (
-            ((initial_state_rent[0:3, :] * param["coeff_A"])
-             / (interest_rate + param["depreciation_rate"]))
-            ** (1 / param["coeff_a"])
-            * param["coeff_a"]
-            * param["coeff_b"] ** (param["coeff_b"] / param["coeff_a"])
-            )
-    elif land_price == 0:
-        priceSimul = initial_state_rent
-
-    priceSimulPricePoints_formal = griddata(
-        np.transpose(np.array([grid.x, grid.y])),
-        priceSimul[0, :],
-        np.transpose(np.array([sp_x, sp_y]))
-        )
-    priceSimulPricePoints_informal = griddata(
-        np.transpose(np.array([grid.x, grid.y])),
-        priceSimul[1, :],
-        np.transpose(np.array([sp_x, sp_y]))
-        )
-    priceSimulPricePoints_backyard = griddata(
-        np.transpose(np.array([grid.x, grid.y])),
-        priceSimul[2, :],
-        np.transpose(np.array([sp_x, sp_y]))
-        )
-
-    xData = np.sqrt((sp_x - center[0]) ** 2 + (sp_y - center[1]) ** 2)
-    # TODO: check need to redefine
-    if land_price == 1:
-        yData = sp_price
-    elif land_price == 0:
-        yData = (sp_price ** param["coeff_a"]
-                 / (param["coeff_a"] ** param["coeff_a"]
-                    * param["coeff_b"]**param["coeff_b"])
-                 * (interest_rate + param["depreciation_rate"])
-                 / param["coeff_A"]
-                 )
-    # xSimulation = xData
-    ySimulation = priceSimulPricePoints_formal
-    informalSimul = priceSimulPricePoints_informal
-    backyardSimul = priceSimulPricePoints_backyard
-
-    df = pd.DataFrame(
-        data=np.transpose(np.array([xData, yData, ySimulation, informalSimul,
-                                    backyardSimul])),
-        columns=["xData", "yData", "ySimulation", "informalSimul",
-                 "backyardSimul"])
-    df["round"] = round(df.xData)
-    new_df = df.groupby(['round']).mean()
-
-    which = ~np.isnan(new_df.yData) & ~np.isnan(new_df.ySimulation)
-    which_informal = ~np.isnan(new_df.informalSimul)
-    which_backyard = ~np.isnan(new_df.backyardSimul)
-
-    fig, ax = plt.subplots(figsize=(10, 7))
-    ax.plot(new_df.xData[which], new_df.yData[which],
-            color="black", label="Data")
-    ax.plot(new_df.xData[which], new_df.ySimulation[which],
-            color="green", label="Simul")
-    ax.plot(new_df.xData[which_informal], new_df.informalSimul[which_informal],
-            color="red", label="Informal")
-    ax.plot(new_df.xData[which_backyard], new_df.backyardSimul[which_backyard],
-            color="blue", label="Backyard")
-    ax.set_ylim(0)
-    ax.set_xlim([0, 50])
-    ax.yaxis.set_major_formatter(
-        mpl.ticker.StrMethodFormatter('{x:,.0f}'))
-    plt.xlabel("Distance to the city center (km)", labelpad=15)
-    if land_price == 1:
-        plt.ylabel("Land price (R/m² of land)", labelpad=15)
-    if land_price == 0:
-        plt.ylabel("Housing price (R/m² of housing)", labelpad=15)
-    plt.legend()
-    plt.tick_params(labelbottom=True)
-    plt.tick_params(bottom=True, labelbottom=True)
-    plt.savefig(path_plots + '/validation_housing_price'
-                + str(land_price) + '.png')
-    plt.close()
-
-    df.to_csv(path_tables + 'validation_housing_price'
-              + str(land_price) + '.csv')
-    print('validation_housing_price' + str(land_price) + ' done')
-
-    return df, yData
-
-
 def simulation_housing_price(
         grid, initial_state_rent, interest_rate, param, center,
         housing_types_sp,
         path_plots, path_tables, land_price):
-    """Plot land price per housing type across space."""
+    """
+    Line plot for housing prices price across 1D-space.
+
+    Breakdown is given per housing type. This function is specifically used
+    for subsequent periods when validation data is not available.
+
+    Parameters
+    ----------
+    grid : DataFrame
+        Table yielding, for each grid cell (24,014), its x and y
+        (centroid) coordinates, and its distance (in km) to the city centre
+    initial_state_rent : ndarray(float64, ndim=2)
+        Average annual rent (in rands) per grid cell for each housing type (4)
+    interest_rate : float64
+        Interest rate for the overall economy, corresponding to an average
+        over past years
+    param : dict
+        Dictionary of default parameters
+    center : ndarray(float64)
+        x and y coordinates of geographic centre of analysis grid
+    housing_types_sp : DataFrame
+        Table yielding, for each Small Place (1,046), the number of informal
+        backyards, of informal settlements, and total dwelling units, as well
+        as their (centroid) x and y coordinates
+    path_plots : str
+        Path for saving output plots
+    path_tables : str
+        Path for saving output plots
+    land_price : int
+        Dummy set to 1 or 0, depending on whether we want to consider
+        theoretical land price or annual housing rent
+
+    Returns
+    -------
+    df : DataFrame
+        Table for housing prices price across 1D-space
+
+    """
     sp_x = housing_types_sp["x_sp"]
     sp_y = housing_types_sp["y_sp"]
 
@@ -1098,11 +1435,55 @@ def simulation_housing_price(
     return df
 
 
-def validation_housing_price_test(
+def validation_housing_price(
         grid, initial_state_rent, initial_state_households_housing_types,
         interest_rate, param, center, housing_types_sp, data_sp,
         path_plots, path_tables, land_price):
-    """Plot land price per housing type across space."""
+    """
+    Validation line plot for housing prices price across 1D-space.
+
+    Breakdown is given per housing type.
+
+    Parameters
+    ----------
+    grid : DataFrame
+        Table yielding, for each grid cell (24,014), its x and y
+        (centroid) coordinates, and its distance (in km) to the city centre
+    initial_state_rent : ndarray(float64, ndim=2)
+        Average annual rent (in rands) per grid cell for each housing type (4)
+    interest_rate : float64
+        Interest rate for the overall economy, corresponding to an average
+        over past years
+    param : dict
+        Dictionary of default parameters
+    center : ndarray(float64)
+        x and y coordinates of geographic centre of analysis grid
+    housing_types_sp : DataFrame
+        Table yielding, for each Small Place (1,046), the number of informal
+        backyards, of informal settlements, and total dwelling units, as well
+        as their (centroid) x and y coordinates
+    data_sp : DataFrame
+        Table yielding, for each Small Place (1,046), the average dwelling size
+        (in m²), the average land price and annual income level (in rands),
+        the size of unconstrained area for construction (in m²), the total area
+        (in km²), the distance to the city centre (in km), whether or not the
+        location belongs to Mitchells Plain, and the SP code
+    path_plots : str
+        Path for saving output plots
+    path_tables : str
+        Path for saving output plots
+    land_price : int
+        Dummy set to 1 or 0, depending on whether we want to consider
+        theoretical land price or annual housing rent
+
+    Returns
+    -------
+    df : DataFrame
+        Validation table for housing prices price across 1D-space.
+    yData : Series
+        Validation housing prices
+
+    """
     sp_x = housing_types_sp["x_sp"]
     sp_y = housing_types_sp["y_sp"]
     sp_price = data_sp["price"]
@@ -1216,7 +1597,43 @@ def plot_housing_demand(grid, center, initial_state_dwelling_size,
                         initial_state_households_housing_types,
                         housing_types_sp, data_sp,
                         path_plots, path_tables):
-    """Plot average dwelling size in private formal across space."""
+    """
+    Line plot average dwelling size in formal private housing across 1D-space.
+
+    Note that this is a validation plot using data at SP level.
+
+    Parameters
+    ----------
+    grid : DataFrame
+        Table yielding, for each grid cell (24,014), its x and y
+        (centroid) coordinates, and its distance (in km) to the city centre
+    center : ndarray(float64)
+        x and y coordinates of geographic centre of analysis grid
+    initial_state_dwelling_size : ndarray(float64, ndim=2)
+        Average dwelling size (in m²) per grid cell in each housing
+        type (4)
+    initial_state_households_housing_types : ndarray(float64, ndim=2)
+        Number of households per grid cell in each housing type (4)
+    housing_types_sp : DataFrame
+        Table yielding, for each Small Place (1,046), the number of informal
+        backyards, of informal settlements, and total dwelling units, as well
+        as their (centroid) x and y coordinates
+    data_sp : DataFrame
+        Table yielding, for each Small Place (1,046), the average dwelling size
+        (in m²), the average land price and annual income level (in rands),
+        the size of unconstrained area for construction (in m²), the total area
+        (in km²), the distance to the city centre (in km), whether or not the
+        location belongs to Mitchells Plain, and the SP code
+    path_plots : str
+        Path for saving output plots
+    path_tables : str
+        Path for saving output plots
+
+    Returns
+    -------
+    None.
+
+    """
     sp_x = housing_types_sp["x_sp"]
     sp_y = housing_types_sp["y_sp"]
     sp_size = data_sp["dwelling_size"]
@@ -1273,7 +1690,34 @@ def plot_housing_demand(grid, center, initial_state_dwelling_size,
 def simul_housing_demand(grid, center, initial_state_dwelling_size,
                          initial_state_households_housing_types,
                          path_plots, path_tables):
-    """Plot average dwelling size in private formal across space."""
+    """
+    Line plot average dwelling size in formal private housing across 1D-space.
+
+    This is not a validation plot function, and it is specifically used for
+    subsequent periods when validation data is not available.
+
+    Parameters
+    ----------
+    grid : DataFrame
+        Table yielding, for each grid cell (24,014), its x and y
+        (centroid) coordinates, and its distance (in km) to the city centre
+    center : ndarray(float64)
+        x and y coordinates of geographic centre of analysis grid
+    initial_state_dwelling_size : ndarray(float64, ndim=2)
+        Average dwelling size (in m²) per grid cell in each housing
+        type (4)
+    initial_state_households_housing_types : ndarray(float64, ndim=2)
+        Number of households per grid cell in each housing type (4)
+    path_plots : str
+        Path for saving output plots
+    path_tables : str
+        Path for saving output plots
+
+    Returns
+    -------
+    None.
+
+    """
 
     # sizeSimulPoints = griddata(
     #     np.transpose(np.array([grid.x, grid.y])),
