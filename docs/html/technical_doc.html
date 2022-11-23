@@ -22,8 +22,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Input tables" href="input_tables.html" />
-    <link rel="prev" title="Use case" href="use_case.html" /> 
+    <link rel="next" title="Appendix" href="appendix.html" />
+    <link rel="prev" title="API reference" href="api_ref.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -43,12 +43,12 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="readme_link.html">Introducing NEDUM-2D</a></li>
-<li class="toctree-l1"><a class="reference internal" href="license_rst.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guidelines.html">General framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="use_case.html">Use case</a></li>
 <li class="toctree-l1"><a class="reference internal" href="main_nb.html">Notebook: run model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="calib_nb.html">Notebook: run calibration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="guidelines.html">User guidelines</a></li>
-<li class="toctree-l1"><a class="reference internal" href="use_case.html">Use case</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_ref.html">API reference</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Technical documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#code-walk-through">Code walk-through</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#inputs">Inputs</a><ul>
@@ -98,12 +98,9 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="input_tables.html">Input tables</a></li>
-<li class="toctree-l1"><a class="reference internal" href="data_bases.html">Data bases</a></li>
-<li class="toctree-l1"><a class="reference internal" href="data_sets.html">Key data sets</a></li>
-<li class="toctree-l1"><a class="reference internal" href="math_appendix.html">Math appendix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix.html">Appendix</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bibliography.html">Bibliography</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_ref.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license_rst.html">License</a></li>
 </ul>
 
         </div>
@@ -203,7 +200,7 @@
 </div>
 <div class="section" id="data">
 <h3>Data<a class="headerlink" href="#data" title="Permalink to this heading"></a></h3>
-<p>Then, the code calls on the <code class="docutils literal notranslate"><span class="pre">data.py</span></code> module. This allows to import basic geographic data, macro data, households and income data, land use projections, flood data, scenarios for time-dependent variables, and transport data (see <a class="reference internal" href="readme_link.html"><span class="doc">Introducing NEDUM-2D</span></a> for the appropriate tree structure to locate the data folder). The databases used are presented in <a class="reference internal" href="data_bases.html"><span class="doc">Data bases</span></a>. A more detailed view on the specific data sets called in the code, and their position in the folder architecture, is given in <a class="reference internal" href="data_sets.html"><span class="doc">Key data sets</span></a> <a class="footnote-reference brackets" href="#fdata" id="id7">6</a>.</p>
+<p>Then, the code calls on the <code class="docutils literal notranslate"><span class="pre">data.py</span></code> module. This allows to import basic geographic data, macro data, households and income data, land use projections, flood data, scenarios for time-dependent variables, and transport data (see <a class="reference internal" href="readme_link.html"><span class="doc">Setup</span></a> for the appropriate tree structure to locate the data folder). The databases used are presented in <a class="reference internal" href="data_bases.html"><span class="doc">Data bases</span></a>. A more detailed view on the specific data sets called in the code, and their position in the folder architecture, is given in <a class="reference internal" href="data_sets.html"><span class="doc">Key data sets</span></a> <a class="footnote-reference brackets" href="#fdata" id="id7">6</a>.</p>
 <p>It should be noted that, by default, housing type data (used for validation) has already been converted from the SAL (Small Area Level) dimension to the grid dimension (500x500m pixels) with the <code class="docutils literal notranslate"><span class="pre">import_sal_data</span></code> and <code class="docutils literal notranslate"><span class="pre">gen_small_areas_to_grid</span></code> functions, and that income net of commuting costs for each income group and each grid cell (from transport data) has already been computed from the calibrated incomes for each income group and each job center with the <code class="docutils literal notranslate"><span class="pre">import_transport_data</span></code> function. If one wants to run the process again, one needs to overwrite the associated default options (please note that this may take some time to run). The import of flood data (through the <code class="docutils literal notranslate"><span class="pre">import_full_floods_data</span></code>) is also a little time-consuming when agents are set to anticipate floods.</p>
 <p>A bit counter-intuitively, the scenario for the interest rate does not only serve to define future values of the variable (more on that in <a class="reference internal" href="#subsequent-periods"><span class="std std-ref">Subsequent periods</span></a>), but also its value at the initial state (as the raw data contains both past and future values). As part of the <code class="docutils literal notranslate"><span class="pre">import_macro_data</span></code> function, the <code class="docutils literal notranslate"><span class="pre">interest_rate</span></code> variable is defined as the average of past values over the past three years, through the <code class="docutils literal notranslate"><span class="pre">interpolate_interest_rate</span></code> function defined in the <code class="docutils literal notranslate"><span class="pre">functions_dynamic.py</span></code> module (included in the <code class="docutils literal notranslate"><span class="pre">equilibrium</span></code> package). This allows to smooth outcomes around a supposed equilibrium value:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">338</span>    <span class="c1">#  Import interest rate history + scenario until 2040</span>
@@ -319,7 +316,7 @@
 <span class="linenos">1965</span>            <span class="n">path_precalc_inp</span> <span class="o">+</span> <span class="s1">&#39;incomeCentersKeep.npy&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>From there, it computes several outputs, of which the key variable is the expected income net of commuting costs <span class="math notranslate nohighlight">\(\tilde{y}_i(x)\)</span>, earned by a household of income group <span class="math notranslate nohighlight">\(i\)</span> choosing to live in <span class="math notranslate nohighlight">\(x\)</span> matrix). It is obtained by recursively solving for the optimal transport mode choice and job center choice of households characterized by <span class="math notranslate nohighlight">\(i\)</span> and <span class="math notranslate nohighlight">\(x\)</span> (see <a class="reference internal" href="math_appendix.html"><span class="doc">Math appendix</span></a> for more details).</p>
+<p>From there, it computes several outputs, of which the key variable is the expected income net of commuting costs <span class="math notranslate nohighlight">\(\tilde{y}_i(x)\)</span>, earned by a household of income group <span class="math notranslate nohighlight">\(i\)</span> choosing to live in <span class="math notranslate nohighlight">\(x\)</span> matrix). It is obtained by recursively solving for the optimal transport mode choice and job center choice of households characterized by <span class="math notranslate nohighlight">\(i\)</span> and <span class="math notranslate nohighlight">\(x\)</span> (see <a class="reference internal" href="math_appendix.html"><span class="doc">Commuting choice model</span></a> for more details).</p>
 <div class="line-block">
 <div class="line"><br /></div>
 </div>
@@ -863,7 +860,7 @@
 </div>
 <div class="section" id="incomes-and-gravity-parameter">
 <h3>Incomes and gravity parameter<a class="headerlink" href="#incomes-and-gravity-parameter" title="Permalink to this heading"></a></h3>
-<p>We update the parameter vector with the newly calculated values and go on with the calibration of incomes <span class="math notranslate nohighlight">\(y_{ic}\)</span> and the gravity parameter <span class="math notranslate nohighlight">\(\lambda\)</span> (see <a class="reference internal" href="math_appendix.html"><span class="doc">Math appendix</span></a> for more details and definitions).</p>
+<p>We update the parameter vector with the newly calculated values and go on with the calibration of incomes <span class="math notranslate nohighlight">\(y_{ic}\)</span> and the gravity parameter <span class="math notranslate nohighlight">\(\lambda\)</span> (see <a class="reference internal" href="math_appendix.html"><span class="doc">Commuting choice model</span></a> for more details and definitions).</p>
 <p>In practice, we scan a set of predefined values for the parameter <span class="math notranslate nohighlight">\(\lambda\)</span> over which we determine the value of <span class="math notranslate nohighlight">\(y_{ic}\)</span>. We then aggregate the total distribution of residence-workplace distances, and compare it with the data aggregated from Cape Town’s Transport Survey 2013. We select the value of <span class="math notranslate nohighlight">\(\lambda\)</span>, and the associated <span class="math notranslate nohighlight">\(y_{ic}\)</span>, that minimizes a distance score between the coùputed distribution of commuting distances and aggregates from the data.</p>
 <p>In the code, this is done through the <code class="docutils literal notranslate"><span class="pre">estim_incomes_and_gravity</span></code> function. First, it imports the number of workers per income group in each selected job center (defined at the Transport Zone level) through the <code class="docutils literal notranslate"><span class="pre">import_employment_data</span></code> function (from the module of the same name).</p>
 <div class="section" id="transport-costs">
@@ -943,7 +940,7 @@
 <div class="section" id="income-calculation">
 <h4>Income calculation<a class="headerlink" href="#income-calculation" title="Permalink to this heading"></a></h4>
 <p>The <code class="docutils literal notranslate"><span class="pre">estim_incomes_and_gravity</span></code> function then goes on with the calibration of incomes per se. To do so, it calls on the <code class="docutils literal notranslate"><span class="pre">EstimateIncome</span></code> function (also from the <code class="docutils literal notranslate"><span class="pre">compute_income.py</span></code> module):</p>
-<p>Essentially, this function relies on the following equation (that can be recoverd following <a class="reference internal" href="math_appendix.html"><span class="doc">Math appendix</span></a>):</p>
+<p>Essentially, this function relies on the following equation (that can be recoverd following <a class="reference internal" href="math_appendix.html"><span class="doc">Commuting choice model</span></a>):</p>
 <div class="math notranslate nohighlight">
 \[W_{ic} = \chi_i \sum_{s} \pi_{c|is} N_{is}\]</div>
 <ul class="simple">
@@ -984,7 +981,7 @@
 </pre></div>
 </div>
 <p>Note that the convergence factors are numerical parameters with no interpretation per se, that are fine-tuned by trial and error to help convergence.</p>
-<p>Both the error term and the simulated distribution of residence-workplace distances are obtained as outputs of the <code class="docutils literal notranslate"><span class="pre">commutingSolve</span></code> function. Let us dig into its body. First, it computes the probability <span class="math notranslate nohighlight">\(\pi_{c|is} \)</span> function (again, see <a class="reference internal" href="math_appendix.html"><span class="doc">Math appendix</span></a> for more details on this function). Then, it simply defines the error term as the difference between the two sides of the above equation:</p>
+<p>Both the error term and the simulated distribution of residence-workplace distances are obtained as outputs of the <code class="docutils literal notranslate"><span class="pre">commutingSolve</span></code> function. Let us dig into its body. First, it computes the probability <span class="math notranslate nohighlight">\(\pi_{c|is} \)</span> function (again, see <a class="reference internal" href="math_appendix.html"><span class="doc">Commuting choice model</span></a> for more details on this function). Then, it simply defines the error term as the difference between the two sides of the above equation:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">784</span>    <span class="c1"># NB: correction is not needed a priori, as income distribution data from</span>
 <span class="linenos">785</span>    <span class="c1"># SP does not include people out of employment</span>
 <span class="linenos">786</span>    <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;correct_eq3&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
@@ -1233,7 +1230,7 @@
 <div class="section" id="fit-on-income-sorting">
 <h4>Fit on income sorting<a class="headerlink" href="#fit-on-income-sorting" title="Permalink to this heading"></a></h4>
 <p>Now, suppose we also want to optimize over the <span class="math notranslate nohighlight">\(\beta\)</span> and <span class="math notranslate nohighlight">\(q_0\)</span> parameters. We will need to comment out the part of the code where we set the scores associated with the two remaining data moments to zero. Then, let us comment on those data moments.</p>
-<p>Observed income sorting can be rationalized through a discrete-choice logit model (similar to the approach we take for modelling commuting choice in <a class="reference internal" href="math_appendix.html"><span class="doc">Math appendix</span></a>). According to bid-rent theory, we consider that households bid their true valuation and that land is allocated to the highest bidder. Identifying the group with the highest bids as the dominant group in the data, we can write the log-likelihood for income sorting as:</p>
+<p>Observed income sorting can be rationalized through a discrete-choice logit model (similar to the approach we take for modelling commuting choice in <a class="reference internal" href="math_appendix.html"><span class="doc">Commuting choice model</span></a>). According to bid-rent theory, we consider that households bid their true valuation and that land is allocated to the highest bidder. Identifying the group with the highest bids as the dominant group in the data, we can write the log-likelihood for income sorting as:</p>
 <div class="math notranslate nohighlight">
 \[\mathcal{l} = \sum_s (\frac{\Psi_{i(s)}(s)}{\lambda_{inc}}) - \sum_s \log(\sum_j e^{\frac{\Psi_{j}(s)}{\lambda_{inc}}})\]</div>
 <p>We recall that <span class="math notranslate nohighlight">\(\Psi_{j}(s)\)</span> stands for the bid rent of some income group <span class="math notranslate nohighlight">\(j\)</span> in Small Place <span class="math notranslate nohighlight">\(s\)</span>. <span class="math notranslate nohighlight">\(\lambda_{inc}\)</span> is a scale factor associated with the underlying Gumbel distribution of idiosyncratic tastes, and that is going to increase the log-likelihood when it goes up. Note however that this impact is marginal above 10. To be conservative, while keeping the same order of magnitude as for gravity parameter  <span class="math notranslate nohighlight">\(\lambda\)</span>, we pin down this value in the code. We do not go below as it would signficantly reduce the value of the log-likelihood, and we want all the likelihoods to be of the same order so as not to overweight some data moments compared to others.</p>
@@ -1263,7 +1260,7 @@
 <p class="rubric">Footnotes</p>
 <dl class="footnote brackets">
 <dt class="label" id="plots-scripts"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
-<dd><p>There are three <code class="docutils literal notranslate"><span class="pre">plots</span></code> scripts that export tables and figures in a dedicated output folder (see <a class="reference internal" href="readme_link.html"><span class="doc">Introducing NEDUM-2D</span></a>) respectively for inputs, static equilibrium, and dynamic simulation outcomes. Those scripts essentially run functions from the <code class="docutils literal notranslate"><span class="pre">outputs</span></code> package and are not shown as notebooks since they do not run any kind of analysis. Rather, they provide inputs to be fed into the more user-friendly <a class="reference external" href="https://kristoffpotgieter-nedumapp-app-f2rto5.streamlitapp.com/">interface</a> that we recommend using for data vizualisation. For developer use, we have included a metadata file as a reference table linking each output to its legend and generating function. Also note that the outputs shown are by no mean supposed to be exhaustive: we encourage developers to leverage the existing infrastructure to code their own plots for future analyses.</p>
+<dd><p>There are three <code class="docutils literal notranslate"><span class="pre">plots</span></code> scripts that export tables and figures in a dedicated output folder (see <a class="reference internal" href="readme_link.html"><span class="doc">Setup</span></a>) respectively for inputs, static equilibrium, and dynamic simulation outcomes. Those scripts essentially run functions from the <code class="docutils literal notranslate"><span class="pre">outputs</span></code> package and are not shown as notebooks since they do not run any kind of analysis. Rather, they provide inputs to be fed into the more user-friendly <a class="reference external" href="https://kristoffpotgieter-nedumapp-app-f2rto5.streamlitapp.com/">interface</a> that we recommend using for data vizualisation. For developer use, we have included a metadata file as a reference table linking each output to its legend and generating function. Also note that the outputs shown are by no mean supposed to be exhaustive: we encourage developers to leverage the existing infrastructure to code their own plots for future analyses.</p>
 </dd>
 <dt class="label" id="f1"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
 <dd><p>The type of a parameter indicates whether it is plugged as a raw value or is the outcome of a calibration process. In theory, all “user” defined parameters can be overwritten by the end user. In practice, we cannot guarantee that the model runs seamlessly for all possible changes in values. We therefore encourage you to ask for guidance if you would like to change a parameter that was not included in main simulation runs.</p>
@@ -1361,8 +1358,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="use_case.html" class="btn btn-neutral float-left" title="Use case" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="input_tables.html" class="btn btn-neutral float-right" title="Input tables" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="api_ref.html" class="btn btn-neutral float-left" title="API reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="appendix.html" class="btn btn-neutral float-right" title="Appendix" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

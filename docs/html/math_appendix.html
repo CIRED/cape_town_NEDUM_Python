@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Math appendix &mdash; NEDUM-2D for CoCT  documentation</title>
+  <title>Commuting choice model &mdash; NEDUM-2D for CoCT  documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
@@ -43,22 +43,22 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="readme_link.html">Introducing NEDUM-2D</a></li>
-<li class="toctree-l1"><a class="reference internal" href="license_rst.html">License</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guidelines.html">General framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="use_case.html">Use case</a></li>
 <li class="toctree-l1"><a class="reference internal" href="main_nb.html">Notebook: run model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="calib_nb.html">Notebook: run calibration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="guidelines.html">User guidelines</a></li>
-<li class="toctree-l1"><a class="reference internal" href="use_case.html">Use case</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_ref.html">API reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="technical_doc.html">Technical documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="input_tables.html">Input tables</a></li>
-<li class="toctree-l1"><a class="reference internal" href="data_bases.html">Data bases</a></li>
-<li class="toctree-l1"><a class="reference internal" href="data_sets.html">Key data sets</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Math appendix</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#commuting-choice-and-net-income-calculation">Commuting choice and net income calculation</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="appendix.html">Appendix</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="input_tables.html">Input tables</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_bases.html">Data bases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data_sets.html">Key data sets</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Commuting choice model</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="bibliography.html">Bibliography</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_ref.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license_rst.html">License</a></li>
 </ul>
 
         </div>
@@ -75,7 +75,8 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Math appendix</li>
+          <li><a href="appendix.html">Appendix</a> &raquo;</li>
+      <li>Commuting choice model</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/math_appendix.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -109,10 +110,8 @@
     text-align: unset;
 }
 </style>
-<div class="section" id="math-appendix">
-<h1>Math appendix<a class="headerlink" href="#math-appendix" title="Permalink to this heading"></a></h1>
-<div class="section" id="commuting-choice-and-net-income-calculation">
-<h2>Commuting choice and net income calculation<a class="headerlink" href="#commuting-choice-and-net-income-calculation" title="Permalink to this heading"></a></h2>
+<div class="section" id="commuting-choice-model">
+<h1>Commuting choice model<a class="headerlink" href="#commuting-choice-model" title="Permalink to this heading"></a></h1>
 <p>The terms highlighted in orange relate to functional assumptions needed to solve the model. For each mode <span class="math notranslate nohighlight">\(m\)</span>, residential location <span class="math notranslate nohighlight">\(x\)</span>, job center <span class="math notranslate nohighlight">\(c\)</span>, income group <span class="math notranslate nohighlight">\(i\)</span>, and worker <span class="math notranslate nohighlight">\(j\)</span>, <strong>expected commuting cost</strong> is:</p>
 <div class="math notranslate nohighlight">
 \[t_{mj}(x,c,w_{ic}) = \chi_i(\tau_m(x,c) + \delta_m(x,c)w_{ic}) + \textcolor{orange}{\epsilon_{mxcij}}\]</div>
@@ -184,7 +183,6 @@
 <span class="linenos">2068</span>            <span class="n">ODflows</span><span class="p">[</span><span class="n">whichCenters</span><span class="p">,</span> <span class="p">:,</span> <span class="n">j</span><span class="p">]</span>
 <span class="linenos">2069</span>            <span class="o">*</span> <span class="p">(</span><span class="n">incomeCentersGroup</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">-</span> <span class="n">transportCost</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
 </pre></div>
-</div>
 </div>
 </div>
 

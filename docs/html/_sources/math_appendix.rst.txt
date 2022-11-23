@@ -1,10 +1,6 @@
-=============
-Math appendix
-=============
-
--------------------------------------------
-Commuting choice and net income calculation
--------------------------------------------
+======================
+Commuting choice model
+======================
 
 The terms highlighted in orange relate to functional assumptions needed to solve the model. For each mode :math:`m`, residential location :math:`x`, job center :math:`c`, income group :math:`i`, and worker :math:`j`, **expected commuting cost** is:
 

@@ -1,6 +1,6 @@
-===============
-User guidelines
-===============
+=================
+General framework
+=================
 
 -------------------
 Elements of context

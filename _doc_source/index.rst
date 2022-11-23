@@ -6,19 +6,16 @@ Welcome to NEDUM-2D's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   Introducing NEDUM-2D <readme_link>
-   License <license_rst>
-   main_nb.nblink
-   calib_nb.nblink
+   Setup <readme_link>
    guidelines
    use_case
-   technical_doc
-   input_tables
-   data_bases
-   data_sets
-   math_appendix
-   bibliography
+   main_nb.nblink
+   calib_nb.nblink
    api_ref
+   technical_doc
+   appendix
+   bibliography
+   License <license_rst>
 
 
 
