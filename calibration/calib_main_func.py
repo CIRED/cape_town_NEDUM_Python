@@ -502,10 +502,12 @@ def estim_util_func_param(data_number_formal, data_income_group,
     # NB: choice has to do with relevance and exogeneity of variables
     # Choice set is relevant but may only refer to a small subset of locations
     # (train stations are often dysfunctional, for instance)
-    variables_regression = [
-        'distance_distr_parks', 'distance_ocean', 'distance_ocean_2_4',
-        'distance_urban_herit', 'airport_cone2', 'slope_1_5', 'slope_5',
-        'distance_biosphere_reserve', 'distance_train']
+    variables_regression = amenities_sp.columns
+    
+    # [
+    #     'distance_distr_parks', 'distance_ocean', 'distance_ocean_2_4',
+    #     'distance_urban_herit', 'airport_cone2', 'slope_1_5', 'slope_5',
+    #     'distance_biosphere_reserve', 'distance_train']
 
     # We run the parameter scanning.
     # Note that this may be long to run as it depends on the combination of all

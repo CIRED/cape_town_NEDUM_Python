@@ -75,8 +75,8 @@ def import_exog_amenities(path_data, path_precalc_inp, dim):
              amenity_data.distance_power_station < 2,
              amenity_data.distance_biosphere_reserve < 2])
             ),
-        columns=['distance_distr_parks', 'distance_ocean',
-                 'distance_ocean_2_4', 'distance_world_herit',
+        columns=['distance_distr_parks', 'distance_ocean','distance_ocean_2_4', 
+                'distance_world_herit',
                  'distance_world_herit_2_4', 'distance_urban_herit',
                  'distance_UCT', 'airport_cone2', 'slope_1_5', 'slope_5',
                  'distance_train', 'distance_protected_envir',
@@ -84,4 +84,23 @@ def import_exog_amenities(path_data, path_precalc_inp, dim):
                  'distance_power_station', 'distance_biosphere_reserve']
         )
 
+    # these are the amenities which feed into the model
+    keep =  [
+        'distance_distr_parks', 'distance_ocean', 'distance_ocean_2_4',
+        'distance_urban_herit', 'airport_cone2', 'slope_1_5', 'slope_5',
+        'distance_biosphere_reserve', 'distance_train']
+    table_amenities = table_amenities[keep]
+    
+
+    # # these new columns have been added to the amenities for testing
+    # newAmmenities=['publicHealthCare', 'privateHealthcare', 'sportsgrounds',
+    #    'publicHighSchool', 'independentHighSchool', 'HighmastLight']
+    # table_amenities[newAmmenities]=amenity_data[newAmmenities].astype(int)
+
     return table_amenities
+
+if __name__=="__main__":
+    import os
+    os.chdir('..')
+    out=import_exog_amenities("Data/data_Cape_Town/", 'Data/precalculated_inputs/', dim="SP")
+
