@@ -45,3 +45,12 @@ In the current implementation, we add flood risk anticipations to the model and 
 *TO BE CONTINUED*
 
 .. Show updated plots in the same spirit as CREST presentation, commenting on the mechanism at play and its welfare assessment
+
+We focus first on aggregate measures, then will do spatial analysis.
+
+Let us start without climate change.
+
+... Before all, recycle general validation from past use case without floods
+..._damages.png : the difference in validation data comes from endogenous content and formal structure costs (that depend on net income, dwelling size, and simulated rent). What about income shares (nonsense if no prior breakdown across housing types, then too complex, just superimpose maps because aggregates imply composition effects?) and utility terms (can just compare numeric values)?
+..._severy_distrib.png for breakdown across income groups (also superimpose with raw flood maps?)
+...End with general spatial patterns in comparative statics

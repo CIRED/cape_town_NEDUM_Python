@@ -114,8 +114,8 @@ options["dem"] = "MERITDEM"
 options["defended"] = 0
 # Dummy for taking sea-level rise into account in coastal flood data
 # NB: Projections are up to 2050, based upon IPCC AR5 assessment for the
-# RCP 8.5 scenario
-options["slr"] = 1
+# RCP 8.5 scenario on coastal (dummy scenarios on other flood risks)
+options["climate_change"] = 1
 
 # #### We also set options for scenarios on time-moving exogenous variables
 
@@ -147,7 +147,7 @@ name = ('floods' + str(options["agents_anticipate_floods"])
         + str(options["informal_land_constrained"])
         + '_F' + str(options["defended"])
         + '_P' + str(options["pluvial"]) + str(options["correct_pluvial"])
-        + '_C' + str(options["coastal"]) + str(options["slr"])
+        + '_C' + str(options["coastal"]) + str(options["climate_change"])
         + '_scenario' + str(options["inc_ineq_scenario"])
         + str(options["pop_growth_scenario"])
         + str(options["fuel_price_scenario"]))
@@ -1064,6 +1064,22 @@ formal_structure_cost = outfld.compute_formal_structure_cost(
 # endregion
 
 # region
+# We re-import flood data to be able to compute damages a posteriori, when
+# agents are set not to anticipate floods, hence do not take them into account,
+# even if they actually do occur
+
+import inputs.data as inpdt
+
+(fraction_capital_destroyed, structural_damages_small_houses,
+ structural_damages_medium_houses, structural_damages_large_houses,
+ content_damages, structural_damages_type1, structural_damages_type2,
+ structural_damages_type3a, structural_damages_type3b,
+ structural_damages_type4a, structural_damages_type4b
+ ) = inpdt.import_full_floods_data(options, param, path_folder)
+
+# endregion
+
+# region
 # From there, we recover aggregate damages associated to each flood type
 # per return period
 import outputs.flood_outputs as outfld
@@ -1168,115 +1184,115 @@ Image(path_output_plots + "coastal_formal_structure_2d_sim.png")
 
 # ## Run simulations for subsequent periods (time depends on timeline length)
 
-# We run the algorithm
-import equilibrium.run_simulations as eqsim
-(simulation_households_center,
- simulation_households_housing_type,
- simulation_dwelling_size,
- simulation_rent,
- simulation_households,
- simulation_error,
- simulation_housing_supply,
- simulation_utility,
- simulation_deriv_housing,
- simulation_T) = eqsim.run_simulation(
-     t,
-     options,
-     param,
-     grid,
-     initial_state_utility,
-     initial_state_error,
-     initial_state_households,
-     initial_state_households_housing_types,
-     initial_state_housing_supply,
-     initial_state_household_centers,
-     initial_state_average_income,
-     initial_state_rent,
-     initial_state_dwelling_size,
-     fraction_capital_destroyed,
-     amenities,
-     housing_limit,
-     spline_estimate_RDP,
-     spline_land_constraints,
-     spline_land_backyard,
-     spline_land_RDP,
-     spline_land_informal,
-     income_class_by_housing_type,
-     path_precalc_transp,
-     spline_RDP,
-     spline_agricultural_price,
-     spline_interest_rate,
-     spline_population_income_distribution,
-     spline_inflation,
-     spline_income_distribution,
-     spline_population,
-     spline_income,
-     spline_minimum_housing_supply,
-     spline_fuel,
-     income_baseline
-     )
+# # We run the algorithm
+# import equilibrium.run_simulations as eqsim
+# (simulation_households_center,
+#  simulation_households_housing_type,
+#  simulation_dwelling_size,
+#  simulation_rent,
+#  simulation_households,
+#  simulation_error,
+#  simulation_housing_supply,
+#  simulation_utility,
+#  simulation_deriv_housing,
+#  simulation_T) = eqsim.run_simulation(
+#      t,
+#      options,
+#      param,
+#      grid,
+#      initial_state_utility,
+#      initial_state_error,
+#      initial_state_households,
+#      initial_state_households_housing_types,
+#      initial_state_housing_supply,
+#      initial_state_household_centers,
+#      initial_state_average_income,
+#      initial_state_rent,
+#      initial_state_dwelling_size,
+#      fraction_capital_destroyed,
+#      amenities,
+#      housing_limit,
+#      spline_estimate_RDP,
+#      spline_land_constraints,
+#      spline_land_backyard,
+#      spline_land_RDP,
+#      spline_land_informal,
+#      income_class_by_housing_type,
+#      path_precalc_transp,
+#      spline_RDP,
+#      spline_agricultural_price,
+#      spline_interest_rate,
+#      spline_population_income_distribution,
+#      spline_inflation,
+#      spline_income_distribution,
+#      spline_population,
+#      spline_income,
+#      spline_minimum_housing_supply,
+#      spline_fuel,
+#      income_baseline
+#      )
 
-print(np.nansum(simulation_deriv_housing, 1))
+# print(np.nansum(simulation_deriv_housing, 1))
 
-# We save the output
-np.save(path_simul + '/simulation_households_center.npy',
-        simulation_households_center)
-np.save(path_simul + '/simulation_households_housing_type.npy',
-        simulation_households_housing_type)
-np.save(path_simul + '/simulation_dwelling_size.npy',
-        simulation_dwelling_size)
-np.save(path_simul + '/simulation_rent.npy',
-        simulation_rent)
-np.save(path_simul + '/simulation_households.npy',
-        simulation_households)
-np.save(path_simul + '/simulation_error.npy',
-        simulation_error)
-np.save(path_simul + '/simulation_housing_supply.npy',
-        simulation_housing_supply)
-np.save(path_simul + '/simulation_utility.npy',
-        simulation_utility)
-np.save(path_simul + '/simulation_deriv_housing.npy',
-        simulation_deriv_housing)
-np.save(path_simul + '/simulation_T.npy',
-        simulation_T)
+# # We save the output
+# np.save(path_simul + '/simulation_households_center.npy',
+#         simulation_households_center)
+# np.save(path_simul + '/simulation_households_housing_type.npy',
+#         simulation_households_housing_type)
+# np.save(path_simul + '/simulation_dwelling_size.npy',
+#         simulation_dwelling_size)
+# np.save(path_simul + '/simulation_rent.npy',
+#         simulation_rent)
+# np.save(path_simul + '/simulation_households.npy',
+#         simulation_households)
+# np.save(path_simul + '/simulation_error.npy',
+#         simulation_error)
+# np.save(path_simul + '/simulation_housing_supply.npy',
+#         simulation_housing_supply)
+# np.save(path_simul + '/simulation_utility.npy',
+#         simulation_utility)
+# np.save(path_simul + '/simulation_deriv_housing.npy',
+#         simulation_deriv_housing)
+# np.save(path_simul + '/simulation_T.npy',
+#         simulation_T)
 
-# ### Output visualization
+# # ### Output visualization
 
-# All the above outputs are available at each period.
-# For reference, we include here some aggregates that evolve over time.
-#
-# We redirect the reader to the interface for a more detailed view of other
-# aggregates, of which the evolution of flood damages for instance.
-# Note that since flood risks do not evolve through time, the evolution in
-# flood damages is just a function of population growth and spatial sorting.
+# # All the above outputs are available at each period.
+# # For reference, we include here some aggregates that evolve over time.
+# #
+# # We redirect the reader to the interface for a more detailed view of other
+# # aggregates, of which the evolution of flood damages for instance.
+# # Note that since flood risks do not evolve through time, the evolution in
+# # flood damages is just a function of population growth and spatial sorting.
 
-# We set the x-axis of our plots
-years_simul = np.arange(2011, 2011 + 30)
+# # We set the x-axis of our plots
+# years_simul = np.arange(2011, 2011 + 30)
 
-# #### Evolution of population sorting across housing types
+# # #### Evolution of population sorting across housing types
 
-# region
-fig, ax = plt.subplots(figsize=(10, 7))
-ax.plot(years_simul, np.nansum(simulation_households_housing_type, 2)[:, 0],
-        color="gold", label="Formal")
-ax.plot(years_simul, np.nansum(simulation_households_housing_type, 2)[:, 1],
-        color="darkorange", label="Backyard")
-ax.plot(years_simul, np.nansum(simulation_households_housing_type, 2)[:, 2],
-        color="red", label="Informal")
-ax.plot(years_simul, np.nansum(simulation_households_housing_type, 2)[:, 3],
-        color="maroon", label="Subsidized")
-ax.set_ylim(0)
-ax.set_xlim(right=2035)
-ax.yaxis.set_major_formatter(
-    mpl.ticker.StrMethodFormatter('{x:,.0f}'))
-plt.legend()
-plt.tick_params(labelbottom=True)
-plt.ylabel("Total number of households per housing type", labelpad=15)
-plt.savefig(path_output_plots + 'evol_nb_households_htype.png')
-plt.close()
+# # region
+# fig, ax = plt.subplots(figsize=(10, 7))
+# ax.plot(years_simul, np.nansum(simulation_households_housing_type, 2)[:, 0],
+#         color="gold", label="Formal")
+# ax.plot(years_simul, np.nansum(simulation_households_housing_type, 2)[:, 1],
+#         color="darkorange", label="Backyard")
+# ax.plot(years_simul, np.nansum(simulation_households_housing_type, 2)[:, 2],
+#         color="red", label="Informal")
+# ax.plot(years_simul, np.nansum(simulation_households_housing_type, 2)[:, 3],
+#         color="maroon", label="Subsidized")
+# ax.set_ylim(0)
+# ax.set_xlim(right=2035)
+# ax.yaxis.set_major_formatter(
+#     mpl.ticker.StrMethodFormatter('{x:,.0f}'))
+# plt.legend()
+# plt.tick_params(labelbottom=True)
+# plt.ylabel("Total number of households per housing type", labelpad=15)
+# plt.savefig(path_output_plots + 'evol_nb_households_htype.png')
+# plt.close()
 
-Image(path_output_plots + "evol_nb_households_htype.png")
-# endregion
+# Image(path_output_plots + "evol_nb_households_htype.png")
+# # endregion
 
 # The graph above can direcly be interpreted given the land-use scenarios we provided.
 #

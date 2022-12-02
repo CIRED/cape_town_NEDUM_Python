@@ -61,8 +61,10 @@ def import_options():
     # Dummy for taking sea-level rise into account in coastal flood data
     # NB: Deltares provides flood risk values under the IPCC AR5 assessment for
     # the RCP 8.5 climate change scenario, taken at year 2050 (pessimistic
-    # projections)
-    options["slr"] = 1
+    # projections). Dummy scenarios are used for other flood risks.
+    options["climate_change"] = 1
+    # Growth rate in flood risk probability for dummy climate change scenarios
+    options["risk_increase"] = 2
 
     # REPROCESSING OPTIONS
     # Default is set at zero to save computing time

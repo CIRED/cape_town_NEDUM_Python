@@ -699,6 +699,30 @@ def annualize_damages(array_init, type_flood, housing_type, options):
         interval8 = (1/250) - (1/500)
         interval9 = (1/500) - (1/1000)
         interval10 = (1/1000)
+
+        if options["climate_change"] == 1:
+            # We increase the likelihood of flood risks based upon given param
+            interval0 = 1 - (1/5 * options["risk_increase"])
+            interval1 = ((1/5 * options["risk_increase"])
+                         - (1/10 * options["risk_increase"]))
+            interval2 = ((1/10 * options["risk_increase"])
+                         - (1/20 * options["risk_increase"]))
+            interval3 = ((1/20 * options["risk_increase"])
+                         - (1/50 * options["risk_increase"]))
+            interval4 = ((1/50 * options["risk_increase"])
+                         - (1/75 * options["risk_increase"]))
+            interval5 = ((1/75 * options["risk_increase"])
+                         - (1/100 * options["risk_increase"]))
+            interval6 = ((1/100 * options["risk_increase"])
+                         - (1/200 * options["risk_increase"]))
+            interval7 = ((1/200 * options["risk_increase"])
+                         - (1/250 * options["risk_increase"]))
+            interval8 = ((1/250 * options["risk_increase"])
+                         - (1/500 * options["risk_increase"]))
+            interval9 = ((1/500 * options["risk_increase"])
+                         - (1/1000 * options["risk_increase"]))
+            interval10 = (1/1000 * options["risk_increase"])
+
         damages0 = array[0]
         damages1 = array[0] + array[1]
         damages2 = array[1] + array[2]

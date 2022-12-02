@@ -109,7 +109,7 @@ options["defended"] = 0
 # Dummy for taking sea-level rise into account in coastal flood data
 # NB: Projections are up to 2050, based upon IPCC AR5 assessment for the
 # RCP 8.5 scenario
-options["slr"] = 1
+options["climate_change"] = 1
 
 # #### We also set options for scenarios on time-moving exogenous variables
 

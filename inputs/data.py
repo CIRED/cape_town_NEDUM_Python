@@ -1083,7 +1083,7 @@ def import_init_floods_data(options, param, path_folder):
     pluvial_floods = ['P_5yr', 'P_10yr', 'P_20yr', 'P_50yr', 'P_75yr',
                       'P_100yr', 'P_200yr', 'P_250yr', 'P_500yr', 'P_1000yr']
 
-    name = 'C_' + options["dem"] + '_' + str(options["slr"])
+    name = 'C_' + options["dem"] + '_' + str(options["climate_change"])
 
     # Coastal flood maps are extracted from DELTARES global flood maps that
     # use GTSMip6 water levels as inputs (Muis et al., 2020) for three distinct
@@ -1224,6 +1224,29 @@ def compute_fraction_capital_destroyed(d, type_flood, damage_function,
         interval9 = (1/500) - (1/1000)
         interval10 = (1/1000)
 
+        if options["climate_change"] == 1:
+            # We increase the likelihood of flood risks based upon given param
+            interval0 = 1 - (1/5 * options["risk_increase"])
+            interval1 = ((1/5 * options["risk_increase"])
+                         - (1/10 * options["risk_increase"]))
+            interval2 = ((1/10 * options["risk_increase"])
+                         - (1/20 * options["risk_increase"]))
+            interval3 = ((1/20 * options["risk_increase"])
+                         - (1/50 * options["risk_increase"]))
+            interval4 = ((1/50 * options["risk_increase"])
+                         - (1/75 * options["risk_increase"]))
+            interval5 = ((1/75 * options["risk_increase"])
+                         - (1/100 * options["risk_increase"]))
+            interval6 = ((1/100 * options["risk_increase"])
+                         - (1/200 * options["risk_increase"]))
+            interval7 = ((1/200 * options["risk_increase"])
+                         - (1/250 * options["risk_increase"]))
+            interval8 = ((1/250 * options["risk_increase"])
+                         - (1/500 * options["risk_increase"]))
+            interval9 = ((1/500 * options["risk_increase"])
+                         - (1/1000 * options["risk_increase"]))
+            interval10 = (1/1000 * options["risk_increase"])
+
         # We consider that formal housing is not vulnerable to pluvial floods
         # over medium run, and that RDP and backyard are not over short run.
         # This is based on CCT Minimum Standards for Stormwater Design 2014
@@ -1331,7 +1354,7 @@ def compute_fraction_capital_destroyed(d, type_flood, damage_function,
     # pluvial/fluvial since we do not have the same return periods available
     # in DELTARES and FATHOM data
 
-        name = type_flood + '_' + options["dem"] + '_' + str(options["slr"])
+        name = type_flood + '_' + options["dem"] + '_' + str(options["climate_change"])
 
         # Here, we do have some inundation estimates at baseline year
         damages0 = ((d[name + '_0000'].prop_flood_prone

@@ -69,7 +69,7 @@ options["defended"] = 1
 #  Dummy for taking sea-level rise into account in coastal flood data
 #  NB: Projections are up to 2050, based upon IPCC AR5 assessment for the
 #  RCP 8.5 scenario
-options["slr"] = 1
+options["climate_change"] = 1
 
 # More custom options regarding scenarios
 options["inc_ineq_scenario"] = 2
@@ -87,7 +87,7 @@ name = ('floods' + str(options["agents_anticipate_floods"])
         + str(options["informal_land_constrained"])
         + '_F' + str(options["defended"])
         + '_P' + str(options["pluvial"]) + str(options["correct_pluvial"])
-        + '_C' + str(options["coastal"]) + str(options["slr"])
+        + '_C' + str(options["coastal"]) + str(options["climate_change"])
         + '_scenario' + str(options["inc_ineq_scenario"])
         + str(options["pop_growth_scenario"])
         + str(options["fuel_price_scenario"]))
