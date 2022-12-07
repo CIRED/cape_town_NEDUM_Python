@@ -81,7 +81,8 @@ name = ('floods' + str(options["agents_anticipate_floods"])
 
 path_plots = path_outputs + name + '/plots/'
 path_tables = path_outputs + name + '/tables/'
-
+path_plots_floods = path_plots + 'floods/'
+path_tables_floods = path_tables + 'floods/'
 
 # CREATE A DICTIONARY OF FLOOD DAMAGE DATA
 
@@ -91,132 +92,10 @@ flood_categ = ['fluvialu_data', 'fluvialu_sim',
 
 housing_types = ['formal', 'subsidized', 'informal', 'backyard']
 
-damage_data_dict = {key: pd.read_csv(path_tables + key + '_damages.csv')
+damage_data_dict = {key: pd.read_csv(path_tables_floods + key + '_damages.csv')
                     for key in flood_categ}
 
 # ANNUALIZE DAMAGES
-
-# We start with validation data distribution of households
-
-# First for fluvial floods
-
-fluvialu_struct = [
-    outfld.annualize_damages(
-        damage_data_dict['fluvialu_data'].formal_structure_damages,
-        'fluvialu', 'formal', options) / 1000000,
-    outfld.annualize_damages(
-        damage_data_dict['fluvialu_data'].subsidized_structure_damages,
-        'fluvialu', 'subsidized', options) / 1000000,
-    outfld.annualize_damages(
-        damage_data_dict['fluvialu_data'].informal_structure_damages,
-        'fluvialu', 'informal', options) / 1000000,
-    outfld.annualize_damages(
-        damage_data_dict['fluvialu_data'].backyard_structure_damages,
-        'fluvialu', 'backyard', options) / 1000000]
-fluvialu_struct = pd.DataFrame(
-    fluvialu_struct, housing_types, ['struct_damage'])
-
-fluvialu_content = [
-    outfld.annualize_damages(
-        damage_data_dict['fluvialu_data'].formal_content_damages,
-        'fluvialu', 'formal', options) / 1000000,
-    outfld.annualize_damages(
-         damage_data_dict['fluvialu_data'].subsidized_content_damages,
-         'fluvialu', 'subsidized',
-         options) / 1000000,
-    outfld.annualize_damages(
-         damage_data_dict['fluvialu_data'].informal_content_damages,
-         'fluvialu', 'informal',
-         options) / 1000000,
-    outfld.annualize_damages(
-         damage_data_dict['fluvialu_data'].backyard_content_damages,
-         'fluvialu', 'backyard',
-         options) / 1000000
-    ]
-fluvialu_content = pd.DataFrame(
-    fluvialu_content, housing_types, ['content_damage'])
-
-fluvialu_data = pd.merge(fluvialu_struct, fluvialu_content,
-                         left_index=True, right_index=True)
-
-# Then for pluvial floods
-
-pluvial_struct = [
-    outfld.annualize_damages(
-        damage_data_dict['pluvial_data'].formal_structure_damages,
-        'pluvial', 'formal', options) / 1000000,
-    outfld.annualize_damages(
-        damage_data_dict['pluvial_data'].subsidized_structure_damages,
-        'pluvial', 'subsidized', options) / 1000000,
-    outfld.annualize_damages(
-        damage_data_dict['pluvial_data'].informal_structure_damages,
-        'pluvial', 'informal', options) / 1000000,
-    outfld.annualize_damages(
-        damage_data_dict['pluvial_data'].backyard_structure_damages,
-        'pluvial', 'backyard', options) / 1000000
-    ]
-pluvial_struct = pd.DataFrame(pluvial_struct, housing_types, ['struct_damage'])
-
-pluvial_content = [
-    outfld.annualize_damages(
-        damage_data_dict['pluvial_data'].formal_content_damages,
-        'pluvial', 'formal', options) / 1000000,
-    outfld.annualize_damages(
-        damage_data_dict['pluvial_data'].subsidized_content_damages,
-        'pluvial', 'subsidized', options) / 1000000,
-    outfld.annualize_damages(
-        damage_data_dict['pluvial_data'].informal_content_damages,
-        'pluvial', 'informal', options) / 1000000,
-    outfld.annualize_damages(
-        damage_data_dict['pluvial_data'].backyard_content_damages,
-        'pluvial', 'backyard', options) / 1000000
-    ]
-pluvial_content = pd.DataFrame(
-    pluvial_content, housing_types, ['content_damage'])
-
-pluvial_data = pd.merge(pluvial_struct, pluvial_content,
-                        left_index=True, right_index=True)
-
-# Finally for coastal floods
-
-coastal_struct = [
-    outfld.annualize_damages(
-        damage_data_dict['coastal_data'].formal_structure_damages,
-        'coastal', 'formal', options) / 1000000,
-    outfld.annualize_damages(
-        damage_data_dict['coastal_data'].subsidized_structure_damages,
-        'coastal', 'subsidized', options) / 1000000,
-    outfld.annualize_damages(
-        damage_data_dict['coastal_data'].informal_structure_damages,
-        'coastal', 'informal', options) / 1000000,
-    outfld.annualize_damages(
-        damage_data_dict['coastal_data'].backyard_structure_damages,
-        'coastal', 'backyard', options) / 1000000
-    ]
-coastal_struct = pd.DataFrame(coastal_struct, housing_types, ['struct_damage'])
-
-coastal_content = [
-    outfld.annualize_damages(
-        damage_data_dict['coastal_data'].formal_content_damages,
-        'coastal', 'formal', options) / 1000000,
-    outfld.annualize_damages(
-        damage_data_dict['coastal_data'].subsidized_content_damages,
-        'coastal', 'subsidized', options) / 1000000,
-    outfld.annualize_damages(
-        damage_data_dict['coastal_data'].informal_content_damages,
-        'coastal', 'informal', options) / 1000000,
-    outfld.annualize_damages(
-        damage_data_dict['coastal_data'].backyard_content_damages,
-        'coastal', 'backyard', options) / 1000000
-    ]
-coastal_content = pd.DataFrame(
-    coastal_content, housing_types, ['content_damage'])
-
-coastal_data = pd.merge(coastal_struct, coastal_content,
-                        left_index=True, right_index=True)
-
-
-# We repeat the whole process for simulation distribution of households
 
 # First for fluvial floods
 
@@ -338,9 +217,9 @@ coastal_sim = pd.merge(coastal_struct, coastal_content,
 
 # SAVE OUTPUTS FOR THE SIMULATION
 
-df_dict = {'fluvialu_data': fluvialu_data, 'fluvialu_sim': fluvialu_sim,
-           'pluvial_data': pluvial_data, 'pluvial_sim': pluvial_sim,
-           'coastal_data': coastal_data, 'coastal_sim': coastal_sim}
+df_dict = {'fluvialu_sim': fluvialu_sim,
+           'pluvial_sim': pluvial_sim,
+           'coastal_sim': coastal_sim}
 
 # Create a Pandas Excel writer using XlsxWriter as the engine.
 writer = pd.ExcelWriter(path_outputs + name + '/damage_data.xlsx',

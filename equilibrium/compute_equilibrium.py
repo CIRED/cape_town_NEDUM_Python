@@ -524,7 +524,7 @@ def compute_equilibrium(fraction_capital_destroyed, amenities, param,
     # Other outputs
     initial_state_utility = utility[index_iteration, :]
     # Housing capital value per unit of available land: see math appendix
-    initial_state_capital_land = ((initial_state_housing_supply
+    initial_state_capital_land = ((initial_state_housing_supply / 1000000
                                    / construction_param)
                                   ** (1 / param["coeff_b"]))
     #  NB: this is not an output of the model

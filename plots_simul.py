@@ -389,14 +389,14 @@ for year_temp in np.arange(0, 30):
 
     # We do the same for total number of households across space,
     # housing types and income groups
-    dist_HH_per_housing_1d = outexp.simulation_density_housing_types(
+    dist_HH_per_housing_1d = outexp.simul_pop_housing_types(
         grid, simulation_households_housing_type[year_temp, :, :],
         path_plots_temp, path_tables_temp
     )
 
     # TODO: switch back to SP level for more precision in validation data?
     # Else, aggregate distance at a higher level?
-    dist_HH_per_income_1d = outexp.simulation_density_income_groups(
+    dist_HH_per_income_1d = outexp.simul_pop_income_groups(
         grid, simulation_households_center[year_temp, :, :],
         path_plots_temp, path_tables_temp
     )
@@ -404,7 +404,7 @@ for year_temp in np.arange(0, 30):
     # We also plot income groups across space (in 1D) for each housing type,
     # even if we cannot validate such output
     (dist_HH_per_housing_and_income_1d
-     ) = outexp.validation_density_housing_and_income_groups(
+     ) = outexp.simul_pop_htype_income(
          grid, simulation_households[year_temp, :, :, :],
          path_plots_temp, path_tables_temp)
 
@@ -487,7 +487,7 @@ for year_temp in np.arange(0, 30):
 
     # By plotting the housing supply per unit of available land, we may check
     # whether the bell-shaped curve of urban development holds
-    avg_hsupply_1d = outexp.plot_housing_supply(
+    avg_hsupply_1d = outexp.valid_housing_supply(
         grid, simulation_housing_supply[year_temp, :, :],
         path_plots_temp, path_tables_temp)
 
@@ -495,7 +495,7 @@ for year_temp in np.arange(0, 30):
     #  TODO: pb with Mitchell's Plain?
     housing_supply = simulation_housing_supply[year_temp,
                                                :, :] * coeff_land * 0.25
-    hsupply_noland_1d = outexp.plot_housing_supply_noland(
+    hsupply_noland_1d = outexp.valid_housing_supply_noland(
         grid, housing_supply, path_plots_temp, path_tables_temp)
 
     hsupply_tot = np.nansum(housing_supply, 0)

@@ -562,6 +562,8 @@ def compute_damages_2d(floods, path_data, param, content_cost,
     """
     dict_damages = {}
 
+    # NB: we need to go back at each return period to get the fraction of
+    # households exposed to floods
     for item in floods:
 
         print(item)
@@ -641,7 +643,7 @@ def compute_damages_2d(floods, path_data, param, content_cost,
              'subsidized_content_damages': subsidized_content_damages})
 
         damages = damages.fillna(value=0)
-        damages[damages < 0] = 0
+        # damages[damages < 0] = 0
         # damages.to_csv(
         #     path_tables + flood_categ + '_' + item + '_damages_2d.csv')
         dict_damages[item] = damages
@@ -769,8 +771,8 @@ def annualize_damages(array_init, type_flood, housing_type, options):
 
 
 def compute_formal_structure_cost(
-        initial_state_rent, param, interest_rate, coeff_land,
-        initial_state_households_housing_types, construction_coeff):
+        initial_state_capital_land, initial_state_households_housing_types,
+        coeff_land):
     """
     Estimate construction costs of formal private housing structures in space.
 
@@ -781,22 +783,16 @@ def compute_formal_structure_cost(
 
     Parameters
     ----------
-    initial_state_rent : ndarray(float64, ndim=2)
-        Average annual rent (in rands) per grid cell for each housing type (4)
-    param : dict
-        Dictionary of default parameters
-    interest_rate : float64
-        Real interest rate for the overall economy, corresponding to an average
-        over past years
+    initial_state_capital_land : ndarray(float64, ndim=2)
+        Value (in rands) of the housing capital stock per unit of available
+        land (in km²) for each endogenous housing type (3) per grid cell
+        at baseline year (2011)
+    initial_state_households_housing_types : ndarray(float64, ndim=2)
+        Number of households per grid cell in each housing type (4)
     coeff_land : ndarray(float64, ndim=2)
         Updated land availability for each grid cell (24,014) and each
         housing type (4: formal private, informal backyards, informal
         settlements, formal subsidized)
-    initial_state_households_housing_types : ndarray(float64, ndim=2)
-        Number of households per grid cell in each housing type (4)
-    construction_coeff : ndarray(float64)
-        (Calibrated) scale factor for the construction function of formal
-        private developers
 
     Returns
     -------
@@ -805,27 +801,21 @@ def compute_formal_structure_cost(
         on their market capital values, per grid cell (24,014)
 
     """
-    # We convert price to capital per unit of land
-    price_simul = (
-        initial_state_rent[0, :] * construction_coeff * param["coeff_b"]
-        / (interest_rate + param["depreciation_rate"])
-        ) ** (1/param["coeff_a"])
-    # TODO: Difference with variable below?
-    # price_simul = initial_state_capital_land[0, :]
+    price_simul = initial_state_capital_land[0, :]
 
     # We multiply by available land area, and average the output across
     # households
-    np.seterr(divide='ignore', invalid='ignore')
+    # np.seterr(divide='ignore', invalid='ignore')
     formal_structure_cost = (
-        price_simul * (250000) * coeff_land[0, :]
+        price_simul * 250000 * coeff_land[0, :]
         / initial_state_households_housing_types[0, :])
-    formal_structure_cost[np.isinf(formal_structure_cost)] = np.nan
+    # formal_structure_cost[np.isinf(formal_structure_cost)] = np.nan
 
     return formal_structure_cost
 
 
 def compute_content_cost(
-        initial_state_household_centers, initial_state_housing_supply,
+        initial_state_households, initial_state_housing_supply,
         income_net_of_commuting_costs, param,
         fraction_capital_destroyed, initial_state_rent,
         initial_state_dwelling_size, interest_rate):
@@ -838,8 +828,9 @@ def compute_content_cost(
 
     Parameters
     ----------
-    initial_state_household_centers : ndarray(float64, ndim=2)
-        Number of households per grid cell in each income group (4)
+    initial_state_households : ndarray(float64, ndim=3)
+        Number of households per grid cell in each income group (4) and
+        each housing type (4)
     initial_state_housing_supply : ndarray(float64, ndim=2)
         Housing supply per unit of available land (in m² per km²)
         for each housing type (4) in each grid cell
@@ -871,19 +862,26 @@ def compute_content_cost(
 
     # We estimate average incomes net of commuting costs in space, per housing
     # type
-    np.seterr(divide='ignore', invalid='ignore')
-    income_formal = np.nansum(
-        income_net_of_commuting_costs * initial_state_household_centers
-        / np.nansum(initial_state_household_centers, 0), 0)
-    income_formal[income_formal < 0] = np.nan
-    np.seterr(divide='ignore', invalid='ignore')
-    income_informal = np.nansum(
-        income_net_of_commuting_costs[0:2, :]
-        * initial_state_household_centers[0:2, :]
-        / np.nansum(initial_state_household_centers[0:2, :], 0), 0)
-    income_informal[income_informal < 0] = np.nan
-    income_subsidized = income_net_of_commuting_costs[0, :]
-    income_subsidized[income_subsidized < 0] = np.nan
+
+    income_formal = (
+        np.nansum(income_net_of_commuting_costs
+                  * initial_state_households[0, :, :], 0)
+        / np.nansum(initial_state_households[0, :, :], 0))
+
+    income_backyard = (
+        np.nansum(income_net_of_commuting_costs
+                  * initial_state_households[1, :, :], 0)
+        / np.nansum(initial_state_households[1, :, :], 0))
+
+    income_informal = (
+        np.nansum(income_net_of_commuting_costs
+                  * initial_state_households[2, :, :], 0)
+        / np.nansum(initial_state_households[2, :, :], 0))
+
+    income_subsidized = (
+        np.nansum(income_net_of_commuting_costs
+                  * initial_state_households[3, :, :], 0)
+        / np.nansum(initial_state_households[3, :, :], 0))
 
     # We also define other useful variables
 
@@ -905,10 +903,11 @@ def compute_content_cost(
     fraction_backyard = initial_state_housing_supply[1, :] / 1000000
 
     # We just multiply the amount of composite good from the budget constraint
-    # by the share parameter to obtain cost estimates
+    # by the damage parameter to obtain cost estimates
 
     content_cost["formal"] = (
         param["fraction_z_dwellings"]
+        # * fraction_capital_destroyed.contents_formal
         / (1 + param["fraction_z_dwellings"]
            * fraction_capital_destroyed.contents_formal)
         * (income_formal
@@ -917,6 +916,7 @@ def compute_content_cost(
 
     content_cost["informal"] = (
         param["fraction_z_dwellings"]
+        # * fraction_capital_destroyed.contents_informal
         / (1 + param["fraction_z_dwellings"]
            * fraction_capital_destroyed.contents_informal)
         * (income_informal
@@ -929,28 +929,34 @@ def compute_content_cost(
 
     content_cost["subsidized"] = (
         param["fraction_z_dwellings"]
+        # * fraction_capital_destroyed.contents_subsidized
         / (1 + param["fraction_z_dwellings"]
            * fraction_capital_destroyed.contents_subsidized)
         * (income_subsidized
-           + param["backyard_size"] * initial_state_rent[1, :]
-           * fraction_backyard
+           + (param["backyard_size"] * initial_state_rent[1, :]
+              * fraction_backyard)
            - (capital_destroyed + param["depreciation_rate"])
            * param["subsidized_structure_value"])
         )
+    # NB: There are (only) 3 corner cases where structural capital depreciation
+    # is bigger than income in RDP, which may occur in high-flood-risk zones
+    # where we do not let poor households arbitrage spatially: we put a floor
+    # on those values as we can assume that those very deprived households
+    # would be bailed out
+    content_cost.loc[content_cost["subsidized"] < 0, "subsidized"] = 0
 
     content_cost["backyard"] = (
-        param["fraction_z_dwellings"] /
-        (1 + param["fraction_z_dwellings"]
-         * fraction_capital_destroyed.contents_backyard)
-        * (income_informal
+        param["fraction_z_dwellings"]
+        # * fraction_capital_destroyed.contents_backyard
+        / (1 + param["fraction_z_dwellings"]
+           * fraction_capital_destroyed.contents_backyard)
+        * (income_backyard
            - initial_state_rent[1, :] * initial_state_dwelling_size[1, :]
            - fraction_capital_destroyed.structure_backyards
            * param["informal_structure_value"]
            - (interest_rate + param["depreciation_rate"])
            * param["informal_structure_value"])
         )
-
-    content_cost[content_cost < 0] = np.nan
 
     return content_cost
 

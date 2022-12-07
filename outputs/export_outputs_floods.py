@@ -527,7 +527,7 @@ def validation_flood_coastal(stats1, stats2, legend1, legend2, type_flood,
     plt.close()
 
 
-def plot_damages(damages1, damages2, path_plots, flood_categ, options):
+def valid_damages(damages1, damages2, path_plots, flood_categ, options):
     """
     Validation bar plot for estimated damages for a given flood type.
 
@@ -635,7 +635,8 @@ def plot_damages(damages1, damages2, path_plots, flood_categ, options):
     plt.xticks(X, quarter)
     plt.tick_params(labelbottom=True)
     plt.ylabel("Million R per year")
-    plt.savefig(path_plots + flood_categ + '_structures_damages.png')
+    plt.savefig(path_plots + 'valid_' + flood_categ
+                + '_structures_damages.png')
     # plt.show()
     plt.close()
 
@@ -653,7 +654,7 @@ def plot_damages(damages1, damages2, path_plots, flood_categ, options):
     plt.xticks(X, quarter)
     plt.tick_params(labelbottom=True)
     plt.ylabel("Million R per year")
-    plt.savefig(path_plots + flood_categ + '_contents_damages.png')
+    plt.savefig(path_plots + 'valid_' + flood_categ + '_contents_damages.png')
     # plt.show()
     plt.close()
 

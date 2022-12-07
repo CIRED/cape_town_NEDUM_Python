@@ -115,7 +115,7 @@ options["defended"] = 0
 # Dummy for taking sea-level rise into account in coastal flood data
 # NB: Projections are up to 2050, based upon IPCC AR5 assessment for the
 # RCP 8.5 scenario on coastal (dummy scenarios on other flood risks)
-options["climate_change"] = 1
+options["climate_change"] = 0
 
 # #### We also set options for scenarios on time-moving exogenous variables
 
@@ -1048,28 +1048,11 @@ coastal_floods = ['C_MERITDEM_1_0000', 'C_MERITDEM_1_0002',
                   'C_MERITDEM_1_0100', 'C_MERITDEM_1_0250']
 
 # region
-# We compute the full values of damaged formal private structures and contents,
-# for each housing type and a representative household
-import outputs.flood_outputs as outfld
-
-content_cost = outfld.compute_content_cost(
-    initial_state_household_centers, initial_state_housing_supply,
-    income_net_of_commuting_costs, param,
-    fraction_capital_destroyed, initial_state_rent,
-    initial_state_dwelling_size, interest_rate)
-
-formal_structure_cost = outfld.compute_formal_structure_cost(
-        initial_state_rent, param, interest_rate, coeff_land,
-        initial_state_households_housing_types, param["coeff_A"])
-# endregion
-
-# region
 # We re-import flood data to be able to compute damages a posteriori, when
 # agents are set not to anticipate floods, hence do not take them into account,
 # even if they actually do occur
 
 import inputs.data as inpdt
-
 (fraction_capital_destroyed, structural_damages_small_houses,
  structural_damages_medium_houses, structural_damages_large_houses,
  content_damages, structural_damages_type1, structural_damages_type2,
@@ -1077,6 +1060,22 @@ import inputs.data as inpdt
  structural_damages_type4a, structural_damages_type4b
  ) = inpdt.import_full_floods_data(options, param, path_folder)
 
+# endregion
+
+# region
+# We compute the full values of exposed formal private structures and contents,
+# for each housing type and a representative household
+import outputs.flood_outputs as outfld
+
+content_cost = outfld.compute_content_cost(
+    initial_state_households, initial_state_housing_supply,
+    income_net_of_commuting_costs, param,
+    fraction_capital_destroyed, initial_state_rent,
+    initial_state_dwelling_size, interest_rate)
+
+formal_structure_cost = outfld.compute_formal_structure_cost(
+        initial_state_capital_land, initial_state_households_housing_types,
+        coeff_land)
 # endregion
 
 # region
