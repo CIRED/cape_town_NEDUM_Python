@@ -277,6 +277,7 @@ try:
 except OSError as error:
     print(error)
 
+
 # %% Validation: draw maps and figures
 
 print("Static equilibrium validation")
@@ -350,7 +351,8 @@ total_data = outexp.export_map(
 
 formal_sim = outexp.export_map(
     sim_nb_households_formal, grid, geo_grid, path_plots,  'formal_sim',
-    "Number of households in formal private, up to 99.99% quantile (simulation)",
+    "Number of households in formal private, up to 99.99% quantile"
+    + " (simulation)",
     path_tables,
     ubnd=np.nanquantile(sim_nb_households_formal, 0.9999))
 formal_data = outexp.export_map(
@@ -379,7 +381,8 @@ informal_sim = outexp.export_map(
     ubnd=np.nanquantile(sim_nb_households_informal, 0.9999))
 informal_data = outexp.export_map(
     data_nb_households_informal, grid, geo_grid, path_plots,  'informal_data',
-    "Number of households in informal settlements, up to 99.99% quantile (data)",
+    "Number of households in informal settlements, up to 99.99% quantile"
+    + " (data)",
     path_tables,
     ubnd=np.nanquantile(data_nb_households_informal, 0.9999))
 
@@ -469,7 +472,8 @@ hsupply_formal_2d_sim = outexp.export_map(
 # validation data on that dimension
 # sim_HFA_dens_formal = initial_state_housing_supply[0, :] / 1000000
 # HFA_dens_formal_2d_sim = outexp.export_map(
-#     sim_HFA_dens_formal, grid, geo_grid, path_plots, 'HFA_dens_formal_2d_sim',
+#     sim_HFA_dens_formal, grid, geo_grid, path_plots,
+#     'HFA_dens_formal_2d_sim',
 #     "Formal private HFA ratio, up to 99.99% quantile (simulation)",
 #     path_tables,
 #     ubnd=np.nanquantile(sim_HFA_dens_formal, 0.9999))
@@ -485,7 +489,8 @@ hsupply_formal_2d_sim = outexp.export_map(
 hsupply_backyard = housing_supply[1, :]
 hsupply_backyard_2d_sim = outexp.export_map(
     hsupply_backyard, grid, geo_grid, path_plots, 'hsupply_backyard_2d_sim',
-    "Total housing supply in informal backyards (in m²), up to 99.99% quantile",
+    "Total housing supply in informal backyards (in m²),"
+    + " up to 99.99% quantile",
     path_tables,
     ubnd=np.nanquantile(hsupply_backyard, 0.9999))
 # FAR_backyard = housing_supply[1, :] / (0.25 * 1000000)
@@ -498,7 +503,8 @@ hsupply_backyard_2d_sim = outexp.export_map(
 hsupply_informal = housing_supply[2, :]
 hsupply_informal_2d_sim = outexp.export_map(
     hsupply_informal, grid, geo_grid, path_plots, 'hsupply_informal_2d_sim',
-    "Total housing supply in informal settlements (in m²), up to 99.99% quantile",
+    "Total housing supply in informal settlements (in m²),"
+    + " up to 99.99% quantile",
     path_tables,
     ubnd=np.nanquantile(hsupply_informal, 0.9999))
 # FAR_informal = housing_supply[2, :] / (0.25 * 1000000)
@@ -682,14 +688,16 @@ netincome_rich_2d_sim = outexp.export_map(
 #     lbnd=np.nanmin(avgincome_poor))
 # avgincome_midpoor = cal_average_income[1, :]
 # avgincome_midpoor_2d_sim = outexp.export_map(
-#     avgincome_midpoor, grid, geo_grid, path_plots, 'avgincome_midpoor_2d_sim',
+#     avgincome_midpoor, grid, geo_grid, path_plots,
+#     'avgincome_midpoor_2d_sim',
 #     "Annual income for the mid-poor (rands, 2011), up to 99.99% quantile",
 #     path_tables,
 #     ubnd=np.nanquantile(avgincome_midpoor, 0.9999),
 #     lbnd=np.nanmin(avgincome_midpoor))
 # avgincome_midrich = cal_average_income[2, :]
 # avgincome_midrich_2d_sim = outexp.export_map(
-#     avgincome_midrich, grid, geo_grid, path_plots, 'avgincome_midrich_2d_sim',
+#     avgincome_midrich, grid, geo_grid, path_plots,
+#     'avgincome_midrich_2d_sim',
 #     "Annual income for the mid-rich (rands, 2011), up to 99.99% quantile",
 #     path_tables,
 #     ubnd=np.nanquantile(avgincome_midrich, 0.9999),
@@ -1115,8 +1123,7 @@ list_sim_backyard = [
 
 # We get the damage maps in absolute values
 
-# NB: coastal damage maps in informal settlements are actually empty, hence
-# the exception in the loop
+# NB: coastal damage maps in informal settlements are actually empty
 for item in list_sim:
     outexp.export_map(item, grid, geo_grid,
                       path_plots_floods, outexp.retrieve_name(item, -1),
@@ -1141,26 +1148,6 @@ for item in list_sim:
 # formal private areas, but households do not actually bear those costs, which
 # are taken into account by developers.
 
-# NB: we will display more information about what are the dominant income group
-# and the population of each area in more elaborate interactive graphs.
-# This is mostly for quick visualization and output data saving
-
-# selected_net_income_formal = np.empty(24014)
-# cond = np.argmax(initial_state_households[0, :, :], axis=0)
-# for j in np.arange(24014):
-#     selected_net_income_formal[j] = (
-#         income_net_of_commuting_costs[cond[j], j])
-
-# for item in list_sim_formal:
-#     new_item = (item
-#                 / selected_net_income_formal
-#                 / initial_state_households_housing_types[0, :])
-#     outexp.export_map(
-#         new_item, grid, geo_grid, path_plots_floods,
-#         outexp.retrieve_name(item, -1) + '_shareinc',
-#         "Flood damages (% net income share), up to 99.99% quantile",
-#         path_tables_floods, ubnd=np.nanquantile(new_item, 0.9999))
-
 # Apart from setting income equal to nan when there is nobody, this yields
 # the same as selected_net_income formulas
 
@@ -1184,12 +1171,6 @@ income_subsidized = (
               * initial_state_households[3, :, :], 0)
     / np.nansum(initial_state_households[3, :, :], 0))
 
-# selected_net_income_rdp = np.empty(24014)
-# cond = np.argmax(initial_state_households[3, :, :], axis=0)
-# for j in np.arange(24014):
-#     selected_net_income_rdp[j] = (
-#         income_net_of_commuting_costs[cond[j], j])
-
 for item in list_sim_subsidized:
     new_item = (item
                 / income_subsidized
@@ -1201,12 +1182,6 @@ for item in list_sim_subsidized:
         "Flood damages (% net income share), up to 99.99% quantile",
         path_tables_floods, ubnd=np.nanquantile(new_item, 0.9999))
 
-# selected_net_income_backyard = np.empty(24014)
-# cond = np.argmax(initial_state_households[1, :, :], axis=0)
-# for j in np.arange(24014):
-#     selected_net_income_backyard[j] = (
-#         income_net_of_commuting_costs[cond[j], j])
-
 for item in list_sim_backyard:
     new_item = (item
                 / income_backyard
@@ -1217,12 +1192,6 @@ for item in list_sim_backyard:
         outexp.retrieve_name(item, -1) + '_shareinc',
         "Flood damages (% net income share), up to 99.99% quantile",
         path_tables_floods, ubnd=np.nanquantile(new_item, 0.9999))
-
-# selected_net_income_informal = np.empty(24014)
-# cond = np.argmax(initial_state_households[2, :, :], axis=0)
-# for j in np.arange(24014):
-#     selected_net_income_informal[j] = (
-#         income_net_of_commuting_costs[cond[j], j])
 
 for item in list_sim_informal:
     new_item = (item
