@@ -64,7 +64,7 @@ options["defended"] = 0
 #  Dummy for taking sea-level rise into account in coastal flood data
 #  NB: Projections are up to 2050, based upon IPCC AR5 assessment for the
 #  RCP 8.5 scenario for coastal (+ dummy scenarios for pluvial / fluvial)
-options["climate_change"] = 0
+options["climate_change"] = 1
 
 # More custom options regarding scenarios
 options["inc_ineq_scenario"] = 2
@@ -204,13 +204,34 @@ initial_state_limit_city = np.load(
 
 # LOAD FLOOD DATA
 
-(fraction_capital_destroyed, structural_damages_small_houses,
- structural_damages_medium_houses, structural_damages_large_houses,
- content_damages, structural_damages_type1, structural_damages_type2,
- structural_damages_type3a, structural_damages_type3b,
- structural_damages_type4a, structural_damages_type4b
- ) = inpdt.import_full_floods_data(
-     options, param, path_folder)
+# TODO: should add option!!!
+
+if options["agents_anticipate_floods"] == 1:
+    (fraction_capital_destroyed, structural_damages_small_houses,
+     structural_damages_medium_houses, structural_damages_large_houses,
+     content_damages, structural_damages_type1, structural_damages_type2,
+     structural_damages_type3a, structural_damages_type3b,
+     structural_damages_type4a, structural_damages_type4b
+     ) = inpdt.import_full_floods_data(options, param, path_folder)
+
+# Else, we set those outputs as zero
+# NB: 24014 is the number of grid pixels
+elif options["agents_anticipate_floods"] == 0:
+    fraction_capital_destroyed = pd.DataFrame()
+    fraction_capital_destroyed["structure_formal_2"] = np.zeros(24014)
+    fraction_capital_destroyed["structure_formal_1"] = np.zeros(24014)
+    fraction_capital_destroyed["structure_subsidized_2"] = np.zeros(24014)
+    fraction_capital_destroyed["structure_subsidized_1"] = np.zeros(24014)
+    fraction_capital_destroyed["contents_formal"] = np.zeros(24014)
+    fraction_capital_destroyed["contents_informal"] = np.zeros(24014)
+    fraction_capital_destroyed["contents_subsidized"] = np.zeros(24014)
+    fraction_capital_destroyed["contents_backyard"] = np.zeros(24014)
+    fraction_capital_destroyed["structure_backyards"] = np.zeros(24014)
+    fraction_capital_destroyed["structure_formal_backyards"] = np.zeros(24014)
+    fraction_capital_destroyed["structure_informal_backyards"
+                               ] = np.zeros(24014)
+    fraction_capital_destroyed["structure_informal_settlements"
+                               ] = np.zeros(24014)
 
 # SCENARIOS
 
@@ -542,7 +563,7 @@ housing_rent_1d = outexp.simulation_housing_price(
     grid, initial_state_rent, interest_rate, param, center,
     housing_types_sp, path_plots, path_tables, land_price=0)
 
-# TODO: check underlying validity/quality of validation data
+# NB: check underlying validity/quality of validation data
 housing_price_1d = outexp.valid_housing_price(
     grid, initial_state_rent, interest_rate, param,
     housing_types_sp, data_sp,
@@ -717,13 +738,15 @@ netincome_rich_2d_sim = outexp.export_map(
 
 # %% FLOOD OUPUTS
 
+# We commented this section out as it was made redundant with the use case
+# scripts
+
 # We start with aggregate flood exposure validation
 
 # NB: evolution is not necessarily monotonous on the short run because of
 # some decreasing flood depths (never proportion of flood-prone area)
 # Also note that we focus on fluvial undefended maps, to compare with other
 # flood maps
-# TODO: We prefer to rely on more detailed distribution plots from...
 
 # stats_fluvialu_per_housing_data = outfld.compute_stats_per_housing_type(
 #     fluvialu_floods, path_floods, data_nb_households_formal,
@@ -786,7 +809,6 @@ netincome_rich_2d_sim = outexp.export_map(
 #     sim_nb_households_midrich, sim_nb_households_rich)
 
 # Finally, we plot flood severity distribution across 3 selected return periods
-# TODO: We prefer to rely on more detailed distribution plots from...
 
 # barWidth = 0.1
 # transparency = [1, 0.5, 0.25]

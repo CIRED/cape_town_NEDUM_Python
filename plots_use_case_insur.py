@@ -20,6 +20,8 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 import inputs.parameters_and_options as inpprm
+import inputs.data as inpdt
+import outputs.flood_outputs as outfld
 
 
 # SET RELATED OPTIONS
@@ -61,6 +63,9 @@ path_maps_rent_distrib_subsidized = path_maps_rent_distrib + 'subsidized/'
 path_maps_rent_distrib_informal = path_maps_rent_distrib + 'informal/'
 path_maps_rent_distrib_backyard = path_maps_rent_distrib + 'backyard/'
 
+path_damage_distrib_total = path_damage_distrib + 'total/'
+path_damage_distrib_content = path_damage_distrib + 'content/'
+
 list_output_paths = [
     path_use_case, path_maps, path_maps_abs_damages, path_maps_rel_damages,
     path_maps_pop_distrib, path_maps_rent_distrib,
@@ -68,7 +73,8 @@ list_output_paths = [
     path_maps_rel_damages_informal, path_maps_rel_damages_backyard,
     path_maps_rent_distrib_formal, path_maps_rent_distrib_subsidized,
     path_maps_rent_distrib_informal, path_maps_rent_distrib_backyard,
-    path_charts, path_damage_distrib]
+    path_charts, path_damage_distrib,
+    path_damage_distrib_total, path_damage_distrib_content]
 
 for path in list_output_paths:
     try:
@@ -83,11 +89,175 @@ options = inpprm.import_options()
 param = inpprm.import_param(
     path_precalc_inp, options)
 
+# (interest_rate, population, housing_type_data, total_RDP
+#  ) = inpdt.import_macro_data(param, path_scenarios, path_folder)
+
+amenities = inpdt.import_amenities(path_precalc_inp, options)
+
 
 # DEFINE SCENARIOS TO IMPORT
 
 list_scenarios = ['floods00_F0_P11_C10_scenario232',
                   'floods10_F0_P11_C10_scenario232']
+
+# TODO: compute damages from 2D tables instead
+
+# CREATE AGGREGATE DAMAGE TABLES
+
+for i in [0, 1]:
+
+    name = list_scenarios[i]
+
+    path_plots = path_outputs + name + '/plots/'
+    path_tables = path_outputs + name + '/tables/'
+    path_plots_floods = path_plots + 'floods/'
+    path_tables_floods = path_tables + 'floods/'
+
+    flood_categ = ['fluvialu_data', 'fluvialu_sim',
+                   'pluvial_data', 'pluvial_sim',
+                   'coastal_data', 'coastal_sim']
+    housing_types = ['formal', 'subsidized', 'informal', 'backyard']
+    damage_data_dict = {
+        key: pd.read_csv(path_tables_floods + key + '_damages.csv')
+        for key in flood_categ}
+
+    # ANNUALIZE DAMAGES
+
+    # First for fluvial floods
+
+    fluvialu_struct = [
+        outfld.annualize_damages(
+            damage_data_dict['fluvialu_sim'].formal_structure_damages,
+            'fluvialu', 'formal', options) / 1000000,
+        outfld.annualize_damages(
+            damage_data_dict['fluvialu_sim'].subsidized_structure_damages,
+            'fluvialu', 'subsidized', options) / 1000000,
+        outfld.annualize_damages(
+            damage_data_dict['fluvialu_sim'].informal_structure_damages,
+            'fluvialu', 'informal', options) / 1000000,
+        outfld.annualize_damages(
+            damage_data_dict['fluvialu_sim'].backyard_structure_damages,
+            'fluvialu', 'backyard', options) / 1000000]
+    fluvialu_struct = pd.DataFrame(
+        fluvialu_struct, housing_types, ['struct_damage'])
+
+    fluvialu_content = [
+        outfld.annualize_damages(
+            damage_data_dict['fluvialu_sim'].formal_content_damages,
+            'fluvialu', 'formal', options) / 1000000,
+        outfld.annualize_damages(
+            damage_data_dict['fluvialu_sim'].subsidized_content_damages,
+            'fluvialu', 'subsidized',
+            options) / 1000000,
+        outfld.annualize_damages(
+            damage_data_dict['fluvialu_sim'].informal_content_damages,
+            'fluvialu', 'informal',
+            options) / 1000000,
+        outfld.annualize_damages(
+            damage_data_dict['fluvialu_sim'].backyard_content_damages,
+            'fluvialu', 'backyard',
+            options) / 1000000
+    ]
+    fluvialu_content = pd.DataFrame(
+        fluvialu_content, housing_types, ['content_damage'])
+
+    fluvialu_sim = pd.merge(fluvialu_struct, fluvialu_content,
+                            left_index=True, right_index=True)
+
+    # Then for pluvial floods
+
+    pluvial_struct = [
+        outfld.annualize_damages(
+            damage_data_dict['pluvial_sim'].formal_structure_damages,
+            'pluvial', 'formal', options) / 1000000,
+        outfld.annualize_damages(
+            damage_data_dict['pluvial_sim'].subsidized_structure_damages,
+            'pluvial', 'subsidized', options) / 1000000,
+        outfld.annualize_damages(
+            damage_data_dict['pluvial_sim'].informal_structure_damages,
+            'pluvial', 'informal', options) / 1000000,
+        outfld.annualize_damages(
+            damage_data_dict['pluvial_sim'].backyard_structure_damages,
+            'pluvial', 'backyard', options) / 1000000
+    ]
+    pluvial_struct = pd.DataFrame(
+        pluvial_struct, housing_types, ['struct_damage'])
+
+    pluvial_content = [
+        outfld.annualize_damages(
+            damage_data_dict['pluvial_sim'].formal_content_damages,
+            'pluvial', 'formal', options) / 1000000,
+        outfld.annualize_damages(
+            damage_data_dict['pluvial_sim'].subsidized_content_damages,
+            'pluvial', 'subsidized', options) / 1000000,
+        outfld.annualize_damages(
+            damage_data_dict['pluvial_sim'].informal_content_damages,
+            'pluvial', 'informal', options) / 1000000,
+        outfld.annualize_damages(
+            damage_data_dict['pluvial_sim'].backyard_content_damages,
+            'pluvial', 'backyard', options) / 1000000
+    ]
+    pluvial_content = pd.DataFrame(
+        pluvial_content, housing_types, ['content_damage'])
+
+    pluvial_sim = pd.merge(pluvial_struct, pluvial_content,
+                           left_index=True, right_index=True)
+
+    # Finally for coastal floods
+
+    coastal_struct = [
+        outfld.annualize_damages(
+            damage_data_dict['coastal_sim'].formal_structure_damages,
+            'coastal', 'formal', options) / 1000000,
+        outfld.annualize_damages(
+            damage_data_dict['coastal_sim'].subsidized_structure_damages,
+            'coastal', 'subsidized', options) / 1000000,
+        outfld.annualize_damages(
+            damage_data_dict['coastal_sim'].informal_structure_damages,
+            'coastal', 'informal', options) / 1000000,
+        outfld.annualize_damages(
+            damage_data_dict['coastal_sim'].backyard_structure_damages,
+            'coastal', 'backyard', options) / 1000000
+    ]
+    coastal_struct = pd.DataFrame(
+        coastal_struct, housing_types, ['struct_damage'])
+
+    coastal_content = [
+        outfld.annualize_damages(
+            damage_data_dict['coastal_sim'].formal_content_damages,
+            'coastal', 'formal', options) / 1000000,
+        outfld.annualize_damages(
+            damage_data_dict['coastal_sim'].subsidized_content_damages,
+            'coastal', 'subsidized', options) / 1000000,
+        outfld.annualize_damages(
+            damage_data_dict['coastal_sim'].informal_content_damages,
+            'coastal', 'informal', options) / 1000000,
+        outfld.annualize_damages(
+            damage_data_dict['coastal_sim'].backyard_content_damages,
+            'coastal', 'backyard', options) / 1000000
+    ]
+    coastal_content = pd.DataFrame(
+        coastal_content, housing_types, ['content_damage'])
+
+    coastal_sim = pd.merge(coastal_struct, coastal_content,
+                           left_index=True, right_index=True)
+
+    # SAVE OUTPUTS FOR THE SIMULATION
+
+    df_dict = {'fluvialu_sim': fluvialu_sim,
+               'pluvial_sim': pluvial_sim,
+               'coastal_sim': coastal_sim}
+
+    # Create a Pandas Excel writer using XlsxWriter as the engine.
+    writer = pd.ExcelWriter(path_outputs + name + '/damage_data.xlsx',
+                            engine='xlsxwriter')
+
+    # Write each dataframe to a different worksheet.
+    for key, value in df_dict.items():
+        value.to_excel(writer, sheet_name=key)
+
+    # Close the Pandas Excel writer and output the Excel file.
+    writer.save()
 
 
 # %% Imports
@@ -106,24 +276,24 @@ print("Import data")
 
 # ##Without insurance
 damages_fluvialu_sim_noinsur = pd.read_excel(
-    path_outputs + 'floods00_F0_P11_C10_scenario232' + '/damage_data.xlsx',
+    path_outputs + list_scenarios[0] + '/damage_data.xlsx',
     'fluvialu_sim', index_col=0)
 damages_pluvial_sim_noinsur = pd.read_excel(
-    path_outputs + 'floods00_F0_P11_C10_scenario232' + '/damage_data.xlsx',
+    path_outputs + list_scenarios[0] + '/damage_data.xlsx',
     'pluvial_sim', index_col=0)
 damages_coastal_sim_noinsur = pd.read_excel(
-    path_outputs + 'floods00_F0_P11_C10_scenario232' + '/damage_data.xlsx',
+    path_outputs + list_scenarios[0] + '/damage_data.xlsx',
     'coastal_sim', index_col=0)
 
 # ##With insurance
 damages_fluvialu_sim_insur = pd.read_excel(
-    path_outputs + 'floods10_F0_P11_C10_scenario232' + '/damage_data.xlsx',
+    path_outputs + list_scenarios[1] + '/damage_data.xlsx',
     'fluvialu_sim', index_col=0)
 damages_pluvial_sim_insur = pd.read_excel(
-    path_outputs + 'floods10_F0_P11_C10_scenario232' + '/damage_data.xlsx',
+    path_outputs + list_scenarios[1] + '/damage_data.xlsx',
     'pluvial_sim', index_col=0)
 damages_coastal_sim_insur = pd.read_excel(
-    path_outputs + 'floods10_F0_P11_C10_scenario232' + '/damage_data.xlsx',
+    path_outputs + list_scenarios[1] + '/damage_data.xlsx',
     'coastal_sim', index_col=0)
 
 
@@ -131,7 +301,6 @@ damages_coastal_sim_insur = pd.read_excel(
 
 # We retrieve all available dimension combinations in the data
 flood_types = ['fluvialu', 'pluvial', 'coastal']
-housing_types = ['formal', 'subsidized', 'informal', 'backyard']
 damage_types = ['structure', 'content']
 list_dim = [flood_types, housing_types, damage_types]
 all_dim = list(itertools.product(*list_dim))
@@ -141,7 +310,7 @@ all_dim = list(itertools.product(*list_dim))
 dict_damage_map_noinsur = {}
 for dim in all_dim:
     table = pd.read_csv(
-        path_outputs + 'floods00_F0_P11_C10_scenario232/tables/floods/'
+        path_outputs + list_scenarios[0] + '/tables/floods/'
         + dim[0] + '_' + dim[1] + '_' + dim[2] + '_2d_sim.csv',
         names=['damage'], header=None)
     dict_damage_map_noinsur[dim[0] + '_' + dim[1] + '_' + dim[2]] = table
@@ -149,7 +318,7 @@ for dim in all_dim:
 dict_damage_map_insur = {}
 for dim in all_dim:
     table = pd.read_csv(
-        path_outputs + 'floods10_F0_P11_C10_scenario232/tables/floods/'
+        path_outputs + list_scenarios[1] + '/tables/floods/'
         + dim[0] + '_' + dim[1] + '_' + dim[2] + '_2d_sim.csv',
         names=['damage'], header=None)
     dict_damage_map_insur[dim[0] + '_' + dim[1] + '_' + dim[2]] = table
@@ -157,7 +326,7 @@ for dim in all_dim:
 dict_damage_map_noinsur_shareinc = {}
 for dim in all_dim:
     table = pd.read_csv(
-        path_outputs + 'floods00_F0_P11_C10_scenario232/tables/floods/'
+        path_outputs + list_scenarios[0] + '/tables/floods/'
         + dim[0] + '_' + dim[1] + '_' + dim[2] + '_2d_sim_shareinc.csv',
         names=['damage'], header=None)
     dict_damage_map_noinsur_shareinc[dim[0] +
@@ -166,7 +335,7 @@ for dim in all_dim:
 dict_damage_map_insur_shareinc = {}
 for dim in all_dim:
     table = pd.read_csv(
-        path_outputs + 'floods10_F0_P11_C10_scenario232/tables/floods/'
+        path_outputs + list_scenarios[0] + '/tables/floods/'
         + dim[0] + '_' + dim[1] + '_' + dim[2] + '_2d_sim_shareinc.csv',
         names=['damage'], header=None)
     dict_damage_map_insur_shareinc[dim[0] +
@@ -554,20 +723,23 @@ for item in list_maps_shareinc:
             dict_scenario_outcomes[list_scenarios[0]]['hh_per_htype'][1, :])
         concat_damage_map['rent_formal'] = (
             dict_scenario_outcomes[list_scenarios[0]]['rent'][0, :])
-        concat_damage_map['rent_formal'][
-            concat_damage_map['nb_households_formal'] == 0] = 0
+        concat_damage_map.loc[
+            concat_damage_map['nb_households_formal'] == 0, 'rent_formal'] = 0
         concat_damage_map['rent_subsidized'] = (
             dict_scenario_outcomes[list_scenarios[0]]['rent'][3, :])
-        concat_damage_map['rent_subsidized'][
-            concat_damage_map['nb_households_subsidized'] == 0] = 0
+        concat_damage_map.loc[
+            concat_damage_map['nb_households_subsidized'] == 0,
+            'rent_subsidized'] = 0
         concat_damage_map['rent_informal'] = (
             dict_scenario_outcomes[list_scenarios[0]]['rent'][2, :])
-        concat_damage_map['rent_informal'][
-            concat_damage_map['nb_households_informal'] == 0] = 0
+        concat_damage_map.loc[
+            concat_damage_map['nb_households_informal'] == 0,
+            'rent_informal'] = 0
         concat_damage_map['rent_backyard'] = (
             dict_scenario_outcomes[list_scenarios[0]]['rent'][1, :])
-        concat_damage_map['rent_subsidized'][
-            concat_damage_map['nb_households_subsidized'] == 0] = 0
+        concat_damage_map.loc[
+            concat_damage_map['nb_households_subsidized'] == 0,
+            'rent_subsidized'] = 0
         for housing_type in housing_types:
             concat_damage_map['incgroup_' + housing_type] = (
                 dict_scenario_outcomes[list_scenarios[0]
@@ -587,20 +759,23 @@ for item in list_maps_shareinc:
             dict_scenario_outcomes[list_scenarios[1]]['hh_per_htype'][1, :])
         concat_damage_map['rent_formal'] = (
             dict_scenario_outcomes[list_scenarios[1]]['rent'][0, :])
-        concat_damage_map['rent_formal'][
-            concat_damage_map['nb_households_formal'] == 0] = 0
+        concat_damage_map.loc[
+            concat_damage_map['nb_households_formal'] == 0, 'rent_formal'] = 0
         concat_damage_map['rent_subsidized'] = (
             dict_scenario_outcomes[list_scenarios[1]]['rent'][3, :])
-        concat_damage_map['rent_subsidized'][
-            concat_damage_map['nb_households_subsidized'] == 0] = 0
+        concat_damage_map.loc[
+            concat_damage_map['nb_households_subsidized'] == 0,
+            'rent_subsidized'] = 0
         concat_damage_map['rent_informal'] = (
             dict_scenario_outcomes[list_scenarios[1]]['rent'][2, :])
-        concat_damage_map['rent_informal'][
-            concat_damage_map['nb_households_informal'] == 0] = 0
+        concat_damage_map.loc[
+            concat_damage_map['nb_households_informal'] == 0,
+            'rent_informal'] = 0
         concat_damage_map['rent_backyard'] = (
             dict_scenario_outcomes[list_scenarios[1]]['rent'][1, :])
-        concat_damage_map['rent_backyard'][
-            concat_damage_map['nb_households_backyard'] == 0] = 0
+        concat_damage_map.loc[
+            concat_damage_map['nb_households_backyard'] == 0,
+            'rent_backyard'] = 0
         for housing_type in housing_types:
             concat_damage_map['incgroup_' + housing_type] = (
                 dict_scenario_outcomes[list_scenarios[1]
@@ -855,7 +1030,7 @@ for housing_type in housing_types:
     equil_map_compar.loc[
         equil_map_compar[housing_type + '_incgroup'] == 0,
         housing_type + '_incgroup'
-        ] = equil_maps[list_scenarios[1]][housing_type + '_incgroup']
+    ] = equil_maps[list_scenarios[1]][housing_type + '_incgroup']
 
 equil_map_compar = equil_map_compar.fillna(0)
 equil_map_compar = equil_map_compar.replace([np.inf, -np.inf], 0)
@@ -1043,6 +1218,8 @@ fig_coastal.write_image(path_charts + "coastal_sim_damage_sum_insur.png")
 
 print("Aggregate coastal damages done")
 
+# NB: add text with value of % change
+
 
 # PLOT SPATIAL DAMAGE DISTRIBUTION
 
@@ -1055,6 +1232,8 @@ for item in list_maps:
 
     damage_maps[item]['lon'] = geo_grid.lon
     damage_maps[item]['lat'] = geo_grid.lat
+    damage_maps[item].loc[
+        damage_maps[item]['max_val'] == 0, 'max_val'] = np.nan
 
     fig = px.choropleth_mapbox(
         damage_maps[item],
@@ -1096,6 +1275,8 @@ for item in list_maps:
 
     print("map_damages_" + item + " done")
 
+damage_map_compar.loc[
+    damage_map_compar['max_val'] == 0, 'max_val'] = np.nan
 fig = px.choropleth_mapbox(
     damage_map_compar,
     geojson=geo_grid.geometry,
@@ -1144,6 +1325,9 @@ for housing_type in housing_types:
 
         damage_maps_shareinc[item]['lon'] = geo_grid.lon
         damage_maps_shareinc[item]['lat'] = geo_grid.lat
+        damage_maps_shareinc[item].loc[
+            damage_maps_shareinc[item]['max_val_' + housing_type] == 0,
+            'max_val_' + housing_type] = np.nan
 
         fig = px.choropleth_mapbox(
             damage_maps_shareinc[item],
@@ -1185,6 +1369,9 @@ for housing_type in housing_types:
 
         print("map_damages_" + item + "_" + housing_type + " done")
 
+    damage_map_compar_shareinc.loc[
+        damage_map_compar_shareinc['max_val_' + housing_type] == 0,
+        'max_val_' + housing_type] = np.nan
     fig = px.choropleth_mapbox(
         damage_map_compar_shareinc,
         geojson=geo_grid.geometry,
@@ -1220,9 +1407,9 @@ for housing_type in housing_types:
     fig.update_traces(marker_line_width=0)
     # fig.show()
     fig.write_html(path_maps_rel_damages + housing_type
-                   + "/map_damages_" + item + '_' + housing_type + ".html")
+                   + "/map_damages_compar_" + '_' + housing_type + ".html")
     fig.write_image(path_maps_rel_damages + housing_type
-                    + "/map_damages_" + item + '_' + housing_type + ".png")
+                    + "/map_damages_compar_" + housing_type + ".png")
 
     print("map_damages_compar_shareinc_insur_" + housing_type + " done")
 
@@ -1235,6 +1422,8 @@ for item in list_scenarios:
 
     equil_maps[item]['lon'] = geo_grid.lon
     equil_maps[item]['lat'] = geo_grid.lat
+    equil_maps[item].loc[
+        equil_maps[item]['hh_tot'] == 0, 'hh_tot'] = np.nan
 
     fig = px.choropleth_mapbox(
         equil_maps[item],
@@ -1283,6 +1472,8 @@ for item in list_scenarios:
 
     print("map_pop_distrib_" + type_map + " done")
 
+equil_map_compar.loc[
+    equil_map_compar['hh_tot'] == 0, 'hh_tot'] = np.nan
 fig = px.choropleth_mapbox(
     equil_map_compar,
     geojson=geo_grid.geometry,
@@ -1337,6 +1528,9 @@ for housing_type in housing_types:
         equil_maps[item]['lat'] = geo_grid.lat
         # equil_maps[item]['hsupply_' + housing_type] = (
         #     equil_maps[item]['hsupply_' + housing_type] / 1000000)
+        equil_maps[item].loc[
+            equil_maps[item]['rent_' + housing_type] == 0,
+            'rent_' + housing_type] = np.nan
 
         fig = px.choropleth_mapbox(
             equil_maps[item],
@@ -1360,7 +1554,8 @@ for housing_type in housing_types:
             title='Estimated average annual rent / m² (rands, 2011)',
             color_continuous_scale="Reds",
             template='plotly_white',
-            hover_data={'hh_' + housing_type: ':,.0f',
+            hover_data={'lon': ':.2f', 'lat': ':.2f',
+                        'hh_' + housing_type: ':,.0f',
                         housing_type + '_incgroup': ':,.0f',
                         # 'hsupply_' + housing_type: ':.2f',
                         'dwelling_size_' + housing_type: ':,.0f',
@@ -1384,6 +1579,9 @@ for housing_type in housing_types:
 
         print("map_rent_distrib_" + type_map + "_" + housing_type + " done")
 
+    equil_map_compar.loc[
+        equil_map_compar['rent_' + housing_type] == 0,
+        'rent_' + housing_type] = np.nan
     fig = px.choropleth_mapbox(
         equil_map_compar,
         geojson=geo_grid.geometry,
@@ -1409,7 +1607,8 @@ for housing_type in housing_types:
         color_continuous_scale="Picnic",
         color_continuous_midpoint=0,
         template='plotly_white',
-        hover_data={'hh_' + housing_type + '_pct': ':+.2%',
+        hover_data={'lon': ':.2f', 'lat': ':.2f',
+                    'hh_' + housing_type + '_pct': ':+.2%',
                     housing_type + '_incgroup': ':,.0f',
                     # 'hsupply_' + housing_type + '_pct': ':+.2%',
                     'dwelling_size_' + housing_type + '_pct': ':+.2%',
@@ -1435,20 +1634,11 @@ for housing_type in housing_types:
 # First, we define the budget share spent on flood damages by income group
 list_incgroup = ['1', '2', '3', '4']
 
-# TODO: correction
+# Then, we create a variable associating each observed damages (as a share of
+# income) to the dominant income group in the location, based on observed
+# housing type
 for item in list_maps_shareinc:
     for incgroup in list_incgroup:
-        for flood in flood_types:
-            damage_maps_shareinc[item]['sum_' + flood + '_' + incgroup] = 0
-            for housing in housing_types:
-                temp1 = damage_maps_shareinc[item]['incgroup_' + housing_type]
-                temp2 = damage_maps_shareinc[item][
-                    'sum_' + flood + '_' + housing_type]
-                damage_maps_shareinc[item].loc[
-                    temp1 == int(incgroup),
-                    'sum_' + flood + '_' + incgroup] = (
-                    damage_maps_shareinc[item]['sum_' + flood + '_' + incgroup]
-                    + temp2)
         if item == 'noinsur_shareinc':
             damage_maps_shareinc[item]['nb_households_' + incgroup] = (
                 dict_scenario_outcomes[list_scenarios[0]]['hh_per_incgroup'][
@@ -1457,10 +1647,38 @@ for item in list_maps_shareinc:
             damage_maps_shareinc[item]['nb_households_' + incgroup] = (
                 dict_scenario_outcomes[list_scenarios[1]]['hh_per_incgroup'][
                     int(incgroup) - 1, :])
+        for flood in flood_types:
+            damage_maps_shareinc[item]['sum_' + flood + '_' + incgroup] = 0
+            for housing in housing_types:
+                temp1 = damage_maps_shareinc[item]['incgroup_' + housing]
+                temp2 = damage_maps_shareinc[item][
+                    'sum_' + flood + '_' + housing]
+                damage_maps_shareinc[item].loc[
+                    temp1 == int(incgroup),
+                    'sum_' + flood + '_' + incgroup] = (
+                    damage_maps_shareinc[item]['sum_' + flood + '_' + incgroup]
+                    + temp2)
 
-# TODO: Repeat instead of doing subplots?
-# NB: add pattern_shape for content?
-# Write somewhere where the rest of households is!
+
+# We repeat the observation for content damages only (to display as a share of
+# total damages)
+for item in list_maps_shareinc:
+    for incgroup in list_incgroup:
+        for flood in flood_types:
+            damage_maps_shareinc[item]['content_' + flood + '_' + incgroup] = 0
+            for housing in housing_types:
+                temp1 = damage_maps_shareinc[item]['incgroup_' + housing]
+                temp2 = damage_maps_shareinc[item][
+                    flood + '_' + housing + '_content']
+                damage_maps_shareinc[item].loc[
+                    temp1 == int(incgroup),
+                    'content_' + flood + '_' + incgroup] = (
+                    damage_maps_shareinc[item][
+                        'content_' + flood + '_' + incgroup]
+                    + temp2)
+
+# NB: Write somewhere where the rest of households is (on top of aggregate
+# satistics)!
 
 damage_maps_shareinc['noinsur_shareinc']['insur'] = 'No'
 damage_maps_shareinc['insur_shareinc']['insur'] = 'Yes'
@@ -1468,9 +1686,26 @@ damage_maps_shareinc_concat = pd.concat(
     [damage_maps_shareinc['insur_shareinc'],
      damage_maps_shareinc['noinsur_shareinc']])
 
+damage_maps['noinsur']['insur'] = 'No'
+damage_maps['insur']['insur'] = 'Yes'
+damage_maps_concat = pd.concat(
+    [damage_maps['insur'],
+     damage_maps['noinsur']])
+
+equil_maps[list_scenarios[0]]['insur'] = 'No'
+equil_maps[list_scenarios[1]]['insur'] = 'Yes'
+equil_maps_concat = pd.concat(
+    [equil_maps[list_scenarios[1]],
+     equil_maps[list_scenarios[0]]])
+
+
+# Then we plot the two variables
+
+agg_stat_rel_damages = pd.DataFrame()
+
 for flood in flood_types:
     for incgroup in list_incgroup:
-        dist = px.histogram(
+        dist_sum = px.histogram(
             damage_maps_shareinc_concat.loc[
                 damage_maps_shareinc_concat[
                     'sum_' + flood + '_' + incgroup] > 0],
@@ -1486,18 +1721,285 @@ for flood in flood_types:
             + incgroup + ' (as % of net income)',
             template='plotly_white')
 
-        dist.update_layout(
-            yaxis_title='Total nb of households',
-            xaxis=dict(tickmode='linear', tick0=0, dtick=0.01)
+        try:
+            noinsur_avg = np.average(
+                damage_maps_shareinc['noinsur_shareinc'].loc[
+                    damage_maps_shareinc['noinsur_shareinc'
+                                         ]['sum_' + flood + '_' + incgroup]
+                    > 0, 'sum_' + flood + '_' + incgroup],
+                weights=damage_maps_shareinc['noinsur_shareinc'].loc[
+                    damage_maps_shareinc['noinsur_shareinc'
+                                         ]['sum_' + flood + '_' + incgroup]
+                    > 0, 'nb_households_' + incgroup]
             )
+        except ZeroDivisionError:
+            noinsur_avg = 0
 
-        dist.write_html(path_damage_distrib + flood + "_damage_dist_"
-                        + incgroup + "_insur.html")
-        dist.write_image(path_damage_distrib + flood + "_damage_dist_"
-                        + incgroup + "_insur.png")
+        noinsur_pop = np.nansum(
+            damage_maps_shareinc['noinsur_shareinc'].loc[
+                damage_maps_shareinc['noinsur_shareinc'
+                                     ]['sum_' + flood + '_' + incgroup]
+                > 0, 'nb_households_' + incgroup]
+        )
 
-        print(flood + "_damage_dist_" + incgroup + "_insur done")
+        try:
+            insur_avg = np.average(
+                damage_maps_shareinc['insur_shareinc'].loc[
+                    damage_maps_shareinc['insur_shareinc'
+                                         ]['sum_' + flood + '_' + incgroup]
+                    > 0, 'sum_' + flood + '_' + incgroup],
+                weights=damage_maps_shareinc['insur_shareinc'].loc[
+                    damage_maps_shareinc['insur_shareinc'
+                                         ]['sum_' + flood + '_' + incgroup]
+                    > 0, 'nb_households_' + incgroup]
+            )
+        except ZeroDivisionError:
+            insur_avg = 0
 
-# TODO: show utility changes in income equiv. What about land value creation?
-# Read Paolo's paper
-# Also save data
+        insur_pop = np.nansum(
+            damage_maps_shareinc['insur_shareinc'].loc[
+                damage_maps_shareinc['insur_shareinc'
+                                     ]['sum_' + flood + '_' + incgroup]
+                > 0, 'nb_households_' + incgroup]
+        )
+
+        agg_stat_rel_damages.at[0, 'insur_avg_' + flood + '_' + incgroup
+                                ] = insur_avg
+        agg_stat_rel_damages.at[0, 'noinsur_avg_' + flood + '_' + incgroup
+                                ] = noinsur_avg
+        agg_stat_rel_damages.at[0, 'insur_pop_' + flood + '_' + incgroup
+                                ] = insur_pop
+        agg_stat_rel_damages.at[0, 'noinsur_pop_' + flood + '_' + incgroup
+                                ] = noinsur_pop
+
+        dist_sum.update_layout(
+            # xaxis=dict(tickmode='linear', tick0=0, dtick=0.01),
+            yaxis_title='Total nb of households'
+        )
+        dist_sum.write_html(path_damage_distrib_total + flood + "_damage_dist_"
+                            + incgroup + "_insur_sum.html")
+        dist_sum.write_image(path_damage_distrib_total + flood
+                             + "_damage_dist_" + incgroup + "_insur_sum.png")
+        print(flood + "_damage_dist_" + incgroup + "_insur_sum done")
+
+        dist_content = px.histogram(
+            damage_maps_shareinc_concat.loc[
+                damage_maps_shareinc_concat[
+                    'content_' + flood + '_' + incgroup] > 0],
+            x='content_' + flood + '_' + incgroup,
+            y='nb_households_' + incgroup,
+            color='insur',
+            labels={'content_' + flood + '_' + incgroup: '(o.w. content)',
+                    'nb_households_' + incgroup: 'nb of households',
+                    'insur': 'w/ insurance'},
+            barmode='group',
+            hover_data={'content_' + flood + '_' + incgroup: False},
+            title='Distribution of flood damages among income group '
+            + incgroup + ' (as % of net income)',
+            template='plotly_white')
+
+        dist_content.update_layout(
+            # xaxis=dict(tickmode='linear', tick0=0, dtick=0.01),
+            yaxis_title='Total nb of households'
+        )
+        dist_content.write_html(
+            path_damage_distrib_content + flood + "_damage_dist_" + incgroup
+            + "_insur_content.html")
+        dist_content.write_image(
+            path_damage_distrib_content + flood + "_damage_dist_" + incgroup
+            + "_insur_content.png")
+
+        print(flood + "_damage_dist_" + incgroup + "_insur_content done")
+
+
+# Since we do not allow for substitution effects, income losses from flood
+# damages in the no-insurance case directly translate into a utility loss
+# through an income effect (note that spatial indifference does not hold in
+# this case). Realized utility levels cannot be directly compared however since
+# they only have an ordinal (as opposed to cardinal) meaning.
+
+# NB: for households living in formal private housing, we can consider that
+# they pay all flood damages, even structural ones through increases in rents:
+# this is an application of tax equivalence with a perfectly elastic supply
+
+# Land value creation potential is another brick that we will add in another
+# use case on mitigation investments
+
+# We save underlying data
+
+damage_maps_concat.to_csv(path_use_case + 'damage_maps_concat.csv')
+damage_map_compar.to_csv(path_use_case + 'damage_map_compar.csv')
+damage_maps_shareinc_concat.to_csv(
+    path_use_case + 'damage_maps_shareinc_concat.csv')
+damage_map_compar_shareinc.to_csv(
+    path_use_case + 'damage_map_compar_shareinc.csv')
+equil_maps_concat.to_csv(path_use_case + 'equil_maps_concat.csv')
+equil_map_compar.to_csv(path_use_case + 'equil_map_compar.csv')
+agg_stat_rel_damages.to_csv(path_use_case + 'agg_stat_rel_damages.csv')
+
+
+# We also do input maps (would change across scenarios with climate change)
+
+equil_maps[list_scenarios[0]].loc[
+    equil_maps[list_scenarios[0]]['flood_deprec_content_formal'] == 0,
+    'flood_deprec_content_formal'] = np.nan
+fig = px.choropleth_mapbox(
+    equil_maps[list_scenarios[0]],
+    geojson=geo_grid.geometry,
+    locations=geo_grid.index,
+    color='flood_deprec_content_formal',
+    center={"lat": -33.92345542582841, "lon": 18.434424141913478},
+    zoom=9.25,
+    mapbox_style='stamen-terrain',
+    opacity=0.5,
+    labels={'locations': 'Pixel ID', 'lon': 'Lon.', 'lat': 'Lat.',
+            'flood_deprec_content_formal': '% depreciation'},
+    title='Estimated fraction of capital destroyed due to floods'
+    + ' (content damages)',
+    color_continuous_scale="Reds",
+    template='plotly_white',
+    hover_data={'lon': ':.2f', 'lat': ':.2f',
+                'flood_deprec_content_formal': ':.2f'})
+fig.update_layout(margin={"r": 0, "t": 30, "l": 0, "b": 0})
+fig.update_traces(marker_line_width=0)
+# fig.show()
+fig.write_html(path_maps + "map_fract_K_destroyed.html")
+fig.write_image(path_maps + "map_fract_K_destroyed.png")
+
+amenities_df = pd.DataFrame({'amenities': amenities})
+amenities_df['lon'] = geo_grid.lon
+amenities_df['lat'] = geo_grid.lat
+amenities_df.loc[amenities_df['amenities'] == 0, 'amenities'] = np.nan
+
+fig = px.choropleth_mapbox(
+    amenities_df,
+    geojson=geo_grid.geometry,
+    locations=geo_grid.index,
+    color='amenities',
+    center={"lat": -33.92345542582841, "lon": 18.434424141913478},
+    zoom=9.25,
+    mapbox_style='stamen-terrain',
+    opacity=0.5,
+    labels={'locations': 'Pixel ID', 'lon': 'Lon.', 'lat': 'Lat.',
+            'amenities': 'Amenity index'},
+    title='Estimated amenity index',
+    color_continuous_scale="Picnic",
+    color_continuous_midpoint=1,
+    template='plotly_white',
+    hover_data={'lon': ':.2f', 'lat': ':.2f',
+                'amenities': ':.2f'})
+fig.update_layout(margin={"r": 0, "t": 30, "l": 0, "b": 0})
+fig.update_traces(marker_line_width=0)
+# fig.show()
+fig.write_html(path_maps + "map_amenities.html")
+fig.write_image(path_maps + "map_amenities.png")
+
+income_net_of_commuting_costs_df = pd.DataFrame(
+    {'1': income_net_of_commuting_costs[0, :],
+     '2': income_net_of_commuting_costs[1, :],
+     '3': income_net_of_commuting_costs[2, :],
+     '4': income_net_of_commuting_costs[3, :]})
+income_net_of_commuting_costs_df.loc[
+    dict_scenario_outcomes[list_scenarios[0]]['hh_per_incgroup'][0, :] == 0,
+    '1'] = np.nan
+income_net_of_commuting_costs_df.loc[
+    dict_scenario_outcomes[list_scenarios[0]]['hh_per_incgroup'][1, :] == 0,
+    '2'] = np.nan
+income_net_of_commuting_costs_df.loc[
+    dict_scenario_outcomes[list_scenarios[0]]['hh_per_incgroup'][2, :] == 0,
+    '3'] = np.nan
+income_net_of_commuting_costs_df.loc[
+    dict_scenario_outcomes[list_scenarios[0]]['hh_per_incgroup'][3, :] == 0,
+    '4'] = np.nan
+income_net_of_commuting_costs_df['lon'] = geo_grid.lon
+income_net_of_commuting_costs_df['lat'] = geo_grid.lat
+
+fig = px.choropleth_mapbox(
+    income_net_of_commuting_costs_df,
+    geojson=geo_grid.geometry,
+    locations=geo_grid.index,
+    color='1',
+    center={"lat": -33.92345542582841, "lon": 18.434424141913478},
+    zoom=9.25,
+    mapbox_style='stamen-terrain',
+    opacity=0.5,
+    labels={'locations': 'Pixel ID', 'lon': 'Lon.', 'lat': 'Lat.',
+            '1': 'Net income'},
+    title='Estimated annual income net of commuting costs for income group 1',
+    color_continuous_scale="Reds",
+    template='plotly_white',
+    hover_data={'lon': ':.2f', 'lat': ':.2f',
+                '1': ':,.0f'})
+fig.update_layout(margin={"r": 0, "t": 30, "l": 0, "b": 0})
+fig.update_traces(marker_line_width=0)
+# fig.show()
+fig.write_html(path_maps + "map_netincome_1.html")
+fig.write_image(path_maps + "map_netincome_1.png")
+
+fig = px.choropleth_mapbox(
+    income_net_of_commuting_costs_df,
+    geojson=geo_grid.geometry,
+    locations=geo_grid.index,
+    color='2',
+    center={"lat": -33.92345542582841, "lon": 18.434424141913478},
+    zoom=9.25,
+    mapbox_style='stamen-terrain',
+    opacity=0.5,
+    labels={'locations': 'Pixel ID', 'lon': 'Lon.', 'lat': 'Lat.',
+            '2': 'Net income'},
+    title='Estimated annual income net of commuting costs for income group 2',
+    color_continuous_scale="Reds",
+    template='plotly_white',
+    hover_data={'lon': ':.2f', 'lat': ':.2f',
+                '2': ':,.0f'})
+fig.update_layout(margin={"r": 0, "t": 30, "l": 0, "b": 0})
+fig.update_traces(marker_line_width=0)
+# fig.show()
+fig.write_html(path_maps + "map_netincome_2.html")
+fig.write_image(path_maps + "map_netincome_2.png")
+
+fig = px.choropleth_mapbox(
+    income_net_of_commuting_costs_df,
+    geojson=geo_grid.geometry,
+    locations=geo_grid.index,
+    color='3',
+    center={"lat": -33.92345542582841, "lon": 18.434424141913478},
+    zoom=9.25,
+    mapbox_style='stamen-terrain',
+    opacity=0.5,
+    labels={'locations': 'Pixel ID', 'lon': 'Lon.', 'lat': 'Lat.',
+            '3': 'Net income'},
+    title='Estimated annual income net of commuting costs for income group 3',
+    color_continuous_scale="Reds",
+    template='plotly_white',
+    hover_data={'lon': ':.2f', 'lat': ':.2f',
+                '3': ':,.0f'})
+fig.update_layout(margin={"r": 0, "t": 30, "l": 0, "b": 0})
+fig.update_traces(marker_line_width=0)
+# fig.show()
+fig.write_html(path_maps + "map_netincome_3.html")
+fig.write_image(path_maps + "map_netincome_3.png")
+
+fig = px.choropleth_mapbox(
+    income_net_of_commuting_costs_df,
+    geojson=geo_grid.geometry,
+    locations=geo_grid.index,
+    color='4',
+    center={"lat": -33.92345542582841, "lon": 18.434424141913478},
+    zoom=9.25,
+    mapbox_style='stamen-terrain',
+    opacity=0.5,
+    labels={'locations': 'Pixel ID', 'lon': 'Lon.', 'lat': 'Lat.',
+            '4': 'Net income'},
+    title='Estimated annual income net of commuting costs for income group 4',
+    color_continuous_scale="Reds",
+    template='plotly_white',
+    hover_data={'lon': ':.2f', 'lat': ':.2f',
+                '4': ':,.0f'})
+fig.update_layout(margin={"r": 0, "t": 30, "l": 0, "b": 0})
+fig.update_traces(marker_line_width=0)
+# fig.show()
+fig.write_html(path_maps + "map_netincome_4.html")
+fig.write_image(path_maps + "map_netincome_4.png")
+
+print("Input maps done")
