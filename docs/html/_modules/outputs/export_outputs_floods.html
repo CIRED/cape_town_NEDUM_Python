@@ -605,7 +605,7 @@
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="plot_damages"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs_floods.plot_damages">[docs]</a><span class="k">def</span> <span class="nf">plot_damages</span><span class="p">(</span><span class="n">damages1</span><span class="p">,</span> <span class="n">damages2</span><span class="p">,</span> <span class="n">path_plots</span><span class="p">,</span> <span class="n">flood_categ</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
+<div class="viewcode-block" id="valid_damages"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs_floods.valid_damages">[docs]</a><span class="k">def</span> <span class="nf">valid_damages</span><span class="p">(</span><span class="n">damages1</span><span class="p">,</span> <span class="n">damages2</span><span class="p">,</span> <span class="n">path_plots</span><span class="p">,</span> <span class="n">flood_categ</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Validation bar plot for estimated damages for a given flood type.</span>
 
@@ -713,7 +713,8 @@
     <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">quarter</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Million R per year&quot;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="n">flood_categ</span> <span class="o">+</span> <span class="s1">&#39;_structures_damages.png&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;valid_&#39;</span> <span class="o">+</span> <span class="n">flood_categ</span>
+                <span class="o">+</span> <span class="s1">&#39;_structures_damages.png&#39;</span><span class="p">)</span>
     <span class="c1"># plt.show()</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
@@ -731,7 +732,7 @@
     <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">quarter</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Million R per year&quot;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="n">flood_categ</span> <span class="o">+</span> <span class="s1">&#39;_contents_damages.png&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;valid_&#39;</span> <span class="o">+</span> <span class="n">flood_categ</span> <span class="o">+</span> <span class="s1">&#39;_contents_damages.png&#39;</span><span class="p">)</span>
     <span class="c1"># plt.show()</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 

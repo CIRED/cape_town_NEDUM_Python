@@ -456,7 +456,7 @@ def import_param(path_precalc_inp, options):
     # below some precision level, or when the number of iterations reaches some
     # threshold (to limit processing time)
     param["max_iter"] = 1000
-    param["precision"] = 0.01
+    param["precision"] = 0.001
 
     # Dynamic parameters
     #  Lag in housing building in years (from Viguié et al., 2014, table B1)

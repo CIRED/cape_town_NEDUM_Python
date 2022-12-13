@@ -602,7 +602,7 @@
     <span class="c1"># Other outputs</span>
     <span class="n">initial_state_utility</span> <span class="o">=</span> <span class="n">utility</span><span class="p">[</span><span class="n">index_iteration</span><span class="p">,</span> <span class="p">:]</span>
     <span class="c1"># Housing capital value per unit of available land: see math appendix</span>
-    <span class="n">initial_state_capital_land</span> <span class="o">=</span> <span class="p">((</span><span class="n">initial_state_housing_supply</span>
+    <span class="n">initial_state_capital_land</span> <span class="o">=</span> <span class="p">((</span><span class="n">initial_state_housing_supply</span> <span class="o">/</span> <span class="mi">1000000</span>
                                    <span class="o">/</span> <span class="n">construction_param</span><span class="p">)</span>
                                   <span class="o">**</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;coeff_b&quot;</span><span class="p">]))</span>
     <span class="c1">#  NB: this is not an output of the model</span>

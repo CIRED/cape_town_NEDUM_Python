@@ -297,7 +297,7 @@
     <span class="k">return</span> <span class="n">jobsTable</span><span class="p">,</span> <span class="n">selected_centers</span></div>
 
 
-<div class="viewcode-block" id="export_housing_types"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs.export_housing_types">[docs]</a><span class="k">def</span> <span class="nf">export_housing_types</span><span class="p">(</span>
+<div class="viewcode-block" id="valid_pop_housing_type"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs.valid_pop_housing_type">[docs]</a><span class="k">def</span> <span class="nf">valid_pop_housing_type</span><span class="p">(</span>
         <span class="n">housing_type_1</span><span class="p">,</span> <span class="n">housing_type_2</span><span class="p">,</span>
         <span class="n">legend1</span><span class="p">,</span> <span class="n">legend2</span><span class="p">,</span> <span class="n">path_plots</span><span class="p">,</span> <span class="n">path_tables</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -335,16 +335,16 @@
     <span class="n">axis</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">mpl</span><span class="o">.</span><span class="n">ticker</span><span class="o">.</span><span class="n">StrMethodFormatter</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{x:,.0f}</span><span class="s1">&#39;</span><span class="p">))</span>
     <span class="n">axis</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelrotation</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
-    <span class="n">figure</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;validation_housing_type.png&#39;</span><span class="p">)</span>
+    <span class="n">figure</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;validation_pop_housing_type.png&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">figure</span><span class="p">)</span>
 
-    <span class="n">data</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">path_tables</span> <span class="o">+</span> <span class="s1">&#39;validation_housing_type.csv&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;validation_housing_type done&#39;</span><span class="p">)</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">path_tables</span> <span class="o">+</span> <span class="s1">&#39;validation_pop_housing_type.csv&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;validation_pop_housing_type done&#39;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">data</span></div>
 
 
-<div class="viewcode-block" id="export_households"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs.export_households">[docs]</a><span class="k">def</span> <span class="nf">export_households</span><span class="p">(</span>
+<div class="viewcode-block" id="valid_pop_htype_income"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs.valid_pop_htype_income">[docs]</a><span class="k">def</span> <span class="nf">valid_pop_htype_income</span><span class="p">(</span>
         <span class="n">initial_state_households</span><span class="p">,</span> <span class="n">households_per_income_and_housing</span><span class="p">,</span>
         <span class="n">legend1</span><span class="p">,</span> <span class="n">legend2</span><span class="p">,</span> <span class="n">path_plots</span><span class="p">,</span> <span class="n">path_tables</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -436,13 +436,13 @@
                         <span class="n">wspace</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
                         <span class="n">hspace</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
 
-    <span class="n">figure</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;validation_housing_per_income.png&#39;</span><span class="p">)</span>
+    <span class="n">figure</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;validation_pop_housing_per_income.png&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">figure</span><span class="p">)</span>
 
-    <span class="n">data0</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">path_tables</span> <span class="o">+</span> <span class="s1">&#39;validation_formal_per_income.csv&#39;</span><span class="p">)</span>
-    <span class="n">data1</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">path_tables</span> <span class="o">+</span> <span class="s1">&#39;validation_backyard_per_income.csv&#39;</span><span class="p">)</span>
-    <span class="n">data2</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">path_tables</span> <span class="o">+</span> <span class="s1">&#39;validation_informal_per_income.csv&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;validation_housing_per_income done&#39;</span><span class="p">)</span>
+    <span class="n">data0</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">path_tables</span> <span class="o">+</span> <span class="s1">&#39;validation_pop_formal_per_income.csv&#39;</span><span class="p">)</span>
+    <span class="n">data1</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">path_tables</span> <span class="o">+</span> <span class="s1">&#39;validation_pop_backyard_per_income.csv&#39;</span><span class="p">)</span>
+    <span class="n">data2</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">path_tables</span> <span class="o">+</span> <span class="s1">&#39;validation_pop_informal_per_income.csv&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;validation_pop_housing_per_income done&#39;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">data0</span><span class="p">,</span> <span class="n">data1</span><span class="p">,</span> <span class="n">data2</span></div>
 
@@ -524,7 +524,7 @@
     <span class="k">return</span> <span class="n">df</span></div>
 
 
-<div class="viewcode-block" id="validation_density_housing_types"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs.validation_density_housing_types">[docs]</a><span class="k">def</span> <span class="nf">validation_density_housing_types</span><span class="p">(</span>
+<div class="viewcode-block" id="valid_pop_housing_types"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs.valid_pop_housing_types">[docs]</a><span class="k">def</span> <span class="nf">valid_pop_housing_types</span><span class="p">(</span>
         <span class="n">grid</span><span class="p">,</span> <span class="n">initial_state_households_housing_types</span><span class="p">,</span> <span class="n">housing_types</span><span class="p">,</span>
         <span class="n">path_plots</span><span class="p">,</span> <span class="n">path_tables</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -594,7 +594,7 @@
     <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Distance to the city center (km)&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Total number of households (formal private)&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;validation_density_formal.png&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;validation_pop_formal.png&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
     <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
@@ -617,7 +617,7 @@
     <span class="c1">#     [&quot;Joe Slovo&quot;, &quot;Hout Bay&quot;, &quot;Du Noon&quot;, &quot;Philippi&quot;, &quot;Khayelitsa&quot;,</span>
     <span class="c1">#      &quot;Wallacedene&quot;, &quot;Khayelitsa&quot;, &quot;Witsand&quot;, &quot;Enkanini&quot;, &quot;Pholile&quot;],</span>
     <span class="c1">#     rotation=&#39;vertical&#39;)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;validation_density_informal.png&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;validation_pop_informal.png&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
     <span class="c1"># print(&quot;1&quot;)</span>
@@ -636,7 +636,7 @@
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Distance to the city center (km)&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Total number of households (informal backyards)&quot;</span><span class="p">,</span>
                <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;validation_density_backyard.png&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;validation_pop_backyard.png&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
     <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
@@ -648,16 +648,16 @@
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Distance to the city center (km)&quot;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Total number of households (formal subsidized)&quot;</span><span class="p">,</span>
                <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;validation_density_rdp.png&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;validation_pop_rdp.png&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-    <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">path_tables</span> <span class="o">+</span> <span class="s1">&#39;validation_density_per_housing.csv&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;validation_density_per_housing done&#39;</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">path_tables</span> <span class="o">+</span> <span class="s1">&#39;validation_pop_per_housing.csv&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;validation_pop_per_housing done&#39;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">df</span></div>
 
 
-<div class="viewcode-block" id="simulation_density_housing_types"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs.simulation_density_housing_types">[docs]</a><span class="k">def</span> <span class="nf">simulation_density_housing_types</span><span class="p">(</span>
+<div class="viewcode-block" id="simul_pop_housing_types"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs.simul_pop_housing_types">[docs]</a><span class="k">def</span> <span class="nf">simul_pop_housing_types</span><span class="p">(</span>
         <span class="n">grid</span><span class="p">,</span> <span class="n">initial_state_households_housing_types</span><span class="p">,</span>
         <span class="n">path_plots</span><span class="p">,</span> <span class="n">path_tables</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -726,13 +726,13 @@
     <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;simulation_density_htype.png&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-    <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">path_tables</span> <span class="o">+</span> <span class="s1">&#39;simulation_density_per_housing.csv&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;simulation_density_per_housing done&#39;</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">path_tables</span> <span class="o">+</span> <span class="s1">&#39;simulation_pop_per_housing.csv&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;simulation_pop_per_housing done&#39;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">df</span></div>
 
 
-<div class="viewcode-block" id="validation_density_income_groups"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs.validation_density_income_groups">[docs]</a><span class="k">def</span> <span class="nf">validation_density_income_groups</span><span class="p">(</span>
+<div class="viewcode-block" id="valid_pop_income_groups"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs.valid_pop_income_groups">[docs]</a><span class="k">def</span> <span class="nf">valid_pop_income_groups</span><span class="p">(</span>
         <span class="n">grid</span><span class="p">,</span> <span class="n">initial_state_household_centers</span><span class="p">,</span> <span class="n">income_distribution_grid</span><span class="p">,</span>
         <span class="n">path_plots</span><span class="p">,</span> <span class="n">path_tables</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -804,7 +804,7 @@
     <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Distance to the city center (km)&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Total number of households (poor)&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;validation_density_poor.png&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;validation_pop_poor.png&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
     <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
@@ -820,7 +820,7 @@
     <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Distance to the city center (km)&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Total number of households (mid-poor)&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;validation_density_midpoor.png&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;validation_pop_midpoor.png&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
     <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
@@ -836,7 +836,7 @@
     <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Distance to the city center (km)&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Total number of households (mid-rich)&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;validation_density_midrich.png&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;validation_pop_midrich.png&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
     <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
@@ -852,16 +852,16 @@
     <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Distance to the city center (km)&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Total number of households (rich)&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;validation_density_rich.png&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;validation_pop_rich.png&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-    <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">path_tables</span> <span class="o">+</span> <span class="s1">&#39;validation_density_per_income.csv&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;validation_density_per_income done&#39;</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">path_tables</span> <span class="o">+</span> <span class="s1">&#39;validation_pop_per_income.csv&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;validation_pop_per_income done&#39;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">df</span></div>
 
 
-<div class="viewcode-block" id="simulation_density_income_groups"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs.simulation_density_income_groups">[docs]</a><span class="k">def</span> <span class="nf">simulation_density_income_groups</span><span class="p">(</span>
+<div class="viewcode-block" id="simul_pop_income_groups"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs.simul_pop_income_groups">[docs]</a><span class="k">def</span> <span class="nf">simul_pop_income_groups</span><span class="p">(</span>
         <span class="n">grid</span><span class="p">,</span> <span class="n">initial_state_household_centers</span><span class="p">,</span>
         <span class="n">path_plots</span><span class="p">,</span> <span class="n">path_tables</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -926,16 +926,16 @@
     <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Distance to the city center (km)&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Total number of households per income group&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;simulation_density_incgroup.png&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;simulation_pop_incgroup.png&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-    <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">path_tables</span> <span class="o">+</span> <span class="s1">&#39;simulation_density_per_income.csv&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;simulation_density_per_income done&#39;</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">path_tables</span> <span class="o">+</span> <span class="s1">&#39;simulation_pop_per_income.csv&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;simulation_pop_per_income done&#39;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">df</span></div>
 
 
-<div class="viewcode-block" id="validation_density_housing_and_income_groups"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs.validation_density_housing_and_income_groups">[docs]</a><span class="k">def</span> <span class="nf">validation_density_housing_and_income_groups</span><span class="p">(</span>
+<div class="viewcode-block" id="simul_pop_htype_income"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs.simul_pop_htype_income">[docs]</a><span class="k">def</span> <span class="nf">simul_pop_htype_income</span><span class="p">(</span>
         <span class="n">grid</span><span class="p">,</span> <span class="n">initial_state_households</span><span class="p">,</span> <span class="n">path_plots</span><span class="p">,</span> <span class="n">path_tables</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Line plot per housing and income groups across 1D-space (no validation).</span>
@@ -1006,7 +1006,7 @@
     <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Distance to the city center (km)&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Total number of households (formal private)&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;validation_density_FP_income.png&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;simul_pop_FP_income.png&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
     <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
@@ -1022,7 +1022,7 @@
     <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Distance to the city center (km)&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Total number of households (informal backyards)&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;validation_density_IB_income.png&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;simul_pop_IB_income.png&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
     <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
@@ -1039,11 +1039,11 @@
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Distance to the city center (km)&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Total number of households (informal settlements)&quot;</span><span class="p">,</span>
                <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;validation_density_IS_income.png&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;simul_pop_IS_income.png&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-    <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">path_tables</span> <span class="o">+</span> <span class="s1">&#39;validation_density_per_housing_and_income.csv&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;validation_density_per_housing_and_income done&#39;</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">path_tables</span> <span class="o">+</span> <span class="s1">&#39;simul_pop_per_housing_and_income.csv&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;simul_pop_per_housing_and_income done&#39;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">df</span></div>
 
@@ -1107,7 +1107,8 @@
     <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Distance to the city center (km)&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Estimated average incomes net of commuting costs&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Average annual incomes net of commuting costs (rands, 2011)&quot;</span><span class="p">,</span>
+               <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;avg_income_net_of_commuting_1d.png&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
@@ -1175,7 +1176,7 @@
     <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Distance to the city center (km)&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Estimated average incomes&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Estimated average incomes (rands, 2011)&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;avg_income_1d.png&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
@@ -1185,70 +1186,8 @@
     <span class="k">return</span> <span class="n">df</span></div>
 
 
-<div class="viewcode-block" id="validate_average_income"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs.validate_average_income">[docs]</a><span class="k">def</span> <span class="nf">validate_average_income</span><span class="p">(</span>
-        <span class="n">grid</span><span class="p">,</span> <span class="n">overall_avg_income</span><span class="p">,</span> <span class="n">data_avg_income</span><span class="p">,</span>
-        <span class="n">path_plots</span><span class="p">,</span> <span class="n">path_tables</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Validation line plot for overall average income across 1D-space.</span>
-
-<span class="sd">    Parameters</span>
-<span class="sd">    ----------</span>
-<span class="sd">    grid : DataFrame</span>
-<span class="sd">        Table yielding, for each grid cell (24,014), its x and y</span>
-<span class="sd">        (centroid) coordinates, and its distance (in km) to the city centre</span>
-<span class="sd">    overall_avg_income : ndarray(float64)</span>
-<span class="sd">        Average income per grid cell (24,014) weighted across income groups,</span>
-<span class="sd">        obtained from calibrated incomes</span>
-<span class="sd">    data_avg_income : ndarray(float64)</span>
-<span class="sd">        Average income per grid cell (24,014) weighted across income groups,</span>
-<span class="sd">        obtained from validation data</span>
-<span class="sd">    path_plots : str</span>
-<span class="sd">        Path for saving output plots</span>
-<span class="sd">    path_tables : str</span>
-<span class="sd">        Path for saving output plots</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    df : DataFrame</span>
-<span class="sd">        Validation table for overall average income across 1D-space</span>
-
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># Housing and income groups</span>
-    <span class="n">xData</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">dist</span>
-
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
-        <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
-            <span class="p">[</span><span class="n">xData</span><span class="p">,</span> <span class="n">overall_avg_income</span><span class="p">,</span> <span class="n">data_avg_income</span><span class="p">]</span>
-            <span class="p">)),</span>
-        <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;xData&quot;</span><span class="p">,</span> <span class="s2">&quot;income_simul&quot;</span><span class="p">,</span> <span class="s2">&quot;income_data&quot;</span><span class="p">]</span>
-        <span class="p">)</span>
-    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;round&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">xData</span><span class="p">)</span>
-    <span class="n">new_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;round&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-
-    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;round&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)),</span>
-            <span class="n">new_df</span><span class="o">.</span><span class="n">income_simul</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Simulation&quot;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;round&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)),</span>
-            <span class="n">new_df</span><span class="o">.</span><span class="n">income_data</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Data&quot;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">])</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span>
-        <span class="n">mpl</span><span class="o">.</span><span class="n">ticker</span><span class="o">.</span><span class="n">StrMethodFormatter</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{x:,.0f}</span><span class="s1">&#39;</span><span class="p">))</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Distance to the city center (km)&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Overall average incomes&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;overall_avg_income_valid_1d.png&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-
-    <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">path_tables</span> <span class="o">+</span> <span class="s1">&#39;overall_avg_income_valid_1d.csv&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;overall_avg_income_valid_1d done&#39;</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">df</span></div>
-
-
-<div class="viewcode-block" id="plot_housing_supply"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs.plot_housing_supply">[docs]</a><span class="k">def</span> <span class="nf">plot_housing_supply</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">initial_state_housing_supply</span><span class="p">,</span> <span class="n">path_plots</span><span class="p">,</span>
-                        <span class="n">path_tables</span><span class="p">):</span>
+<div class="viewcode-block" id="valid_housing_supply"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs.valid_housing_supply">[docs]</a><span class="k">def</span> <span class="nf">valid_housing_supply</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">initial_state_housing_supply</span><span class="p">,</span> <span class="n">path_plots</span><span class="p">,</span>
+                         <span class="n">path_tables</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Line plot for housing supply per unit of available land across 1D-space.</span>
 
@@ -1319,8 +1258,8 @@
     <span class="k">return</span> <span class="n">df</span></div>
 
 
-<div class="viewcode-block" id="plot_housing_supply_noland"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs.plot_housing_supply_noland">[docs]</a><span class="k">def</span> <span class="nf">plot_housing_supply_noland</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">initial_state_housing_supply</span><span class="p">,</span> <span class="n">path_plots</span><span class="p">,</span>
-                               <span class="n">path_tables</span><span class="p">):</span>
+<div class="viewcode-block" id="valid_housing_supply_noland"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs.valid_housing_supply_noland">[docs]</a><span class="k">def</span> <span class="nf">valid_housing_supply_noland</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">initial_state_housing_supply</span><span class="p">,</span> <span class="n">path_plots</span><span class="p">,</span>
+                                <span class="n">path_tables</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Line plot for housing supply (no land availability) across 1D-space.</span>
 
@@ -1396,7 +1335,7 @@
         <span class="n">housing_types_sp</span><span class="p">,</span>
         <span class="n">path_plots</span><span class="p">,</span> <span class="n">path_tables</span><span class="p">,</span> <span class="n">land_price</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Line plot for housing prices price across 1D-space.</span>
+<span class="sd">    Line plot for housing/land prices/rents across 1D-space.</span>
 
 <span class="sd">    Breakdown is given per housing type. This function is specifically used</span>
 <span class="sd">    for subsequent periods when validation data is not available.</span>
@@ -1430,97 +1369,131 @@
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    df : DataFrame</span>
-<span class="sd">        Table for housing prices price across 1D-space</span>
+<span class="sd">        Table for housing prices across 1D-space</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">sp_x</span> <span class="o">=</span> <span class="n">housing_types_sp</span><span class="p">[</span><span class="s2">&quot;x_sp&quot;</span><span class="p">]</span>
     <span class="n">sp_y</span> <span class="o">=</span> <span class="n">housing_types_sp</span><span class="p">[</span><span class="s2">&quot;y_sp&quot;</span><span class="p">]</span>
+    <span class="n">xData</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">sp_x</span> <span class="o">-</span> <span class="n">center</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">sp_y</span> <span class="o">-</span> <span class="n">center</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
 
+    <span class="c1"># Note that in informal sectors, the annual housing rent is the same as</span>
+    <span class="c1"># the annual land rent. The formula for underlying land price derived from</span>
+    <span class="c1"># developer&#39;s decisions only makes sense in the formal private sector</span>
     <span class="k">if</span> <span class="n">land_price</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+
         <span class="n">priceSimul</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="p">((</span><span class="n">initial_state_rent</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;coeff_A&quot;</span><span class="p">])</span>
+            <span class="p">((</span><span class="n">initial_state_rent</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;coeff_A&quot;</span><span class="p">])</span>
              <span class="o">/</span> <span class="p">(</span><span class="n">interest_rate</span> <span class="o">+</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;depreciation_rate&quot;</span><span class="p">]))</span>
             <span class="o">**</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;coeff_a&quot;</span><span class="p">])</span>
             <span class="o">*</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;coeff_a&quot;</span><span class="p">]</span>
             <span class="o">*</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;coeff_b&quot;</span><span class="p">]</span> <span class="o">**</span> <span class="p">(</span><span class="n">param</span><span class="p">[</span><span class="s2">&quot;coeff_b&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;coeff_a&quot;</span><span class="p">])</span>
             <span class="p">)</span>
+
+        <span class="n">priceSimulPricePoints_formal</span> <span class="o">=</span> <span class="n">griddata</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">])),</span>
+            <span class="n">priceSimul</span><span class="p">,</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">sp_x</span><span class="p">,</span> <span class="n">sp_y</span><span class="p">]))</span>
+            <span class="p">)</span>
+
+        <span class="n">ySimulation</span> <span class="o">=</span> <span class="n">priceSimulPricePoints_formal</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">xData</span><span class="p">,</span> <span class="n">ySimulation</span><span class="p">])),</span>
+            <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;xData&quot;</span><span class="p">,</span> <span class="s2">&quot;ySimulation&quot;</span><span class="p">])</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;round&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">xData</span><span class="p">)</span>
+        <span class="n">new_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;round&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="n">which</span> <span class="o">=</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">new_df</span><span class="o">.</span><span class="n">ySimulation</span><span class="p">)</span>
+
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">new_df</span><span class="o">.</span><span class="n">xData</span><span class="p">[</span><span class="n">which</span><span class="p">],</span> <span class="n">new_df</span><span class="o">.</span><span class="n">ySimulation</span><span class="p">[</span><span class="n">which</span><span class="p">],</span>
+                <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Formal&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">])</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span>
+            <span class="n">mpl</span><span class="o">.</span><span class="n">ticker</span><span class="o">.</span><span class="n">StrMethodFormatter</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{x:,.0f}</span><span class="s1">&#39;</span><span class="p">))</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Distance to the city center (km)&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Land price (R/m² of land)&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">bottom</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;/simulation_land_price.png&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">path_tables</span> <span class="o">+</span> <span class="s1">&#39;simulation_land_price.csv&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;simulation_land_price done&#39;</span><span class="p">)</span>
+
     <span class="k">elif</span> <span class="n">land_price</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">priceSimul</span> <span class="o">=</span> <span class="n">initial_state_rent</span>
 
-    <span class="n">priceSimulPricePoints_formal</span> <span class="o">=</span> <span class="n">griddata</span><span class="p">(</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">])),</span>
-        <span class="n">priceSimul</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:],</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">sp_x</span><span class="p">,</span> <span class="n">sp_y</span><span class="p">]))</span>
-        <span class="p">)</span>
-    <span class="n">priceSimulPricePoints_informal</span> <span class="o">=</span> <span class="n">griddata</span><span class="p">(</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">])),</span>
-        <span class="n">priceSimul</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:],</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">sp_x</span><span class="p">,</span> <span class="n">sp_y</span><span class="p">]))</span>
-        <span class="p">)</span>
-    <span class="n">priceSimulPricePoints_backyard</span> <span class="o">=</span> <span class="n">griddata</span><span class="p">(</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">])),</span>
-        <span class="n">priceSimul</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:],</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">sp_x</span><span class="p">,</span> <span class="n">sp_y</span><span class="p">]))</span>
-        <span class="p">)</span>
+        <span class="n">priceSimulPricePoints_formal</span> <span class="o">=</span> <span class="n">griddata</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">])),</span>
+            <span class="n">priceSimul</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:],</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">sp_x</span><span class="p">,</span> <span class="n">sp_y</span><span class="p">]))</span>
+            <span class="p">)</span>
+        <span class="n">priceSimulPricePoints_informal</span> <span class="o">=</span> <span class="n">griddata</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">])),</span>
+            <span class="n">priceSimul</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:],</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">sp_x</span><span class="p">,</span> <span class="n">sp_y</span><span class="p">]))</span>
+            <span class="p">)</span>
+        <span class="n">priceSimulPricePoints_backyard</span> <span class="o">=</span> <span class="n">griddata</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">])),</span>
+            <span class="n">priceSimul</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:],</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">sp_x</span><span class="p">,</span> <span class="n">sp_y</span><span class="p">]))</span>
+            <span class="p">)</span>
 
-    <span class="n">xData</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">sp_x</span> <span class="o">-</span> <span class="n">center</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">sp_y</span> <span class="o">-</span> <span class="n">center</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
-    <span class="c1"># TODO: check need to redefine</span>
+        <span class="n">ySimulation</span> <span class="o">=</span> <span class="n">priceSimulPricePoints_formal</span>
+        <span class="n">informalSimul</span> <span class="o">=</span> <span class="n">priceSimulPricePoints_informal</span>
+        <span class="n">backyardSimul</span> <span class="o">=</span> <span class="n">priceSimulPricePoints_backyard</span>
 
-    <span class="c1"># xSimulation = xData</span>
-    <span class="n">ySimulation</span> <span class="o">=</span> <span class="n">priceSimulPricePoints_formal</span>
-    <span class="n">informalSimul</span> <span class="o">=</span> <span class="n">priceSimulPricePoints_informal</span>
-    <span class="n">backyardSimul</span> <span class="o">=</span> <span class="n">priceSimulPricePoints_backyard</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">xData</span><span class="p">,</span> <span class="n">ySimulation</span><span class="p">,</span> <span class="n">informalSimul</span><span class="p">,</span>
+                                        <span class="n">backyardSimul</span><span class="p">])),</span>
+            <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;xData&quot;</span><span class="p">,</span> <span class="s2">&quot;ySimulation&quot;</span><span class="p">,</span> <span class="s2">&quot;informalSimul&quot;</span><span class="p">,</span>
+                     <span class="s2">&quot;backyardSimul&quot;</span><span class="p">])</span>
+        <span class="n">df</span><span class="p">[</span><span class="s2">&quot;round&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">xData</span><span class="p">)</span>
+        <span class="n">new_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;round&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 
-    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
-        <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">xData</span><span class="p">,</span> <span class="n">ySimulation</span><span class="p">,</span> <span class="n">informalSimul</span><span class="p">,</span>
-                                    <span class="n">backyardSimul</span><span class="p">])),</span>
-        <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;xData&quot;</span><span class="p">,</span> <span class="s2">&quot;ySimulation&quot;</span><span class="p">,</span> <span class="s2">&quot;informalSimul&quot;</span><span class="p">,</span>
-                 <span class="s2">&quot;backyardSimul&quot;</span><span class="p">])</span>
-    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;round&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">xData</span><span class="p">)</span>
-    <span class="n">new_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;round&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="n">which</span> <span class="o">=</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">new_df</span><span class="o">.</span><span class="n">ySimulation</span><span class="p">)</span>
+        <span class="n">which_informal</span> <span class="o">=</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">new_df</span><span class="o">.</span><span class="n">informalSimul</span><span class="p">)</span>
+        <span class="n">which_backyard</span> <span class="o">=</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">new_df</span><span class="o">.</span><span class="n">backyardSimul</span><span class="p">)</span>
 
-    <span class="n">which</span> <span class="o">=</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">new_df</span><span class="o">.</span><span class="n">ySimulation</span><span class="p">)</span>
-    <span class="n">which_informal</span> <span class="o">=</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">new_df</span><span class="o">.</span><span class="n">informalSimul</span><span class="p">)</span>
-    <span class="n">which_backyard</span> <span class="o">=</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">new_df</span><span class="o">.</span><span class="n">backyardSimul</span><span class="p">)</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">new_df</span><span class="o">.</span><span class="n">xData</span><span class="p">[</span><span class="n">which</span><span class="p">],</span> <span class="n">new_df</span><span class="o">.</span><span class="n">ySimulation</span><span class="p">[</span><span class="n">which</span><span class="p">],</span>
+                <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Formal&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">new_df</span><span class="o">.</span><span class="n">xData</span><span class="p">[</span><span class="n">which_informal</span><span class="p">],</span>
+                <span class="n">new_df</span><span class="o">.</span><span class="n">informalSimul</span><span class="p">[</span><span class="n">which_informal</span><span class="p">],</span>
+                <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Informal&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">new_df</span><span class="o">.</span><span class="n">xData</span><span class="p">[</span><span class="n">which_backyard</span><span class="p">],</span>
+                <span class="n">new_df</span><span class="o">.</span><span class="n">backyardSimul</span><span class="p">[</span><span class="n">which_backyard</span><span class="p">],</span>
+                <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Backyard&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">])</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span>
+            <span class="n">mpl</span><span class="o">.</span><span class="n">ticker</span><span class="o">.</span><span class="n">StrMethodFormatter</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{x:,.0f}</span><span class="s1">&#39;</span><span class="p">))</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Distance to the city center (km)&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Annual housing rent (R/m² of housing)&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
 
-    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">new_df</span><span class="o">.</span><span class="n">xData</span><span class="p">[</span><span class="n">which</span><span class="p">],</span> <span class="n">new_df</span><span class="o">.</span><span class="n">ySimulation</span><span class="p">[</span><span class="n">which</span><span class="p">],</span>
-            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Formal&quot;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">new_df</span><span class="o">.</span><span class="n">xData</span><span class="p">[</span><span class="n">which_informal</span><span class="p">],</span> <span class="n">new_df</span><span class="o">.</span><span class="n">informalSimul</span><span class="p">[</span><span class="n">which_informal</span><span class="p">],</span>
-            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Informal&quot;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">new_df</span><span class="o">.</span><span class="n">xData</span><span class="p">[</span><span class="n">which_backyard</span><span class="p">],</span> <span class="n">new_df</span><span class="o">.</span><span class="n">backyardSimul</span><span class="p">[</span><span class="n">which_backyard</span><span class="p">],</span>
-            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Backyard&quot;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">])</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span>
-        <span class="n">mpl</span><span class="o">.</span><span class="n">ticker</span><span class="o">.</span><span class="n">StrMethodFormatter</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{x:,.0f}</span><span class="s1">&#39;</span><span class="p">))</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Distance to the city center (km)&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">land_price</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Land price (R/m² of land)&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">land_price</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Housing price (R/m² of housing)&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">bottom</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;/simulation_housing_price&#39;</span>
-                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">land_price</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.png&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">bottom</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;/simulation_housing_rent.png&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-    <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">path_tables</span> <span class="o">+</span> <span class="s1">&#39;simulation_housing_price&#39;</span>
-              <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">land_price</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.csv&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;simulation_housing_price&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">land_price</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; done&#39;</span><span class="p">)</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">path_tables</span> <span class="o">+</span> <span class="s1">&#39;simulation_housing_rent.csv&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;simulation_housing_rent done&#39;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">df</span></div>
 
 
-<div class="viewcode-block" id="validation_housing_price"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs.validation_housing_price">[docs]</a><span class="k">def</span> <span class="nf">validation_housing_price</span><span class="p">(</span>
-        <span class="n">grid</span><span class="p">,</span> <span class="n">initial_state_rent</span><span class="p">,</span> <span class="n">initial_state_households_housing_types</span><span class="p">,</span>
-        <span class="n">interest_rate</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">center</span><span class="p">,</span> <span class="n">housing_types_sp</span><span class="p">,</span> <span class="n">data_sp</span><span class="p">,</span>
-        <span class="n">path_plots</span><span class="p">,</span> <span class="n">path_tables</span><span class="p">,</span> <span class="n">land_price</span><span class="p">):</span>
+<div class="viewcode-block" id="valid_housing_price"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs.valid_housing_price">[docs]</a><span class="k">def</span> <span class="nf">valid_housing_price</span><span class="p">(</span>
+        <span class="n">grid</span><span class="p">,</span> <span class="n">initial_state_rent</span><span class="p">,</span> <span class="n">interest_rate</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span>
+        <span class="n">housing_types_sp</span><span class="p">,</span> <span class="n">data_sp</span><span class="p">,</span>
+        <span class="n">path_plots</span><span class="p">,</span> <span class="n">path_tables</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Validation line plot for housing prices price across 1D-space.</span>
+<span class="sd">    Line plot for housing prices across 1D-space.</span>
 
-<span class="sd">    Breakdown is given per housing type.</span>
+<span class="sd">    This focuses on validation for housing prices in the formal private sector.</span>
+<span class="sd">    Note that we have missing values in the city centre and beyond 40km.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1534,8 +1507,6 @@
 <span class="sd">        over past years</span>
 <span class="sd">    param : dict</span>
 <span class="sd">        Dictionary of default parameters</span>
-<span class="sd">    center : ndarray(float64)</span>
-<span class="sd">        x and y coordinates of geographic centre of analysis grid</span>
 <span class="sd">    housing_types_sp : DataFrame</span>
 <span class="sd">        Table yielding, for each Small Place (1,046), the number of informal</span>
 <span class="sd">        backyards, of informal settlements, and total dwelling units, as well</span>
@@ -1550,131 +1521,73 @@
 <span class="sd">        Path for saving output plots</span>
 <span class="sd">    path_tables : str</span>
 <span class="sd">        Path for saving output plots</span>
-<span class="sd">    land_price : int</span>
-<span class="sd">        Dummy set to 1 or 0, depending on whether we want to consider</span>
-<span class="sd">        theoretical land price or annual housing rent</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    df : DataFrame</span>
-<span class="sd">        Validation table for housing prices price across 1D-space.</span>
-<span class="sd">    yData : Series</span>
-<span class="sd">        Validation housing prices</span>
+<span class="sd">        Table for formal private housing prices across 1-D space (with</span>
+<span class="sd">        validation data)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">sp_x</span> <span class="o">=</span> <span class="n">housing_types_sp</span><span class="p">[</span><span class="s2">&quot;x_sp&quot;</span><span class="p">]</span>
     <span class="n">sp_y</span> <span class="o">=</span> <span class="n">housing_types_sp</span><span class="p">[</span><span class="s2">&quot;y_sp&quot;</span><span class="p">]</span>
     <span class="n">sp_price</span> <span class="o">=</span> <span class="n">data_sp</span><span class="p">[</span><span class="s2">&quot;price&quot;</span><span class="p">]</span>
-
-    <span class="k">if</span> <span class="n">land_price</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="c1"># priceSimul = (</span>
-        <span class="c1">#     ((initial_state_rent[0:3, :] * param[&quot;coeff_A&quot;])</span>
-        <span class="c1">#      / (interest_rate + param[&quot;depreciation_rate&quot;]))</span>
-        <span class="c1">#     ** (1 / param[&quot;coeff_a&quot;])</span>
-        <span class="c1">#     * param[&quot;coeff_a&quot;]</span>
-        <span class="c1">#     * param[&quot;coeff_b&quot;] ** (param[&quot;coeff_b&quot;] / param[&quot;coeff_a&quot;])</span>
-        <span class="c1">#     )</span>
-        <span class="n">priceSimul</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="p">(</span><span class="n">initial_state_rent</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;coeff_A&quot;</span><span class="p">])</span>
-            <span class="o">**</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;coeff_a&quot;</span><span class="p">])</span>
-            <span class="o">*</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;coeff_a&quot;</span><span class="p">]</span>
-            <span class="o">*</span> <span class="p">(</span><span class="n">param</span><span class="p">[</span><span class="s2">&quot;coeff_b&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="n">interest_rate</span> <span class="o">+</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;depreciation_rate&quot;</span><span class="p">]))</span>
-            <span class="o">**</span> <span class="p">(</span><span class="n">param</span><span class="p">[</span><span class="s2">&quot;coeff_b&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;coeff_a&quot;</span><span class="p">])</span>
-            <span class="o">/</span> <span class="n">interest_rate</span>
-            <span class="p">)</span>
-    <span class="k">elif</span> <span class="n">land_price</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">priceSimul</span> <span class="o">=</span> <span class="n">initial_state_rent</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="p">:]</span>
-
-    <span class="n">np</span><span class="o">.</span><span class="n">seterr</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
-    <span class="n">avg_priceSimul</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">priceSimul</span> <span class="o">*</span> <span class="n">initial_state_households_housing_types</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="p">:]</span>
-        <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">initial_state_households_housing_types</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="p">:],</span> <span class="mi">0</span><span class="p">))</span>
-    <span class="c1"># Here, we preserve nan values!</span>
-    <span class="n">avg_priceSimul</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">avg_priceSimul</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-
-    <span class="c1"># TODO: check need to redefine</span>
-    <span class="k">if</span> <span class="n">land_price</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">yData</span> <span class="o">=</span> <span class="n">sp_price</span>
-    <span class="k">elif</span> <span class="n">land_price</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="c1"># yData = (sp_price ** param[&quot;coeff_a&quot;]</span>
-        <span class="c1">#          / (param[&quot;coeff_a&quot;] ** param[&quot;coeff_a&quot;]</span>
-        <span class="c1">#             * param[&quot;coeff_b&quot;]**param[&quot;coeff_b&quot;])</span>
-        <span class="c1">#          * (interest_rate + param[&quot;depreciation_rate&quot;])</span>
-        <span class="c1">#          / param[&quot;coeff_A&quot;]</span>
-        <span class="c1">#          )</span>
-        <span class="n">yData</span> <span class="o">=</span> <span class="p">(</span><span class="n">sp_price</span> <span class="o">**</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;coeff_a&quot;</span><span class="p">]</span>
-                 <span class="o">/</span> <span class="p">(</span><span class="n">param</span><span class="p">[</span><span class="s2">&quot;coeff_a&quot;</span><span class="p">]</span> <span class="o">**</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;coeff_a&quot;</span><span class="p">]</span>
-                    <span class="o">*</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;coeff_b&quot;</span><span class="p">]</span><span class="o">**</span><span class="n">param</span><span class="p">[</span><span class="s2">&quot;coeff_b&quot;</span><span class="p">])</span>
-                 <span class="o">*</span> <span class="p">(</span><span class="n">interest_rate</span> <span class="o">+</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;depreciation_rate&quot;</span><span class="p">])</span>
-                 <span class="o">**</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;coeff_b&quot;</span><span class="p">]</span>
-                 <span class="o">*</span> <span class="n">interest_rate</span><span class="o">**</span><span class="n">param</span><span class="p">[</span><span class="s2">&quot;coeff_a&quot;</span><span class="p">]</span>
-                 <span class="o">/</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;coeff_A&quot;</span><span class="p">]</span>
-                 <span class="p">)</span>
+    <span class="n">priceSimul</span> <span class="o">=</span> <span class="n">initial_state_rent</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">/</span> <span class="n">interest_rate</span>
+    <span class="c1"># priceSimul = (</span>
+    <span class="c1">#     ((initial_state_rent[0, :] * param[&quot;coeff_A&quot;])</span>
+    <span class="c1">#      / (interest_rate + param[&quot;depreciation_rate&quot;]))</span>
+    <span class="c1">#     ** (1 / param[&quot;coeff_a&quot;])</span>
+    <span class="c1">#     * param[&quot;coeff_a&quot;]</span>
+    <span class="c1">#     * param[&quot;coeff_b&quot;] ** (param[&quot;coeff_b&quot;] / param[&quot;coeff_a&quot;])</span>
+    <span class="c1">#     )</span>
 
     <span class="n">xData</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">dist</span>
-    <span class="c1"># TODO: check coordinate issues and lack of data in center</span>
     <span class="n">yData</span> <span class="o">=</span> <span class="n">griddata</span><span class="p">(</span>
         <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">sp_x</span><span class="p">,</span> <span class="n">sp_y</span><span class="p">])),</span>
-        <span class="n">yData</span><span class="p">,</span>
+        <span class="n">sp_price</span><span class="p">,</span>
         <span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">]))</span>
         <span class="p">)</span>
-    <span class="n">ySimulation</span> <span class="o">=</span> <span class="n">priceSimul</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
-    <span class="n">informalSimul</span> <span class="o">=</span> <span class="n">priceSimul</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
-    <span class="n">backyardSimul</span> <span class="o">=</span> <span class="n">priceSimul</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">ySimulation</span> <span class="o">=</span> <span class="n">priceSimul</span>
 
-    <span class="c1"># NB: we take yData out as we do not have enough observations</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
-        <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">xData</span><span class="p">,</span> <span class="n">ySimulation</span><span class="p">,</span> <span class="n">informalSimul</span><span class="p">,</span>
-                                    <span class="n">backyardSimul</span><span class="p">,</span> <span class="n">avg_priceSimul</span><span class="p">])),</span>
-        <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;xData&quot;</span><span class="p">,</span> <span class="s2">&quot;ySimulation&quot;</span><span class="p">,</span> <span class="s2">&quot;informalSimul&quot;</span><span class="p">,</span>
-                 <span class="s2">&quot;backyardSimul&quot;</span><span class="p">,</span> <span class="s2">&quot;avgSimul&quot;</span><span class="p">])</span>
+        <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">xData</span><span class="p">,</span> <span class="n">yData</span><span class="p">,</span> <span class="n">ySimulation</span><span class="p">]</span>
+            <span class="p">)),</span>
+        <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;xData&quot;</span><span class="p">,</span> <span class="s2">&quot;yData&quot;</span><span class="p">,</span> <span class="s2">&quot;ySimulation&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
     <span class="n">df</span><span class="p">[</span><span class="s2">&quot;round&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">xData</span><span class="p">)</span>
     <span class="n">new_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;round&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 
-    <span class="c1"># which_data = ~np.isnan(new_df.yData)</span>
+    <span class="n">new_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">path_tables</span> <span class="o">+</span> <span class="s1">&#39;validation_housing_price.csv&#39;</span><span class="p">)</span>
+
     <span class="n">which_simul</span> <span class="o">=</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">new_df</span><span class="o">.</span><span class="n">ySimulation</span><span class="p">)</span>
-    <span class="n">which_informal</span> <span class="o">=</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">new_df</span><span class="o">.</span><span class="n">informalSimul</span><span class="p">)</span>
-    <span class="n">which_backyard</span> <span class="o">=</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">new_df</span><span class="o">.</span><span class="n">backyardSimul</span><span class="p">)</span>
-    <span class="n">which_avg</span> <span class="o">=</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">new_df</span><span class="o">.</span><span class="n">avgSimul</span><span class="p">)</span>
+    <span class="n">which_data</span> <span class="o">=</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">new_df</span><span class="o">.</span><span class="n">yData</span><span class="p">)</span>
 
     <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
-    <span class="c1"># ax.plot(new_df.xData[which_data], new_df.yData[which_data],</span>
-    <span class="c1">#         color=&quot;black&quot;, label=&quot;Data&quot;)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">new_df</span><span class="o">.</span><span class="n">xData</span><span class="p">[</span><span class="n">which_data</span><span class="p">],</span> <span class="n">new_df</span><span class="o">.</span><span class="n">yData</span><span class="p">[</span><span class="n">which_data</span><span class="p">],</span>
+            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Data&quot;</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">new_df</span><span class="o">.</span><span class="n">xData</span><span class="p">[</span><span class="n">which_simul</span><span class="p">],</span> <span class="n">new_df</span><span class="o">.</span><span class="n">ySimulation</span><span class="p">[</span><span class="n">which_simul</span><span class="p">],</span>
-            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Formal&quot;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">new_df</span><span class="o">.</span><span class="n">xData</span><span class="p">[</span><span class="n">which_informal</span><span class="p">],</span> <span class="n">new_df</span><span class="o">.</span><span class="n">informalSimul</span><span class="p">[</span><span class="n">which_informal</span><span class="p">],</span>
-            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Informal&quot;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">new_df</span><span class="o">.</span><span class="n">xData</span><span class="p">[</span><span class="n">which_backyard</span><span class="p">],</span> <span class="n">new_df</span><span class="o">.</span><span class="n">backyardSimul</span><span class="p">[</span><span class="n">which_backyard</span><span class="p">],</span>
-            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Backyard&quot;</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">new_df</span><span class="o">.</span><span class="n">xData</span><span class="p">[</span><span class="n">which_avg</span><span class="p">],</span> <span class="n">new_df</span><span class="o">.</span><span class="n">avgSimul</span><span class="p">[</span><span class="n">which_avg</span><span class="p">],</span>
-            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Average&quot;</span><span class="p">)</span>
+            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Simul&quot;</span><span class="p">)</span>
+
     <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">40</span><span class="p">])</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span>
         <span class="n">mpl</span><span class="o">.</span><span class="n">ticker</span><span class="o">.</span><span class="n">StrMethodFormatter</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{x:,.0f}</span><span class="s1">&#39;</span><span class="p">))</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Distance to the city center (km)&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">land_price</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Land price (R/m² of land)&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">land_price</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Housing price (R/m² of housing)&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">bottom</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;/validation_housing_price&#39;</span>
-                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">land_price</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.png&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Distance to the city center (km)&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Average housing price/m² in formal private&quot;</span><span class="p">,</span>
+               <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;validation_housing_price.png&#39;</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-    <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">path_tables</span> <span class="o">+</span> <span class="s1">&#39;validation_housing_price&#39;</span>
-              <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">land_price</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.csv&#39;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;validation_housing_price&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">land_price</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; done&#39;</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">df</span><span class="p">,</span> <span class="n">yData</span></div>
+    <span class="k">return</span> <span class="n">df</span></div>
 
 
-<div class="viewcode-block" id="plot_housing_demand"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs.plot_housing_demand">[docs]</a><span class="k">def</span> <span class="nf">plot_housing_demand</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">center</span><span class="p">,</span> <span class="n">initial_state_dwelling_size</span><span class="p">,</span>
-                        <span class="n">initial_state_households_housing_types</span><span class="p">,</span>
-                        <span class="n">housing_types_sp</span><span class="p">,</span> <span class="n">data_sp</span><span class="p">,</span>
-                        <span class="n">path_plots</span><span class="p">,</span> <span class="n">path_tables</span><span class="p">):</span>
+<div class="viewcode-block" id="valid_housing_demand"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs.valid_housing_demand">[docs]</a><span class="k">def</span> <span class="nf">valid_housing_demand</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">center</span><span class="p">,</span> <span class="n">initial_state_dwelling_size</span><span class="p">,</span>
+                         <span class="n">initial_state_households_housing_types</span><span class="p">,</span>
+                         <span class="n">housing_types_sp</span><span class="p">,</span> <span class="n">data_sp</span><span class="p">,</span>
+                         <span class="n">path_plots</span><span class="p">,</span> <span class="n">path_tables</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Line plot average dwelling size in formal private housing across 1D-space.</span>
 
@@ -1709,7 +1622,8 @@
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    None.</span>
+<span class="sd">    df : DataFrame</span>
+<span class="sd">        Table with simulated and validation dwelling sizes across 1-D space</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">sp_x</span> <span class="o">=</span> <span class="n">housing_types_sp</span><span class="p">[</span><span class="s2">&quot;x_sp&quot;</span><span class="p">]</span>
@@ -1743,6 +1657,8 @@
     <span class="n">df</span><span class="p">[</span><span class="s2">&quot;round&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">xData</span><span class="p">)</span>
     <span class="n">new_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;round&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 
+    <span class="n">new_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">path_tables</span> <span class="o">+</span> <span class="s1">&#39;validation_housing_demand.csv&#39;</span><span class="p">)</span>
+
     <span class="n">which_simul</span> <span class="o">=</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">new_df</span><span class="o">.</span><span class="n">ySimulation</span><span class="p">)</span>
     <span class="n">which_data</span> <span class="o">=</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">new_df</span><span class="o">.</span><span class="n">yData</span><span class="p">)</span>
 
@@ -1759,10 +1675,12 @@
     <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Distance to the city center (km)&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Avg dwelling size in private formal sector (in m²)&quot;</span><span class="p">,</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Average dwelling size in formal private (in m²)&quot;</span><span class="p">,</span>
                <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;validation_housing_demand.png&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">df</span></div>
 
 
 <div class="viewcode-block" id="simul_housing_demand"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs.simul_housing_demand">[docs]</a><span class="k">def</span> <span class="nf">simul_housing_demand</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">center</span><span class="p">,</span> <span class="n">initial_state_dwelling_size</span><span class="p">,</span>
@@ -1793,7 +1711,8 @@
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
-<span class="sd">    None.</span>
+<span class="sd">    df : DataFrame</span>
+<span class="sd">        Table with simulated dwelling sizes across 1-D space</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -1819,6 +1738,8 @@
     <span class="n">df</span><span class="p">[</span><span class="s2">&quot;round&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">xData</span><span class="p">)</span>
     <span class="n">new_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;round&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 
+    <span class="n">new_df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">path_tables</span> <span class="o">+</span> <span class="s1">&#39;simulation_housing_demand.csv&#39;</span><span class="p">)</span>
+
     <span class="n">which_simul</span> <span class="o">=</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">new_df</span><span class="o">.</span><span class="n">ySimulation</span><span class="p">)</span>
 
     <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
@@ -1832,10 +1753,12 @@
     <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;Distance to the city center (km)&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Avg dwelling size in private formal sector (in m²)&quot;</span><span class="p">,</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Average dwelling size in formal private (in m²)&quot;</span><span class="p">,</span>
                <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;simulation_housing_demand.png&#39;</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">df</span></div>
 </pre></div>
 
            </div>

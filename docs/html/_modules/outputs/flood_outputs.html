@@ -640,6 +640,8 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">dict_damages</span> <span class="o">=</span> <span class="p">{}</span>
 
+    <span class="c1"># NB: we need to go back at each return period to get the fraction of</span>
+    <span class="c1"># households exposed to floods</span>
     <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">floods</span><span class="p">:</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
@@ -719,7 +721,7 @@
              <span class="s1">&#39;subsidized_content_damages&#39;</span><span class="p">:</span> <span class="n">subsidized_content_damages</span><span class="p">})</span>
 
         <span class="n">damages</span> <span class="o">=</span> <span class="n">damages</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">damages</span><span class="p">[</span><span class="n">damages</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1"># damages[damages &lt; 0] = 0</span>
         <span class="c1"># damages.to_csv(</span>
         <span class="c1">#     path_tables + flood_categ + &#39;_&#39; + item + &#39;_damages_2d.csv&#39;)</span>
         <span class="n">dict_damages</span><span class="p">[</span><span class="n">item</span><span class="p">]</span> <span class="o">=</span> <span class="n">damages</span>
@@ -777,6 +779,30 @@
         <span class="n">interval8</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">250</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">500</span><span class="p">)</span>
         <span class="n">interval9</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">500</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">1000</span><span class="p">)</span>
         <span class="n">interval10</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">1000</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;climate_change&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># We increase the likelihood of flood risks based upon given param</span>
+            <span class="n">interval0</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">5</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">])</span>
+            <span class="n">interval1</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1</span><span class="o">/</span><span class="mi">5</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">])</span>
+                         <span class="o">-</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">10</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">]))</span>
+            <span class="n">interval2</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1</span><span class="o">/</span><span class="mi">10</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">])</span>
+                         <span class="o">-</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">20</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">]))</span>
+            <span class="n">interval3</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1</span><span class="o">/</span><span class="mi">20</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">])</span>
+                         <span class="o">-</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">50</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">]))</span>
+            <span class="n">interval4</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1</span><span class="o">/</span><span class="mi">50</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">])</span>
+                         <span class="o">-</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">75</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">]))</span>
+            <span class="n">interval5</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1</span><span class="o">/</span><span class="mi">75</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">])</span>
+                         <span class="o">-</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">100</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">]))</span>
+            <span class="n">interval6</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1</span><span class="o">/</span><span class="mi">100</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">])</span>
+                         <span class="o">-</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">200</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">]))</span>
+            <span class="n">interval7</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1</span><span class="o">/</span><span class="mi">200</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">])</span>
+                         <span class="o">-</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">250</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">]))</span>
+            <span class="n">interval8</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1</span><span class="o">/</span><span class="mi">250</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">])</span>
+                         <span class="o">-</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">500</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">]))</span>
+            <span class="n">interval9</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1</span><span class="o">/</span><span class="mi">500</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">])</span>
+                         <span class="o">-</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">1000</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">]))</span>
+            <span class="n">interval10</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">1000</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">])</span>
+
         <span class="n">damages0</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">damages1</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">array</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">damages2</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">array</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
@@ -823,8 +849,8 @@
 
 
 <div class="viewcode-block" id="compute_formal_structure_cost"><a class="viewcode-back" href="../../api_ref.html#outputs.flood_outputs.compute_formal_structure_cost">[docs]</a><span class="k">def</span> <span class="nf">compute_formal_structure_cost</span><span class="p">(</span>
-        <span class="n">initial_state_rent</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">interest_rate</span><span class="p">,</span> <span class="n">coeff_land</span><span class="p">,</span>
-        <span class="n">initial_state_households_housing_types</span><span class="p">,</span> <span class="n">construction_coeff</span><span class="p">):</span>
+        <span class="n">initial_state_capital_land</span><span class="p">,</span> <span class="n">initial_state_households_housing_types</span><span class="p">,</span>
+        <span class="n">coeff_land</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Estimate construction costs of formal private housing structures in space.</span>
 
@@ -835,22 +861,16 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    initial_state_rent : ndarray(float64, ndim=2)</span>
-<span class="sd">        Average annual rent (in rands) per grid cell for each housing type (4)</span>
-<span class="sd">    param : dict</span>
-<span class="sd">        Dictionary of default parameters</span>
-<span class="sd">    interest_rate : float64</span>
-<span class="sd">        Real interest rate for the overall economy, corresponding to an average</span>
-<span class="sd">        over past years</span>
+<span class="sd">    initial_state_capital_land : ndarray(float64, ndim=2)</span>
+<span class="sd">        Value (in rands) of the housing capital stock per unit of available</span>
+<span class="sd">        land (in km²) for each endogenous housing type (3) per grid cell</span>
+<span class="sd">        at baseline year (2011)</span>
+<span class="sd">    initial_state_households_housing_types : ndarray(float64, ndim=2)</span>
+<span class="sd">        Number of households per grid cell in each housing type (4)</span>
 <span class="sd">    coeff_land : ndarray(float64, ndim=2)</span>
 <span class="sd">        Updated land availability for each grid cell (24,014) and each</span>
 <span class="sd">        housing type (4: formal private, informal backyards, informal</span>
 <span class="sd">        settlements, formal subsidized)</span>
-<span class="sd">    initial_state_households_housing_types : ndarray(float64, ndim=2)</span>
-<span class="sd">        Number of households per grid cell in each housing type (4)</span>
-<span class="sd">    construction_coeff : ndarray(float64)</span>
-<span class="sd">        (Calibrated) scale factor for the construction function of formal</span>
-<span class="sd">        private developers</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -859,27 +879,21 @@
 <span class="sd">        on their market capital values, per grid cell (24,014)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># We convert price to capital per unit of land</span>
-    <span class="n">price_simul</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">initial_state_rent</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">construction_coeff</span> <span class="o">*</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;coeff_b&quot;</span><span class="p">]</span>
-        <span class="o">/</span> <span class="p">(</span><span class="n">interest_rate</span> <span class="o">+</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;depreciation_rate&quot;</span><span class="p">])</span>
-        <span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">param</span><span class="p">[</span><span class="s2">&quot;coeff_a&quot;</span><span class="p">])</span>
-    <span class="c1"># TODO: Difference with variable below?</span>
-    <span class="c1"># price_simul = initial_state_capital_land[0, :]</span>
+    <span class="n">price_simul</span> <span class="o">=</span> <span class="n">initial_state_capital_land</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
 
     <span class="c1"># We multiply by available land area, and average the output across</span>
     <span class="c1"># households</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">seterr</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+    <span class="c1"># np.seterr(divide=&#39;ignore&#39;, invalid=&#39;ignore&#39;)</span>
     <span class="n">formal_structure_cost</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">price_simul</span> <span class="o">*</span> <span class="p">(</span><span class="mi">250000</span><span class="p">)</span> <span class="o">*</span> <span class="n">coeff_land</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">price_simul</span> <span class="o">*</span> <span class="mi">250000</span> <span class="o">*</span> <span class="n">coeff_land</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
         <span class="o">/</span> <span class="n">initial_state_households_housing_types</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:])</span>
-    <span class="n">formal_structure_cost</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isinf</span><span class="p">(</span><span class="n">formal_structure_cost</span><span class="p">)]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="c1"># formal_structure_cost[np.isinf(formal_structure_cost)] = np.nan</span>
 
     <span class="k">return</span> <span class="n">formal_structure_cost</span></div>
 
 
 <div class="viewcode-block" id="compute_content_cost"><a class="viewcode-back" href="../../api_ref.html#outputs.flood_outputs.compute_content_cost">[docs]</a><span class="k">def</span> <span class="nf">compute_content_cost</span><span class="p">(</span>
-        <span class="n">initial_state_household_centers</span><span class="p">,</span> <span class="n">initial_state_housing_supply</span><span class="p">,</span>
+        <span class="n">initial_state_households</span><span class="p">,</span> <span class="n">initial_state_housing_supply</span><span class="p">,</span>
         <span class="n">income_net_of_commuting_costs</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span>
         <span class="n">fraction_capital_destroyed</span><span class="p">,</span> <span class="n">initial_state_rent</span><span class="p">,</span>
         <span class="n">initial_state_dwelling_size</span><span class="p">,</span> <span class="n">interest_rate</span><span class="p">):</span>
@@ -892,8 +906,9 @@
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    initial_state_household_centers : ndarray(float64, ndim=2)</span>
-<span class="sd">        Number of households per grid cell in each income group (4)</span>
+<span class="sd">    initial_state_households : ndarray(float64, ndim=3)</span>
+<span class="sd">        Number of households per grid cell in each income group (4) and</span>
+<span class="sd">        each housing type (4)</span>
 <span class="sd">    initial_state_housing_supply : ndarray(float64, ndim=2)</span>
 <span class="sd">        Housing supply per unit of available land (in m² per km²)</span>
 <span class="sd">        for each housing type (4) in each grid cell</span>
@@ -925,19 +940,26 @@
 
     <span class="c1"># We estimate average incomes net of commuting costs in space, per housing</span>
     <span class="c1"># type</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">seterr</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
-    <span class="n">income_formal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span>
-        <span class="n">income_net_of_commuting_costs</span> <span class="o">*</span> <span class="n">initial_state_household_centers</span>
-        <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">initial_state_household_centers</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="n">income_formal</span><span class="p">[</span><span class="n">income_formal</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-    <span class="n">np</span><span class="o">.</span><span class="n">seterr</span><span class="p">(</span><span class="n">divide</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">invalid</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
-    <span class="n">income_informal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span>
-        <span class="n">income_net_of_commuting_costs</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span>
-        <span class="o">*</span> <span class="n">initial_state_household_centers</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span>
-        <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">initial_state_household_centers</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="p">:],</span> <span class="mi">0</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="n">income_informal</span><span class="p">[</span><span class="n">income_informal</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-    <span class="n">income_subsidized</span> <span class="o">=</span> <span class="n">income_net_of_commuting_costs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
-    <span class="n">income_subsidized</span><span class="p">[</span><span class="n">income_subsidized</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="n">income_formal</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">income_net_of_commuting_costs</span>
+                  <span class="o">*</span> <span class="n">initial_state_households</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">initial_state_households</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="mi">0</span><span class="p">))</span>
+
+    <span class="n">income_backyard</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">income_net_of_commuting_costs</span>
+                  <span class="o">*</span> <span class="n">initial_state_households</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">initial_state_households</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="mi">0</span><span class="p">))</span>
+
+    <span class="n">income_informal</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">income_net_of_commuting_costs</span>
+                  <span class="o">*</span> <span class="n">initial_state_households</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">initial_state_households</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="mi">0</span><span class="p">))</span>
+
+    <span class="n">income_subsidized</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">income_net_of_commuting_costs</span>
+                  <span class="o">*</span> <span class="n">initial_state_households</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">initial_state_households</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="mi">0</span><span class="p">))</span>
 
     <span class="c1"># We also define other useful variables</span>
 
@@ -959,10 +981,11 @@
     <span class="n">fraction_backyard</span> <span class="o">=</span> <span class="n">initial_state_housing_supply</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">/</span> <span class="mi">1000000</span>
 
     <span class="c1"># We just multiply the amount of composite good from the budget constraint</span>
-    <span class="c1"># by the share parameter to obtain cost estimates</span>
+    <span class="c1"># by the damage parameter to obtain cost estimates</span>
 
     <span class="n">content_cost</span><span class="p">[</span><span class="s2">&quot;formal&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">param</span><span class="p">[</span><span class="s2">&quot;fraction_z_dwellings&quot;</span><span class="p">]</span>
+        <span class="c1"># * fraction_capital_destroyed.contents_formal</span>
         <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;fraction_z_dwellings&quot;</span><span class="p">]</span>
            <span class="o">*</span> <span class="n">fraction_capital_destroyed</span><span class="o">.</span><span class="n">contents_formal</span><span class="p">)</span>
         <span class="o">*</span> <span class="p">(</span><span class="n">income_formal</span>
@@ -971,6 +994,7 @@
 
     <span class="n">content_cost</span><span class="p">[</span><span class="s2">&quot;informal&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">param</span><span class="p">[</span><span class="s2">&quot;fraction_z_dwellings&quot;</span><span class="p">]</span>
+        <span class="c1"># * fraction_capital_destroyed.contents_informal</span>
         <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;fraction_z_dwellings&quot;</span><span class="p">]</span>
            <span class="o">*</span> <span class="n">fraction_capital_destroyed</span><span class="o">.</span><span class="n">contents_informal</span><span class="p">)</span>
         <span class="o">*</span> <span class="p">(</span><span class="n">income_informal</span>
@@ -983,28 +1007,34 @@
 
     <span class="n">content_cost</span><span class="p">[</span><span class="s2">&quot;subsidized&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
         <span class="n">param</span><span class="p">[</span><span class="s2">&quot;fraction_z_dwellings&quot;</span><span class="p">]</span>
+        <span class="c1"># * fraction_capital_destroyed.contents_subsidized</span>
         <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;fraction_z_dwellings&quot;</span><span class="p">]</span>
            <span class="o">*</span> <span class="n">fraction_capital_destroyed</span><span class="o">.</span><span class="n">contents_subsidized</span><span class="p">)</span>
         <span class="o">*</span> <span class="p">(</span><span class="n">income_subsidized</span>
-           <span class="o">+</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;backyard_size&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">initial_state_rent</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
-           <span class="o">*</span> <span class="n">fraction_backyard</span>
+           <span class="o">+</span> <span class="p">(</span><span class="n">param</span><span class="p">[</span><span class="s2">&quot;backyard_size&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">initial_state_rent</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+              <span class="o">*</span> <span class="n">fraction_backyard</span><span class="p">)</span>
            <span class="o">-</span> <span class="p">(</span><span class="n">capital_destroyed</span> <span class="o">+</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;depreciation_rate&quot;</span><span class="p">])</span>
            <span class="o">*</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;subsidized_structure_value&quot;</span><span class="p">])</span>
         <span class="p">)</span>
+    <span class="c1"># NB: There are (only) 3 corner cases where structural capital depreciation</span>
+    <span class="c1"># is bigger than income in RDP, which may occur in high-flood-risk zones</span>
+    <span class="c1"># where we do not let poor households arbitrage spatially: we put a floor</span>
+    <span class="c1"># on those values as we can assume that those very deprived households</span>
+    <span class="c1"># would be bailed out</span>
+    <span class="n">content_cost</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">content_cost</span><span class="p">[</span><span class="s2">&quot;subsidized&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;subsidized&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="n">content_cost</span><span class="p">[</span><span class="s2">&quot;backyard&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">param</span><span class="p">[</span><span class="s2">&quot;fraction_z_dwellings&quot;</span><span class="p">]</span> <span class="o">/</span>
-        <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;fraction_z_dwellings&quot;</span><span class="p">]</span>
-         <span class="o">*</span> <span class="n">fraction_capital_destroyed</span><span class="o">.</span><span class="n">contents_backyard</span><span class="p">)</span>
-        <span class="o">*</span> <span class="p">(</span><span class="n">income_informal</span>
+        <span class="n">param</span><span class="p">[</span><span class="s2">&quot;fraction_z_dwellings&quot;</span><span class="p">]</span>
+        <span class="c1"># * fraction_capital_destroyed.contents_backyard</span>
+        <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;fraction_z_dwellings&quot;</span><span class="p">]</span>
+           <span class="o">*</span> <span class="n">fraction_capital_destroyed</span><span class="o">.</span><span class="n">contents_backyard</span><span class="p">)</span>
+        <span class="o">*</span> <span class="p">(</span><span class="n">income_backyard</span>
            <span class="o">-</span> <span class="n">initial_state_rent</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">initial_state_dwelling_size</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
            <span class="o">-</span> <span class="n">fraction_capital_destroyed</span><span class="o">.</span><span class="n">structure_backyards</span>
            <span class="o">*</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;informal_structure_value&quot;</span><span class="p">]</span>
            <span class="o">-</span> <span class="p">(</span><span class="n">interest_rate</span> <span class="o">+</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;depreciation_rate&quot;</span><span class="p">])</span>
            <span class="o">*</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;informal_structure_value&quot;</span><span class="p">])</span>
         <span class="p">)</span>
-
-    <span class="n">content_cost</span><span class="p">[</span><span class="n">content_cost</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
 
     <span class="k">return</span> <span class="n">content_cost</span></div>
 

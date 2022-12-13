@@ -1241,6 +1241,17 @@ for item in list_sim_formal:
         path_tables_floods, ubnd=np.nanquantile(new_item, 0.9999))
 
 
+# We could plot fraction of capital destroyed separately for each
+# flood type, but it would be similar due to bath-tub model
+# NB: note that content damage function is the same for all housing types
+for col in fraction_capital_destroyed.columns:
+    value = fraction_capital_destroyed[col]
+    outexp.export_map(value, grid, geo_grid,
+                      path_plots_floods, col + '_fract_K_destroyed', "",
+                      path_tables_floods,
+                      ubnd=1)
+
+
 # We make a noise when model stops running!
 duration = 1000  # milliseconds
 freq = 440  # Hz

@@ -9,6 +9,7 @@ Welcome to NEDUM-2D's documentation!
    Setup <readme_link>
    guidelines
    use_case
+   use_cases
    main_nb.nblink
    calib_nb.nblink
    api_ref

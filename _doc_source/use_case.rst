@@ -50,7 +50,20 @@ We focus first on aggregate measures, then will do spatial analysis.
 
 Let us start without climate change.
 
+As expected, full insurance has an impact on spatial sorting, hence the extent of damages
+
 ... Before all, recycle general validation from past use case without floods
 ..._damages.png : the difference in validation data comes from endogenous content and formal structure costs (that depend on net income, dwelling size, and simulated rent). What about income shares (nonsense if no prior breakdown across housing types, then too complex, just superimpose maps because aggregates imply composition effects?) and utility terms (can just compare numeric values)?
 ..._severy_distrib.png for breakdown across income groups (also superimpose with raw flood maps?)
 ...End with general spatial patterns in comparative statics
+
+---------
+Insurance
+---------
+
+.. raw:: html
+
+   <iframe src="../../Output/use_case_insur/charts/fluvialu_sim_damage_sum_insur.html" height="345px" width="100%"></iframe>
+
+bla
+..:file: ../../Output/use_case_insur/charts/fluvialu_sim_damage_sum_insur.html
