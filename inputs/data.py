@@ -1167,6 +1167,12 @@ def import_init_floods_data(options, param, path_folder):
         [0, 0.2, 0.3, 0.4, 0.45, 0.5, 0.55, 0.6, 0.62, 0.64, 0.65, 0.65]
         )
 
+    # Previous WB report uses the following for type4a/b equivalent (+ content)
+    # It seems that Englhardt already incorporates the cap for maximum
+    # destruction in his estimates
+    # ([0, 0.5, 1, 1.5, 2, 3, 4, 5, 6],
+    # [0, 0.22, 0.38, 0.53, 0.64, 0.82, 0.90, 0.96, 1])
+
     return (structural_damages_small_houses, structural_damages_medium_houses,
             structural_damages_large_houses, content_damages,
             structural_damages_type1, structural_damages_type2,

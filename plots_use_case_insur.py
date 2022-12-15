@@ -357,6 +357,10 @@ for item in list_maps:
     concat_damage_map['max_val'] = concat_damage_map[
         ['sum_fluvialu', 'sum_pluvial', 'sum_coastal']].max(axis=1)
 
+    # For reference to rainwater floods
+    concat_damage_map['max_val_rainwater'] = concat_damage_map[
+        ['sum_fluvialu', 'sum_pluvial']].max(axis=1)
+
     # We also define the dominant flood type to display as hover data
     concat_damage_map['flood_type'] = 'None'
     concat_damage_map.loc[
@@ -975,7 +979,7 @@ for housing_type in housing_types:
                     'net_income_' + housing_type: 'Net income',
                     'rent_' + housing_type: 'Annual rent / m²'},
             title='Estimated annual flood damages in ' + housing_type
-            + ' housing (as % of net income)',
+            + ' housing (as share of net income)',
             color_continuous_scale="Reds",
             template='plotly_white',
             hover_data={'lon': ':.2f', 'lat': ':.2f',
@@ -1009,7 +1013,7 @@ for housing_type in housing_types:
         mapbox_style='stamen-toner',
         opacity=0.75,
         labels={'lon': 'Lon.', 'lat': 'Lat.',
-                'max_val_' + housing_type: '% surplus',
+                'max_val_' + housing_type: 'Tot. change',
                 'max_content_' + housing_type: 'o.w. content',
                 'locations': 'Pixel ID',
                 'flood_type_' + housing_type: 'Flood type',
@@ -1018,7 +1022,7 @@ for housing_type in housing_types:
                 'net_income_' + housing_type: 'Net income',
                 'rent_' + housing_type + '_pct': '% change in rent'},
         title='Flood damage surplus from no insurance in ' + housing_type
-        + ' housing (as % of net income)',
+        + ' housing (as share of net income)',
         color_continuous_scale="Picnic",
         color_continuous_midpoint=0,
         template='plotly_white',
@@ -1340,13 +1344,13 @@ for flood in flood_types:
             x='sum_' + flood + '_' + incgroup,
             y='nb_households_' + incgroup,
             color='insur',
-            labels={'sum_' + flood + '_' + incgroup: '% of net income',
+            labels={'sum_' + flood + '_' + incgroup: 'share of net income',
                     'nb_households_' + incgroup: 'nb of households',
                     'insur': 'w/ insurance'},
             barmode='group',
             hover_data={'sum_' + flood + '_' + incgroup: False},
             title='Distribution of flood damages among income group '
-            + incgroup + ' (as % of net income)',
+            + incgroup + ' (as share of net income)',
             template='plotly_white')
 
         try:
@@ -1423,7 +1427,7 @@ for flood in flood_types:
             barmode='group',
             hover_data={'content_' + flood + '_' + incgroup: False},
             title='Distribution of flood damages among income group '
-            + incgroup + ' (as % of net income)',
+            + incgroup + ' (as share of net income)',
             template='plotly_white')
 
         dist_content.update_layout(
