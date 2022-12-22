@@ -435,7 +435,7 @@ def compute_equilibrium(fraction_capital_destroyed, amenities, param,
             erreur_temp = (total_simulated_jobs[index_iteration, :]
                            / households_per_income_class - 1)
             error_max[index_iteration] = erreur_temp[m]
-            # TODO: print error_mean?
+
             error_mean[index_iteration] = np.mean(np.abs(
                 total_simulated_jobs[index_iteration, :]
                 / (households_per_income_class + 0.001) - 1))

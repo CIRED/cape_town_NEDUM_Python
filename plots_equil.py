@@ -14,14 +14,13 @@ import numpy as np
 import pandas as pd
 import geopandas as gpd
 import scipy
-import winsound
 
 import inputs.parameters_and_options as inpprm
 import inputs.data as inpdt
 import equilibrium.functions_dynamic as eqdyn
 import outputs.export_outputs as outexp
 import outputs.flood_outputs as outfld
-import outputs.export_outputs_floods as outval
+# import outputs.export_outputs_floods as outval
 
 
 # DEFINE FILE PATHS
@@ -64,7 +63,7 @@ options["defended"] = 0
 #  Dummy for taking sea-level rise into account in coastal flood data
 #  NB: Projections are up to 2050, based upon IPCC AR5 assessment for the
 #  RCP 8.5 scenario for coastal (+ dummy scenarios for pluvial / fluvial)
-options["climate_change"] = 1
+options["climate_change"] = 0
 
 # More custom options regarding scenarios
 options["inc_ineq_scenario"] = 2
@@ -204,8 +203,6 @@ initial_state_limit_city = np.load(
 
 # LOAD FLOOD DATA
 
-# TODO: should add option!!!
-
 if options["agents_anticipate_floods"] == 1:
     (fraction_capital_destroyed, structural_damages_small_houses,
      structural_damages_medium_houses, structural_damages_large_houses,
@@ -271,10 +268,14 @@ fluvialu_floods = ['FU_5yr', 'FU_10yr', 'FU_20yr', 'FU_50yr', 'FU_75yr',
                    'FU_100yr', 'FU_200yr', 'FU_250yr', 'FU_500yr', 'FU_1000yr']
 pluvial_floods = ['P_5yr', 'P_10yr', 'P_20yr', 'P_50yr', 'P_75yr', 'P_100yr',
                   'P_200yr', 'P_250yr', 'P_500yr', 'P_1000yr']
-coastal_floods = ['C_MERITDEM_1_0000', 'C_MERITDEM_1_0002',
-                  'C_MERITDEM_1_0005', 'C_MERITDEM_1_0010',
-                  'C_MERITDEM_1_0025', 'C_MERITDEM_1_0050',
-                  'C_MERITDEM_1_0100', 'C_MERITDEM_1_0250']
+coastal_floods = ['C_MERITDEM_' + str(options['climate_change']) + '_0000',
+                  'C_MERITDEM_' + str(options['climate_change']) + '_0002',
+                  'C_MERITDEM_' + str(options['climate_change']) + '_0005',
+                  'C_MERITDEM_' + str(options['climate_change']) + '_0010',
+                  'C_MERITDEM_' + str(options['climate_change']) + '_0025',
+                  'C_MERITDEM_' + str(options['climate_change']) + '_0050',
+                  'C_MERITDEM_' + str(options['climate_change']) + '_0100',
+                  'C_MERITDEM_' + str(options['climate_change']) + '_0250']
 
 # WE CREATE DIRECTORIES TO STORE OUTPUTS (IF NEEDED)
 
@@ -564,10 +565,10 @@ housing_rent_1d = outexp.simulation_housing_price(
     housing_types_sp, path_plots, path_tables, land_price=0)
 
 # NB: check underlying validity/quality of validation data
-housing_price_1d = outexp.valid_housing_price(
-    grid, initial_state_rent, interest_rate, param,
-    housing_types_sp, data_sp,
-    path_plots, path_tables)
+# housing_price_1d = outexp.valid_housing_price(
+#     grid, initial_state_rent, interest_rate, param,
+#     housing_types_sp, data_sp,
+#     path_plots, path_tables)
 
 # Then in two dimensions
 # NB: same remark as before holds for SP-level validation data
@@ -851,6 +852,16 @@ formal_structure_cost = outfld.compute_formal_structure_cost(
 # already takes into account the maximum across each annualized depreciation
 # term
 
+# We re-import flood data to compute ex-post damages in case agents do not
+# anticipate floods
+
+(fraction_capital_destroyed, structural_damages_small_houses,
+ structural_damages_medium_houses, structural_damages_large_houses,
+ content_damages, structural_damages_type1, structural_damages_type2,
+ structural_damages_type3a, structural_damages_type3b,
+ structural_damages_type4a, structural_damages_type4b
+ ) = inpdt.import_full_floods_data(options, param, path_folder)
+
 fluvialu_damages_data = outfld.compute_damages(
     fluvialu_floods, path_floods, param, content_cost,
     data_nb_households_formal, data_nb_households_rdp,
@@ -902,17 +913,18 @@ coastal_damages_sim = outfld.compute_damages(
     structural_damages_type2, structural_damages_type3a, options,
     spline_inflation, year_temp, path_tables_floods, 'coastal_sim')
 
-# We get aggregate validation graphs
 
-outval.valid_damages(
-    fluvialu_damages_sim, fluvialu_damages_data,
-    path_plots_floods, 'fluvialu', options)
-outval.valid_damages(
-    pluvial_damages_sim, pluvial_damages_data,
-    path_plots_floods, 'pluvial', options)
-outval.valid_damages(
-    coastal_damages_sim, coastal_damages_data,
-    path_plots_floods, 'coastal', options)
+# We get aggregate validation graphs (deprecated)
+
+# outval.valid_damages(
+#     fluvialu_damages_sim, fluvialu_damages_data,
+#     path_plots_floods, 'fluvialu', options)
+# outval.valid_damages(
+#     pluvial_damages_sim, pluvial_damages_data,
+#     path_plots_floods, 'pluvial', options)
+# outval.valid_damages(
+#     coastal_damages_sim, coastal_damages_data,
+#     path_plots_floods, 'coastal', options)
 
 
 # Now in two dimensions
@@ -1250,9 +1262,3 @@ for col in fraction_capital_destroyed.columns:
                       path_plots_floods, col + '_fract_K_destroyed', "",
                       path_tables_floods,
                       ubnd=1)
-
-
-# We make a noise when model stops running!
-duration = 1000  # milliseconds
-freq = 440  # Hz
-winsound.Beep(freq, duration)

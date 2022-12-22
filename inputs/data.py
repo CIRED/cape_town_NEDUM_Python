@@ -1360,7 +1360,8 @@ def compute_fraction_capital_destroyed(d, type_flood, damage_function,
     # pluvial/fluvial since we do not have the same return periods available
     # in DELTARES and FATHOM data
 
-        name = type_flood + '_' + options["dem"] + '_' + str(options["climate_change"])
+        name = (type_flood + '_' + options["dem"] + '_'
+                + str(options["climate_change"]))
 
         # Here, we do have some inundation estimates at baseline year
         damages0 = ((d[name + '_0000'].prop_flood_prone

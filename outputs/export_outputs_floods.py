@@ -89,27 +89,18 @@ def validation_flood(stats1, stats2, legend1, legend2, type_flood,
     plt.bar(r, np.array(flood_depth_20_1),
             color=colors[1], edgecolor='white', width=barWidth,
             label='20 years')
-    # valueb = np.maximum(np.array(flood_depth_50_1) - np.array(flood_depth_20_1),
-    # np.full(4, 0.003))
-    # floorb = np.maximum(np.array(flood_depth_50_), np.array(flood_depth_20_))
     plt.bar(r, np.array(flood_depth_50_1) - np.array(flood_depth_20_1),
             bottom=np.array(flood_depth_20_1), color=colors[2],
             edgecolor='white', width=barWidth, label='50 years')
-    # valuec = np.maximum(np.array(flood_depth_100_1) - floorb, np.full(4, 0.003))
     plt.bar(r, np.array(flood_depth_100_1) - np.array(flood_depth_50_1),
             bottom=np.array(flood_depth_50_1), color=colors[3],
             edgecolor='white', width=barWidth, label='100 years')
     plt.bar(r + barWidth, np.array(flood_depth_20_2),
             color=colors[1], edgecolor='white', width=barWidth)
-    # valueb2 = np.maximum(np.array(flood_depth_50_2) - np.array(flood_depth_20_2),
-    # np.full(4, 0.003))
-    # floorb2 = np.maximum(np.array(flood_depth_50_2), np.array(flood_depth_20_2))
     plt.bar(r + barWidth,
             np.array(flood_depth_50_2) - np.array(flood_depth_20_2),
             bottom=np.array(flood_depth_20_2), color=colors[2],
             edgecolor='white', width=barWidth)
-    # valuec2 = np.maximum(np.array(flood_depth_100_2) - floorb2,
-    # np.full(4, 0.003))
     plt.bar(r + barWidth,
             np.array(flood_depth_100_2) - np.array(flood_depth_50_2),
             bottom=np.array(flood_depth_50_2), color=colors[3],
@@ -350,28 +341,19 @@ def validation_flood_coastal(stats1, stats2, legend1, legend2, type_flood,
     plt.bar(r, np.array(flood_depth_25_1),
             color=colors[1], edgecolor='white', width=barWidth,
             label='25 years')
-    # valueb = np.maximum(np.array(flood_depth_50_1) - np.array(flood_depth_25_1),
-    # np.full(4, 0.003))
-    # floorb = np.maximum(np.array(flood_depth_50_1), np.array(flood_depth_25_1))
     plt.bar(r, np.array(flood_depth_50_1) - np.array(flood_depth_25_1),
             bottom=np.array(flood_depth_25_1), color=colors[2],
             edgecolor='white', width=barWidth, label='50 years')
-    # valuec = np.maximum(np.array(flood_depth_100_1) - floorb, np.full(4, 0.003))
     plt.bar(r, np.array(flood_depth_100_1) - np.array(flood_depth_50_1),
             bottom=np.array(flood_depth_50_1), color=colors[3],
             edgecolor='white', width=barWidth, label='100 years')
 
     plt.bar(r + barWidth, np.array(flood_depth_25_2),
             color=colors[1], edgecolor='white', width=barWidth)
-    # valueb2 = np.maximum(np.array(flood_depth_50_2) - np.array(flood_depth_25_2),
-    # np.full(4, 0.003))
-    # floorb2 = np.maximum(np.array(flood_depth_50_2), np.array(flood_depth_25_2))
     plt.bar(r + barWidth,
             np.array(flood_depth_50_2) - np.array(flood_depth_25_2),
             bottom=np.array(flood_depth_25_2), color=colors[2],
             edgecolor='white', width=barWidth)
-    # valuec2 = np.maximum(np.array(flood_depth_100_2) - floorb2,
-    # np.full(4, 0.003))
     plt.bar(r + barWidth,
             np.array(flood_depth_100_2) - np.array(flood_depth_50_2),
             bottom=np.array(flood_depth_50_2), color=colors[3],

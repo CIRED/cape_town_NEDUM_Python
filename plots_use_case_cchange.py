@@ -886,8 +886,8 @@ for item in list_maps:
 
     damage_maps[item]['lon'] = geo_grid.lon
     damage_maps[item]['lat'] = geo_grid.lat
-    # damage_maps[item].loc[
-    #     damage_maps[item]['max_val'] == 0, 'max_val'] = np.nan
+    damage_maps[item].loc[
+        damage_maps[item]['max_val'] == 0, 'max_val'] = np.nan
 
     fig = px.choropleth_mapbox(
         damage_maps[item],
@@ -925,12 +925,13 @@ for item in list_maps:
     fig.update_traces(marker_line_width=0)
     # fig.show()
     fig.write_html(path_maps_abs_damages + "map_damages_" + item + ".html")
-    fig.write_image(path_maps_abs_damages + "map_damages_" + item + ".png")
+    fig.write_image(path_maps_abs_damages + "map_damages_" + item + ".png",
+                    height=650, width=1000)
 
     print("map_damages_" + item + " done")
 
-# damage_map_compar.loc[
-#     damage_map_compar['max_val'] == 0, 'max_val'] = np.nan
+damage_map_compar.loc[
+    damage_map_compar['max_val'] == 0, 'max_val'] = np.nan
 fig = px.choropleth_mapbox(
     damage_map_compar,
     geojson=geo_grid.geometry,
@@ -966,7 +967,8 @@ fig.update_layout(margin={"r": 0, "t": 30, "l": 0, "b": 0})
 fig.update_traces(marker_line_width=0)
 # fig.show()
 fig.write_html(path_maps_abs_damages + "map_damages_compar_cchange.html")
-fig.write_image(path_maps_abs_damages + "map_damages_compar_cchange.png")
+fig.write_image(path_maps_abs_damages + "map_damages_compar_cchange.png",
+                height=650, width=1000)
 
 print("map_damages_compar_cchange done")
 
@@ -979,9 +981,9 @@ for housing_type in housing_types:
 
         damage_maps_shareinc[item]['lon'] = geo_grid.lon
         damage_maps_shareinc[item]['lat'] = geo_grid.lat
-        # damage_maps_shareinc[item].loc[
-        #     damage_maps_shareinc[item]['max_val_' + housing_type] == 0,
-        #     'max_val_' + housing_type] = np.nan
+        damage_maps_shareinc[item].loc[
+            damage_maps_shareinc[item]['max_val_' + housing_type] == 0,
+            'max_val_' + housing_type] = np.nan
 
         fig = px.choropleth_mapbox(
             damage_maps_shareinc[item],
@@ -1019,13 +1021,14 @@ for housing_type in housing_types:
         fig.write_html(path_maps_rel_damages + housing_type
                        + "/map_damages_" + item + '_' + housing_type + ".html")
         fig.write_image(path_maps_rel_damages + housing_type
-                        + "/map_damages_" + item + '_' + housing_type + ".png")
+                        + "/map_damages_" + item + '_' + housing_type + ".png",
+                        height=650, width=1000)
 
         print("map_damages_" + item + "_" + housing_type + " done")
 
-    # damage_map_compar_shareinc.loc[
-    #     damage_map_compar_shareinc['max_val_' + housing_type] == 0,
-    #     'max_val_' + housing_type] = np.nan
+    damage_map_compar_shareinc.loc[
+        damage_map_compar_shareinc['max_val_' + housing_type] == 0,
+        'max_val_' + housing_type] = np.nan
     fig = px.choropleth_mapbox(
         damage_map_compar_shareinc,
         geojson=geo_grid.geometry,
@@ -1036,7 +1039,7 @@ for housing_type in housing_types:
         mapbox_style='stamen-toner',
         opacity=0.75,
         labels={'lon': 'Lon.', 'lat': 'Lat.',
-                'max_val_' + housing_type: 'Tot. change',
+                'max_val_' + housing_type: 'Total change',
                 'max_content_' + housing_type: 'o.w. content',
                 'locations': 'Pixel ID',
                 'flood_type_' + housing_type: 'Flood type',
@@ -1064,7 +1067,8 @@ for housing_type in housing_types:
     fig.write_html(path_maps_rel_damages + housing_type
                    + "/map_damages_compar_" + housing_type + ".html")
     fig.write_image(path_maps_rel_damages + housing_type
-                    + "/map_damages_compar_" + housing_type + ".png")
+                    + "/map_damages_compar_" + housing_type + ".png",
+                    height=650, width=1000)
 
     print("map_damages_compar_shareinc_cchange_" + housing_type + " done")
 
@@ -1077,8 +1081,8 @@ for item in list_scenarios:
 
     equil_maps[item]['lon'] = geo_grid.lon
     equil_maps[item]['lat'] = geo_grid.lat
-    # equil_maps[item].loc[
-    #     equil_maps[item]['hh_tot'] == 0, 'hh_tot'] = np.nan
+    equil_maps[item].loc[
+        equil_maps[item]['hh_tot'] == 0, 'hh_tot'] = np.nan
 
     fig = px.choropleth_mapbox(
         equil_maps[item],
@@ -1123,12 +1127,12 @@ for item in list_scenarios:
     fig.write_html(path_maps_pop_distrib + "map_pop_distrib_" + type_map
                    + ".html")
     fig.write_image(path_maps_pop_distrib + "map_pop_distrib_" + type_map
-                    + ".png")
+                    + ".png", height=650, width=1000)
 
     print("map_pop_distrib_" + type_map + " done")
 
-# equil_map_compar.loc[
-#     equil_map_compar['hh_tot'] == 0, 'hh_tot'] = np.nan
+equil_map_compar.loc[
+    equil_map_compar['hh_tot'] == 0, 'hh_tot'] = np.nan
 fig = px.choropleth_mapbox(
     equil_map_compar,
     geojson=geo_grid.geometry,
@@ -1168,7 +1172,8 @@ fig.update_layout(margin={"r": 0, "t": 30, "l": 0, "b": 0})
 fig.update_traces(marker_line_width=0)
 # fig.show()
 fig.write_html(path_maps_pop_distrib + "map_pop_distrib_compar_cchange.html")
-fig.write_image(path_maps_pop_distrib + "map_pop_distrib_compar_cchange.png")
+fig.write_image(path_maps_pop_distrib + "map_pop_distrib_compar_cchange.png",
+                height=650, width=1000)
 
 print("map_pop_distrib_compar_cchange done")
 
@@ -1183,9 +1188,9 @@ for housing_type in housing_types:
         equil_maps[item]['lat'] = geo_grid.lat
         # equil_maps[item]['hsupply_' + housing_type] = (
         #     equil_maps[item]['hsupply_' + housing_type] / 1000000)
-        # equil_maps[item].loc[
-        #     equil_maps[item]['rent_' + housing_type] == 0,
-        #     'rent_' + housing_type] = np.nan
+        equil_maps[item].loc[
+            equil_maps[item]['rent_' + housing_type] == 0,
+            'rent_' + housing_type] = np.nan
 
         fig = px.choropleth_mapbox(
             equil_maps[item],
@@ -1206,7 +1211,8 @@ for housing_type in housing_types:
                     'flood_deprec_content_' + housing_type:
                         'Content deprec. from floods',
                     'rent_' + housing_type: 'Annual rent / m²'},
-            title='Estimated average annual rent / m² (in rands, 2011)',
+            title='Estimated average annual rent / m² in ' + housing_type
+            + ' housing (in rands, 2011)',
             color_continuous_scale="Reds",
             template='plotly_white',
             hover_data={'lon': ':.2f', 'lat': ':.2f',
@@ -1230,13 +1236,13 @@ for housing_type in housing_types:
                        + ".html")
         fig.write_image(path_maps_rent_distrib + housing_type
                         + "/map_rent_distrib_" + type_map + "_" + housing_type
-                        + ".png")
+                        + ".png", height=650, width=1000)
 
         print("map_rent_distrib_" + type_map + "_" + housing_type + " done")
 
-    # equil_map_compar.loc[
-    #     equil_map_compar['rent_' + housing_type] == 0,
-    #     'rent_' + housing_type] = np.nan
+    equil_map_compar.loc[
+        equil_map_compar['rent_' + housing_type] == 0,
+        'rent_' + housing_type] = np.nan
     fig = px.choropleth_mapbox(
         equil_map_compar,
         geojson=geo_grid.geometry,
@@ -1256,10 +1262,10 @@ for housing_type in housing_types:
                     'Struct. deprec. (% change)',
                 'flood_deprec_content_' + housing_type:
                     'Content deprec. (% change)',
-                'rent_' + housing_type: 'Rent (tot. change)',
+                'rent_' + housing_type: 'Rent (total change)',
                 'rent_' + housing_type + '_pct': '% change'},
-        title='Evolution of annual rent / m² under climate change'
-        + ' (in rands, 2011)',
+        title='Evolution of annual rent / m² under climate change in '
+        + housing_type + ' housing (in rands, 2011)',
         color_continuous_scale="Picnic",
         color_continuous_midpoint=0,
         template='plotly_white',
@@ -1280,7 +1286,7 @@ for housing_type in housing_types:
                    + housing_type + ".html")
     fig.write_image(path_maps_rent_distrib + housing_type
                     + "/map_rent_distrib_compar_cchange_"
-                    + housing_type + ".png")
+                    + housing_type + ".png", height=650, width=1000)
 
     print("map_rent_distrib_compar_cchange_" + housing_type + " done")
 
@@ -1368,7 +1374,7 @@ for flood in flood_types:
             x='sum_' + flood + '_' + incgroup,
             y='nb_households_' + incgroup,
             color='cchange',
-            labels={'sum_' + flood + '_' + incgroup: 'share of net income',
+            labels={'sum_' + flood + '_' + incgroup: 'Share of net income',
                     'nb_households_' + incgroup: 'nb of households',
                     'cchange': 'w/ c.change'},
             barmode='group',
@@ -1435,7 +1441,8 @@ for flood in flood_types:
         dist_sum.write_html(path_damage_distrib_total + flood + "_damage_dist_"
                             + incgroup + "_cchange_sum.html")
         dist_sum.write_image(path_damage_distrib_total + flood
-                             + "_damage_dist_" + incgroup + "_cchange_sum.png")
+                             + "_damage_dist_" + incgroup + "_cchange_sum.png",
+                             height=650, width=1000)
         print(flood + "_damage_dist_" + incgroup + "_cchange_sum done")
 
         dist_content = px.histogram(
@@ -1463,7 +1470,7 @@ for flood in flood_types:
             + "_cchange_content.html")
         dist_content.write_image(
             path_damage_distrib_content + flood + "_damage_dist_" + incgroup
-            + "_cchange_content.png")
+            + "_cchange_content.png", height=650, width=1000)
 
         print(flood + "_damage_dist_" + incgroup + "_cchange_content done")
 
@@ -1617,7 +1624,8 @@ fig_fluvialu = go.Figure(fig_fluvialu_cchange)
 fig_fluvialu = fig_fluvialu.add_traces(fig_fluvialu_nocchange.data)
 # fig_fluvialu.show()
 fig_fluvialu.write_html(path_charts + "fluvialu_sim_damage_sum_cchange.html")
-fig_fluvialu.write_image(path_charts + "fluvialu_sim_damage_sum_cchange.png")
+fig_fluvialu.write_image(path_charts + "fluvialu_sim_damage_sum_cchange.png",
+                         height=650, width=1000)
 
 # Then for pluvial floods
 
@@ -1665,7 +1673,8 @@ fig_pluvial = go.Figure(fig_pluvial_cchange)
 fig_pluvial = fig_pluvial.add_traces(fig_pluvial_nocchange.data)
 # fig_pluvial.show()
 fig_pluvial.write_html(path_charts + "pluvial_sim_damage_sum_cchange.html")
-fig_pluvial.write_image(path_charts + "pluvial_sim_damage_sum_cchange.png")
+fig_pluvial.write_image(path_charts + "pluvial_sim_damage_sum_cchange.png",
+                        height=650, width=1000)
 
 # Finally for coastal floods
 
@@ -1713,7 +1722,8 @@ fig_coastal = go.Figure(fig_coastal_cchange)
 fig_coastal = fig_coastal.add_traces(fig_coastal_nocchange.data)
 # fig_coastal.show()
 fig_coastal.write_html(path_charts + "coastal_sim_damage_sum_cchange.html")
-fig_coastal.write_image(path_charts + "coastal_sim_damage_sum_cchange.png")
+fig_coastal.write_image(path_charts + "coastal_sim_damage_sum_cchange.png",
+                        height=650, width=1000)
 
 
 # INPUT MAPS
@@ -1747,7 +1757,8 @@ fig.update_layout(margin={"r": 0, "t": 30, "l": 0, "b": 0})
 fig.update_traces(marker_line_width=0)
 # fig.show()
 fig.write_html(path_maps + "map_fract_K_destroyed_nocchange.html")
-fig.write_image(path_maps + "map_fract_K_destroyed_nocchange.png")
+fig.write_image(path_maps + "map_fract_K_destroyed_nocchange.png",
+                height=650, width=1000)
 
 equil_maps[list_scenarios[0]].loc[
     equil_maps[list_scenarios[0]]['flood_deprec_content_formal'] == 0,
@@ -1773,7 +1784,8 @@ fig.update_layout(margin={"r": 0, "t": 30, "l": 0, "b": 0})
 fig.update_traces(marker_line_width=0)
 # fig.show()
 fig.write_html(path_maps + "map_fract_K_destroyed_cchange.html")
-fig.write_image(path_maps + "map_fract_K_destroyed_cchange.png")
+fig.write_image(path_maps + "map_fract_K_destroyed_cchange.png",
+                height=650, width=1000)
 
 equil_map_compar.loc[
     equil_map_compar['flood_deprec_content_formal'] == 0,
@@ -1799,7 +1811,8 @@ fig.update_layout(margin={"r": 0, "t": 30, "l": 0, "b": 0})
 fig.update_traces(marker_line_width=0)
 # fig.show()
 fig.write_html(path_maps + "map_fract_K_destroyed_compar.html")
-fig.write_image(path_maps + "map_fract_K_destroyed_compar.png")
+fig.write_image(path_maps + "map_fract_K_destroyed_compar.png",
+                height=650, width=1000)
 
 
 # We then plot estimated amenity index
@@ -1832,7 +1845,7 @@ fig.update_layout(margin={"r": 0, "t": 30, "l": 0, "b": 0})
 fig.update_traces(marker_line_width=0)
 # fig.show()
 fig.write_html(path_maps + "map_amenities.html")
-fig.write_image(path_maps + "map_amenities.png")
+fig.write_image(path_maps + "map_amenities.png", height=650, width=1000)
 
 
 # Finally, we plot theoretical income net of commuting costs (to picture better
@@ -1875,7 +1888,7 @@ fig.update_layout(margin={"r": 0, "t": 30, "l": 0, "b": 0})
 fig.update_traces(marker_line_width=0)
 # fig.show()
 fig.write_html(path_maps + "map_netincome_1.html")
-fig.write_image(path_maps + "map_netincome_1.png")
+fig.write_image(path_maps + "map_netincome_1.png", height=650, width=1000)
 
 fig = px.choropleth_mapbox(
     income_net_of_commuting_costs_df,
@@ -1898,7 +1911,7 @@ fig.update_layout(margin={"r": 0, "t": 30, "l": 0, "b": 0})
 fig.update_traces(marker_line_width=0)
 # fig.show()
 fig.write_html(path_maps + "map_netincome_2.html")
-fig.write_image(path_maps + "map_netincome_2.png")
+fig.write_image(path_maps + "map_netincome_2.png", height=650, width=1000)
 
 fig = px.choropleth_mapbox(
     income_net_of_commuting_costs_df,
@@ -1921,7 +1934,7 @@ fig.update_layout(margin={"r": 0, "t": 30, "l": 0, "b": 0})
 fig.update_traces(marker_line_width=0)
 # fig.show()
 fig.write_html(path_maps + "map_netincome_3.html")
-fig.write_image(path_maps + "map_netincome_3.png")
+fig.write_image(path_maps + "map_netincome_3.png", height=650, width=1000)
 
 fig = px.choropleth_mapbox(
     income_net_of_commuting_costs_df,
@@ -1944,7 +1957,7 @@ fig.update_layout(margin={"r": 0, "t": 30, "l": 0, "b": 0})
 fig.update_traces(marker_line_width=0)
 # fig.show()
 fig.write_html(path_maps + "map_netincome_4.html")
-fig.write_image(path_maps + "map_netincome_4.png")
+fig.write_image(path_maps + "map_netincome_4.png", height=650, width=1000)
 
 print("Input maps done")
 

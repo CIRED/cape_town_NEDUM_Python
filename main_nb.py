@@ -115,7 +115,7 @@ options["defended"] = 0
 # Dummy for taking sea-level rise into account in coastal flood data
 # NB: Projections are up to 2050, based upon IPCC AR5 assessment for the
 # RCP 8.5 scenario on coastal (dummy scenarios on other flood risks)
-options["climate_change"] = 1
+options["climate_change"] = 0
 
 # #### We also set options for scenarios on time-moving exogenous variables
 
@@ -370,7 +370,7 @@ coeff_land = inpdt.import_coeff_land(
     spline_land_constraints, spline_land_backyard, spline_land_informal,
     spline_land_RDP, param, 0)
 
-# #### Let us visualize land availaibility ay baseline year (2011)
+# #### Let us visualize land availaibility at baseline year (2011)
 
 # region
 # For formal private housing
@@ -508,9 +508,9 @@ Image(path_input_plots + 'P_100yr' + '_map_depth.png')
 # endregion
 
 # region
-# Coastal maximum flood depth (in m) for a 100-year return period
+# Coastal maximum flood depth (in m) for a 100-year return period (without climate change)
 ref_flood = np.squeeze(pd.read_excel(
-    path_floods + "C_MERITDEM_1_0100" + ".xlsx"))
+    path_floods + "C_MERITDEM_0_0100" + ".xlsx"))
 ref_flood_depth = ref_flood["flood_depth"]
 import outputs.export_outputs as outexp
 ref_flood_map_depth = outexp.export_map(
@@ -545,7 +545,7 @@ Image(path_input_plots + 'structure_informal_settlements' + '_fract_K_destroyed.
 # For formal subsidized structures
 Image(path_input_plots + 'structure_subsidized_1' + '_fract_K_destroyed.png')
 
-# For contents across all housing types
+# For contents across all housing types (does not change)
 Image(path_input_plots + 'contents_formal' + '_fract_K_destroyed.png')
 
 
@@ -578,70 +578,8 @@ income_net_of_commuting_costs = np.load(
     path_precalc_transp + 'GRID_incomeNetOfCommuting_0.npy')
 # endregion
 
-# #### Let us visualize income net of commuting costs at baseline year
-
 # Note that this variable is computed through our commuting choice model,
 # based on calibrated incomes per income group and job center.
-
-# region
-# For income group 1
-netincome_poor = income_net_of_commuting_costs[0, :]
-import outputs.export_outputs as outexp
-netincome_poor_2d_sim = outexp.export_map(
-    netincome_poor, grid, geo_grid, path_input_plots, 'netincome_poor_2d_sim',
-    "Expected annual income net of commuting costs for the poor, in rands (up to the 99% quantile)",
-    path_input_tables,
-    ubnd=np.quantile(netincome_poor[~np.isnan(netincome_poor)], 0.99),
-    lbnd=np.quantile(netincome_poor[~np.isnan(netincome_poor)], 0.01))
-
-Image(path_input_plots + 'netincome_poor_2d_sim.png')
-# endregion
-
-# region
-# For income group 2
-netincome_midpoor = income_net_of_commuting_costs[1, :]
-import outputs.export_outputs as outexp
-netincome_midpoor_2d_sim = outexp.export_map(
-    netincome_midpoor, grid, geo_grid, path_input_plots,
-    'netincome_midpoor_2d_sim',
-    "Expected annual income net of commuting costs for the midpoor, in rands (up to the 99% quantile)",
-    path_input_tables,
-    ubnd=np.quantile(netincome_midpoor[~np.isnan(netincome_midpoor)], 0.99),
-    lbnd=np.quantile(netincome_midpoor[~np.isnan(netincome_midpoor)], 0.01))
-
-Image(path_input_plots + 'netincome_midpoor_2d_sim.png')
-# endregion
-
-# region
-# For income group 3
-netincome_midrich = income_net_of_commuting_costs[2, :]
-import outputs.export_outputs as outexp
-netincome_midrich_2d_sim = outexp.export_map(
-    netincome_midrich, grid, geo_grid, path_input_plots,
-    'netincome_midrich_2d_sim',
-    "Expected annual income net of commuting costs for the midrich, in rands (up to the 99% quantile)",
-    path_input_tables,
-    ubnd=np.quantile(netincome_midrich[~np.isnan(netincome_midrich)], 0.99),
-    lbnd=np.quantile(netincome_midrich[~np.isnan(netincome_midrich)], 0.01))
-
-Image(path_input_plots + 'netincome_midrich_2d_sim.png')
-# endregion
-
-# region
-# For income group 4
-netincome_rich = income_net_of_commuting_costs[3, :]
-import outputs.export_outputs as outexp
-netincome_rich_2d_sim = outexp.export_map(
-    netincome_rich, grid, geo_grid, path_input_plots, 'netincome_rich_2d_sim',
-    "Expected annual income net of commuting costs for the rich, in rands (up to the 99% quantile)",
-    path_input_tables,
-    ubnd=np.quantile(netincome_rich[~np.isnan(netincome_rich)], 0.99),
-    lbnd=np.quantile(netincome_rich[~np.isnan(netincome_rich)], 0.01))
-
-Image(path_input_plots + 'netincome_rich_2d_sim.png')
-# endregion
-
-# As expected, we observe a gravity-like structure with maximum income net of commuting costs around selected job centers.
 
 # ## Compute initial state equilibrium
 
@@ -963,7 +901,7 @@ Image(path_output_plots + 'hsupply_rdp_2d_sim.png')
 
 # We first convert our estimates for the average annual rents into land prices
 # based on the zero profit condition for developers
-land_rent = (
+land_price = (
     (initial_state_rent[0:3, :] * param["coeff_A"])
     ** (1 / param["coeff_a"])
     * param["coeff_a"]
@@ -974,93 +912,43 @@ land_rent = (
 
 # region
 # For formal private housing
-landrent_formal_simul = land_rent[0, :].copy()
-landrent_formal_simul[hsupply_formal==0 | np.isnan(hsupply_formal)] = 0
+landprice_formal_simul = land_price[0, :].copy()
+landprice_formal_simul[hsupply_formal==0 | np.isnan(hsupply_formal)] = 0
 
 import outputs.export_outputs as outexp
 land_price_formal_2d_sim = outexp.export_map(
-    landrent_formal_simul, grid, geo_grid,
-    path_output_plots, 'landrent_formal_2d_sim',
+    landprice_formal_simul, grid, geo_grid,
+    path_output_plots, 'landprice_formal_2d_sim',
     "Average land prices (in rands / m²) in formal private areas (up to the 99.99% quantile)",
     path_output_tables,
-    ubnd=np.quantile(landrent_formal_simul[landrent_formal_simul > 0], 0.9999))
+    ubnd=np.quantile(landprice_formal_simul[landprice_formal_simul > 0], 0.9999))
 
-Image(path_output_plots + 'landrent_formal_2d_sim.png')
+Image(path_output_plots + 'landprice_formal_2d_sim.png')
 # endregion
 
 # Our results conform to the standard urban economics predictions about the overall shape of the housing/land rent/price gradient, modulated by the value of the amenity score.
 
-# Note that, although we also simulate the average annual rents for informal backyards and settlements, it is not absolutely rigorous to apply the above formula to recover land prices in those areas, as they are considered unfit for development. We still include the plots for reference, that can be interpreted as land prices should such areas become fit for development, keeping constant housing supply and demand (not very realistic).
-
-# region
-# For informal backyards
-landrent_backyard_simul = land_rent[1, :].copy()
-landrent_backyard_simul[hsupply_backyard==0 | np.isnan(hsupply_backyard)] = 0
-
-import outputs.export_outputs as outexp
-land_price_backyard_2d_sim = outexp.export_map(
-    landrent_backyard_simul, grid, geo_grid,
-    path_output_plots, 'landrent_backyard_2d_sim',
-    "Average land prices (in rands / m²) in informal backyard areas (up to the 99.99% quantile)",
-    path_output_tables,
-    ubnd=np.quantile(landrent_backyard_simul[landrent_backyard_simul > 0], 0.9999))
-
-Image(path_output_plots + 'landrent_backyard_2d_sim.png')
-# endregion
-
-# region
-# For informal settlements
-landrent_informal_simul = land_rent[2, :].copy()
-landrent_informal_simul[hsupply_informal==0 | np.isnan(hsupply_informal)] = 0
-
-import outputs.export_outputs as outexp
-land_price_informal_2d_sim = outexp.export_map(
-    landrent_informal_simul, grid, geo_grid,
-    path_output_plots, 'landrent_informal_2d_sim',
-    "Average land prices (in rands / m²) in informal settlement areas (up to the 99.99% quantile)",
-    path_output_tables,
-    ubnd=np.quantile(landrent_informal_simul[landrent_informal_simul > 0], 0.9999))
-
-Image(path_output_plots + 'landrent_informal_2d_sim.png')
-# endregion
-
-# Note that we cannot estimate land rents for formal subsidized parcels since
-# such housing is exogenous in our model.
+# Note that, although we also simulate the average annual rents for informal backyards and settlements, it is not absolutely rigorous to apply the above formula to recover land prices in those areas, as they are considered unfit for development. We cannot look at formal subsidized housing areas either, since such housing is rented out for free in the model.
 
 # #### Finally, let us look at flood damages (in rands)
 
 # In the interest of space and for illustrative purposes, we only show results
 # for the formal private sector structures (which are also the biggest in
-# absolute terms).
-#
-# We redirect the reader to the interface for a more detailed view on other
-# housing submarkets or content damages, with results given as a share of
-# income and distributional impacts, for instance.
+# absolute terms). We redirect the reader to the use cases for a more detailed view.
 
 # We first list the flood map labels to be used
 fluvialu_floods = ['FU_5yr', 'FU_10yr', 'FU_20yr', 'FU_50yr', 'FU_75yr',
                    'FU_100yr', 'FU_200yr', 'FU_250yr', 'FU_500yr', 'FU_1000yr']
 pluvial_floods = ['P_5yr', 'P_10yr', 'P_20yr', 'P_50yr', 'P_75yr', 'P_100yr',
                   'P_200yr', 'P_250yr', 'P_500yr', 'P_1000yr']
-coastal_floods = ['C_MERITDEM_1_0000', 'C_MERITDEM_1_0002',
-                  'C_MERITDEM_1_0005', 'C_MERITDEM_1_0010',
-                  'C_MERITDEM_1_0025', 'C_MERITDEM_1_0050',
-                  'C_MERITDEM_1_0100', 'C_MERITDEM_1_0250']
-
-# region
-# We re-import flood data to be able to compute damages a posteriori, when
-# agents are set not to anticipate floods, hence do not take them into account,
-# even if they actually do occur
-
-import inputs.data as inpdt
-(fraction_capital_destroyed, structural_damages_small_houses,
- structural_damages_medium_houses, structural_damages_large_houses,
- content_damages, structural_damages_type1, structural_damages_type2,
- structural_damages_type3a, structural_damages_type3b,
- structural_damages_type4a, structural_damages_type4b
- ) = inpdt.import_full_floods_data(options, param, path_folder)
-
-# endregion
+coastal_floods = ['C_MERITDEM_' + str(options['climate_change']) + '_0000',
+                  'C_MERITDEM_' + str(options['climate_change']) + '_0002',
+                  'C_MERITDEM_' + str(options['climate_change']) + '_0005',
+                  'C_MERITDEM_' + str(options['climate_change']) + '_0010',
+                  'C_MERITDEM_' + str(options['climate_change']) + '_0025',
+                  'C_MERITDEM_' + str(options['climate_change']) + '_0050',
+                  'C_MERITDEM_' + str(options['climate_change']) + '_0100',
+                  'C_MERITDEM_' + str(options['climate_change']) + '_0250']
 
 # region
 # We compute the full values of exposed formal private structures and contents,
@@ -1076,6 +964,21 @@ content_cost = outfld.compute_content_cost(
 formal_structure_cost = outfld.compute_formal_structure_cost(
         initial_state_capital_land, initial_state_households_housing_types,
         coeff_land)
+# endregion
+
+# region
+# We re-import flood data to be able to compute damages a posteriori, when
+# agents are set not to anticipate floods, hence do not take them into account,
+# even if they actually do occur
+
+import inputs.data as inpdt
+(fraction_capital_destroyed, structural_damages_small_houses,
+ structural_damages_medium_houses, structural_damages_large_houses,
+ content_damages, structural_damages_type1, structural_damages_type2,
+ structural_damages_type3a, structural_damages_type3b,
+ structural_damages_type4a, structural_damages_type4b
+ ) = inpdt.import_full_floods_data(options, param, path_folder)
+
 # endregion
 
 # region
@@ -1177,121 +1080,114 @@ outexp.export_map(coastal_formal_structure_2d_sim, grid, geo_grid,
 Image(path_output_plots + "coastal_formal_structure_2d_sim.png")
 # endregion
 
-# As could have been expected from the flood maps, fluvial damages are more acute but also more localized than pluvial damages. When superimposing the maps above with what we obtained above on population spatial distribution, households appear to avoid the worst-affected areas, but are willing to trade off some flood exposure for good locations nearby the CBD (especially regarding fluvial flood risks). When superimposing them with the flood maps, we remark that the biggest pluvial damages occur in such places where flood exposure is not the highest: it is rather the increase in (housing supply) capital value (driven by a relaxed trade-off) that causes the impact.
+# As could have been expected from the flood maps, fluvial damages are more acute but also more localized than pluvial damages. When superimposing the maps with what we obtained above on population spatial distribution, households appear to avoid the worst-affected areas, but are willing to trade off some flood exposure for good locations nearby the CBD (especially regarding fluvial flood risks). When superimposing them with the raw flood maps, we remark that the biggest pluvial damages occur in such places where flood exposure is not the highest: it is rather the increase in exposed capital value (driven by a relaxed trade-off) that causes the impact.
 #
-# The same mechanism seems at play regarding coastal damages, but the estimated damages are well above standard estimates from the literature. This reflects the fact that we use sea-level rise projections based upon the (pessimistic) RCP 8.5 climate change scenario, but also the methodology we adopt: destroyed capital values are determined endogenously through the housing market, and not calibrated to reflect some maximum share of exposed capital at the city-level. As values are typically high near the CBD and in high-amenity areas, so are damages when floods hit such areas.
+# The same mechanism seems at play regarding coastal damages, but the estimated damages are well above standard estimates from the literature. This reflects the methodology we adopt: destroyed capital values are determined endogenously through the housing market, and not calibrated to reflect some maximum share of exposed capital at the city-level. As values are typically high near the CBD and in high-amenity areas, so are damages when floods hit such areas.
 
 # ## Run simulations for subsequent periods (time depends on timeline length)
 
-# # We run the algorithm
-# import equilibrium.run_simulations as eqsim
-# (simulation_households_center,
-#  simulation_households_housing_type,
-#  simulation_dwelling_size,
-#  simulation_rent,
-#  simulation_households,
-#  simulation_error,
-#  simulation_housing_supply,
-#  simulation_utility,
-#  simulation_deriv_housing,
-#  simulation_T) = eqsim.run_simulation(
-#      t,
-#      options,
-#      param,
-#      grid,
-#      initial_state_utility,
-#      initial_state_error,
-#      initial_state_households,
-#      initial_state_households_housing_types,
-#      initial_state_housing_supply,
-#      initial_state_household_centers,
-#      initial_state_average_income,
-#      initial_state_rent,
-#      initial_state_dwelling_size,
-#      fraction_capital_destroyed,
-#      amenities,
-#      housing_limit,
-#      spline_estimate_RDP,
-#      spline_land_constraints,
-#      spline_land_backyard,
-#      spline_land_RDP,
-#      spline_land_informal,
-#      income_class_by_housing_type,
-#      path_precalc_transp,
-#      spline_RDP,
-#      spline_agricultural_price,
-#      spline_interest_rate,
-#      spline_population_income_distribution,
-#      spline_inflation,
-#      spline_income_distribution,
-#      spline_population,
-#      spline_income,
-#      spline_minimum_housing_supply,
-#      spline_fuel,
-#      income_baseline
-#      )
+# NB: This part can be commented out to save time if one is not interested in the dynamics of the model
 
-# print(np.nansum(simulation_deriv_housing, 1))
+# We run the algorithm
+import equilibrium.run_simulations as eqsim
+(simulation_households_center,
+ simulation_households_housing_type,
+ simulation_dwelling_size,
+ simulation_rent,
+ simulation_households,
+ simulation_error,
+ simulation_housing_supply,
+ simulation_utility,
+ simulation_deriv_housing,
+ simulation_T) = eqsim.run_simulation(
+     t,
+     options,
+     param,
+     grid,
+     initial_state_utility,
+     initial_state_error,
+     initial_state_households,
+     initial_state_households_housing_types,
+     initial_state_housing_supply,
+     initial_state_household_centers,
+     initial_state_average_income,
+     initial_state_rent,
+     initial_state_dwelling_size,
+     fraction_capital_destroyed,
+     amenities,
+     housing_limit,
+     spline_estimate_RDP,
+     spline_land_constraints,
+     spline_land_backyard,
+     spline_land_RDP,
+     spline_land_informal,
+     income_class_by_housing_type,
+     path_precalc_transp,
+     spline_RDP,
+     spline_agricultural_price,
+     spline_interest_rate,
+     spline_population_income_distribution,
+     spline_inflation,
+     spline_income_distribution,
+     spline_population,
+     spline_income,
+     spline_minimum_housing_supply,
+     spline_fuel,
+     income_baseline
+     )
 
-# # We save the output
-# np.save(path_simul + '/simulation_households_center.npy',
-#         simulation_households_center)
-# np.save(path_simul + '/simulation_households_housing_type.npy',
-#         simulation_households_housing_type)
-# np.save(path_simul + '/simulation_dwelling_size.npy',
-#         simulation_dwelling_size)
-# np.save(path_simul + '/simulation_rent.npy',
-#         simulation_rent)
-# np.save(path_simul + '/simulation_households.npy',
-#         simulation_households)
-# np.save(path_simul + '/simulation_error.npy',
-#         simulation_error)
-# np.save(path_simul + '/simulation_housing_supply.npy',
-#         simulation_housing_supply)
-# np.save(path_simul + '/simulation_utility.npy',
-#         simulation_utility)
-# np.save(path_simul + '/simulation_deriv_housing.npy',
-#         simulation_deriv_housing)
-# np.save(path_simul + '/simulation_T.npy',
-#         simulation_T)
+# We save the output
+np.save(path_simul + '/simulation_households_center.npy',
+        simulation_households_center)
+np.save(path_simul + '/simulation_households_housing_type.npy',
+        simulation_households_housing_type)
+np.save(path_simul + '/simulation_dwelling_size.npy',
+        simulation_dwelling_size)
+np.save(path_simul + '/simulation_rent.npy',
+        simulation_rent)
+np.save(path_simul + '/simulation_households.npy',
+        simulation_households)
+np.save(path_simul + '/simulation_error.npy',
+        simulation_error)
+np.save(path_simul + '/simulation_housing_supply.npy',
+        simulation_housing_supply)
+np.save(path_simul + '/simulation_utility.npy',
+        simulation_utility)
+np.save(path_simul + '/simulation_deriv_housing.npy',
+        simulation_deriv_housing)
+np.save(path_simul + '/simulation_T.npy',
+        simulation_T)
 
-# # ### Output visualization
+# ### Output visualization
 
-# # All the above outputs are available at each period.
-# # For reference, we include here some aggregates that evolve over time.
-# #
-# # We redirect the reader to the interface for a more detailed view of other
-# # aggregates, of which the evolution of flood damages for instance.
-# # Note that since flood risks do not evolve through time, the evolution in
-# # flood damages is just a function of population growth and spatial sorting.
+# All the above outputs are available at each period.
+# For reference, we include here some aggregates that evolve over time.
 
-# # We set the x-axis of our plots
-# years_simul = np.arange(2011, 2011 + 30)
+# We set the x-axis of our plots
+years_simul = np.arange(2011, 2011 + 30)
 
-# # #### Evolution of population sorting across housing types
+# #### Evolution of population sorting across housing types
 
-# # region
-# fig, ax = plt.subplots(figsize=(10, 7))
-# ax.plot(years_simul, np.nansum(simulation_households_housing_type, 2)[:, 0],
-#         color="gold", label="Formal")
-# ax.plot(years_simul, np.nansum(simulation_households_housing_type, 2)[:, 1],
-#         color="darkorange", label="Backyard")
-# ax.plot(years_simul, np.nansum(simulation_households_housing_type, 2)[:, 2],
-#         color="red", label="Informal")
-# ax.plot(years_simul, np.nansum(simulation_households_housing_type, 2)[:, 3],
-#         color="maroon", label="Subsidized")
-# ax.set_ylim(0)
-# ax.set_xlim(right=2035)
-# ax.yaxis.set_major_formatter(
-#     mpl.ticker.StrMethodFormatter('{x:,.0f}'))
-# plt.legend()
-# plt.tick_params(labelbottom=True)
-# plt.ylabel("Total number of households per housing type", labelpad=15)
-# plt.savefig(path_output_plots + 'evol_nb_households_htype.png')
-# plt.close()
+fig, ax = plt.subplots(figsize=(10, 7))
+ax.plot(years_simul, np.nansum(simulation_households_housing_type, 2)[:, 0],
+        color="gold", label="Formal")
+ax.plot(years_simul, np.nansum(simulation_households_housing_type, 2)[:, 1],
+        color="darkorange", label="Backyard")
+ax.plot(years_simul, np.nansum(simulation_households_housing_type, 2)[:, 2],
+        color="red", label="Informal")
+ax.plot(years_simul, np.nansum(simulation_households_housing_type, 2)[:, 3],
+        color="maroon", label="Subsidized")
+ax.set_ylim(0)
+ax.set_xlim(right=2035)
+ax.yaxis.set_major_formatter(
+    mpl.ticker.StrMethodFormatter('{x:,.0f}'))
+plt.legend()
+plt.tick_params(labelbottom=True)
+plt.ylabel("Total number of households per housing type", labelpad=15)
+plt.savefig(path_output_plots + 'evol_nb_households_htype.png')
+plt.close()
 
-# Image(path_output_plots + "evol_nb_households_htype.png")
-# # endregion
+Image(path_output_plots + "evol_nb_households_htype.png")
 
 # The graph above can direcly be interpreted given the land-use scenarios we provided.
 #

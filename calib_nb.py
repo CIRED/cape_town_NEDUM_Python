@@ -29,8 +29,6 @@ import os
 import geopandas as gpd
 import matplotlib.pyplot as plt
 from IPython.display import Image
-# import scipy
-# import statsmodels.api as sm
 
 # We also import our own packages
 import inputs.data as inpdt
@@ -109,7 +107,7 @@ options["defended"] = 0
 # Dummy for taking sea-level rise into account in coastal flood data
 # NB: Projections are up to 2050, based upon IPCC AR5 assessment for the
 # RCP 8.5 scenario
-options["climate_change"] = 1
+options["climate_change"] = 0
 
 # #### We also set options for scenarios on time-moving exogenous variables
 
@@ -1091,26 +1089,4 @@ np.save(path_precalc_inp + 'param_pockets.npy',
         param["informal_pockets"])
 np.save(path_precalc_inp + 'param_backyards.npy',
         param["backyard_pockets"])
-# endregion
-
-# region
-# Let us visualize the calibrated disamenity index for informal settlements
-import outputs.export_outputs as outexp
-disamenity_IS_map = outexp.export_map(
-    param["informal_pockets"], grid, geo_grid, path_input_plots, 'disamenity_IS_map',
-    "Location-specific informal settlement disamenity score",
-    path_input_tables, ubnd=1)
-
-Image(path_input_plots + "disamenity_IS_map.png")
-# endregion
-
-# region
-# Now for informal backyards
-import outputs.export_outputs as outexp
-disamenity_IB_map = outexp.export_map(
-    param["backyard_pockets"], grid, geo_grid, path_input_plots, 'disamenity_IB_map',
-    "Location-specific informal backyard disamenity score",
-    path_input_tables, ubnd=1)
-
-Image(path_input_plots + "disamenity_IB_map.png")
 # endregion

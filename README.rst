@@ -14,8 +14,6 @@ Resources
 
 Documentation is freely available `here <https://cired.github.io/cape_town_NEDUM_Python/html/index.html>`__.
 
-A simple user interface is available `here <https://kristoffpotgieter-nedumapp-app-f2rto5.streamlitapp.com/>`__.
-
 The reference working paper used along the documentation is available `here <https://openknowledge.worldbank.org/handle/10986/31987?locale-attribute=fr>`__.
 
 ------------
@@ -30,37 +28,27 @@ Installation
 
 	code capetown python (name of the repo)
 	├── _doc_source (source code for documentation)
-	├── _flood_processing (notebook used to pre-process Deltares coastal flood maps)
+	├── _flood_processing (notebook + data used to pre-process Deltares coastal flood maps)
 	├── _research (research articles referenced in the code)
-	├── calibration (package used for calibration)
 	├── docs (html output for documentation)
+	├── calibration (package used for calibration)
 	├── equilibrium (package used to compute equilibrium outcomes)
 	├── inputs (package used to import and process inputs)
 	├── outputs (package used for output plots and tables)
 	├── .gitignore (defines files to ignore when pushing commits online)
 	├── LICENSE (open source license file)
 	├── README.rst (introduction file)
-	├── calib_nb.ipynb (Jupyter notebook that runs calibration)
-	├── calib_nb.py (paired Python script that runs calibration)
-	├── main_nb.ipynb (Jupyter notebook that runs the model)
-	├── main_nb.py (paired Python script that runs the model)
-	├── plots_equil.py (exports plots and tables for initial state static equilibrium)
-	├── plots_inputs.py (exports plots and tables for input data)
-	└── plots_simul.py (exports plots and tables for subsequent dynamic simulations)
-
-.. **Step 2**: Create a conda environment from the *nedum-2d-env.yml* file
-
-.. ..
-.. 	Create the environment file
-
-.. * The *nedum-2d-env.yml* file is in the **NEDUM-2D** repository
-.. * Use the terminal and go to the **NEDUM-2D** repository stored on your computer
-.. * Type: ``conda env create -f nedum-2d-env.yml``
-
-.. **Step 3**: Activate the new environment
-
-.. * The first line of the *.yml* file sets the new environment’s name
-.. * Type: ``conda activate NEDUM-2D``
+	├── 0_calib_nb.ipynb (Jupyter notebook that runs calibration)
+	├── 0_calib_nb.py (Jupytext-paired Python script that runs calibration)
+	├── 1_main_nb.ipynb (Jupyter notebook that runs the model)
+	├── 1_main_nb.py (Jupytext-paired Python script that runs the model)
+	├── 2_plots_equil.py (exports basic plots and tables for initial state static equilibrium)
+	├── 2_plots_inputs.py (exports basic plots and tables for input data)
+	├── 2_plots_simul.py (exports basic plots and tables for subsequent dynamic simulations)
+	├── 3_plots_use_case_cchange.py (exports interactive plots and tables for c.change use case)
+	├── 3_plots_use_case_insur.py (exports interactive plots and tables for insurance use case)
+	├── 4_use_case_nb_empty.ipynb (Jupyter notebook that loads and comments on use case outputs)
+	└── 4_use_case_nb_full.ipynb (Jupyter notebook that loads and comments on use case outputs)
 
 **Step 2**: Set project directory
 
@@ -79,28 +67,20 @@ Installation
 	├── Output
 	└── code capetown python
 
-..
-	Do we need to set the repo as a project in Spyder?
-
 **Step 3**: Launch **NEDUM-2D**
 
-* From ``code capetown python`` root, execute the ``main_nb`` notebook (either in .py or .ipynb format) to run the simulations and obtain a preview of results. A non-interactive copy is shown in the documentation for illustrative purposes
-* Run one of the ``plots`` scripts to export tables and figures in dedicated subfolders (under the ``Output`` directory)
-* If needed, run the ``calib_nb`` notebook (either in .py or .ipynb format) to calibrate parameters again if underlying data has changed
-* See :doc:`../technical_doc` for more details on running custom simulations / calibration. Note that when modifying ``main_nb`` or ``calib_nb`` notebooks (either in .py or .ipynb format), the associated paired file needs to be updated using Jupytext.
+* If needed, run the ``0_calib_nb`` notebook (either in .py or .ipynb format) to calibrate parameters again (under ``precalculated_inputs``) if underlying data (in ``data_Cape_Town``) has changed. A static copy is shown in the documentation for illustrative purposes.
+* Execute the ``1_main_nb`` notebook (either in .py or .ipynb format) to run the simulations and obtain a preview of results. Outcomes will be automatically saved in a dedicated subfolder (according to a naming convention defined in the preamble of the script) under the ``Output`` directory. A static copy is shown in the documentation for illustrative purposes.
+* Run the ``2_plots`` scripts to export static tables and figures in dedicated subfolders. ``2_plots_inputs.py`` plots input data that does not change across scenarios (output is saved in dedicated subfolders under the ``Output`` directory). ``2_plots_equil.py`` plots outcomes for the initial state static equilibrium. Output changes across scenarios and is saved under the specific subfolder created at previous step with ``1_main_nb``. ``2_plots_simul.py`` plots outcomes for dynamic simulations over subsequent periods. Output is saved in same directory as for ``2_plots_equil.py``: we have created a separate script in case the end user is not interested in the dynamics (which are long to loop over). In case of discrepancies, we recommend using ``2_plots_equil.py`` for each period individually.
+* Run the ``3_plots_use_case_insurance.py`` and ``3_plots_use_case_cchange.py`` to export the interactive plots and tables associated with respectively the insurance and climate change use cases that we developed for this iteration of the model. This requires to run both ``1_main_nb`` and ``2_plots_equil.py`` for the scenarios used in each script (with and without insurance, with and without climate change). Those options can be modified in the preamble of the scripts (see :doc:`../technical_doc` for more details).
+* Run the ``4_use_case_nb_empty.ipynb`` notebook to recover key plots from ``3_plots_use_case_insurance.py`` and ``3_plots_use_case_cchange.py`` with associated comments and interpretation. As the interactive output is too heavy to load on the website, ``4_use_case_nb_full.ipynb`` provides a static version with cached output, that is shown in the documentation for illustrative purposes.
+* See :doc:`../technical_doc` for more details on running custom simulations. Note that to keep ``.py`` and ``.ipynb`` versions of the same script in sync, one needs to pair them by setting up Jupytext locally.
 
 ----------
 Versioning
 ----------
 
-..
-	Set as default branch
-
 * The ``gh_pages`` branch contains the latest update of the code and is set as default. If you want to modify the code, please fork the repository and start from this branch, as this is the one used in this documentation.
-* The ``main`` branch contains the original code (with some extra features) from our last paper (ported from Matlab to Python)
-* The ``TLM-edits`` branch contains some code and folder reorganization without rewriting anything
-* The ``TLM-write`` branch contains some rewriting and commenting
-* The branches ending in ``_specif`` are tests for several specifications of the code
 * All other branches are deprecated
 
 -----------------
@@ -132,11 +112,11 @@ If you find **NEDUM-2D** useful, please kindly cite our last paper:
 	  url         = {https://openknowledge.worldbank.org/handle/10986/31987}
 	}
 
-For internal reference within the CoCT, please contact kristoff.potgieter@capetown.gov.za
+For internal reference within the CoCT, please contact kristoff.potgieter@capetown.gov.za.
 
 |
 
-Thomas Monnier - `tlmonnier.github.io <https://tlmonnier.github.io>`_ - `Github <https://github.com/TLMonnier>`_ - `@TLMonnier <https://twitter.com/TLMonnier>`_ - thomas.monnier@ensae.fr
+Thomas Monnier - `Website <https://tlmonnier.github.io>`_ - `Github <https://github.com/TLMonnier>`_ - `Twitter <https://twitter.com/TLMonnier>`_ - thomas.monnier@ensae.fr
 
 Distributed under the GNU GENERAL PUBLIC LICENSE.
 

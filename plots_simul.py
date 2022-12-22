@@ -13,10 +13,8 @@ import os
 import numpy as np
 import pandas as pd
 import geopandas as gpd
-# import matplotlib as mpl
 import matplotlib.pyplot as plt
 import matplotlib as mpl
-# import copy
 
 import inputs.parameters_and_options as inpprm
 import inputs.data as inpdt
@@ -51,7 +49,6 @@ param = inpprm.import_param(
 options["agents_anticipate_floods"] = 1
 #  Dummy for preventing new informal settlement development
 options["informal_land_constrained"] = 0
-#  TODO: add option to take into account less likely developments?
 
 # More custom options regarding flood model
 #  Dummy for taking pluvial floods into account (on top of fluvial floods)
@@ -221,22 +218,37 @@ simulation_T = np.load(
 
 # LOAD FLOOD DATA
 
-# We enforce option to show damages even when agents do not anticipate them
-options["agents_anticipate_floods"] = 1
-(fraction_capital_destroyed, structural_damages_small_houses,
- structural_damages_medium_houses, structural_damages_large_houses,
- content_damages, structural_damages_type1, structural_damages_type2,
- structural_damages_type3a, structural_damages_type3b,
- structural_damages_type4a, structural_damages_type4b
- ) = inpdt.import_full_floods_data(
-     options, param, path_folder)
+if options["agents_anticipate_floods"] == 1:
+    (fraction_capital_destroyed, structural_damages_small_houses,
+     structural_damages_medium_houses, structural_damages_large_houses,
+     content_damages, structural_damages_type1, structural_damages_type2,
+     structural_damages_type3a, structural_damages_type3b,
+     structural_damages_type4a, structural_damages_type4b
+     ) = inpdt.import_full_floods_data(
+         options, param, path_folder)
+
+elif options["agents_anticipate_floods"] == 0:
+    fraction_capital_destroyed = pd.DataFrame()
+    fraction_capital_destroyed["structure_formal_2"] = np.zeros(24014)
+    fraction_capital_destroyed["structure_formal_1"] = np.zeros(24014)
+    fraction_capital_destroyed["structure_subsidized_2"] = np.zeros(24014)
+    fraction_capital_destroyed["structure_subsidized_1"] = np.zeros(24014)
+    fraction_capital_destroyed["contents_formal"] = np.zeros(24014)
+    fraction_capital_destroyed["contents_informal"] = np.zeros(24014)
+    fraction_capital_destroyed["contents_subsidized"] = np.zeros(24014)
+    fraction_capital_destroyed["contents_backyard"] = np.zeros(24014)
+    fraction_capital_destroyed["structure_backyards"] = np.zeros(24014)
+    fraction_capital_destroyed["structure_formal_backyards"] = np.zeros(24014)
+    fraction_capital_destroyed["structure_informal_backyards"
+                               ] = np.zeros(24014)
+    fraction_capital_destroyed["structure_informal_settlements"
+                               ] = np.zeros(24014)
 
 
 # SCENARIOS
 
 #  We create this parameter to maintain money illusion in simulations
 #  (see eqsim.run_simulation)
-#  TODO: Set as a variable, not a parameter
 param["income_year_reference"] = mean_income
 
 (spline_agricultural_price, spline_interest_rate,
@@ -246,7 +258,6 @@ param["income_year_reference"] = mean_income
  ) = eqdyn.import_scenarios(income_baseline, param, grid, path_scenarios,
                             options)
 
-fluviald_damages_2d_dyn = []
 fluvialu_damages_2d_dyn = []
 pluvial_damages_2d_dyn = []
 coastal_damages_2d_dyn = []
@@ -310,10 +321,9 @@ plt.ylabel("Total number of households per housing type", labelpad=15)
 plt.savefig(path_plots + 'evol_nb_households_htype.png')
 plt.close()
 
-# NB: Where do aggregate flood damage estimates come from?
-
 
 # %% BEGIN THE LOOP AFTER CREATING STORAGE VARIABLES
+
 for year_temp in np.arange(0, 30):
 
     income_net_of_commuting_costs = np.load(
@@ -394,8 +404,6 @@ for year_temp in np.arange(0, 30):
         path_plots_temp, path_tables_temp
     )
 
-    # TODO: switch back to SP level for more precision in validation data?
-    # Else, aggregate distance at a higher level?
     dist_HH_per_income_1d = outexp.simul_pop_income_groups(
         grid, simulation_households_center[year_temp, :, :],
         path_plots_temp, path_tables_temp
@@ -417,7 +425,7 @@ for year_temp in np.arange(0, 30):
         sim_nb_households_tot, grid, geo_grid, path_plots_temp, 'total_sim',
         "Total number of households (simulation)",
         path_tables_temp,
-        ubnd=5000)
+        ubnd=np.nanquantile(sim_nb_households_tot, 0.9999))
 
     #  Per housing type
     sim_nb_households_formal = simulation_households_housing_type[
@@ -427,7 +435,7 @@ for year_temp in np.arange(0, 30):
         path_plots_temp, 'formal_sim',
         "Number of households in formal private (simulation)",
         path_tables_temp,
-        ubnd=1000)
+        ubnd=np.nanquantile(sim_nb_households_formal, 0.9999))
 
     sim_nb_households_backyard = simulation_households_housing_type[
         year_temp, 1, :]
@@ -436,7 +444,7 @@ for year_temp in np.arange(0, 30):
         'backyard_sim',
         "Number of households in informal backyard (simulation)",
         path_tables_temp,
-        ubnd=1000)
+        ubnd=np.nanquantile(sim_nb_households_backyard, 0.9999))
 
     sim_nb_households_informal = simulation_households_housing_type[
         year_temp, 2, :]
@@ -445,7 +453,7 @@ for year_temp in np.arange(0, 30):
         'informal_sim',
         "Number of households in informal settlements (simulation)",
         path_tables_temp,
-        ubnd=3000)
+        ubnd=np.nanquantile(sim_nb_households_informal, 0.9999))
 
     data_nb_households_rdp = simulation_households_housing_type[
         year_temp, 3, :]
@@ -453,7 +461,7 @@ for year_temp in np.arange(0, 30):
         data_nb_households_rdp, grid, geo_grid, path_plots_temp, 'rdp_sim',
         "Number of households in formal subsidized (data)",
         path_tables_temp,
-        ubnd=1800)
+        ubnd=np.nanquantile(data_nb_households_rdp, 0.9999))
 
     #  Per income group
     sim_nb_households_poor = simulation_households_center[year_temp, 0, :]
@@ -461,27 +469,27 @@ for year_temp in np.arange(0, 30):
         sim_nb_households_poor, grid, geo_grid, path_plots_temp, 'poor_sim',
         "Number of poor households (simulation)",
         path_tables_temp,
-        ubnd=5000)
+        ubnd=np.nanquantile(sim_nb_households_poor, 0.9999))
     sim_nb_households_midpoor = simulation_households_center[year_temp, 1, :]
     midpoor_sim = outexp.export_map(
         sim_nb_households_midpoor, grid, geo_grid,
         path_plots_temp, 'midpoor_sim',
         "Number of mid-poor households (simulation)",
         path_tables_temp,
-        ubnd=2000)
+        ubnd=np.nanquantile(sim_nb_households_midpoor, 0.9999))
     sim_nb_households_midrich = simulation_households_center[year_temp, 2, :]
     midrich_sim = outexp.export_map(
         sim_nb_households_midrich, grid, geo_grid,
         path_plots_temp, 'midrich_sim',
         "Number of mid-rich households (simulation)",
         path_tables_temp,
-        ubnd=1000)
+        ubnd=np.nanquantile(sim_nb_households_midrich, 0.9999))
     sim_nb_households_rich = simulation_households_center[year_temp, 3, :]
     rich_sim = outexp.export_map(
         sim_nb_households_rich, grid, geo_grid, path_plots_temp, 'rich_sim',
         "Number of rich households (simulation)",
         path_tables_temp,
-        ubnd=500)
+        ubnd=np.nanquantile(sim_nb_households_rich, 0.9999))
 
     # HOUSING SUPPLY OUTPUTS
 
@@ -492,7 +500,6 @@ for year_temp in np.arange(0, 30):
         path_plots_temp, path_tables_temp)
 
     # We now consider overall land to recover building density
-    #  TODO: pb with Mitchell's Plain?
     housing_supply = simulation_housing_supply[year_temp,
                                                :, :] * coeff_land * 0.25
     hsupply_noland_1d = outexp.valid_housing_supply_noland(
@@ -503,13 +510,13 @@ for year_temp in np.arange(0, 30):
         hsupply_tot, grid, geo_grid, path_plots_temp, 'hsupply_2d_sim',
         "Total housing supply (in m²)",
         path_tables_temp,
-        ubnd=50000)
-    FAR = np.nansum(housing_supply, 0) / (0.25 * 1000000)
-    FAR_2d_sim = outexp.export_map(
-        FAR, grid, geo_grid, path_plots_temp,  'FAR_2d_sim',
-        "Overall floor-area ratio",
-        path_tables_temp,
-        ubnd=0.3)
+        ubnd=np.nanquantile(hsupply_tot, 0.9999))
+    # FAR = np.nansum(housing_supply, 0) / (0.25 * 1000000)
+    # FAR_2d_sim = outexp.export_map(
+    #     FAR, grid, geo_grid, path_plots_temp,  'FAR_2d_sim',
+    #     "Overall floor-area ratio",
+    #     path_tables_temp,
+    #     ubnd=0.3)
 
     hsupply_formal = housing_supply[0, :]
     hsupply_formal_2d_sim = outexp.export_map(
@@ -517,22 +524,23 @@ for year_temp in np.arange(0, 30):
         path_plots_temp, 'hsupply_formal_2d_sim',
         "Total housing supply in private formal (in m²)",
         path_tables_temp,
-        ubnd=35000)
-    FAR_formal = housing_supply[0, :] / (0.25 * 1000000)
-    FAR_formal_2d_sim = outexp.export_map(
-        FAR_formal, grid, geo_grid, path_plots_temp, 'FAR_formal_2d_sim',
-        "Floor-area ratio in formal private",
-        path_tables_temp,
-        ubnd=0.15)
+        ubnd=np.nanquantile(hsupply_formal, 0.9999))
+    # FAR_formal = housing_supply[0, :] / (0.25 * 1000000)
+    # FAR_formal_2d_sim = outexp.export_map(
+    #     FAR_formal, grid, geo_grid, path_plots_temp, 'FAR_formal_2d_sim',
+    #     "Floor-area ratio in formal private",
+    #     path_tables_temp,
+    #     ubnd=0.15)
 
     # Pb of validation in hyper-centre is also reflected in price
-    sim_HFA_dens_formal = simulation_housing_supply[year_temp, 0, :] / 1000000
-    HFA_dens_formal_2d_sim = outexp.export_map(
-        sim_HFA_dens_formal, grid, geo_grid, path_plots_temp,
-        'HFA_dens_formal_2d_sim',
-        "Households density in formal private HFA (simulation)",
-        path_tables_temp,
-        ubnd=1)
+    # sim_HFA_dens_formal = (simulation_housing_supply[year_temp, 0, :]
+    #                        / 1000000)
+    # HFA_dens_formal_2d_sim = outexp.export_map(
+    #     sim_HFA_dens_formal, grid, geo_grid, path_plots_temp,
+    #     'HFA_dens_formal_2d_sim',
+    #     "Households density in formal private HFA (simulation)",
+    #     path_tables_temp,
+    #     ubnd=1)
 
     hsupply_backyard = housing_supply[1, :]
     hsupply_backyard_2d_sim = outexp.export_map(
@@ -540,13 +548,13 @@ for year_temp in np.arange(0, 30):
         'hsupply_backyard_2d_sim',
         "Total housing supply in informal backyards (in m²)",
         path_tables_temp,
-        ubnd=30000)
-    FAR_backyard = housing_supply[1, :] / (0.25 * 1000000)
-    FAR_backyard_2d_sim = outexp.export_map(
-        FAR_backyard, grid, geo_grid, path_plots_temp, 'FAR_backyard_2d_sim',
-        "Floor-area ratio in informal backyards",
-        path_tables_temp,
-        ubnd=0.10)
+        ubnd=np.nanquantile(hsupply_backyard, 0.9999))
+    # FAR_backyard = housing_supply[1, :] / (0.25 * 1000000)
+    # FAR_backyard_2d_sim = outexp.export_map(
+    #     FAR_backyard, grid, geo_grid, path_plots_temp, 'FAR_backyard_2d_sim',
+    #     "Floor-area ratio in informal backyards",
+    #     path_tables_temp,
+    #     ubnd=0.10)
 
     hsupply_informal = housing_supply[2, :]
     hsupply_informal_2d_sim = outexp.export_map(
@@ -554,27 +562,27 @@ for year_temp in np.arange(0, 30):
         'hsupply_informal_2d_sim',
         "Total housing supply in informal settlements (in m²)",
         path_tables_temp,
-        ubnd=70000)
-    FAR_informal = housing_supply[2, :] / (0.25 * 1000000)
-    FAR_informal_2d_sim = outexp.export_map(
-        FAR_informal, grid, geo_grid, path_plots_temp,
-        'FAR_informal_2d_sim',
-        "Floor-area ratio in informal settlements",
-        path_tables_temp,
-        ubnd=0.30)
+        ubnd=np.nanquantile(hsupply_informal, 0.9999))
+    # FAR_informal = housing_supply[2, :] / (0.25 * 1000000)
+    # FAR_informal_2d_sim = outexp.export_map(
+    #     FAR_informal, grid, geo_grid, path_plots_temp,
+    #     'FAR_informal_2d_sim',
+    #     "Floor-area ratio in informal settlements",
+    #     path_tables_temp,
+    #     ubnd=0.30)
 
     hsupply_rdp = housing_supply[3, :]
     hsupply_rdp_2d_sim = outexp.export_map(
         hsupply_rdp, grid, geo_grid, path_plots_temp, 'hsupply_rdp_2d_sim',
         "Total housing supply in formal subsidized (in m²)",
         path_tables_temp,
-        ubnd=25000)
-    FAR_rdp = housing_supply[3, :] / (0.25 * 1000000)
-    FAR_rdp_2d_sim = outexp.export_map(
-        FAR_rdp, grid, geo_grid, path_plots_temp, 'FAR_rdp_2d_sim',
-        "Floor-area ratio in formal subsidized",
-        path_tables_temp,
-        ubnd=0.10)
+        ubnd=np.nanquantile(hsupply_rdp, 0.9999))
+    # FAR_rdp = housing_supply[3, :] / (0.25 * 1000000)
+    # FAR_rdp_2d_sim = outexp.export_map(
+    #     FAR_rdp, grid, geo_grid, path_plots_temp, 'FAR_rdp_2d_sim',
+    #     "Floor-area ratio in formal subsidized",
+    #     path_tables_temp,
+    #     ubnd=0.10)
 
     # As we do not know surface of built land (just of available land),
     # we need to rely on dwelling size to compute build heigth in
@@ -597,31 +605,29 @@ for year_temp in np.arange(0, 30):
 
     # Then in two dimensions
 
-    # TODO: why don't we manage to reproduce very high prices in center?
-    # Has to do with amenity map?
     rent_formal_simul = simulation_rent[year_temp, 0, :].copy()
     housing_price_formal_2d_sim = outexp.export_map(
         rent_formal_simul, grid, geo_grid,
         path_plots_temp, 'rent_formal_2d_sim',
         "Simulated average housing rents per location (private formal)",
         path_tables_temp,
-        ubnd=4000)
+        ubnd=np.nanquantile(rent_formal_simul, 0.9999))
     rent_backyard_simul = simulation_rent[year_temp, 1, :].copy()
     housing_price_backyard_2d_sim = outexp.export_map(
         rent_backyard_simul, grid, geo_grid, path_plots_temp,
         'rent_backyard_2d_sim',
         "Simulated average housing rents per location (informal backyards)",
         path_tables_temp,
-        ubnd=2500)
+        ubnd=np.nanquantile(rent_backyard_simul, 0.9999))
     rent_informal_simul = simulation_rent[year_temp, 2, :].copy()
     housing_price_informal_2d_sim = outexp.export_map(
         rent_informal_simul, grid, geo_grid, path_plots_temp,
         'rent_informal_2d_sim',
         "Simulated average housing rents per location (informal settlements)",
         path_tables_temp,
-        ubnd=2500)
+        ubnd=np.nanquantile(rent_informal_simul, 0.9999))
 
-    land_rent = (
+    land_price = (
         (simulation_rent[year_temp, 0:3, :] * param["coeff_A"])
         ** (1 / param["coeff_a"])
         * param["coeff_a"]
@@ -629,34 +635,30 @@ for year_temp in np.arange(0, 30):
         ** (param["coeff_b"] / param["coeff_a"])
         / interest_rate
     )
-    landrent_formal_simul = land_rent[0, :].copy()
+    landprice_formal_simul = land_price[0, :].copy()
     land_price_formal_2d_sim = outexp.export_map(
-        landrent_formal_simul, grid, geo_grid,
-        path_plots_temp, 'landrent_formal_2d_sim',
-        "Simulated average land rents per location (private formal)",
+        landprice_formal_simul, grid, geo_grid,
+        path_plots_temp, 'landprice_formal_2d_sim',
+        "Simulated average land prices per location (private formal)",
         path_tables_temp,
-        ubnd=15000)
-    landrent_backyard_simul = land_rent[1, :].copy()
+        ubnd=np.nanquantile(landprice_formal_simul, 0.9999))
+    landprice_backyard_simul = land_price[1, :].copy()
     land_price_backyard_2d_sim = outexp.export_map(
-        landrent_backyard_simul, grid, geo_grid,
-        path_plots_temp, 'landrent_backyard_2d_sim',
-        "Simulated average land rents per location (informal backyards)",
+        landprice_backyard_simul, grid, geo_grid,
+        path_plots_temp, 'landprice_backyard_2d_sim',
+        "Simulated average land prices per location (informal backyards)",
         path_tables_temp,
-        ubnd=10000)
-    landrent_informal_simul = land_rent[2, :].copy()
+        ubnd=np.nanquantile(landprice_backyard_simul, 0.9999))
+    landprice_informal_simul = land_price[2, :].copy()
     land_price_informal_2d_sim = outexp.export_map(
-        landrent_informal_simul, grid, geo_grid,
-        path_plots_temp, 'landrent_informal_2d_sim',
-        "Simulated average land rents per location (informal settlements)",
+        landprice_informal_simul, grid, geo_grid,
+        path_plots_temp, 'landprice_informal_2d_sim',
+        "Simulated average land prices per location (informal settlements)",
         path_tables_temp,
-        ubnd=10000)
+        ubnd=np.nanquantile(landprice_informal_simul, 0.9999))
 
     # DWELLING SIZE OUTPUTS
 
-    # Note that we start getting a lot of nan values around 30km
-    # Could this explain the low number of households in Mitchell's Plain
-    # in spite of the housing supply
-    # TODO: how should we interpret such high values?
     dwelling_size_1d = outexp.simul_housing_demand(
         grid, center, simulation_dwelling_size[year_temp, :, :],
         simulation_households_housing_type[year_temp, :, :],
@@ -668,7 +670,7 @@ for year_temp in np.arange(0, 30):
         path_plots_temp, 'formal_dwellingsize_2d_sim',
         "Simulated average dwelling size per location (formal private)",
         path_tables_temp,
-        ubnd=300)
+        ubnd=np.nanquantile(formal_dwelling_size, 0.9999))
 
     # TRANSPORT OUTPUTS
 
@@ -679,28 +681,28 @@ for year_temp in np.arange(0, 30):
         path_plots_temp, 'netincome_poor_2d_sim',
         "Estimated income net of commuting costs (poor)",
         path_tables_temp,
-        ubnd=25000, lbnd=-15000, cmap='bwr')
+        ubnd=np.nanquantile(netincome_poor, 0.9999))
     netincome_midpoor = income_net_of_commuting_costs[1, :]
     netincome_midpoor_2d_sim = outexp.export_map(
         netincome_midpoor, grid, geo_grid, path_plots_temp,
         'netincome_midpoor_2d_sim',
         "Estimated income net of commuting costs (mid-poor)",
         path_tables_temp,
-        ubnd=70000, lbnd=-20000, cmap='bwr')
+        ubnd=np.nanquantile(netincome_midpoor, 0.9999))
     netincome_midrich = income_net_of_commuting_costs[2, :]
     netincome_midrich_2d_sim = outexp.export_map(
         netincome_midrich, grid, geo_grid, path_plots_temp,
         'netincome_midrich_2d_sim',
         "Estimated income net of commuting costs (mid-rich)",
         path_tables_temp,
-        ubnd=200000, lbnd=25000)
+        ubnd=np.nanquantile(netincome_midrich, 0.9999))
     netincome_rich = income_net_of_commuting_costs[3, :]
     netincome_rich_2d_sim = outexp.export_map(
         netincome_rich, grid, geo_grid,
         path_plots_temp, 'netincome_rich_2d_sim',
         "Estimated income net of commuting costs (rich)",
         path_tables_temp,
-        ubnd=850000, lbnd=250000)
+        ubnd=np.nanquantile(netincome_rich, 0.9999))
 
     (avg_income_net_of_commuting_1d
      ) = outexp.plot_income_net_of_commuting_costs(
@@ -709,86 +711,73 @@ for year_temp in np.arange(0, 30):
 
     #  Average income
 
-    avgincome_poor = cal_average_income[0, :]
-    avgincome_poor_2d_sim = outexp.export_map(
-        avgincome_poor, grid, geo_grid,
-        path_plots_temp, 'avgincome_poor_2d_sim',
-        "Estimated average income (poor)",
-        path_tables_temp,
-        ubnd=25000, lbnd=10000)
-    avgincome_midpoor = cal_average_income[1, :]
-    avgincome_midpoor_2d_sim = outexp.export_map(
-        avgincome_midpoor, grid, geo_grid, path_plots_temp,
-        'avgincome_midpoor_2d_sim',
-        "Estimated average income (mid-poor)",
-        path_tables_temp,
-        ubnd=70000, lbnd=25000)
-    avgincome_midrich = cal_average_income[2, :]
-    avgincome_midrich_2d_sim = outexp.export_map(
-        avgincome_midrich, grid, geo_grid, path_plots_temp,
-        'avgincome_midrich_2d_sim',
-        "Estimated average income (mid-rich)",
-        path_tables_temp,
-        ubnd=200000, lbnd=100000)
-    avgincome_rich = cal_average_income[3, :]
-    avgincome_rich_2d_sim = outexp.export_map(
-        avgincome_rich, grid, geo_grid,
-        path_plots_temp, 'avgincome_rich_2d_sim',
-        "Estimated average income (rich)",
-        path_tables_temp,
-        ubnd=850000, lbnd=550000)
+    # avgincome_poor = cal_average_income[0, :]
+    # avgincome_poor_2d_sim = outexp.export_map(
+    #     avgincome_poor, grid, geo_grid,
+    #     path_plots_temp, 'avgincome_poor_2d_sim',
+    #     "Estimated average income (poor)",
+    #     path_tables_temp,
+    #     ubnd=25000, lbnd=10000)
+    # avgincome_midpoor = cal_average_income[1, :]
+    # avgincome_midpoor_2d_sim = outexp.export_map(
+    #     avgincome_midpoor, grid, geo_grid, path_plots_temp,
+    #     'avgincome_midpoor_2d_sim',
+    #     "Estimated average income (mid-poor)",
+    #     path_tables_temp,
+    #     ubnd=70000, lbnd=25000)
+    # avgincome_midrich = cal_average_income[2, :]
+    # avgincome_midrich_2d_sim = outexp.export_map(
+    #     avgincome_midrich, grid, geo_grid, path_plots_temp,
+    #     'avgincome_midrich_2d_sim',
+    #     "Estimated average income (mid-rich)",
+    #     path_tables_temp,
+    #     ubnd=200000, lbnd=100000)
+    # avgincome_rich = cal_average_income[3, :]
+    # avgincome_rich_2d_sim = outexp.export_map(
+    #     avgincome_rich, grid, geo_grid,
+    #     path_plots_temp, 'avgincome_rich_2d_sim',
+    #     "Estimated average income (rich)",
+    #     path_tables_temp,
+    #     ubnd=850000, lbnd=550000)
 
-    (avg_income_1d
-     ) = outexp.plot_average_income(
-         grid, cal_average_income, path_plots_temp, path_tables_temp)
+    # (avg_income_1d
+    #  ) = outexp.plot_average_income(
+    #      grid, cal_average_income, path_plots_temp, path_tables_temp)
 
     # We also conduct validation with overall average income
     # Also do fit in 1D
-    np.seterr(divide='ignore', invalid='ignore')
-    overall_avg_income = (
-        cal_average_income
-        * simulation_households_center[year_temp, :, :]
-        / np.nansum(simulation_households_center[year_temp, :, :], 0))
-    overall_avg_income[np.isnan(overall_avg_income)] = 0
-    overall_avg_income = np.nansum(overall_avg_income, 0)
+    # np.seterr(divide='ignore', invalid='ignore')
+    # overall_avg_income = (
+    #     cal_average_income
+    #     * simulation_households_center[year_temp, :, :]
+    #     / np.nansum(simulation_households_center[year_temp, :, :], 0))
+    # overall_avg_income[np.isnan(overall_avg_income)] = 0
+    # overall_avg_income = np.nansum(overall_avg_income, 0)
 
-    # The validation is pretty bad, but we should check if this is indeed
-    # a problem (calibration </> final output) and if validation data refers
-    # to same incomes (we can make the case that we only model employed HHs
-    # with two members, etc.)
-    avgincome_all_2d_sim = outexp.export_map(
-        overall_avg_income, grid, geo_grid, path_plots_temp,
-        'avgincome_all_2d_sim',
-        "Estimated average income (all income groups)",
-        path_tables_temp,
-        ubnd=850000)
+    # avgincome_all_2d_sim = outexp.export_map(
+    #     overall_avg_income, grid, geo_grid, path_plots_temp,
+    #     'avgincome_all_2d_sim',
+    #     "Estimated average income (all income groups)",
+    #     path_tables_temp,
+    #     ubnd=850000)
 
     # FLOOD DAMAGES
 
-    # TODO: first do input flood maps in 2D, to be superimposed with
-    # some previous maps
-    # Then also compute damages, welfare impacts, aggregate effects, etc.
-    # Finally, need to do dynamics and comparisons across scenarios, LVC, etc.
-
-    # TODO: recompute floods with maximum bath-tub perspective (also coastal
-    # matching)
-
-    fluviald_floods = ['FD_5yr', 'FD_10yr', 'FD_20yr', 'FD_50yr', 'FD_75yr',
-                       'FD_100yr', 'FD_200yr', 'FD_250yr', 'FD_500yr',
-                       'FD_1000yr']
     fluvialu_floods = ['FU_5yr', 'FU_10yr', 'FU_20yr', 'FU_50yr', 'FU_75yr',
                        'FU_100yr', 'FU_200yr', 'FU_250yr', 'FU_500yr',
                        'FU_1000yr']
     pluvial_floods = ['P_5yr', 'P_10yr', 'P_20yr', 'P_50yr', 'P_75yr',
                       'P_100yr', 'P_200yr', 'P_250yr', 'P_500yr', 'P_1000yr']
-    coastal_floods = ['C_MERITDEM_1_0000', 'C_MERITDEM_1_0002',
-                      'C_MERITDEM_1_0005', 'C_MERITDEM_1_0010',
-                      'C_MERITDEM_1_0025', 'C_MERITDEM_1_0050',
-                      'C_MERITDEM_1_0100', 'C_MERITDEM_1_0250']
+    coastal_floods = ['C_MERITDEM_' + str(options['climate_change']) + '_0000',
+                      'C_MERITDEM_' + str(options['climate_change']) + '_0002',
+                      'C_MERITDEM_' + str(options['climate_change']) + '_0005',
+                      'C_MERITDEM_' + str(options['climate_change']) + '_0010',
+                      'C_MERITDEM_' + str(options['climate_change']) + '_0025',
+                      'C_MERITDEM_' + str(options['climate_change']) + '_0050',
+                      'C_MERITDEM_' + str(options['climate_change']) + '_0100',
+                      'C_MERITDEM_' + str(options['climate_change']) + '_0250']
 
-    # TODO: check MAUP
     # We get damages per housing type for one representative household!
-
     content_cost = outfld.compute_content_cost(
         simulation_households_center[year_temp, :, :],
         simulation_housing_supply[year_temp, :, :],
@@ -796,22 +785,22 @@ for year_temp in np.arange(0, 30):
         fraction_capital_destroyed, simulation_rent[year_temp, :, :],
         simulation_dwelling_size[year_temp, :, :], interest_rate)
 
-    # NOTE THAT CAPITAL IS IN MONETARY VALUES
+    # Note that capital is in monetary values
     formal_structure_cost = outfld.compute_formal_structure_cost(
         simulation_rent[year_temp, :, :], param, interest_rate, coeff_land,
         simulation_households_housing_type[year_temp, :, :], param["coeff_A"])
 
-    # Then we run the aggregate tables
+    # We re-import flood data to compute ex-post damages in case agents do not
+    # anticipate floods
 
-    fluviald_damages_sim = outfld.compute_damages(
-        fluviald_floods, path_floods, param, content_cost,
-        sim_nb_households_formal, data_nb_households_rdp,
-        sim_nb_households_informal, sim_nb_households_backyard,
-        simulation_dwelling_size[year_temp, :, :],
-        formal_structure_cost, content_damages,
-        structural_damages_type4b, structural_damages_type4a,
-        structural_damages_type2, structural_damages_type3a, options,
-        spline_inflation, year_temp, path_tables_temp, 'fluviald_sim')
+    (fraction_capital_destroyed, structural_damages_small_houses,
+     structural_damages_medium_houses, structural_damages_large_houses,
+     content_damages, structural_damages_type1, structural_damages_type2,
+     structural_damages_type3a, structural_damages_type3b,
+     structural_damages_type4a, structural_damages_type4b
+     ) = inpdt.import_full_floods_data(options, param, path_folder)
+
+    # Then we run the aggregate tables
 
     fluvialu_damages_sim = outfld.compute_damages(
         fluvialu_floods, path_floods, param, content_cost,
@@ -845,30 +834,17 @@ for year_temp in np.arange(0, 30):
 
     # We get aggregate graphs
 
-    outval.simul_damages(
-        fluviald_damages_sim,
-        path_plots_temp, 'fluviald', options)
-    outval.simul_damages(
-        fluvialu_damages_sim,
-        path_plots_temp, 'fluvialu', options)
-    outval.simul_damages(
-        pluvial_damages_sim,
-        path_plots_temp, 'pluvial', options)
-    outval.simul_damages(
-        coastal_damages_sim,
-        path_plots_temp, 'coastal', options)
+    # outval.simul_damages(
+    #     fluvialu_damages_sim,
+    #     path_plots_temp, 'fluvialu', options)
+    # outval.simul_damages(
+    #     pluvial_damages_sim,
+    #     path_plots_temp, 'pluvial', options)
+    # outval.simul_damages(
+    #     coastal_damages_sim,
+    #     path_plots_temp, 'coastal', options)
 
     # Now in two dimensions
-
-    fluviald_damages_2d_sim = outfld.compute_damages_2d(
-        fluviald_floods, path_floods, param, content_cost,
-        sim_nb_households_formal, data_nb_households_rdp,
-        sim_nb_households_informal, sim_nb_households_backyard,
-        simulation_dwelling_size[year_temp, :, :],
-        formal_structure_cost, content_damages,
-        structural_damages_type4b, structural_damages_type4a,
-        structural_damages_type2, structural_damages_type3a, options,
-        spline_inflation, year_temp, path_tables_temp, 'fluviald_sim')
 
     fluvialu_damages_2d_sim = outfld.compute_damages_2d(
         fluvialu_floods, path_floods, param, content_cost,
@@ -902,49 +878,6 @@ for year_temp in np.arange(0, 30):
 
     # Hence the maps and shapefiles
 
-    fluviald_damages_2d_sim_stacked = np.stack(
-        [df for df in fluviald_damages_2d_sim.values()])
-    fluviald_formal_structure_2d_sim = np.zeros(24014)
-    for j in np.arange(24014):
-        fluviald_formal_structure_2d_sim[j] = outfld.annualize_damages(
-            fluviald_damages_2d_sim_stacked[:, j, 0],
-            'fluviald', 'formal', options)
-    fluviald_subsidized_structure_2d_sim = np.zeros(24014)
-    for j in np.arange(24014):
-        fluviald_subsidized_structure_2d_sim[j] = outfld.annualize_damages(
-            fluviald_damages_2d_sim_stacked[:, j, 1],
-            'fluviald', 'subsidized', options)
-    fluviald_informal_structure_2d_sim = np.zeros(24014)
-    for j in np.arange(24014):
-        fluviald_informal_structure_2d_sim[j] = outfld.annualize_damages(
-            fluviald_damages_2d_sim_stacked[:, j, 2],
-            'fluviald', 'informal', options)
-    fluviald_backyard_structure_2d_sim = np.zeros(24014)
-    for j in np.arange(24014):
-        fluviald_backyard_structure_2d_sim[j] = outfld.annualize_damages(
-            fluviald_damages_2d_sim_stacked[:, j, 3],
-            'fluviald', 'backyard', options)
-    fluviald_formal_content_2d_sim = np.zeros(24014)
-    for j in np.arange(24014):
-        fluviald_formal_content_2d_sim[j] = outfld.annualize_damages(
-            fluviald_damages_2d_sim_stacked[:, j, 4],
-            'fluviald', 'formal', options)
-    fluviald_subsidized_content_2d_sim = np.zeros(24014)
-    for j in np.arange(24014):
-        fluviald_subsidized_content_2d_sim[j] = outfld.annualize_damages(
-            fluviald_damages_2d_sim_stacked[:, j, 5],
-            'fluviald', 'subsidized', options)
-    fluviald_informal_content_2d_sim = np.zeros(24014)
-    for j in np.arange(24014):
-        fluviald_informal_content_2d_sim[j] = outfld.annualize_damages(
-            fluviald_damages_2d_sim_stacked[:, j, 6],
-            'fluviald', 'informal', options)
-    fluviald_backyard_content_2d_sim = np.zeros(24014)
-    for j in np.arange(24014):
-        fluviald_backyard_content_2d_sim[j] = outfld.annualize_damages(
-            fluviald_damages_2d_sim_stacked[:, j, 7],
-            'fluviald', 'backyard', options)
-
     fluvialu_damages_2d_sim_stacked = np.stack(
         [df for df in fluvialu_damages_2d_sim.values()])
     fluvialu_formal_structure_2d_sim = np.zeros(24014)
@@ -972,21 +905,21 @@ for year_temp in np.arange(0, 30):
         fluvialu_formal_content_2d_sim[j] = outfld.annualize_damages(
             fluvialu_damages_2d_sim_stacked[:, j, 4],
             'fluvialu', 'formal', options)
-    fluvialu_subsidized_content_2d_sim = np.zeros(24014)
-    for j in np.arange(24014):
-        fluvialu_subsidized_content_2d_sim[j] = outfld.annualize_damages(
-            fluvialu_damages_2d_sim_stacked[:, j, 5],
-            'fluvialu', 'subsidized', options)
     fluvialu_informal_content_2d_sim = np.zeros(24014)
     for j in np.arange(24014):
         fluvialu_informal_content_2d_sim[j] = outfld.annualize_damages(
-            fluvialu_damages_2d_sim_stacked[:, j, 6],
+            fluvialu_damages_2d_sim_stacked[:, j, 5],
             'fluvialu', 'informal', options)
     fluvialu_backyard_content_2d_sim = np.zeros(24014)
     for j in np.arange(24014):
         fluvialu_backyard_content_2d_sim[j] = outfld.annualize_damages(
-            fluvialu_damages_2d_sim_stacked[:, j, 7],
+            fluvialu_damages_2d_sim_stacked[:, j, 6],
             'fluvialu', 'backyard', options)
+    fluvialu_subsidized_content_2d_sim = np.zeros(24014)
+    for j in np.arange(24014):
+        fluvialu_subsidized_content_2d_sim[j] = outfld.annualize_damages(
+            fluvialu_damages_2d_sim_stacked[:, j, 7],
+            'fluvialu', 'subsidized', options)
 
     pluvial_damages_2d_sim_stacked = np.stack(
         [df for df in pluvial_damages_2d_sim.values()])
@@ -1015,21 +948,21 @@ for year_temp in np.arange(0, 30):
         pluvial_formal_content_2d_sim[j] = outfld.annualize_damages(
             pluvial_damages_2d_sim_stacked[:, j, 4],
             'pluvial', 'formal', options)
-    pluvial_subsidized_content_2d_sim = np.zeros(24014)
-    for j in np.arange(24014):
-        pluvial_subsidized_content_2d_sim[j] = outfld.annualize_damages(
-            pluvial_damages_2d_sim_stacked[:, j, 5],
-            'pluvial', 'subsidized', options)
     pluvial_informal_content_2d_sim = np.zeros(24014)
     for j in np.arange(24014):
         pluvial_informal_content_2d_sim[j] = outfld.annualize_damages(
-            pluvial_damages_2d_sim_stacked[:, j, 6],
+            pluvial_damages_2d_sim_stacked[:, j, 5],
             'pluvial', 'informal', options)
     pluvial_backyard_content_2d_sim = np.zeros(24014)
     for j in np.arange(24014):
         pluvial_backyard_content_2d_sim[j] = outfld.annualize_damages(
-            pluvial_damages_2d_sim_stacked[:, j, 7],
+            pluvial_damages_2d_sim_stacked[:, j, 6],
             'pluvial', 'backyard', options)
+    pluvial_subsidized_content_2d_sim = np.zeros(24014)
+    for j in np.arange(24014):
+        pluvial_subsidized_content_2d_sim[j] = outfld.annualize_damages(
+            pluvial_damages_2d_sim_stacked[:, j, 7],
+            'pluvial', 'subsidized', options)
 
     coastal_damages_2d_sim_stacked = np.stack(
         [df for df in coastal_damages_2d_sim.values()])
@@ -1058,31 +991,23 @@ for year_temp in np.arange(0, 30):
         coastal_formal_content_2d_sim[j] = outfld.annualize_damages(
             coastal_damages_2d_sim_stacked[:, j, 4],
             'coastal', 'formal', options)
-    coastal_subsidized_content_2d_sim = np.zeros(24014)
-    for j in np.arange(24014):
-        coastal_subsidized_content_2d_sim[j] = outfld.annualize_damages(
-            coastal_damages_2d_sim_stacked[:, j, 5],
-            'coastal', 'subsidized', options)
     coastal_informal_content_2d_sim = np.zeros(24014)
     for j in np.arange(24014):
         coastal_informal_content_2d_sim[j] = outfld.annualize_damages(
-            coastal_damages_2d_sim_stacked[:, j, 6],
+            coastal_damages_2d_sim_stacked[:, j, 5],
             'coastal', 'informal', options)
     coastal_backyard_content_2d_sim = np.zeros(24014)
     for j in np.arange(24014):
         coastal_backyard_content_2d_sim[j] = outfld.annualize_damages(
-            coastal_damages_2d_sim_stacked[:, j, 7],
+            coastal_damages_2d_sim_stacked[:, j, 6],
             'coastal', 'backyard', options)
+    coastal_subsidized_content_2d_sim = np.zeros(24014)
+    for j in np.arange(24014):
+        coastal_subsidized_content_2d_sim[j] = outfld.annualize_damages(
+            coastal_damages_2d_sim_stacked[:, j, 7],
+            'coastal', 'subsidized', options)
 
     list_annualized_2d_damages = [
-        fluviald_backyard_structure_2d_sim,
-        fluviald_backyard_content_2d_sim,
-        fluviald_subsidized_structure_2d_sim,
-        fluviald_subsidized_content_2d_sim,
-        fluviald_informal_structure_2d_sim,
-        fluviald_informal_content_2d_sim,
-        fluviald_formal_structure_2d_sim,
-        fluviald_formal_content_2d_sim,
         fluvialu_backyard_structure_2d_sim,
         fluvialu_backyard_content_2d_sim,
         fluvialu_subsidized_structure_2d_sim,
@@ -1109,8 +1034,6 @@ for year_temp in np.arange(0, 30):
         coastal_formal_content_2d_sim]
 
     list_annualized_2d_damages_formal = [
-        fluviald_formal_structure_2d_sim,
-        fluviald_formal_content_2d_sim,
         fluvialu_formal_structure_2d_sim,
         fluvialu_formal_content_2d_sim,
         pluvial_formal_structure_2d_sim,
@@ -1119,8 +1042,6 @@ for year_temp in np.arange(0, 30):
         coastal_formal_content_2d_sim]
 
     list_annualized_2d_damages_informal = [
-        fluviald_informal_structure_2d_sim,
-        fluviald_informal_content_2d_sim,
         fluvialu_informal_structure_2d_sim,
         fluvialu_informal_content_2d_sim,
         pluvial_informal_structure_2d_sim,
@@ -1129,8 +1050,6 @@ for year_temp in np.arange(0, 30):
         coastal_informal_content_2d_sim]
 
     list_annualized_2d_damages_backyard = [
-        fluviald_backyard_structure_2d_sim,
-        fluviald_backyard_content_2d_sim,
         fluvialu_backyard_structure_2d_sim,
         fluvialu_backyard_content_2d_sim,
         pluvial_backyard_structure_2d_sim,
@@ -1139,8 +1058,6 @@ for year_temp in np.arange(0, 30):
         coastal_backyard_content_2d_sim]
 
     list_annualized_2d_damages_subsidized = [
-        fluviald_subsidized_structure_2d_sim,
-        fluviald_subsidized_content_2d_sim,
         fluvialu_subsidized_structure_2d_sim,
         fluvialu_subsidized_content_2d_sim,
         pluvial_subsidized_structure_2d_sim,
@@ -1168,13 +1085,9 @@ for year_temp in np.arange(0, 30):
         outexp.export_map(value, grid, geo_grid,
                           path_plots_temp, col + '_fract_K_destroyed', "",
                           path_tables_temp,
-                          ubnd=1)
+                          ubnd=np.nanquantile(value, 0.9999))
 
-    # Graphs with share of annual income destroyed (by income group
-    # and return period)?
-
-    # TODO: are duplicates a problem?
-    # NB: note that share can be bigger than 1 (which is just a cap)
+    # Graphs with share of annual income destroyed
 
     selected_net_income_formal = np.empty(24014)
     cond = np.argmax(simulation_households[year_temp, 0, :, :], axis=0)
@@ -1189,7 +1102,7 @@ for year_temp in np.arange(0, 30):
                               path_plots_temp,
                               outexp.retrieve_name(item, -1) + '_shareinc', "",
                               path_tables_temp,
-                              ubnd=1)
+                              ubnd=np.nanquantile(new_item, 0.9999))
         except IndexError:
             pass
 
@@ -1206,7 +1119,7 @@ for year_temp in np.arange(0, 30):
                               path_plots_temp,
                               outexp.retrieve_name(item, -1) + '_shareinc', "",
                               path_tables_temp,
-                              ubnd=1)
+                              ubnd=np.nanquantile(new_item, 0.9999))
         except IndexError:
             pass
 
@@ -1223,7 +1136,7 @@ for year_temp in np.arange(0, 30):
                               path_plots_temp,
                               outexp.retrieve_name(item, -1) + '_shareinc', "",
                               path_tables_temp,
-                              ubnd=1)
+                              ubnd=np.nanquantile(new_item, 0.9999))
         except IndexError:
             pass
 
@@ -1240,34 +1153,22 @@ for year_temp in np.arange(0, 30):
                               path_plots_temp,
                               outexp.retrieve_name(item, -1) + '_shareinc', "",
                               path_tables_temp,
-                              ubnd=1)
+                              ubnd=np.nanquantile(new_item, 0.9999))
         except IndexError:
             pass
 
-    # TODO: Does it really make sense to take share of net income for formal
-    # where households do not bear structural costs?
-    # In that case, we should just superimpose fraction of capital destroyed
-    # over capital map (for formal sector) or exogenous value (for other
-    # sectors)
-
-    fluviald_damages_2d_dyn.append(fluviald_damages_2d_sim)
     fluvialu_damages_2d_dyn.append(fluvialu_damages_2d_sim)
     pluvial_damages_2d_dyn.append(pluvial_damages_2d_sim)
     coastal_damages_2d_dyn.append(coastal_damages_2d_sim)
 
 
 # %% DYNAMICS: GET OUT OF LOOP AFTER STORING WHAT'S NEEDED
-# TODO: Do aggregate damage graphs! Does not work yet
 
-outval.simul_damages_time(
-    fluviald_damages_2d_dyn, path_plots, path_tables, 'fluviald', options)
+# We get the evolution of aggregate flood damages over time (due to spatial
+# sorting)
 outval.simul_damages_time(
     fluvialu_damages_2d_dyn, path_plots, path_tables, 'fluvialu', options)
 outval.simul_damages_time(
     pluvial_damages_2d_dyn, path_plots, path_tables, 'pluvial', options)
 outval.simul_damages_time(
     coastal_damages_2d_dyn, path_plots, path_tables, 'coastal', options)
-
-# TODO: also do 2D variations from 2011 to 2040 and other comparisons?
-
-# NB: Where do aggregate flood damage estimates come from?

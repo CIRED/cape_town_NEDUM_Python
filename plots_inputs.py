@@ -7,8 +7,6 @@ Created on Mon Jun 20 10:57:30 2022.
 
 # %% Preamble
 
-# TODO: check MAUP
-
 # IMPORT PACKAGES
 
 import os
@@ -19,14 +17,11 @@ import scipy
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
-# import copy
 
 import inputs.parameters_and_options as inpprm
 import inputs.data as inpdt
 import equilibrium.functions_dynamic as eqdyn
 import outputs.export_outputs as outexp
-# import outputs.flood_outputs as outfld
-# import outputs.export_outputs_floods as outval
 
 print("Import information to be used in the simulation")
 
@@ -54,7 +49,6 @@ param = inpprm.import_param(
 options["agents_anticipate_floods"] = 1
 #  Dummy for preventing new informal settlement development
 options["informal_land_constrained"] = 0
-#  TODO: add option to take into account less likely developments?
 
 # More custom options regarding flood model
 #  Dummy for taking pluvial floods into account (on top of fluvial floods)
@@ -72,7 +66,7 @@ options["defended"] = 0
 #  Dummy for taking sea-level rise into account in coastal flood data
 #  NB: Projections are up to 2050, based upon IPCC AR5 assessment for the
 #  RCP 8.5 scenario
-options["climate_change"] = 1
+options["climate_change"] = 0
 
 # More custom options regarding scenarios
 options["inc_ineq_scenario"] = 2
@@ -210,30 +204,6 @@ initial_state_average_income = np.load(
     path_outputs + name + '/initial_state_average_income.npy')
 initial_state_limit_city = np.load(
     path_outputs + name + '/initial_state_limit_city.npy')
-
-
-# LOAD SIMULATION DATA (from main.py)
-
-# simulation_households_center = np.load(
-#     path_outputs + name + '/simulation_households_center.npy')
-# simulation_households_housing_type = np.load(
-#     path_outputs + name + '/simulation_households_housing_type.npy')
-# simulation_dwelling_size = np.load(
-#     path_outputs + name + '/simulation_dwelling_size.npy')
-# simulation_rent = np.load(
-#     path_outputs + name + '/simulation_rent.npy')
-# simulation_households_housing_type = np.load(
-#     path_outputs + name + '/simulation_households_housing_type.npy')
-# simulation_households = np.load(
-#     path_outputs + name + '/simulation_households.npy')
-# simulation_error = np.load(
-#     path_outputs + name + '/simulation_error.npy')
-# simulation_utility = np.load(
-#     path_outputs + name + '/simulation_utility.npy')
-# simulation_deriv_housing = np.load(
-#     path_outputs + name + '/simulation_deriv_housing.npy')
-# simulation_T = np.load(
-#     path_outputs + name + '/simulation_T.npy')
 
 
 # LOAD FLOOD DATA
@@ -488,8 +458,6 @@ income_centers_2d_select.plot(column='rich_income', ax=ax,
 plt.savefig(path_plots + 'rich_income_in_selected_centers')
 plt.close()
 
-# TODO: ask for TAZ code dictionnary to identify OD flows for some key
-# job centers (CBD, etc.)
 
 amenity_map = outexp.export_map(
     amenities, grid, geo_grid, path_plots,  'amenity_map',
@@ -621,7 +589,6 @@ scenario_price_fuel_2 = pd.read_csv(
 scenario_price_fuel_3 = pd.read_csv(
     path_scenarios + 'Scenario_price_fuel_3.csv', sep=',')
 
-# NB: save tables?
 
 year_simul = np.arange(2011, 2011 + 30)
 income_groups = np.arange(1, 13)
@@ -740,8 +707,6 @@ plt.close()
 
 
 # We also do maps for informal settlement scenarios
-
-# TODO: apply polygon_medium_timing correction?
 
 #  First for timing
 informal_risks_short = pd.read_csv(
