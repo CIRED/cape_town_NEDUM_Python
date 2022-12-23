@@ -25,13 +25,15 @@ data_Cape_Town,grid_NEDUM_Cape_Town_500,Pixel,Standard geographic data on CoCT's
 data_Cape_Town,grid_new_RDP_projects,Pixel,Scenarios for formal subsidized housing construction: used to define land availability
 data_Cape_Town,grid_SAL_intersect,Pixel & SAL,Correspondance table between Small Areas and grid cells
 data_Cape_Town,grid_SP_intersect,Pixel & SP (2011),Correspondance table between Small Places and grid cells
+data_Cape_Town,grid_amenities,Pixel (2011),Exogenous amenities at grid cell level
+data_Cape_Town,SP_amenities,SP (2011),Exogenous amenities at SP level
 data_Cape_Town,Income_distribution_2011,Parameter,Income distribution inputs into the model
 data_Cape_Town,TAZ_amp_2013_proj_centro2,TAZ (2013),"Employment data at the Transport Zone level, used in calibration"
-FATHOM,…,Pixel,"Flood depth hazard and share of flood-prone areas for fluvial undefended (FU), fluvial defended (FD), pluvial (P), and coastal (C) floods"
+flood_maps,…,Pixel,"Flood depth hazard and share of flood-prone areas for fluvial undefended (FU), fluvial defended (FD), pluvial (P), and coastal (C) floods"
 data_Cape_Town,inf_dwellings_2020,Pixel,"Number of informal dwellings in 2020, used to define land availability"
 occupation_maps,informal_settlements_risk,Pixel,Areas at risk of new informal settlements (9 scenarios)
 occupation_maps,polygon_medium_timing,Pixel,"Semi-agricultural land (Philippi neighbourhood), whose squatting risk can be changed to model push-back from farmers"
-precalculated_transport,incomeNetOfCommuting,Pixel,"Income net of commuting costs for each income bracket in model, as calibrated in Pfeiffer et al. (see part 3.1 or appendix C3), simulated over 30 years"
+precalculated_transport,[dim]_incomeNetOfCommuting_[year],Pixel & SP (2011),"Income net of commuting costs for each income bracket in model, as calibrated in Pfeiffer et al. (see part 3.1 or appendix C3), simulated over 30 years"
 /root,housing_types_grid_sal,Pixel,"Population density per housing type, used for validation"
 /root,housing_types_sal_analysis,/,SAL data that shows the breakdown across multiple housing categories and from which we recover aggregate population values
 Aux data,HH-budget-floods,/,"Breakdown of representative household budget in main districts, from which we deduce the fraction of composite good at risk of destruction from floods"

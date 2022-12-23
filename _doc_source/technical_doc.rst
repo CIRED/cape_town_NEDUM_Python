@@ -7,7 +7,7 @@ Technical documentation
 Code walk-through
 -----------------
 
-The project repository is composed of a ``main_nb`` script, a ``calib_nb`` script (a static version of which is shown in :doc:`main_nb` and :doc:`calib_nb`), and ``plots`` scripts [#plots_scripts]_, themselves calling on several secondary scripts and custom packages. Those packages in turn include modules that are used at different steps of the code:
+The project repository is composed of a ``main_nb`` script, a ``calib_nb`` script (a static version of which is shown in :doc:`main_nb` and :doc:`calib_nb`), and ``plots`` scripts, themselves calling on several secondary scripts and custom packages. Those packages in turn include modules that are used at different steps of the code:
 
 * ``inputs``: contains the modules used to import default parameters and options, as well as pre-treated data
 * ``equilibrium``: contains the modules used to compute the static equilibrium allocation, as well as the dynamic simulations
@@ -26,7 +26,7 @@ Inputs
 Parameters and options
 ^^^^^^^^^^^^^^^^^^^^^^
 
-In this part, the code calls on the ``parameters_and_options.py`` module that imports the default parameters and options, then sets the timeline for the simulations, and overwrites the default parameters and options according to the specific scenario one is interested in. The detail of key parameters and options is given in :doc:`../input_tables` (there are other technical parameters and options that should be of no interest for the end user) [#f1]_. Typically, one may set options allowing or not agents to anticipate floods, or new informal settlements to be built.
+In this part, the code calls on the ``parameters_and_options.py`` module that imports the default parameters and options, then sets the timeline for the simulations, and overwrites the default parameters and options according to the specific scenario one is interested in. The detail of key parameters and options is given in :doc:`../input_tables` (there are other technical parameters and options that should be of no interest for the end user) [#f1]_. Typically, one may set options allowing or not agents to anticipate floods, take climate climate change into account, or new informal settlements to be built.
 
 Note that, on top of the ``import_options`` and ``import_param`` functions, the code later calls on a ``import_construction_parameters`` function that makes use of imported data to define additional parameter variables.
 
@@ -40,12 +40,12 @@ In the ``compute_agricultural_rent`` function, this corresponds to:
 
 .. literalinclude:: ../inputs/parameters_and_options.py
    :language: python
-   :lines: 661-667
-   :lineno-start: 661
+   :lines: 663-669
+   :lineno-start: 663
 
 Below this rent, it is therefore never profitable to build housing. Agricultural rent defines a floor on equilibrium rent values as well as an endogenous city edge.
 
-To store the output in a dedicated folder, we create a name associated to the parameters and options used. This name is a code associated to the options, parameters, and scenarios that we changed across our main simulation runs. They can safely be updated by the end user.
+To store the output in a dedicated folder, we create a name associated to the parameters and options used. This name is a code associated to the options, parameters, and scenarios that we changed across our main simulation runs. They can be safely updated by the end user.
 
 
 ^^^^^^^^^^^
@@ -56,7 +56,7 @@ Note that, in our model, we consider three endogenous housing markets (whose all
 
 By default, only agents from the poorest income group have access to RDP housing units. Without loss of generality, we assume that the price of such dwellings is zero, and that they are allocated randomly to the fraction of poorest agents they can host, the rest being rationed out of the formal subsidized housing market. Then, the two poorest income groups sort across formal private housing, informal backyards, and informal settlements; whereas the two richest only choose to live in the formal private housing units. Those assumptions are passed into the code through the ``income_class_by_housing_type`` parameter. We believe that this is a good approximation of reality. Also note that, although the two richest income groups are identical in terms of housing options, we distinguish between them to better account for income heterogeneity and spatial sorting along income lines in our simulations, while keeping the model sufficiently simple to be solved numerically.
 
-.. figure:: images/model_assumpt.png 
+.. figure:: images/inc_group_distrib.png 
    :scale: 60% 
    :align: center
    :alt: summary table of the modeling assumptions regarding housing
@@ -68,11 +68,11 @@ By default, only agents from the poorest income group have access to RDP housing
 Data
 ^^^^
 
-Then, the code calls on the ``data.py`` module. This allows to import basic geographic data, macro data, households and income data, land use projections, flood data, scenarios for time-dependent variables, and transport data (see :doc:`../readme_link` for the appropriate tree structure to locate the data folder). The databases used are presented in :doc:`../data_bases`. A more detailed view on the specific data sets called in the code, and their position in the folder architecture, is given in :doc:`../data_sets` [#fdata]_.
+Then, the code calls on the ``data.py`` module. This allows to import basic geographic data, macro data, households and income data, land use projections, flood data, scenarios for time-dependent variables, and transport data (see :doc:`../readme_link` for the appropriate tree structure where to locate the data folder). The databases used are presented in :doc:`../data_bases`. A more detailed view on the specific data sets called in the code, and their position in the folder architecture, is given in :doc:`../data_sets` [#fdata]_.
 
 It should be noted that, by default, housing type data (used for validation) has already been converted from the SAL (Small Area Level) dimension to the grid dimension (500x500m pixels) with the ``import_sal_data`` and ``gen_small_areas_to_grid`` functions, and that income net of commuting costs for each income group and each grid cell (from transport data) has already been computed from the calibrated incomes for each income group and each job center with the ``import_transport_data`` function. If one wants to run the process again, one needs to overwrite the associated default options (please note that this may take some time to run). The import of flood data (through the ``import_full_floods_data``) is also a little time-consuming when agents are set to anticipate floods.
 
-A bit counter-intuitively, the scenario for the interest rate does not only serve to define future values of the variable (more on that in :ref:`subsequent_periods`), but also its value at the initial state (as the raw data contains both past and future values). As part of the ``import_macro_data`` function, the ``interest_rate`` variable is defined as the average of past values over the past three years, through the ``interpolate_interest_rate`` function defined in the ``functions_dynamic.py`` module (included in the ``equilibrium`` package). This allows to smooth outcomes around a supposed equilibrium value:
+A bit counter-intuitively, the scenario for the interest rate does not only serve to define future values of the variable (more on that in :ref:`subsequent_periods`), but also its value at the initial state (as the raw data contains both past and future values). As part of the ``import_macro_data`` function, the ``interest_rate`` variable is defined as the average over the past three years, through the ``interpolate_interest_rate`` function defined in the ``functions_dynamic.py`` module (included in the ``equilibrium`` package). This allows to smooth outcomes around a supposed equilibrium value:
 
 .. literalinclude:: ../inputs/data.py
    :language: python
@@ -133,7 +133,7 @@ Flood data
 
 Flood data is processed through the ``import_init_floods_data``, ``compute_fraction_capital_destroyed``, and ``import_full_floods_data`` functions.
 
-The ``import_init_floods_data`` function imports the pre-processed flood maps from FATHOM (fluvial and pluvial), and DELTARES (coastal). Those maps yield for each grid cell an estimate of the pixel share that is exposed to a flood of some maximum depth level, reached in a given year with a probability equal to the inverse of their return period. For instance, a flood map corresponding to a return period of 100 years considers events that have a 1/100 chance of ocurring in a given year.
+The ``import_init_floods_data`` function imports the pre-processed flood maps from FATHOM (fluvial and pluvial), and DELTARES (coastal). Those maps yield for each grid cell an estimate of the pixel share that is exposed to a flood of some maximum depth level, reached in a given year with a probability equal to the inverse of their return period. For instance, a flood map corresponding to a return period of 100 years considers events that have a 1/100 chance of ocurring in any given year.
 
 .. figure:: ../../Output/input_plots/P_100yr_map_depth.png
    :scale: 70% 
@@ -148,7 +148,7 @@ The function then imports depth-damage functions from the existing literature. T
 
 On this basis, the ``compute_fraction_capital_destroyed`` function integrates flood damages over the full range of return periods, for each flood type and damage function [#f6]_. This yields an annualized fraction of capital destroyed, corresponding to its expected value in a given year [#f7]_.
 
-Finally, the ``import_full_floods_data`` function uses those outputs to define the depreciation term :math:`\rho_{h}^{d}(x)` that is specific to housing type :math:`h`, damage type (structures or contents) :math:`d`, and location :math:`x` (stored in the ``fraction_capital_destroyed`` matrix), by taking the maximum across fractions of capital destroyed for all flood types considered. When multiplied by some capital value, this term yields the expected economic cost from flood risks that is considered by anticipating agents when solving for equilibrium. It is also equal to the risk premium in the case of a perfect insurance market (leading to full insurance with actuarially fair prices) [#f8]_.
+Finally, the ``import_full_floods_data`` function uses those outputs to define the depreciation term :math:`\rho_{h}^{d}(x)` that is specific to housing type :math:`h`, damage type (structures or contents) :math:`d`, and location :math:`x` (stored in the ``fraction_capital_destroyed`` matrix), by taking the maximum across fractions of capital destroyed for all flood types considered. When multiplied by some capital value, this term yields the expected economic cost from flood risks that is considered by anticipating agents when solving for equilibrium. It is also equal to the risk premium in the case of a perfect risk-based insurance market (leading to full insurance with actuarially fair prices) [#f8]_.
 
 .. figure:: ../../Output/input_plots/structure_informal_settlements_fract_K_destroyed.png
    :scale: 70% 
@@ -161,19 +161,19 @@ Finally, the ``import_full_floods_data`` function uses those outputs to define t
 Transport data
 """"""""""""""
 
-Transport data is processed through the ``import_transport_data`` function. It imports monetary and time transport costs and pre-calibrated incomes (``income_centers_init`` parameter) per income group and job center (more on that in :ref:`transport_costs`), for a given dimension (grid-cell level or Small Place level) and a given simulation year (zero at initial state):
+Transport data is processed through the ``import_transport_data`` function. It imports monetary and time transport costs, and pre-calibrated incomes (``income_centers_init`` parameter) per income group and job center (more on that in :ref:`transport_costs`), for a given dimension (grid-cell level or Small Place level) and a given simulation year (zero at initial state):
 
 .. literalinclude:: ../inputs/data.py
    :language: python
-   :lines: 1925-1931
-   :lineno-start: 1925
+   :lines: 1955-1961
+   :lineno-start: 1955
 
 .. literalinclude:: ../inputs/data.py
    :language: python
-   :lines: 1958-1965
-   :lineno-start: 1958
+   :lines: 1982-2001
+   :lineno-start: 1982
 
-From there, it computes several outputs, of which the key variable is the expected income net of commuting costs :math:`\tilde{y}_i(x)`, earned by a household of income group :math:`i` choosing to live in :math:`x`(stored in the ``income_net_of_commuting_costs`` matrix). It is obtained by recursively solving for the optimal transport mode choice and job center choice of households characterized by :math:`i` and :math:`x` (see :doc:`../math_appendix` for more details). 
+From there, it computes several outputs, of which the key variable is the expected income net of commuting costs :math:`\tilde{y}_i(x)`, earned by a household of income group :math:`i` choosing to live in :math:`x` (stored in the ``income_net_of_commuting_costs`` matrix). It is obtained by recursively solving for the optimal transport mode choice and job center choice of households characterized by :math:`i` and :math:`x` (see :doc:`../math_appendix` for more details). 
 
 |
 
@@ -196,9 +196,9 @@ Let us first dig into the ``compute_equilibrium`` function. Our main input is th
    :lines: 145-146
    :lineno-start: 145
 
-Results are given in the table below:
+The associated distribution is given below:
 
-.. figure:: images/inc_group_distrib.png 
+.. figure:: images/households_per_income_class.png 
    :scale: 60% 
    :align: center
    :alt: summary table of income groups characteristics
@@ -212,7 +212,7 @@ Then, considering that all formal subsidized housing belongs to the poorest inco
    :lines: 167-168
    :lineno-start: 167
 
-Finally, we shorten the grid to consider only habitable pixels according to land availability and expected income net of commuting costs to reduce numeric computations and initialize a few key variables before starting the optimization per se:
+Finally, we shorten the grid to consider only habitable pixels according to land availability and expected income net of commuting costs to reduce numeric computations, and initialize a few key variables before starting the optimization per se:
 
 .. literalinclude:: ../equilibrium/compute_equilibrium.py
    :language: python
@@ -341,7 +341,7 @@ The ``compute_dwelling_size_formal`` function then recovers the value of :math:`
    :lines: 81-89
    :lineno-start: 81
 
-Back to the ``compute_outputs`` function, the dwelling size in the informal backyards and informal settlements sectors is exogenously set as being the standard parametrized size of a "shack" (``shack_size`` parameter).
+Back to the ``compute_outputs`` function, the dwelling size in the informal backyards and informal settlements is exogenously set as being the standard parametrized size of a "shack" (``shack_size`` parameter).
 
 """"""""""""""""
 Equilibrium rent
@@ -393,7 +393,7 @@ Bid rents :math:`\Psi^i_h(x,u)` correspond to the maximum amount households of t
 Equilibrium housing supply
 """"""""""""""""""""""""""
 
-Then, it goes on calling the ``compute_housing_supply_formal`` and ``compute_housing_supply_backyard`` functions.
+Then, the ``compute_outputs`` function goes on calling the ``compute_housing_supply_formal`` and ``compute_housing_supply_backyard`` functions.
 
 In the formal private sector, profit maximization of developers with respect to capital yields:
 
@@ -484,7 +484,7 @@ To complete the process, we concatenate (exogenous) values for formal subsidized
    :lines: 494-509
    :lineno-start: 494
 
-We also return other intermediate outputs from the model, such as utility levels, the final error, or capital per unit of available land.
+We also return other outputs from the model, such as utility levels, the final error, or capital per unit of available land.
 
 .. _subsequent_periods:
 
@@ -492,7 +492,7 @@ We also return other intermediate outputs from the model, such as utility levels
 Subsequent periods
 ^^^^^^^^^^^^^^^^^^
 
-Back to the body of the ``main_nb`` script, we save the outputs for the initial state equilibrium in a dedicated subfolder (according to the naming convention defined in the preamble). Then, we launch the ``run_simulation`` function that take them as an argument, and calls on the same modules as before, plus the ``functions_dynamic.py`` module.
+Back to the body of the ``main_nb`` script, we save the outputs for the initial state equilibrium in a dedicated subfolder (according to the naming convention defined in the preamble). Then, we launch the ``run_simulation`` function that takes them as an argument, and calls on the same modules as before, plus the ``functions_dynamic.py`` module.
 
 After initializing a few key variables, the function starts a loop over predefined simulation years. The first part of the loop consists in updating the value of all time-moving variables. This is based on exogenous scenarios previously imported as inputs (through the ``import_scenarios`` function) and taken as an argument of the function. Provided by the CoCT, they provide trajectories for the following set of variables:
 
@@ -510,7 +510,7 @@ This leads to the update of, among others, number of households per income class
    :lines: 228-247
    :lineno-start: 228
 
-Note that we also update the scale factor of the Cobb-Douglas housing production function so as to neutralize the impact that the inflation of incomes would have on housing supply through the rent [#fmoney_illus]_:
+Note that we also update the scale factor of the Cobb-Douglas housing production function so as to neutralize the impact that the inflation of incomes would have on housing supply through rents [#fmoney_illus]_:
 
 .. literalinclude:: ../equilibrium/run_simulations.py
    :language: python
@@ -567,9 +567,11 @@ Back to the body of the ``main_nb`` script, we save the simulation outputs in a 
 Outputs
 -------
 
-Apart from the data visualization in notebooks, all the modules of this package are used as part of the ``plots`` scripts. Those scripts can be run independently of the notebooks. The ``plots_inputs.py`` script plots input data for descriptive statistics. The ``plots_equil.py`` script plots outputs specific to the initial state equilibrium, notably with respect to result validation. The ``plots_simul.py`` script plots outputs for all simulation years, and some evolution of variables across time. Only the two latter require to run the ``main_nb`` script at least once to save the associated numeric outputs. To call on a specific simulation, one just has to change the path name at the beginning of the scripts to call on the dedicated subfolder. All scripts save the associated tables and figures in another folder (under the same name for equilibrium and simulation outputs).
+Apart from the data visualization in notebooks, all the modules of this package are used as part of the ``plots`` scripts. Those scripts can be run independently of the notebooks. The ``plots_inputs.py`` script plots input data for descriptive statistics. The ``plots_equil.py`` script plots outputs specific to the initial state equilibrium, notably with respect to result validation. The ``plots_simul.py`` script plots outputs for all simulation years, and some evolution of variables across time. Only the two latter require to run the ``main_nb`` script at least once to save the associated numeric outputs. To call on a specific simulation, one just has to change the path name at the beginning of the scripts to call on the dedicated subfolder. All scripts save the associated tables and figures in another subfolder (under the same name for equilibrium and simulation outputs).
 
-As part of the package, the ``export_outputs.py`` module is for processing and displaying the standard urban variables of the model (already present in :cite:t:`pfeiffer`), the ``flood_outputs.py`` module is for processing values relative to floods, and the ``export_outputs_floods.py`` module is for displaying them. We believe the code to be pretty self-explanatory here, and refer the reader to :doc:`../api_ref` for further details.
+Then, ``plots_use_case_insur.py`` and ``plots_use_case_cchange.py`` draw on outputs from ``plots_equil.py`` to generate plots and tables for specific comparative statics (with and without ``options["agents_anticipate_floods"]`` in the first case, with and without ``options["climate_change"]`` in the second case). Those outputs are the ones leveraged in the :doc:`../use_case_nb` section (also see corresponding notebooks).
+
+As part of the ``outputs`` package, the ``export_outputs.py`` module is for processing and displaying the standard urban variables of the model (already present in :cite:t:`pfeiffer`), the ``flood_outputs.py`` module is for processing values relative to floods, and the ``export_outputs_floods.py`` module is for exporting them. We believe the code to be pretty self-explanatory here, and refer the reader to :doc:`../api_ref` for further details.
 
 |
 
@@ -583,7 +585,7 @@ This package is essentially called as part of the ``calib_nb`` notebook. Note th
 
 The preamble of the ``calib_nb`` notebook starts with the same imports as the ``main_nb`` notebook, then does some more data preparation. Essentially, it defines an observed dominant income group and number of formal private units (useful variables for what follows), and a sample selection array for areas where formal private housing units is predominant. This processing is done at the Small Place (SP) level, and ensures that the relations we are going to estimate are well identified: indeed, many of them rely on equilibrium conditions that are only defined for the formal private sector. Note that, whereas the same data might be used for calibration of parameters and validation of results, it is never an input of the model per se: we want to validate / calibrate the model with external data, for the fit not to be automatic.
 
-The rest of the script calls on the ``calib_main_func.py`` module, that itself calls on other modules from ``sub`` directory.
+The rest of the script calls on the ``calib_main_func.py`` module, that itself calls on other modules from the ``sub`` directory.
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Housing production function parameters
@@ -682,7 +684,7 @@ All the terms in the above equation are observed, except for incomes :math:`y_{i
 
 Note that the convergence factors are numerical parameters with no interpretation per se, that are fine-tuned by trial and error to help convergence.
 
-Both the error term and the simulated distribution of residence-workplace distances are obtained as outputs of the ``commutingSolve`` function. Let us dig into its body. First, it computes the probability :math:`\pi_{c|is} ` by calling on the ``compute_ODflows`` function (again, see :doc:`../math_appendix` for more details on this function). Then, it simply defines the error term as the difference between the two sides of the above equation:
+Both the error term and the simulated distribution of residence-workplace distances are obtained as outputs of the ``commutingSolve`` function. Let us dig into its body. First, it computes the probability :math:`\pi_{c|is}` by calling on the ``compute_ODflows`` function (again, see :doc:`../math_appendix` for more details on this function). Then, it simply defines the error term as the difference between the two sides of the above equation:
 
 .. literalinclude:: ../calibration/sub/compute_income.py
    :language: python
@@ -707,7 +709,7 @@ Back to the body of the ``estim_incomes_and_gravity`` function, we import the re
    :lines: 246-266
    :lineno-start: 246
 
-Note that we rely on this two-step computation-selection procedure as a simplification for a more complex nested optimization (as the value of the distance score itself depends on the value of calibrated incomes): given the fine discrete range that we use for scanning (see ``scan_type`` option), we consider our results as a good enough approximation of true parameter values (as long as stay at the interior of the scanned range).
+Note that we rely on this two-step computation-selection procedure as a simplification for a more complex nested optimization (as the value of the distance score itself depends on the value of calibrated incomes): given the fine discrete range that we use for scanning (see ``scan_type`` option), we consider our results as a good enough approximation of true parameter values (as long as we stay at the interior of the scanned range).
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Utility function parameters
@@ -715,7 +717,7 @@ Utility function parameters
 
 Again, we update the parameter vector with the newly calculated values and go on with the calibration of utility function parameters through the ``estim_util_func_param`` function. It allows to optimize over the parameters :math:`\beta`, :math:`q_0`, and the utility levels of various income groups (hence, indirectly, the local amenity index :math:`A(x)`) [#disam_index]_. To do so, it fits three data moments where those variables enter, as they cannot be identified separately from the model structure otherwise. More precisely, it is going to maximize a composite log-likelihood that sums one log-likelihood for the fit of the predicted local amenity index on exogenous amenities, one for the fit of predicted income sorting, and one for the fit of predicted dwelling sizes [#mle]_.
 
-We are going to describe this process in more details, as it is the one followed in :cite:t:`pfeiffer`, but before that, we are going to explain why we actually only use the first data moment in our benchmark.
+We are going to describe this process in more details, as it is the one followed in :cite:t:`pfeiffer`, but before that, we are going to explain why we actually only use the first data moment as our benchmark.
 
 """"""""""""""""""""
 External calibration
@@ -725,9 +727,9 @@ First of all, note that the procedure we just described is a complex optimizatio
 
 For a start, the parameter :math:`q_0` has a direct empirical interpretation: it can just be set to be equal to the bottom decile, or bottom percentile, of observed dwelling sizes. Since we do not have access to such data (but only to average dwelling sizes aggregated at the SP level), we just keep the value calibrated in :cite:t:`pfeiffer`, which is plausible enough, to be substituted later with a more robust value: although this approach may seem more rudimentary than the full one, it requires no structural assumptions whatsoever.
 
-It is different for the :math:`\beta` parameter. Its empirical counterpart would be the expenditure share of households on housing (at purchasing power parity). However, direct measurement of such quantity in expenditure survey data suffers from numerous biases, as we do not observe annual spending by owner-occupiers (as opposed to renters), and we do not observe variation in local housing prices either (see :cite:t:`review` for more details). Then, due to non-homotheticity, this share is expected to vary across income groups. Yet, it is the whole point of using a Stone-Geary (as opposed to Cobb-Douglas) specification to micro-found such non-homotheticity with a single elasticity parameter [#heterog]_.
+It is different for the :math:`\beta` parameter. Its empirical counterpart would be the expenditure share of households on housing (at purchasing power parity). However, direct measurement of such quantity in expenditure survey data suffers from numerous biases, as we do not observe annual spending by owner-occupiers (as opposed to renters), and we do not observe variation in local housing prices either (see :cite:t:`review` for more details). Then, due to non-homotheticity (households spend a smaller share of their budget on housing as their income increases), this share is expected to vary across income groups. Yet, it is the whole point of using a Stone-Geary (as opposed to Cobb-Douglas) specification to micro-found such non-homotheticity with a single elasticity parameter [#heterog]_.
 
-For all those reasons, we need to leverage some theoretical structure to estimate this parameter. However, whereas the Cobb-Douglas specification used for the housing production function has been shown to be empirically robust :cite:p:`combes`, it is not the case for Stone-Geary preferences, which should rather be thought of as a first-order approximation for nonhomothetic constant elasticity of substitution (NHCES) preferences or price independent generalized linear (PIGL) preferences [#ces]_ :cite:p:`finlay`. Therefore, we think it is more empirically robust to use their benchmark estimate for the :math:`\beta` parameter (which also controls for the aforementioned biases). Luckily for us, it is almost the same as the value estimated by :cite:t:`pfeiffer`. We therefore keep that value in the code, and do not contradict previous findings (even though we criticize the method).
+For all those reasons, we need to leverage some theoretical structure to estimate this parameter. However, whereas the Cobb-Douglas specification used for the housing production function has been shown to be empirically robust :cite:p:`combes`, it is not the case for Stone-Geary preferences, which should rather be thought of as a first-order approximation for non-homothetic constant elasticity of substitution (NHCES) preferences or price independent generalized linear (PIGL) preferences [#ces]_ :cite:p:`finlay`. Therefore, we think it is more generally valid to directly use the benchmark estimate for the :math:`\beta` parameter (which also controls for the aforementioned biases) from this last paper, instead of trying to estimate it ourselves (with endogenous moments). Luckily for us, it is almost the same as the value estimated by :cite:t:`pfeiffer`. We therefore keep that value in the code, and do not contradict previous findings (even though we criticize the method).
 
 Then, we are simply left with the estimation of the local amenity score :math:`A(x)`, that we are going to detail below. A last general comment we want to make is that, even for a well-identified model, it is important to run sensitivity checks on the value of parameters: for internal calibration, this implies checking alternative data processing and sample selection ; for external calibration, this implies scanning through acceptable ranges of values (more on that in the code). Running the calibration with data from previous years is also a good robustness check to determine how close our estimates are to long-term equilibrium values we are targeting.
 
@@ -749,7 +751,7 @@ After pinning down the values of :math:`\beta` and :math:`q_0`, we define target
    :lines: 407
    :lineno-start: 407
 
-Since, in practice, the poorest income group is going to be crowded out of the formal private sector, we are only going to optimize over the utility levels of the three income groups. For the sake of numerical simplicity, we are even going to take the lowest utility level as fixed, and allow only the two highest to vary (note that none of this is critical for convergence):
+Since, in practice, the poorest income group is going to be crowded out of the formal private sector, we are only going to optimize over the utility levels of the three richest income groups. For the sake of numerical simplicity, we are even going to take the lowest utility level as fixed, and allow only the two highest to vary (note that none of this is critical for convergence):
 
 .. literalinclude:: ../calibration/calib_main_func.py
    :language: python
@@ -775,7 +777,7 @@ Note that, since we only observe housing prices in transaction data, we define :
 
 Also note that we are not interested in the value of the utility levels per se at this stage, but only in the value of the amenity score. We could therefore directly optimize over that value. The reason why we keep the above specification is that it becomes important when we also want to optimize over :math:`\beta` and :math:`q_0`. Then, if we are only interested in the calibration of the amenity score, we believe it is more robust to estimate only the fit with regard to exogenous amenities. Indeed, this implies very light structural assumptions compared to other moments, and it ensures that the amenity score is well-identified. The score has an impact on the other two moments, but if we allow them to enter the calibration, then it would also capture part of the residual fit of the model, that is the part not strictly explained by amenity factors. Therefore, sticking with the first data moment allows the amenity score to have a clear empirical interpretation, which can also be leveraged for policy evaluation (studying how a change in exogenous coviarates eventually impacts spatial sorting). Again, using more moments becomes important to avoid underidentification when we want to estimate more interacting parameters, even if it comes at the price of tractability.
 
-Then, we just import amenity data with the ``import_exog_amenities`` function and select exogenous covariates before calling on the ``EstimateParametersByScanning`` function that runs the discrete parameter scan. This function runs some additional sample and variable selection, then defines useful function for the optimization algorithm, before running the algorithm per se:
+Then, we just import amenity data with the ``import_exog_amenities`` function and select exogenous covariates before calling on the ``EstimateParametersByScanning`` function that runs the discrete parameter scan. This function runs some additional sample and variable selection, then defines useful functions for the optimization algorithm, before running the algorithm per se:
 
 .. literalinclude:: ../calibration/sub/estimate_parameters_by_scanning.py
    :language: python
@@ -794,7 +796,7 @@ As part of the ``LogLikelihoodModel`` function, we finally define the log-likeli
 * :math:`\mathcal{v}_i` are elasticity parameters to be estimated (conditional on the dominant income group at the SP level)
 * :math:`\epsilon_{A,s}` is an error term that is log-normally distributed with mean zero
 
-Log-linearizing this relation, we can regress the predicted value of the log-amenity score on log-values of exogenous amenities that we proxy as dummy variables (pre-processing that is already done as part of the ``import_exog_amenities`` function), and estimate the parameters :math:`\mathcal{v}_i` by ordinary least squares (OLS). In the code, this yields:
+Log-linearizing this relation, we can regress the predicted value of the log-amenity score on log-values of exogenous amenities that we proxy as dummy variables (pre-processing is already done as part of the ``import_exog_amenities`` function), and estimate the parameters :math:`\mathcal{v}_i` by ordinary least squares (OLS). In the code, this yields:
 
 .. literalinclude:: ../calibration/sub/loglikelihood.py
    :language: python
@@ -850,17 +852,17 @@ This is exactly the formula given by the ``CalculateDwellingSize`` lambda functi
 Smooth optimization
 """""""""""""""""""
 
-After running discrete parameter scanning in the ``estim_util_func_param`` function, the ``param_optim`` option allows the user to run a smooth optimization procedure based on the same composite log-likelihood, starting with the estimates we just computed as initial guess. This is done by calling the ``EstimateParametersByOptimization`` function. Note that, when pinning down the values of :math:`beta` and :math:`q_0`, the algorithm does not converge when setting the scores associated to dwelling sizes and income sorting to zero (directly into the ``LogLikelihoodModel`` function). For that reason, we set the default value of the ``param_optim`` option at zero and run a discrete scanning that we consider to be granular enough to estimate an amenity index that is precise enough. We therefore onlu recommend to use that option when allowing the :math:`\beta` and :math:`q_0` parameters to vary.
+After running discrete parameter scanning in the ``estim_util_func_param`` function, the ``param_optim`` option allows the user to run a smooth optimization procedure based on the same composite log-likelihood, starting with the estimates we just computed as initial guess. This is done by calling the ``EstimateParametersByOptimization`` function. Note that, when pinning down the values of :math:`\beta` and :math:`q_0`, the algorithm does not converge when setting the scores associated to dwelling sizes and income sorting to zero (directly into the ``LogLikelihoodModel`` function). For that reason, we set the default value of the ``param_optim`` option at zero and run a discrete scanning that we consider to be granular enough to estimate an amenity index that is precise enough. We therefore only recommend to use that option when allowing the :math:`\beta` and :math:`q_0` parameters to vary.
 
 ^^^^^^^^^^^^^^^^
 Disamenity index
 ^^^^^^^^^^^^^^^^
 
-The last part of the calibration procedure is done directly in the body of the ``calib_nb`` notebook. As we stated before, the local disamenity index associated with informal backyards and informal settlements is going to be recovered from model inversion, to proxy for unobserved disamenity factors. In other words, we are going to optimize over the value of this parameter to capture most of the residual (unexplained) component of spatial sorting into those places. This clearly improves the fit of the model, but comes at the price of empirical tractability and increases the risk of overfitting: this is the reason why we do not follow this method for other parameters when an alternative approach is available. To back up this choice, let us just say that this is not a critical factor in our simulations, and that this also common in the literature.
+The last part of the calibration procedure is done directly in the body of the ``calib_nb`` notebook. As we stated before, the local disamenity index associated with informal backyards and informal settlements is going to be recovered from model inversion, to proxy for unobserved disamenity factors. In other words, we are going to optimize over the value of this parameter to capture most of the residual (unexplained) component of spatial sorting into those places. This clearly improves the fit of the model, but comes at the price of empirical tractability and increases the risk of overfitting: this is the reason why we do not follow this method for other parameters when an alternative approach is available. To back up this choice, let us just say that this is not a critical factor in our simulations, and that this is also common in the literature.
 
 We start by considering a constant value for each of the index (one per informal housing type). This is also the approach taken by :cite:t:`pfeiffer`. We range over a discrete set of values for those parameters and select the pair that minimizes the sum of differences between total number of households in the data vs. simulation, for each housing sector of interest.
 
-Then, we propose a procedure to improve the model fit further by allowing those parameters to vary with residential location. By default, we choose to run it with the ``location_based_calib`` option, but as we face a standard variance-bias trade-off when considering model fit, we allow the user to switch it off. To do so, we just define the error metric at the grid level and start with the calibrated constant values as initial guesses for all locations. Then, we update them iteratively in proportion with the error term. We allow for a number of iterations that is large enough to reach a minimum score before the end of the algorithm.
+Then, we propose a procedure to improve the model fit further by allowing those parameters to vary with residential location. By default, we choose to run it with the ``location_based_calib`` option, but as we face a standard variance-bias trade-off when considering model fit, we allow the user to switch it off. To run it, we just define the previous error metric at the grid level and start with the calibrated constant values as initial guesses for all locations. Then, we update them iteratively in proportion with the error term. We allow for a number of iterations that is large enough to reach a minimum score before the end of the algorithm.
 
 Of course, even if we define values for all locations on the map, this parameter will only impact the model in zones where land is available for a given housing type (same for the amenity index or expected income net of commuting costs).
 
@@ -868,9 +870,7 @@ Of course, even if we define values for all locations on the map, this parameter
 
 .. rubric:: Footnotes
 
-.. [#plots_scripts] There are three ``plots`` scripts that export tables and figures in a dedicated output folder (see :doc:`../readme_link`) respectively for inputs, static equilibrium, and dynamic simulation outcomes. Those scripts essentially run functions from the ``outputs`` package and are not shown as notebooks since they do not run any kind of analysis. Rather, they provide inputs to be fed into the more user-friendly `interface <https://kristoffpotgieter-nedumapp-app-f2rto5.streamlitapp.com/>`_ that we recommend using for data vizualisation. For developer use, we have included a metadata file as a reference table linking each output to its legend and generating function. Also note that the outputs shown are by no mean supposed to be exhaustive: we encourage developers to leverage the existing infrastructure to code their own plots for future analyses.
-
-.. [#f1] The type of a parameter indicates whether it is plugged as a raw value or is the outcome of a calibration process. In theory, all "user" defined parameters can be overwritten by the end user. In practice, we cannot guarantee that the model runs seamlessly for all possible changes in values. We therefore encourage you to ask for guidance if you would like to change a parameter that was not included in main simulation runs.
+.. [#f1] The type of a parameter indicates whether it is plugged as a raw value or is the outcome of a calibration process. In theory, all "user" defined parameters can be overwritten by the end user. In practice, we cannot guarantee that the model runs seamlessly for all possible changes in values. We therefore encourage the end user to ask for guidance if they would like to change a parameter that was not included in main simulation runs.
 
 .. [#fagri] See definition of developers' profit function in :ref:`functional_assumpt`. To obtain the formula, we plug the first-order optimality condition relative to capital into the zero profit equation. Also note that we artificially set the depreciation due to floods at zero in agricultural land / at the city edge.
 

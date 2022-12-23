@@ -41,7 +41,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">Setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../guidelines.html">General framework</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../use_case.html">Use case</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../use_case_nb.html">Notebook: use cases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../main_nb.html">Notebook: run model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../calib_nb.html">Notebook: run calibration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api_ref.html">API reference</a></li>
@@ -1161,7 +1161,7 @@
     <span class="n">pluvial_floods</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;P_5yr&#39;</span><span class="p">,</span> <span class="s1">&#39;P_10yr&#39;</span><span class="p">,</span> <span class="s1">&#39;P_20yr&#39;</span><span class="p">,</span> <span class="s1">&#39;P_50yr&#39;</span><span class="p">,</span> <span class="s1">&#39;P_75yr&#39;</span><span class="p">,</span>
                       <span class="s1">&#39;P_100yr&#39;</span><span class="p">,</span> <span class="s1">&#39;P_200yr&#39;</span><span class="p">,</span> <span class="s1">&#39;P_250yr&#39;</span><span class="p">,</span> <span class="s1">&#39;P_500yr&#39;</span><span class="p">,</span> <span class="s1">&#39;P_1000yr&#39;</span><span class="p">]</span>
 
-    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;C_&#39;</span> <span class="o">+</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;dem&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;slr&quot;</span><span class="p">])</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;C_&#39;</span> <span class="o">+</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;dem&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;climate_change&quot;</span><span class="p">])</span>
 
     <span class="c1"># Coastal flood maps are extracted from DELTARES global flood maps that</span>
     <span class="c1"># use GTSMip6 water levels as inputs (Muis et al., 2020) for three distinct</span>
@@ -1245,6 +1245,12 @@
         <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">,</span> <span class="mf">0.45</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.55</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">,</span> <span class="mf">0.62</span><span class="p">,</span> <span class="mf">0.64</span><span class="p">,</span> <span class="mf">0.65</span><span class="p">,</span> <span class="mf">0.65</span><span class="p">]</span>
         <span class="p">)</span>
 
+    <span class="c1"># Previous WB report uses the following for type4a/b equivalent (+ content)</span>
+    <span class="c1"># It seems that Englhardt already incorporates the cap for maximum</span>
+    <span class="c1"># destruction in his estimates</span>
+    <span class="c1"># ([0, 0.5, 1, 1.5, 2, 3, 4, 5, 6],</span>
+    <span class="c1"># [0, 0.22, 0.38, 0.53, 0.64, 0.82, 0.90, 0.96, 1])</span>
+
     <span class="k">return</span> <span class="p">(</span><span class="n">structural_damages_small_houses</span><span class="p">,</span> <span class="n">structural_damages_medium_houses</span><span class="p">,</span>
             <span class="n">structural_damages_large_houses</span><span class="p">,</span> <span class="n">content_damages</span><span class="p">,</span>
             <span class="n">structural_damages_type1</span><span class="p">,</span> <span class="n">structural_damages_type2</span><span class="p">,</span>
@@ -1301,6 +1307,29 @@
         <span class="n">interval8</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">250</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">500</span><span class="p">)</span>
         <span class="n">interval9</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">500</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">1000</span><span class="p">)</span>
         <span class="n">interval10</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">1000</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;climate_change&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># We increase the likelihood of flood risks based upon given param</span>
+            <span class="n">interval0</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">5</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">])</span>
+            <span class="n">interval1</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1</span><span class="o">/</span><span class="mi">5</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">])</span>
+                         <span class="o">-</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">10</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">]))</span>
+            <span class="n">interval2</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1</span><span class="o">/</span><span class="mi">10</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">])</span>
+                         <span class="o">-</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">20</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">]))</span>
+            <span class="n">interval3</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1</span><span class="o">/</span><span class="mi">20</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">])</span>
+                         <span class="o">-</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">50</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">]))</span>
+            <span class="n">interval4</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1</span><span class="o">/</span><span class="mi">50</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">])</span>
+                         <span class="o">-</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">75</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">]))</span>
+            <span class="n">interval5</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1</span><span class="o">/</span><span class="mi">75</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">])</span>
+                         <span class="o">-</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">100</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">]))</span>
+            <span class="n">interval6</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1</span><span class="o">/</span><span class="mi">100</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">])</span>
+                         <span class="o">-</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">200</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">]))</span>
+            <span class="n">interval7</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1</span><span class="o">/</span><span class="mi">200</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">])</span>
+                         <span class="o">-</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">250</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">]))</span>
+            <span class="n">interval8</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1</span><span class="o">/</span><span class="mi">250</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">])</span>
+                         <span class="o">-</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">500</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">]))</span>
+            <span class="n">interval9</span> <span class="o">=</span> <span class="p">((</span><span class="mi">1</span><span class="o">/</span><span class="mi">500</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">])</span>
+                         <span class="o">-</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">1000</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">]))</span>
+            <span class="n">interval10</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="mi">1000</span> <span class="o">*</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">])</span>
 
         <span class="c1"># We consider that formal housing is not vulnerable to pluvial floods</span>
         <span class="c1"># over medium run, and that RDP and backyard are not over short run.</span>
@@ -1409,7 +1438,8 @@
     <span class="c1"># pluvial/fluvial since we do not have the same return periods available</span>
     <span class="c1"># in DELTARES and FATHOM data</span>
 
-        <span class="n">name</span> <span class="o">=</span> <span class="n">type_flood</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;dem&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;slr&quot;</span><span class="p">])</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="p">(</span><span class="n">type_flood</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;dem&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span>
+                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;climate_change&quot;</span><span class="p">]))</span>
 
         <span class="c1"># Here, we do have some inundation estimates at baseline year</span>
         <span class="n">damages0</span> <span class="o">=</span> <span class="p">((</span><span class="n">d</span><span class="p">[</span><span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;_0000&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">prop_flood_prone</span>

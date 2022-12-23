@@ -11,4 +11,4 @@ informal_land_constrained,0,Dummy for forbidding new informal housing constructi
 interest_rate_scenario,2,Categorical variable to select scenario for interest rate (should be set to 1/2/3 for low/medium/high growth rate)
 pluvial,1,Dummy for considering pluvial floods on top of fluvial
 pop_growth_scenario,3,Categorical variable to select scenario for total population (should be set to 1/2/3 for low/medium/high population growth)
-slr,1,Dummy for taking sea-level rise into account in coastal flood data
+climate_change,0,Dummy for taking climate change into account in flood maps

@@ -43,7 +43,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="readme_link.html">Setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="guidelines.html">General framework</a></li>
-<li class="toctree-l1"><a class="reference internal" href="use_case.html">Use case</a></li>
+<li class="toctree-l1"><a class="reference internal" href="use_case_nb.html">Notebook: use cases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="main_nb.html">Notebook: run model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="calib_nb.html">Notebook: run calibration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_ref.html">API reference</a></li>
@@ -257,6 +257,16 @@
 <td><p>Correspondance table between Small Places and grid cells</p></td>
 </tr>
 <tr class="row-even"><td><p>data_Cape_Town</p></td>
+<td><p>grid_amenities</p></td>
+<td><p>Pixel (2011)</p></td>
+<td><p>Exogenous amenities at grid cell level</p></td>
+</tr>
+<tr class="row-odd"><td><p>data_Cape_Town</p></td>
+<td><p>SP_amenities</p></td>
+<td><p>SP (2011)</p></td>
+<td><p>Exogenous amenities at SP level</p></td>
+</tr>
+<tr class="row-even"><td><p>data_Cape_Town</p></td>
 <td><p>Income_distribution_2011</p></td>
 <td><p>Parameter</p></td>
 <td><p>Income distribution inputs into the model</p></td>
@@ -266,7 +276,7 @@
 <td><p>TAZ (2013)</p></td>
 <td><p>Employment data at the Transport Zone level, used in calibration</p></td>
 </tr>
-<tr class="row-even"><td><p>FATHOM</p></td>
+<tr class="row-even"><td><p>flood_maps</p></td>
 <td><p>…</p></td>
 <td><p>Pixel</p></td>
 <td><p>Flood depth hazard and share of flood-prone areas for fluvial undefended (FU), fluvial defended (FD), pluvial (P), and coastal (C) floods</p></td>
@@ -287,8 +297,8 @@
 <td><p>Semi-agricultural land (Philippi neighbourhood), whose squatting risk can be changed to model push-back from farmers</p></td>
 </tr>
 <tr class="row-even"><td><p>precalculated_transport</p></td>
-<td><p>incomeNetOfCommuting</p></td>
-<td><p>Pixel</p></td>
+<td><p>[dim]_incomeNetOfCommuting_[year]</p></td>
+<td><p>Pixel &amp; SP (2011)</p></td>
 <td><p>Income net of commuting costs for each income bracket in model, as calibrated in Pfeiffer et al. (see part 3.1 or appendix C3), simulated over 30 years</p></td>
 </tr>
 <tr class="row-odd"><td><p>/root</p></td>

@@ -139,8 +139,10 @@
     <span class="c1"># Dummy for taking sea-level rise into account in coastal flood data</span>
     <span class="c1"># NB: Deltares provides flood risk values under the IPCC AR5 assessment for</span>
     <span class="c1"># the RCP 8.5 climate change scenario, taken at year 2050 (pessimistic</span>
-    <span class="c1"># projections)</span>
-    <span class="n">options</span><span class="p">[</span><span class="s2">&quot;slr&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="c1"># projections). Dummy scenarios are used for other flood risks.</span>
+    <span class="n">options</span><span class="p">[</span><span class="s2">&quot;climate_change&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="c1"># Growth rate in flood risk probability for dummy climate change scenarios</span>
+    <span class="n">options</span><span class="p">[</span><span class="s2">&quot;risk_increase&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
 
     <span class="c1"># REPROCESSING OPTIONS</span>
     <span class="c1"># Default is set at zero to save computing time</span>
@@ -532,7 +534,7 @@
     <span class="c1"># below some precision level, or when the number of iterations reaches some</span>
     <span class="c1"># threshold (to limit processing time)</span>
     <span class="n">param</span><span class="p">[</span><span class="s2">&quot;max_iter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1000</span>
-    <span class="n">param</span><span class="p">[</span><span class="s2">&quot;precision&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.01</span>
+    <span class="n">param</span><span class="p">[</span><span class="s2">&quot;precision&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.001</span>
 
     <span class="c1"># Dynamic parameters</span>
     <span class="c1">#  Lag in housing building in years (from Viguié et al., 2014, table B1)</span>

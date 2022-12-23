@@ -43,7 +43,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="readme_link.html">Setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="guidelines.html">General framework</a></li>
-<li class="toctree-l1"><a class="reference internal" href="use_case.html">Use case</a></li>
+<li class="toctree-l1"><a class="reference internal" href="use_case_nb.html">Notebook: use cases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="main_nb.html">Notebook: run model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="calib_nb.html">Notebook: run calibration</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API reference</a><ul>
@@ -2147,61 +2147,6 @@ versions where we use construction costs)</p></li>
 <div class="section" id="module-outputs.export_outputs">
 <span id="process-and-display-general-values"></span><h3>Process and display general values<a class="headerlink" href="#module-outputs.export_outputs" title="Permalink to this heading"></a></h3>
 <dl class="py function">
-<dt class="sig sig-object py" id="outputs.export_outputs.export_households">
-<span class="sig-prename descclassname"><span class="pre">outputs.export_outputs.</span></span><span class="sig-name descname"><span class="pre">export_households</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initial_state_households</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">households_per_income_and_housing</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_plots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_tables</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/outputs/export_outputs.html#export_households"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#outputs.export_outputs.export_households" title="Permalink to this definition"></a></dt>
-<dd><p>Validation bar plot for nb of households across housing and income groups.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>initial_state_households</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=3</em><em>)</em>) – Number of households per grid cell in each income group (4) and
-each housing type (4)</p></li>
-<li><p><strong>households_per_income_and_housing</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=2</em><em>)</em>) – Exogenous number of households per income group (4, from poorest to
-richest) in each endogenous housing type (3: formal private,</p></li>
-<li><p><strong>legend1</strong> (<em>str</em>) – Legend for first array</p></li>
-<li><p><strong>legend2</strong> (<em>str</em>) – Legend for second array</p></li>
-<li><p><strong>path_plots</strong> (<em>str</em>) – Path for saving output plots</p></li>
-<li><p><strong>path_tables</strong> (<em>str</em>) – Path for saving output plots</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>data0</strong> (<em>DataFrame</em>) – Validation table for simulated number of households across income
-groups in formal private housing</p></li>
-<li><p><strong>data1</strong> (<em>DataFrame</em>) – Validation table for simulated number of households across income
-groups in informal backyards</p></li>
-<li><p><strong>data2</strong> (<em>DataFrame</em>) – Validation table for simulated number of households across income
-groups in informal settlements</p></li>
-</ul>
-</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="outputs.export_outputs.export_housing_types">
-<span class="sig-prename descclassname"><span class="pre">outputs.export_outputs.</span></span><span class="sig-name descname"><span class="pre">export_housing_types</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">housing_type_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">housing_type_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_plots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_tables</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/outputs/export_outputs.html#export_housing_types"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#outputs.export_outputs.export_housing_types" title="Permalink to this definition"></a></dt>
-<dd><p>Validation bar plot for number of simulated households per housing type.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>housing_type_1</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=2</em><em>)</em>) – Number of simulated households per grid cell in each housing type (4)</p></li>
-<li><p><strong>housing_type_2</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=2</em><em>)</em>) – Number of households from data per grid cell in each housing type (4)</p></li>
-<li><p><strong>legend1</strong> (<em>str</em>) – Legend for first array</p></li>
-<li><p><strong>legend2</strong> (<em>str</em>) – Legend for second array</p></li>
-<li><p><strong>path_plots</strong> (<em>str</em>) – Path for saving output plots</p></li>
-<li><p><strong>path_tables</strong> (<em>str</em>) – Path for saving output plots</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>data</strong> – Validation table for number of simulated households per housing type</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>DataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="outputs.export_outputs.export_map">
 <span class="sig-prename descclassname"><span class="pre">outputs.export_outputs.</span></span><span class="sig-name descname"><span class="pre">export_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geo_grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_plots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">export_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_tables</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ubnd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lbnd</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Reds'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/outputs/export_outputs.html#export_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#outputs.export_outputs.export_map" title="Permalink to this definition"></a></dt>
 <dd><p>Generate 2D heat maps of any spatial input.</p>
@@ -2300,88 +2245,6 @@ jobs threshold (185), out of the total set of transport zones (1787)</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="outputs.export_outputs.plot_housing_demand">
-<span class="sig-prename descclassname"><span class="pre">outputs.export_outputs.</span></span><span class="sig-name descname"><span class="pre">plot_housing_demand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state_dwelling_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state_households_housing_types</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">housing_types_sp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_sp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_plots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_tables</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/outputs/export_outputs.html#plot_housing_demand"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#outputs.export_outputs.plot_housing_demand" title="Permalink to this definition"></a></dt>
-<dd><p>Line plot average dwelling size in formal private housing across 1D-space.</p>
-<p>Note that this is a validation plot using data at SP level.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>grid</strong> (<em>DataFrame</em>) – Table yielding, for each grid cell (24,014), its x and y
-(centroid) coordinates, and its distance (in km) to the city centre</p></li>
-<li><p><strong>center</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>)</em>) – x and y coordinates of geographic centre of analysis grid</p></li>
-<li><p><strong>initial_state_dwelling_size</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=2</em><em>)</em>) – Average dwelling size (in m²) per grid cell in each housing
-type (4)</p></li>
-<li><p><strong>initial_state_households_housing_types</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=2</em><em>)</em>) – Number of households per grid cell in each housing type (4)</p></li>
-<li><p><strong>housing_types_sp</strong> (<em>DataFrame</em>) – Table yielding, for each Small Place (1,046), the number of informal
-backyards, of informal settlements, and total dwelling units, as well
-as their (centroid) x and y coordinates</p></li>
-<li><p><strong>data_sp</strong> (<em>DataFrame</em>) – Table yielding, for each Small Place (1,046), the average dwelling size
-(in m²), the average land price and annual income level (in rands),
-the size of unconstrained area for construction (in m²), the total area
-(in km²), the distance to the city centre (in km), whether or not the
-location belongs to Mitchells Plain, and the SP code</p></li>
-<li><p><strong>path_plots</strong> (<em>str</em>) – Path for saving output plots</p></li>
-<li><p><strong>path_tables</strong> (<em>str</em>) – Path for saving output plots</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>None.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="outputs.export_outputs.plot_housing_supply">
-<span class="sig-prename descclassname"><span class="pre">outputs.export_outputs.</span></span><span class="sig-name descname"><span class="pre">plot_housing_supply</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state_housing_supply</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_plots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_tables</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/outputs/export_outputs.html#plot_housing_supply"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#outputs.export_outputs.plot_housing_supply" title="Permalink to this definition"></a></dt>
-<dd><p>Line plot for housing supply per unit of available land across 1D-space.</p>
-<p>Breakdown is given per housing type.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>grid</strong> (<em>DataFrame</em>) – Table yielding, for each grid cell (24,014), its x and y
-(centroid) coordinates, and its distance (in km) to the city centre</p></li>
-<li><p><strong>initial_state_housing_supply</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=2</em><em>)</em>) – Housing supply per unit of available land (in m² per km²)
-for each housing type (4) in each grid cell</p></li>
-<li><p><strong>path_plots</strong> (<em>str</em>) – Path for saving output plots</p></li>
-<li><p><strong>path_tables</strong> (<em>str</em>) – Path for saving output plots</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>df</strong> – Table for housing supply per unit of available land across 1D-space</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>DataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="outputs.export_outputs.plot_housing_supply_noland">
-<span class="sig-prename descclassname"><span class="pre">outputs.export_outputs.</span></span><span class="sig-name descname"><span class="pre">plot_housing_supply_noland</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state_housing_supply</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_plots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_tables</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/outputs/export_outputs.html#plot_housing_supply_noland"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#outputs.export_outputs.plot_housing_supply_noland" title="Permalink to this definition"></a></dt>
-<dd><p>Line plot for housing supply (no land availability) across 1D-space.</p>
-<p>Breakdown is given per housing type.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>grid</strong> (<em>DataFrame</em>) – Table yielding, for each grid cell (24,014), its x and y
-(centroid) coordinates, and its distance (in km) to the city centre</p></li>
-<li><p><strong>initial_state_housing_supply</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=2</em><em>)</em>) – Housing supply per unit of available land (in m² per km²)
-for each housing type (4) in each grid cell</p></li>
-<li><p><strong>path_plots</strong> (<em>str</em>) – Path for saving output plots</p></li>
-<li><p><strong>path_tables</strong> (<em>str</em>) – Path for saving output plots</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>df</strong> – Table for housing supply (no land availability) across 1D-space</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>DataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="outputs.export_outputs.plot_income_net_of_commuting_costs">
 <span class="sig-prename descclassname"><span class="pre">outputs.export_outputs.</span></span><span class="sig-name descname"><span class="pre">plot_income_net_of_commuting_costs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">income_net_of_commuting_costs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_plots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_tables</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/outputs/export_outputs.html#plot_income_net_of_commuting_costs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#outputs.export_outputs.plot_income_net_of_commuting_costs" title="Permalink to this definition"></a></dt>
 <dd><p>Line plot for average income net of commuting costs across 1D-space.</p>
@@ -2445,15 +2308,18 @@ type (4)</p></li>
 <li><p><strong>path_tables</strong> (<em>str</em>) – Path for saving output plots</p></li>
 </ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>None.</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>df</strong> – Table with simulated dwelling sizes across 1-D space</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="outputs.export_outputs.simulation_density_housing_types">
-<span class="sig-prename descclassname"><span class="pre">outputs.export_outputs.</span></span><span class="sig-name descname"><span class="pre">simulation_density_housing_types</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state_households_housing_types</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_plots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_tables</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/outputs/export_outputs.html#simulation_density_housing_types"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#outputs.export_outputs.simulation_density_housing_types" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="outputs.export_outputs.simul_pop_housing_types">
+<span class="sig-prename descclassname"><span class="pre">outputs.export_outputs.</span></span><span class="sig-name descname"><span class="pre">simul_pop_housing_types</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state_households_housing_types</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_plots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_tables</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/outputs/export_outputs.html#simul_pop_housing_types"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#outputs.export_outputs.simul_pop_housing_types" title="Permalink to this definition"></a></dt>
 <dd><p>Line plot for number of households per housing type across 1D-space.</p>
 <p>This is used specifically for subsequent periods where no validation data
 is available.</p>
@@ -2478,8 +2344,33 @@ is available.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="outputs.export_outputs.simulation_density_income_groups">
-<span class="sig-prename descclassname"><span class="pre">outputs.export_outputs.</span></span><span class="sig-name descname"><span class="pre">simulation_density_income_groups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state_household_centers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_plots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_tables</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/outputs/export_outputs.html#simulation_density_income_groups"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#outputs.export_outputs.simulation_density_income_groups" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="outputs.export_outputs.simul_pop_htype_income">
+<span class="sig-prename descclassname"><span class="pre">outputs.export_outputs.</span></span><span class="sig-name descname"><span class="pre">simul_pop_htype_income</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state_households</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_plots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_tables</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/outputs/export_outputs.html#simul_pop_htype_income"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#outputs.export_outputs.simul_pop_htype_income" title="Permalink to this definition"></a></dt>
+<dd><p>Line plot per housing and income groups across 1D-space (no validation).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>grid</strong> (<em>DataFrame</em>) – Table yielding, for each grid cell (24,014), its x and y
+(centroid) coordinates, and its distance (in km) to the city centre</p></li>
+<li><p><strong>initial_state_households</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=3</em><em>)</em>) – Number of households per grid cell in each income group (4) and
+each housing type (4)</p></li>
+<li><p><strong>path_plots</strong> (<em>str</em>) – Path for saving output plots</p></li>
+<li><p><strong>path_tables</strong> (<em>str</em>) – Path for saving output plots</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>df</strong> – Validation table for number of households (no density) per housing and
+income groups across 1D-space</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dataframe</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="outputs.export_outputs.simul_pop_income_groups">
+<span class="sig-prename descclassname"><span class="pre">outputs.export_outputs.</span></span><span class="sig-name descname"><span class="pre">simul_pop_income_groups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state_household_centers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_plots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_tables</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/outputs/export_outputs.html#simul_pop_income_groups"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#outputs.export_outputs.simul_pop_income_groups" title="Permalink to this definition"></a></dt>
 <dd><p>Line plot for number of households per income group across 1D-space.</p>
 <p>This is used specifically for subsequent periods when validation data is
 not available.</p>
@@ -2507,7 +2398,7 @@ density)</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="outputs.export_outputs.simulation_housing_price">
 <span class="sig-prename descclassname"><span class="pre">outputs.export_outputs.</span></span><span class="sig-name descname"><span class="pre">simulation_housing_price</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state_rent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interest_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">housing_types_sp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_plots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_tables</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">land_price</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/outputs/export_outputs.html#simulation_housing_price"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#outputs.export_outputs.simulation_housing_price" title="Permalink to this definition"></a></dt>
-<dd><p>Line plot for housing prices price across 1D-space.</p>
+<dd><p>Line plot for housing/land prices/rents across 1D-space.</p>
 <p>Breakdown is given per housing type. This function is specifically used
 for subsequent periods when validation data is not available.</p>
 <dl class="field-list simple">
@@ -2530,7 +2421,7 @@ theoretical land price or annual housing rent</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>df</strong> – Table for housing prices price across 1D-space</p>
+<dd class="field-even"><p><strong>df</strong> – Table for housing prices across 1D-space</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>DataFrame</p>
@@ -2539,24 +2430,229 @@ theoretical land price or annual housing rent</p></li>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="outputs.export_outputs.validate_average_income">
-<span class="sig-prename descclassname"><span class="pre">outputs.export_outputs.</span></span><span class="sig-name descname"><span class="pre">validate_average_income</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overall_avg_income</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_avg_income</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_plots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_tables</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/outputs/export_outputs.html#validate_average_income"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#outputs.export_outputs.validate_average_income" title="Permalink to this definition"></a></dt>
-<dd><p>Validation line plot for overall average income across 1D-space.</p>
+<dt class="sig sig-object py" id="outputs.export_outputs.valid_housing_demand">
+<span class="sig-prename descclassname"><span class="pre">outputs.export_outputs.</span></span><span class="sig-name descname"><span class="pre">valid_housing_demand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state_dwelling_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state_households_housing_types</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">housing_types_sp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_sp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_plots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_tables</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/outputs/export_outputs.html#valid_housing_demand"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#outputs.export_outputs.valid_housing_demand" title="Permalink to this definition"></a></dt>
+<dd><p>Line plot average dwelling size in formal private housing across 1D-space.</p>
+<p>Note that this is a validation plot using data at SP level.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>grid</strong> (<em>DataFrame</em>) – Table yielding, for each grid cell (24,014), its x and y
 (centroid) coordinates, and its distance (in km) to the city centre</p></li>
-<li><p><strong>overall_avg_income</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>)</em>) – Average income per grid cell (24,014) weighted across income groups,
-obtained from calibrated incomes</p></li>
-<li><p><strong>data_avg_income</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>)</em>) – Average income per grid cell (24,014) weighted across income groups,
-obtained from validation data</p></li>
+<li><p><strong>center</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>)</em>) – x and y coordinates of geographic centre of analysis grid</p></li>
+<li><p><strong>initial_state_dwelling_size</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=2</em><em>)</em>) – Average dwelling size (in m²) per grid cell in each housing
+type (4)</p></li>
+<li><p><strong>initial_state_households_housing_types</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=2</em><em>)</em>) – Number of households per grid cell in each housing type (4)</p></li>
+<li><p><strong>housing_types_sp</strong> (<em>DataFrame</em>) – Table yielding, for each Small Place (1,046), the number of informal
+backyards, of informal settlements, and total dwelling units, as well
+as their (centroid) x and y coordinates</p></li>
+<li><p><strong>data_sp</strong> (<em>DataFrame</em>) – Table yielding, for each Small Place (1,046), the average dwelling size
+(in m²), the average land price and annual income level (in rands),
+the size of unconstrained area for construction (in m²), the total area
+(in km²), the distance to the city centre (in km), whether or not the
+location belongs to Mitchells Plain, and the SP code</p></li>
 <li><p><strong>path_plots</strong> (<em>str</em>) – Path for saving output plots</p></li>
 <li><p><strong>path_tables</strong> (<em>str</em>) – Path for saving output plots</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>df</strong> – Validation table for overall average income across 1D-space</p>
+<dd class="field-even"><p><strong>df</strong> – Table with simulated and validation dwelling sizes across 1-D space</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="outputs.export_outputs.valid_housing_price">
+<span class="sig-prename descclassname"><span class="pre">outputs.export_outputs.</span></span><span class="sig-name descname"><span class="pre">valid_housing_price</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state_rent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interest_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">housing_types_sp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_sp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_plots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_tables</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/outputs/export_outputs.html#valid_housing_price"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#outputs.export_outputs.valid_housing_price" title="Permalink to this definition"></a></dt>
+<dd><p>Line plot for housing prices across 1D-space.</p>
+<p>This focuses on validation for housing prices in the formal private sector.
+Note that we have missing values in the city centre and beyond 40km.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>grid</strong> (<em>DataFrame</em>) – Table yielding, for each grid cell (24,014), its x and y
+(centroid) coordinates, and its distance (in km) to the city centre</p></li>
+<li><p><strong>initial_state_rent</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=2</em><em>)</em>) – Average annual rent (in rands) per grid cell for each housing type (4)</p></li>
+<li><p><strong>interest_rate</strong> (<em>float64</em>) – Interest rate for the overall economy, corresponding to an average
+over past years</p></li>
+<li><p><strong>param</strong> (<em>dict</em>) – Dictionary of default parameters</p></li>
+<li><p><strong>housing_types_sp</strong> (<em>DataFrame</em>) – Table yielding, for each Small Place (1,046), the number of informal
+backyards, of informal settlements, and total dwelling units, as well
+as their (centroid) x and y coordinates</p></li>
+<li><p><strong>data_sp</strong> (<em>DataFrame</em>) – Table yielding, for each Small Place (1,046), the average dwelling size
+(in m²), the average land price and annual income level (in rands),
+the size of unconstrained area for construction (in m²), the total area
+(in km²), the distance to the city centre (in km), whether or not the
+location belongs to Mitchells Plain, and the SP code</p></li>
+<li><p><strong>path_plots</strong> (<em>str</em>) – Path for saving output plots</p></li>
+<li><p><strong>path_tables</strong> (<em>str</em>) – Path for saving output plots</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>df</strong> – Table for formal private housing prices across 1-D space (with
+validation data)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="outputs.export_outputs.valid_housing_supply">
+<span class="sig-prename descclassname"><span class="pre">outputs.export_outputs.</span></span><span class="sig-name descname"><span class="pre">valid_housing_supply</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state_housing_supply</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_plots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_tables</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/outputs/export_outputs.html#valid_housing_supply"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#outputs.export_outputs.valid_housing_supply" title="Permalink to this definition"></a></dt>
+<dd><p>Line plot for housing supply per unit of available land across 1D-space.</p>
+<p>Breakdown is given per housing type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>grid</strong> (<em>DataFrame</em>) – Table yielding, for each grid cell (24,014), its x and y
+(centroid) coordinates, and its distance (in km) to the city centre</p></li>
+<li><p><strong>initial_state_housing_supply</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=2</em><em>)</em>) – Housing supply per unit of available land (in m² per km²)
+for each housing type (4) in each grid cell</p></li>
+<li><p><strong>path_plots</strong> (<em>str</em>) – Path for saving output plots</p></li>
+<li><p><strong>path_tables</strong> (<em>str</em>) – Path for saving output plots</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>df</strong> – Table for housing supply per unit of available land across 1D-space</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="outputs.export_outputs.valid_housing_supply_noland">
+<span class="sig-prename descclassname"><span class="pre">outputs.export_outputs.</span></span><span class="sig-name descname"><span class="pre">valid_housing_supply_noland</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state_housing_supply</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_plots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_tables</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/outputs/export_outputs.html#valid_housing_supply_noland"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#outputs.export_outputs.valid_housing_supply_noland" title="Permalink to this definition"></a></dt>
+<dd><p>Line plot for housing supply (no land availability) across 1D-space.</p>
+<p>Breakdown is given per housing type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>grid</strong> (<em>DataFrame</em>) – Table yielding, for each grid cell (24,014), its x and y
+(centroid) coordinates, and its distance (in km) to the city centre</p></li>
+<li><p><strong>initial_state_housing_supply</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=2</em><em>)</em>) – Housing supply per unit of available land (in m² per km²)
+for each housing type (4) in each grid cell</p></li>
+<li><p><strong>path_plots</strong> (<em>str</em>) – Path for saving output plots</p></li>
+<li><p><strong>path_tables</strong> (<em>str</em>) – Path for saving output plots</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>df</strong> – Table for housing supply (no land availability) across 1D-space</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="outputs.export_outputs.valid_pop_housing_type">
+<span class="sig-prename descclassname"><span class="pre">outputs.export_outputs.</span></span><span class="sig-name descname"><span class="pre">valid_pop_housing_type</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">housing_type_1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">housing_type_2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_plots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_tables</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/outputs/export_outputs.html#valid_pop_housing_type"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#outputs.export_outputs.valid_pop_housing_type" title="Permalink to this definition"></a></dt>
+<dd><p>Validation bar plot for number of simulated households per housing type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>housing_type_1</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=2</em><em>)</em>) – Number of simulated households per grid cell in each housing type (4)</p></li>
+<li><p><strong>housing_type_2</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=2</em><em>)</em>) – Number of households from data per grid cell in each housing type (4)</p></li>
+<li><p><strong>legend1</strong> (<em>str</em>) – Legend for first array</p></li>
+<li><p><strong>legend2</strong> (<em>str</em>) – Legend for second array</p></li>
+<li><p><strong>path_plots</strong> (<em>str</em>) – Path for saving output plots</p></li>
+<li><p><strong>path_tables</strong> (<em>str</em>) – Path for saving output plots</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>data</strong> – Validation table for number of simulated households per housing type</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="outputs.export_outputs.valid_pop_housing_types">
+<span class="sig-prename descclassname"><span class="pre">outputs.export_outputs.</span></span><span class="sig-name descname"><span class="pre">valid_pop_housing_types</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state_households_housing_types</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">housing_types</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_plots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_tables</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/outputs/export_outputs.html#valid_pop_housing_types"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#outputs.export_outputs.valid_pop_housing_types" title="Permalink to this definition"></a></dt>
+<dd><p>Validation line plot for nb of households per housing type across 1D-space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>grid</strong> (<em>DataFrame</em>) – Table yielding, for each grid cell (24,014), its x and y
+(centroid) coordinates, and its distance (in km) to the city centre</p></li>
+<li><p><strong>initial_state_households_housing_types</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=2</em><em>)</em>) – Number of households per grid cell in each housing type (4)</p></li>
+<li><p><strong>housing_types</strong> (<em>DataFrame</em>) – Table yielding, for 4 different housing types (informal settlements,
+formal backyards, informal backyards, and formal private housing),
+the number of households in each grid cell (24,014), from SAL data.</p></li>
+<li><p><strong>path_plots</strong> (<em>str</em>) – Path for saving output plots</p></li>
+<li><p><strong>path_tables</strong> (<em>str</em>) – Path for saving output plots</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>df</strong> – Validation table for number of households (no density) per housing type
+across 1D-space.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="outputs.export_outputs.valid_pop_htype_income">
+<span class="sig-prename descclassname"><span class="pre">outputs.export_outputs.</span></span><span class="sig-name descname"><span class="pre">valid_pop_htype_income</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initial_state_households</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">households_per_income_and_housing</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">legend2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_plots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_tables</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/outputs/export_outputs.html#valid_pop_htype_income"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#outputs.export_outputs.valid_pop_htype_income" title="Permalink to this definition"></a></dt>
+<dd><p>Validation bar plot for nb of households across housing and income groups.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>initial_state_households</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=3</em><em>)</em>) – Number of households per grid cell in each income group (4) and
+each housing type (4)</p></li>
+<li><p><strong>households_per_income_and_housing</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=2</em><em>)</em>) – Exogenous number of households per income group (4, from poorest to
+richest) in each endogenous housing type (3: formal private,</p></li>
+<li><p><strong>legend1</strong> (<em>str</em>) – Legend for first array</p></li>
+<li><p><strong>legend2</strong> (<em>str</em>) – Legend for second array</p></li>
+<li><p><strong>path_plots</strong> (<em>str</em>) – Path for saving output plots</p></li>
+<li><p><strong>path_tables</strong> (<em>str</em>) – Path for saving output plots</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>data0</strong> (<em>DataFrame</em>) – Validation table for simulated number of households across income
+groups in formal private housing</p></li>
+<li><p><strong>data1</strong> (<em>DataFrame</em>) – Validation table for simulated number of households across income
+groups in informal backyards</p></li>
+<li><p><strong>data2</strong> (<em>DataFrame</em>) – Validation table for simulated number of households across income
+groups in informal settlements</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="outputs.export_outputs.valid_pop_income_groups">
+<span class="sig-prename descclassname"><span class="pre">outputs.export_outputs.</span></span><span class="sig-name descname"><span class="pre">valid_pop_income_groups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state_household_centers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">income_distribution_grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_plots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_tables</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/outputs/export_outputs.html#valid_pop_income_groups"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#outputs.export_outputs.valid_pop_income_groups" title="Permalink to this definition"></a></dt>
+<dd><p>Validation line plot for nb of households per income group across 1D-space.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>grid</strong> (<em>DataFrame</em>) – Table yielding, for each grid cell (24,014), its x and y
+(centroid) coordinates, and its distance (in km) to the city centre</p></li>
+<li><p><strong>initial_state_household_centers</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=2</em><em>)</em>) – Number of households per grid cell in each income group (4)
+at baseline year (2011)</p></li>
+<li><p><strong>income_distribution_grid</strong> (<em>ndarray</em><em>(</em><em>uint16</em><em>, </em><em>ndim=2</em><em>)</em>) – Exogenous number of households in each grid cell (24,014) for each
+income group in the model (4)</p></li>
+<li><p><strong>path_plots</strong> (<em>str</em>) – Path for saving output plots</p></li>
+<li><p><strong>path_tables</strong> (<em>str</em>) – Path for saving output plots</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>df</strong> – Validation table for nb of households per income group across 1D-space
+(no density)</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>DataFrame</p>
@@ -2586,124 +2682,6 @@ the number of households in each grid cell (24,014), from SAL data.</p></li>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>DataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="outputs.export_outputs.validation_density_housing_and_income_groups">
-<span class="sig-prename descclassname"><span class="pre">outputs.export_outputs.</span></span><span class="sig-name descname"><span class="pre">validation_density_housing_and_income_groups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state_households</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_plots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_tables</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/outputs/export_outputs.html#validation_density_housing_and_income_groups"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#outputs.export_outputs.validation_density_housing_and_income_groups" title="Permalink to this definition"></a></dt>
-<dd><p>Line plot per housing and income groups across 1D-space (no validation).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>grid</strong> (<em>DataFrame</em>) – Table yielding, for each grid cell (24,014), its x and y
-(centroid) coordinates, and its distance (in km) to the city centre</p></li>
-<li><p><strong>initial_state_households</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=3</em><em>)</em>) – Number of households per grid cell in each income group (4) and
-each housing type (4)</p></li>
-<li><p><strong>path_plots</strong> (<em>str</em>) – Path for saving output plots</p></li>
-<li><p><strong>path_tables</strong> (<em>str</em>) – Path for saving output plots</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>df</strong> – Validation table for number of households (no density) per housing and
-income groups across 1D-space</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Dataframe</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="outputs.export_outputs.validation_density_housing_types">
-<span class="sig-prename descclassname"><span class="pre">outputs.export_outputs.</span></span><span class="sig-name descname"><span class="pre">validation_density_housing_types</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state_households_housing_types</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">housing_types</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_plots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_tables</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/outputs/export_outputs.html#validation_density_housing_types"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#outputs.export_outputs.validation_density_housing_types" title="Permalink to this definition"></a></dt>
-<dd><p>Validation line plot for nb of households per housing type across 1D-space.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>grid</strong> (<em>DataFrame</em>) – Table yielding, for each grid cell (24,014), its x and y
-(centroid) coordinates, and its distance (in km) to the city centre</p></li>
-<li><p><strong>initial_state_households_housing_types</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=2</em><em>)</em>) – Number of households per grid cell in each housing type (4)</p></li>
-<li><p><strong>housing_types</strong> (<em>DataFrame</em>) – Table yielding, for 4 different housing types (informal settlements,
-formal backyards, informal backyards, and formal private housing),
-the number of households in each grid cell (24,014), from SAL data.</p></li>
-<li><p><strong>path_plots</strong> (<em>str</em>) – Path for saving output plots</p></li>
-<li><p><strong>path_tables</strong> (<em>str</em>) – Path for saving output plots</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>df</strong> – Validation table for number of households (no density) per housing type
-across 1D-space.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>DataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="outputs.export_outputs.validation_density_income_groups">
-<span class="sig-prename descclassname"><span class="pre">outputs.export_outputs.</span></span><span class="sig-name descname"><span class="pre">validation_density_income_groups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state_household_centers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">income_distribution_grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_plots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_tables</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/outputs/export_outputs.html#validation_density_income_groups"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#outputs.export_outputs.validation_density_income_groups" title="Permalink to this definition"></a></dt>
-<dd><p>Validation line plot for nb of households per income group across 1D-space.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>grid</strong> (<em>DataFrame</em>) – Table yielding, for each grid cell (24,014), its x and y
-(centroid) coordinates, and its distance (in km) to the city centre</p></li>
-<li><p><strong>initial_state_household_centers</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=2</em><em>)</em>) – Number of households per grid cell in each income group (4)
-at baseline year (2011)</p></li>
-<li><p><strong>income_distribution_grid</strong> (<em>ndarray</em><em>(</em><em>uint16</em><em>, </em><em>ndim=2</em><em>)</em>) – Exogenous number of households in each grid cell (24,014) for each
-income group in the model (4)</p></li>
-<li><p><strong>path_plots</strong> (<em>str</em>) – Path for saving output plots</p></li>
-<li><p><strong>path_tables</strong> (<em>str</em>) – Path for saving output plots</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><strong>df</strong> – Validation table for nb of households per income group across 1D-space
-(no density)</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>DataFrame</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="outputs.export_outputs.validation_housing_price">
-<span class="sig-prename descclassname"><span class="pre">outputs.export_outputs.</span></span><span class="sig-name descname"><span class="pre">validation_housing_price</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state_rent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state_households_housing_types</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interest_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">housing_types_sp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_sp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_plots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_tables</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">land_price</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/outputs/export_outputs.html#validation_housing_price"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#outputs.export_outputs.validation_housing_price" title="Permalink to this definition"></a></dt>
-<dd><p>Validation line plot for housing prices price across 1D-space.</p>
-<p>Breakdown is given per housing type.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>grid</strong> (<em>DataFrame</em>) – Table yielding, for each grid cell (24,014), its x and y
-(centroid) coordinates, and its distance (in km) to the city centre</p></li>
-<li><p><strong>initial_state_rent</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=2</em><em>)</em>) – Average annual rent (in rands) per grid cell for each housing type (4)</p></li>
-<li><p><strong>interest_rate</strong> (<em>float64</em>) – Interest rate for the overall economy, corresponding to an average
-over past years</p></li>
-<li><p><strong>param</strong> (<em>dict</em>) – Dictionary of default parameters</p></li>
-<li><p><strong>center</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>)</em>) – x and y coordinates of geographic centre of analysis grid</p></li>
-<li><p><strong>housing_types_sp</strong> (<em>DataFrame</em>) – Table yielding, for each Small Place (1,046), the number of informal
-backyards, of informal settlements, and total dwelling units, as well
-as their (centroid) x and y coordinates</p></li>
-<li><p><strong>data_sp</strong> (<em>DataFrame</em>) – Table yielding, for each Small Place (1,046), the average dwelling size
-(in m²), the average land price and annual income level (in rands),
-the size of unconstrained area for construction (in m²), the total area
-(in km²), the distance to the city centre (in km), whether or not the
-location belongs to Mitchells Plain, and the SP code</p></li>
-<li><p><strong>path_plots</strong> (<em>str</em>) – Path for saving output plots</p></li>
-<li><p><strong>path_tables</strong> (<em>str</em>) – Path for saving output plots</p></li>
-<li><p><strong>land_price</strong> (<em>int</em>) – Dummy set to 1 or 0, depending on whether we want to consider
-theoretical land price or annual housing rent</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul class="simple">
-<li><p><strong>df</strong> (<em>DataFrame</em>) – Validation table for housing prices price across 1D-space.</p></li>
-<li><p><strong>yData</strong> (<em>Series</em>) – Validation housing prices</p></li>
-</ul>
-</p>
 </dd>
 </dl>
 </dd></dl>
@@ -2740,7 +2718,7 @@ type, housing type, and grid cell</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="outputs.flood_outputs.compute_content_cost">
-<span class="sig-prename descclassname"><span class="pre">outputs.flood_outputs.</span></span><span class="sig-name descname"><span class="pre">compute_content_cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initial_state_household_centers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state_housing_supply</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">income_net_of_commuting_costs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fraction_capital_destroyed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state_rent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state_dwelling_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interest_rate</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/outputs/flood_outputs.html#compute_content_cost"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#outputs.flood_outputs.compute_content_cost" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">outputs.flood_outputs.</span></span><span class="sig-name descname"><span class="pre">compute_content_cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initial_state_households</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state_housing_supply</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">income_net_of_commuting_costs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fraction_capital_destroyed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state_rent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state_dwelling_size</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interest_rate</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/outputs/flood_outputs.html#compute_content_cost"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#outputs.flood_outputs.compute_content_cost" title="Permalink to this definition"></a></dt>
 <dd><p>Estimate value of flood-prone composite good consumption in space.</p>
 <p>Again, this is based on model outcomes. Since cost estimates are specific
 to housing type, we rely on an estimation of average income per housing
@@ -2748,7 +2726,8 @@ type that we plug into households’ budget constraint.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>initial_state_household_centers</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=2</em><em>)</em>) – Number of households per grid cell in each income group (4)</p></li>
+<li><p><strong>initial_state_households</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=3</em><em>)</em>) – Number of households per grid cell in each income group (4) and
+each housing type (4)</p></li>
 <li><p><strong>initial_state_housing_supply</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=2</em><em>)</em>) – Housing supply per unit of available land (in m² per km²)
 for each housing type (4) in each grid cell</p></li>
 <li><p><strong>income_net_of_commuting_costs</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=2</em><em>)</em>) – Expected annual income net of commuting costs (in rands, for
@@ -2903,7 +2882,7 @@ and contents</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="outputs.flood_outputs.compute_formal_structure_cost">
-<span class="sig-prename descclassname"><span class="pre">outputs.flood_outputs.</span></span><span class="sig-name descname"><span class="pre">compute_formal_structure_cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initial_state_rent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">interest_rate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeff_land</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state_households_housing_types</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">construction_coeff</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/outputs/flood_outputs.html#compute_formal_structure_cost"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#outputs.flood_outputs.compute_formal_structure_cost" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">outputs.flood_outputs.</span></span><span class="sig-name descname"><span class="pre">compute_formal_structure_cost</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initial_state_capital_land</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial_state_households_housing_types</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coeff_land</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/outputs/flood_outputs.html#compute_formal_structure_cost"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#outputs.flood_outputs.compute_formal_structure_cost" title="Permalink to this definition"></a></dt>
 <dd><p>Estimate construction costs of formal private housing structures in space.</p>
 <p>Note that the estimation process relies on a theoretical relation linking
 market prices to capital values. The value obtained is therefore an
@@ -2912,16 +2891,13 @@ are common in the impact evaluation literature.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>initial_state_rent</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=2</em><em>)</em>) – Average annual rent (in rands) per grid cell for each housing type (4)</p></li>
-<li><p><strong>param</strong> (<em>dict</em>) – Dictionary of default parameters</p></li>
-<li><p><strong>interest_rate</strong> (<em>float64</em>) – Real interest rate for the overall economy, corresponding to an average
-over past years</p></li>
+<li><p><strong>initial_state_capital_land</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=2</em><em>)</em>) – Value (in rands) of the housing capital stock per unit of available
+land (in km²) for each endogenous housing type (3) per grid cell
+at baseline year (2011)</p></li>
+<li><p><strong>initial_state_households_housing_types</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=2</em><em>)</em>) – Number of households per grid cell in each housing type (4)</p></li>
 <li><p><strong>coeff_land</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=2</em><em>)</em>) – Updated land availability for each grid cell (24,014) and each
 housing type (4: formal private, informal backyards, informal
 settlements, formal subsidized)</p></li>
-<li><p><strong>initial_state_households_housing_types</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>, </em><em>ndim=2</em><em>)</em>) – Number of households per grid cell in each housing type (4)</p></li>
-<li><p><strong>construction_coeff</strong> (<em>ndarray</em><em>(</em><em>float64</em><em>)</em>) – (Calibrated) scale factor for the construction function of formal
-private developers</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -3044,35 +3020,6 @@ their residential location</p>
 <div class="section" id="module-outputs.export_outputs_floods">
 <span id="display-values-related-to-floods"></span><h3>Display values related to floods<a class="headerlink" href="#module-outputs.export_outputs_floods" title="Permalink to this heading"></a></h3>
 <dl class="py function">
-<dt class="sig sig-object py" id="outputs.export_outputs_floods.plot_damages">
-<span class="sig-prename descclassname"><span class="pre">outputs.export_outputs_floods.</span></span><span class="sig-name descname"><span class="pre">plot_damages</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">damages1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">damages2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_plots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flood_categ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/outputs/export_outputs_floods.html#plot_damages"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#outputs.export_outputs_floods.plot_damages" title="Permalink to this definition"></a></dt>
-<dd><p>Validation bar plot for estimated damages for a given flood type.</p>
-<p>Breakdown is given by housing type as depth-damage functions used to
-estimate costs are specific to building materials. Here, we just annualize
-previously estimated total damages across available return periods. The
-function returns two separate plots for damages done to housing structures
-and contents.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>damages1</strong> (<em>DataFrame</em>) – Table yielding, for each return period and housing types, the estimated
-total damages in terms of housing structures and contents. Here, we
-expect simulation results.</p></li>
-<li><p><strong>damages2</strong> (<em>DataFrame</em>) – Table yielding, for each return period and housing types, the estimated
-total damages in terms of housing structures and contents. Here, we
-expect validation data.</p></li>
-<li><p><strong>path_plots</strong> (<em>str</em>) – Path for saving output plots</p></li>
-<li><p><strong>flood_categ</strong> (<em>str</em>) – Type of flood risk considered, used to define output file name</p></li>
-<li><p><strong>options</strong> (<em>dict</em>) – Dictionary of default options</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>None.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="outputs.export_outputs_floods.plot_flood_severity_distrib">
 <span class="sig-prename descclassname"><span class="pre">outputs.export_outputs_floods.</span></span><span class="sig-name descname"><span class="pre">plot_flood_severity_distrib</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">barWidth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transparency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dictio</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flood_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_plots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylim</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/outputs/export_outputs_floods.html#plot_flood_severity_distrib"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#outputs.export_outputs_floods.plot_flood_severity_distrib" title="Permalink to this definition"></a></dt>
 <dd><p>Bar plot distribution of households across flood zones of varying severity.</p>
@@ -3174,6 +3121,35 @@ yielding, for each return period, the estimated damages per grid cell
 contents</p></li>
 <li><p><strong>path_plots</strong> (<em>str</em>) – Path for saving output plots</p></li>
 <li><p><strong>path_tables</strong> (<em>str</em>) – Path for saving output plots</p></li>
+<li><p><strong>flood_categ</strong> (<em>str</em>) – Type of flood risk considered, used to define output file name</p></li>
+<li><p><strong>options</strong> (<em>dict</em>) – Dictionary of default options</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="outputs.export_outputs_floods.valid_damages">
+<span class="sig-prename descclassname"><span class="pre">outputs.export_outputs_floods.</span></span><span class="sig-name descname"><span class="pre">valid_damages</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">damages1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">damages2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_plots</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flood_categ</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">options</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/outputs/export_outputs_floods.html#valid_damages"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#outputs.export_outputs_floods.valid_damages" title="Permalink to this definition"></a></dt>
+<dd><p>Validation bar plot for estimated damages for a given flood type.</p>
+<p>Breakdown is given by housing type as depth-damage functions used to
+estimate costs are specific to building materials. Here, we just annualize
+previously estimated total damages across available return periods. The
+function returns two separate plots for damages done to housing structures
+and contents.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>damages1</strong> (<em>DataFrame</em>) – Table yielding, for each return period and housing types, the estimated
+total damages in terms of housing structures and contents. Here, we
+expect simulation results.</p></li>
+<li><p><strong>damages2</strong> (<em>DataFrame</em>) – Table yielding, for each return period and housing types, the estimated
+total damages in terms of housing structures and contents. Here, we
+expect validation data.</p></li>
+<li><p><strong>path_plots</strong> (<em>str</em>) – Path for saving output plots</p></li>
 <li><p><strong>flood_categ</strong> (<em>str</em>) – Type of flood risk considered, used to define output file name</p></li>
 <li><p><strong>options</strong> (<em>dict</em>) – Dictionary of default options</p></li>
 </ul>

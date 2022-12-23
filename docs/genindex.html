@@ -41,7 +41,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="readme_link.html">Setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="guidelines.html">General framework</a></li>
-<li class="toctree-l1"><a class="reference internal" href="use_case.html">Use case</a></li>
+<li class="toctree-l1"><a class="reference internal" href="use_case_nb.html">Notebook: use cases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="main_nb.html">Notebook: run model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="calib_nb.html">Notebook: run calibration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_ref.html">API reference</a></li>
@@ -250,10 +250,6 @@
 </li>
       <li><a href="api_ref.html#equilibrium.sub.functions_solver.explicit_qfunc">explicit_qfunc() (in module equilibrium.sub.functions_solver)</a>
 </li>
-      <li><a href="api_ref.html#outputs.export_outputs.export_households">valid_pop_htype_income() (in module outputs.export_outputs)</a>
-</li>
-      <li><a href="api_ref.html#outputs.export_outputs.export_housing_types">valid_pop_housing_type() (in module outputs.export_outputs)</a>
-</li>
       <li><a href="api_ref.html#outputs.export_outputs.export_map">export_map() (in module outputs.export_outputs)</a>
 </li>
   </ul></td>
@@ -428,17 +424,9 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api_ref.html#outputs.export_outputs.plot_average_income">plot_average_income() (in module outputs.export_outputs)</a>
 </li>
-      <li><a href="api_ref.html#outputs.export_outputs_floods.plot_damages">valid_damages() (in module outputs.export_outputs_floods)</a>
-</li>
-      <li><a href="api_ref.html#outputs.export_outputs_floods.plot_flood_severity_distrib">plot_flood_severity_distrib() (in module outputs.export_outputs_floods)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api_ref.html#outputs.export_outputs.plot_housing_demand">valid_housing_demand() (in module outputs.export_outputs)</a>
-</li>
-      <li><a href="api_ref.html#outputs.export_outputs.plot_housing_supply">valid_housing_supply() (in module outputs.export_outputs)</a>
-</li>
-      <li><a href="api_ref.html#outputs.export_outputs.plot_housing_supply_noland">valid_housing_supply_noland() (in module outputs.export_outputs)</a>
+      <li><a href="api_ref.html#outputs.export_outputs_floods.plot_flood_severity_distrib">plot_flood_severity_distrib() (in module outputs.export_outputs_floods)</a>
 </li>
       <li><a href="api_ref.html#outputs.export_outputs.plot_income_net_of_commuting_costs">plot_income_net_of_commuting_costs() (in module outputs.export_outputs)</a>
 </li>
@@ -470,9 +458,11 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api_ref.html#outputs.export_outputs.simulation_density_housing_types">simul_pop_housing_types() (in module outputs.export_outputs)</a>
+      <li><a href="api_ref.html#outputs.export_outputs.simul_pop_housing_types">simul_pop_housing_types() (in module outputs.export_outputs)</a>
 </li>
-      <li><a href="api_ref.html#outputs.export_outputs.simulation_density_income_groups">simul_pop_income_groups() (in module outputs.export_outputs)</a>
+      <li><a href="api_ref.html#outputs.export_outputs.simul_pop_htype_income">simul_pop_htype_income() (in module outputs.export_outputs)</a>
+</li>
+      <li><a href="api_ref.html#outputs.export_outputs.simul_pop_income_groups">simul_pop_income_groups() (in module outputs.export_outputs)</a>
 </li>
       <li><a href="api_ref.html#outputs.export_outputs.simulation_housing_price">simulation_housing_price() (in module outputs.export_outputs)</a>
 </li>
@@ -482,23 +472,31 @@
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api_ref.html#outputs.export_outputs.validate_average_income">validate_average_income() (in module outputs.export_outputs)</a>
+      <li><a href="api_ref.html#outputs.export_outputs_floods.valid_damages">valid_damages() (in module outputs.export_outputs_floods)</a>
 </li>
-      <li><a href="api_ref.html#outputs.export_outputs.validation_density">validation_density() (in module outputs.export_outputs)</a>
+      <li><a href="api_ref.html#outputs.export_outputs.valid_housing_demand">valid_housing_demand() (in module outputs.export_outputs)</a>
 </li>
-      <li><a href="api_ref.html#outputs.export_outputs.validation_density_housing_and_income_groups">simul_pop_htype_income() (in module outputs.export_outputs)</a>
+      <li><a href="api_ref.html#outputs.export_outputs.valid_housing_price">valid_housing_price() (in module outputs.export_outputs)</a>
 </li>
-      <li><a href="api_ref.html#outputs.export_outputs.validation_density_housing_types">valid_pop_housing_types() (in module outputs.export_outputs)</a>
+      <li><a href="api_ref.html#outputs.export_outputs.valid_housing_supply">valid_housing_supply() (in module outputs.export_outputs)</a>
+</li>
+      <li><a href="api_ref.html#outputs.export_outputs.valid_housing_supply_noland">valid_housing_supply_noland() (in module outputs.export_outputs)</a>
+</li>
+      <li><a href="api_ref.html#outputs.export_outputs.valid_pop_housing_type">valid_pop_housing_type() (in module outputs.export_outputs)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api_ref.html#outputs.export_outputs.validation_density_income_groups">valid_pop_income_groups() (in module outputs.export_outputs)</a>
+      <li><a href="api_ref.html#outputs.export_outputs.valid_pop_housing_types">valid_pop_housing_types() (in module outputs.export_outputs)</a>
+</li>
+      <li><a href="api_ref.html#outputs.export_outputs.valid_pop_htype_income">valid_pop_htype_income() (in module outputs.export_outputs)</a>
+</li>
+      <li><a href="api_ref.html#outputs.export_outputs.valid_pop_income_groups">valid_pop_income_groups() (in module outputs.export_outputs)</a>
+</li>
+      <li><a href="api_ref.html#outputs.export_outputs.validation_density">validation_density() (in module outputs.export_outputs)</a>
 </li>
       <li><a href="api_ref.html#outputs.export_outputs_floods.validation_flood">validation_flood() (in module outputs.export_outputs_floods)</a>
 </li>
       <li><a href="api_ref.html#outputs.export_outputs_floods.validation_flood_coastal">validation_flood_coastal() (in module outputs.export_outputs_floods)</a>
-</li>
-      <li><a href="api_ref.html#outputs.export_outputs.validation_housing_price">simulation_housing_price() (in module outputs.export_outputs)</a>
 </li>
   </ul></td>
 </tr></table>

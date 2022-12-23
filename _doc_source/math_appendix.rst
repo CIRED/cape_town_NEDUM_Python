@@ -26,8 +26,8 @@ In the ``import_transport_data`` function (``inputs.data`` module), for a given 
 
 .. literalinclude:: ../inputs/data.py
    :language: python
-   :lines: 1992-1995
-   :lineno-start: 1992
+   :lines: 2022-2025
+   :lineno-start: 2022
 
 Looking into the body of the ``compute_ODflows`` function (``calibration.sub.compute_income`` module), we see that the definitions of the ``transportCostModes`` and ``transportCost`` variables correspond to the above definitions of :math:`t_{mj}(x,c,w_{ic})` and :math:`min_m [t_{mj}(x,c,w_{ic})]`
 
@@ -59,8 +59,8 @@ In the ``import_transport_data`` function, this corresponds to:
 
 .. literalinclude:: ../inputs/data.py
    :language: python
-   :lines: 2034-2042
-   :lineno-start: 2034
+   :lines: 2064-2072
+   :lineno-start: 2064
 
 From there, we calculate the **expected income net of commuting costs** for residents of group :math:`i` living in location :math:`x`:
 
@@ -72,5 +72,5 @@ In the ``import_transport_data`` function, this corresponds to:
 
 .. literalinclude:: ../inputs/data.py
    :language: python
-   :lines: 2067-2069
-   :lineno-start: 2067
+   :lines: 2097-2099
+   :lineno-start: 2097

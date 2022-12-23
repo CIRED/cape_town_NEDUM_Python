@@ -2,29 +2,20 @@
 Data bases
 ==========
 
----------------
-Compulsory data
----------------
+--------------------------
+Data used to run the model
+--------------------------
 
    .. csv-table::
-      :file: tables/compulsory_db.csv
+      :file: tables/equil_db.csv
       :header-rows: 1
       :class: tight-table
 
---------------
-Important data
---------------
+-------------------------
+Data used for calibration
+-------------------------
 
    .. csv-table::
-      :file: tables/important_db.csv
-      :header-rows: 1
-      :class: tight-table
-
--------------
-Optional data
--------------
-
-   .. csv-table::
-      :file: tables/optional_db.csv
+      :file: tables/calib_db.csv
       :header-rows: 1
       :class: tight-table

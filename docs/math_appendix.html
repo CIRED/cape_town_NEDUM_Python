@@ -45,7 +45,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="readme_link.html">Setup</a></li>
 <li class="toctree-l1"><a class="reference internal" href="guidelines.html">General framework</a></li>
-<li class="toctree-l1"><a class="reference internal" href="use_case.html">Use case</a></li>
+<li class="toctree-l1"><a class="reference internal" href="use_case_nb.html">Notebook: use cases</a></li>
 <li class="toctree-l1"><a class="reference internal" href="main_nb.html">Notebook: run model</a></li>
 <li class="toctree-l1"><a class="reference internal" href="calib_nb.html">Notebook: run calibration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_ref.html">API reference</a></li>
@@ -129,10 +129,10 @@
 <li><p><span class="math notranslate nohighlight">\(\textcolor{orange}{\eta_{xcij}}\)</span> also follows a Gumbel minimum distribution of mean <span class="math notranslate nohighlight">\(0\)</span> and scale parameter <span class="math notranslate nohighlight">\(\frac{1}{\lambda}\)</span>.</p></li>
 </ul>
 <p>In the <code class="docutils literal notranslate"><span class="pre">import_transport_data</span></code> function (<code class="docutils literal notranslate"><span class="pre">inputs.data</span></code> module), for a given income group, this is imported with:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1992</span>        <span class="p">(</span><span class="n">transportCostModes</span><span class="p">,</span> <span class="n">transportCost</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">valueMax</span><span class="p">,</span> <span class="n">minIncome</span>
-<span class="linenos">1993</span>         <span class="p">)</span> <span class="o">=</span> <span class="n">calcmp</span><span class="o">.</span><span class="n">compute_ODflows</span><span class="p">(</span>
-<span class="linenos">1994</span>            <span class="n">householdSize</span><span class="p">,</span> <span class="n">monetaryCost</span><span class="p">,</span> <span class="n">costTime</span><span class="p">,</span> <span class="n">incomeCentersGroup</span><span class="p">,</span>
-<span class="linenos">1995</span>            <span class="n">whichCenters</span><span class="p">,</span> <span class="n">param_lambda</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">2022</span>        <span class="p">(</span><span class="n">transportCostModes</span><span class="p">,</span> <span class="n">transportCost</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">valueMax</span><span class="p">,</span> <span class="n">minIncome</span>
+<span class="linenos">2023</span>         <span class="p">)</span> <span class="o">=</span> <span class="n">calcmp</span><span class="o">.</span><span class="n">compute_ODflows</span><span class="p">(</span>
+<span class="linenos">2024</span>            <span class="n">householdSize</span><span class="p">,</span> <span class="n">monetaryCost</span><span class="p">,</span> <span class="n">costTime</span><span class="p">,</span> <span class="n">incomeCentersGroup</span><span class="p">,</span>
+<span class="linenos">2025</span>            <span class="n">whichCenters</span><span class="p">,</span> <span class="n">param_lambda</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Looking into the body of the <code class="docutils literal notranslate"><span class="pre">compute_ODflows</span></code> function (<code class="docutils literal notranslate"><span class="pre">calibration.sub.compute_income</span></code> module), we see that the definitions of the <code class="docutils literal notranslate"><span class="pre">transportCostModes</span></code> and <code class="docutils literal notranslate"><span class="pre">transportCost</span></code> variables correspond to the above definitions of <span class="math notranslate nohighlight">\(t_{mj}(x,c,w_{ic})\)</span> and <span class="math notranslate nohighlight">\(min_m [t_{mj}(x,c,w_{ic})]\)</span></p>
@@ -164,24 +164,24 @@
 <div class="math notranslate nohighlight">
 \[\pi_{c|ix} = \frac{exp[\lambda y_{ic} + log(\sum_{m=1}^{M}exp[-\lambda\chi_i(\tau_m(x,c) + \delta_m(x,c)w_{ic})])]}{\sum_{k=1}^{C} exp[\lambda y_{ik} + log(\sum_{m=1}^{M}exp[-\lambda\chi_i(\tau_m(x,k) + \delta_m(x,k)w_{ik})])]}\]</div>
 <p>In the <code class="docutils literal notranslate"><span class="pre">import_transport_data</span></code> function, this corresponds to:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">2034</span>            <span class="n">ODflows</span><span class="p">[</span><span class="n">whichCenters</span><span class="p">,</span> <span class="p">:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-<span class="linenos">2035</span>                <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>
-<span class="linenos">2036</span>                    <span class="n">param_lambda</span>
-<span class="linenos">2037</span>                    <span class="o">*</span> <span class="p">(</span><span class="n">incomeCentersGroup</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">-</span> <span class="n">transportCost</span><span class="p">))</span>
-<span class="linenos">2038</span>                <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span>
-<span class="linenos">2039</span>                    <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">param_lambda</span>
-<span class="linenos">2040</span>                           <span class="o">*</span> <span class="p">(</span><span class="n">incomeCentersGroup</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">-</span> <span class="n">transportCost</span><span class="p">)),</span>
-<span class="linenos">2041</span>                    <span class="mi">0</span><span class="p">)[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
-<span class="linenos">2042</span>                <span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">2064</span>            <span class="n">ODflows</span><span class="p">[</span><span class="n">whichCenters</span><span class="p">,</span> <span class="p">:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+<span class="linenos">2065</span>                <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>
+<span class="linenos">2066</span>                    <span class="n">param_lambda</span>
+<span class="linenos">2067</span>                    <span class="o">*</span> <span class="p">(</span><span class="n">incomeCentersGroup</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">-</span> <span class="n">transportCost</span><span class="p">))</span>
+<span class="linenos">2068</span>                <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span>
+<span class="linenos">2069</span>                    <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">param_lambda</span>
+<span class="linenos">2070</span>                           <span class="o">*</span> <span class="p">(</span><span class="n">incomeCentersGroup</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">-</span> <span class="n">transportCost</span><span class="p">)),</span>
+<span class="linenos">2071</span>                    <span class="mi">0</span><span class="p">)[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+<span class="linenos">2072</span>                <span class="p">)</span>
 </pre></div>
 </div>
 <p>From there, we calculate the <strong>expected income net of commuting costs</strong> for residents of group <span class="math notranslate nohighlight">\(i\)</span> living in location <span class="math notranslate nohighlight">\(x\)</span>:</p>
 <div class="math notranslate nohighlight">
 \[\tilde{y}_i(x) = E[y_{ic} - min_m(t_m(x,c,w_{ic}))|x]\]</div>
 <p>In the <code class="docutils literal notranslate"><span class="pre">import_transport_data</span></code> function, this corresponds to:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">2067</span>        <span class="n">incomeNetOfCommuting</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span>
-<span class="linenos">2068</span>            <span class="n">ODflows</span><span class="p">[</span><span class="n">whichCenters</span><span class="p">,</span> <span class="p">:,</span> <span class="n">j</span><span class="p">]</span>
-<span class="linenos">2069</span>            <span class="o">*</span> <span class="p">(</span><span class="n">incomeCentersGroup</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">-</span> <span class="n">transportCost</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">2097</span>        <span class="n">incomeNetOfCommuting</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span>
+<span class="linenos">2098</span>            <span class="n">ODflows</span><span class="p">[</span><span class="n">whichCenters</span><span class="p">,</span> <span class="p">:,</span> <span class="n">j</span><span class="p">]</span>
+<span class="linenos">2099</span>            <span class="o">*</span> <span class="p">(</span><span class="n">incomeCentersGroup</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">-</span> <span class="n">transportCost</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
