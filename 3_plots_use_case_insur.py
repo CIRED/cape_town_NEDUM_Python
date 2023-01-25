@@ -780,8 +780,8 @@ for housing_type in housing_types:
         damage_map_compar_shareinc['flood_type_' + housing_type] == 'None',
         'flood_type_' + housing_type
     ] = damage_maps_shareinc['insur_shareinc']['flood_type_' + housing_type]
-    # NB: we take the no-insurance case as a benchmark, since we want to show
-    # surplus damages from no insurance. We'll rely on other maps to show
+    # NB: we take the no-anticipation case as a benchmark, since we want to show
+    # increase damages from no anticipation. We'll rely on other maps to show
     # population moves and composition effects, and the extent to which they
     # explain what we observe
     damage_map_compar_shareinc['nb_households_' + housing_type] = (
@@ -829,7 +829,7 @@ equil_map_compar[list_num_pct] = (
 equil_map_compar['lon'] = geo_grid.lon
 equil_map_compar['lat'] = geo_grid.lat
 
-# NB: Again, we take the no-insurance case as a benchmark, while considering
+# NB: Again, we take the no-anticipation case as a benchmark, while considering
 # the income group of households who left when the area is left unoccupied
 # in the benchmark case
 for housing_type in housing_types:
@@ -929,7 +929,7 @@ fig = px.choropleth_mapbox(
             'damage_informal_pct': '% change (informal)',
             'damage_backyard': 'Informal backyards',
             'damage_backyard_pct': '% change (backyards)'},
-    title='Flood damage surplus from no insurance (in rands, 2011)',
+    title='Flood damage increase from no anticipation (in rands, 2011)',
     color_continuous_scale="Picnic",
     color_continuous_midpoint=0,
     template='plotly_white',
@@ -1024,7 +1024,7 @@ for housing_type in housing_types:
                 'incgroup_' + housing_type: 'Dominant inc. group',
                 'net_income_' + housing_type: 'Net income',
                 'rent_' + housing_type + '_pct': '% change in rent'},
-        title='Flood damage surplus from no insurance in ' + housing_type
+        title='Flood damage increase from no anticipation in ' + housing_type
         + ' housing (as share of net income)',
         color_continuous_scale="Picnic",
         color_continuous_midpoint=0,
@@ -1129,7 +1129,7 @@ fig = px.choropleth_mapbox(
             'backyard_incgroup': 'Inc. group (backyard)',
             'hh_tot': 'Total change', 'hh_tot_pct': '% change',
             'locations': 'Pixel ID'},
-    title='Evolution of number of households under no insurance',
+    title='Evolution of number of households under no anticipation',
     color_continuous_scale="Picnic",
     color_continuous_midpoint=0,
     template='plotly_white',
@@ -1240,7 +1240,7 @@ for housing_type in housing_types:
                     'Content deprec. from floods',
                 'rent_' + housing_type: 'Total change',
                 'rent_' + housing_type + '_pct': '% change'},
-        title='Evolution of annual rent / m² under no insurance in '
+        title='Evolution of annual rent / m² under no anticipation in '
         + housing_type + ' housing (in rands, 2011)',
         color_continuous_scale="Picnic",
         color_continuous_midpoint=0,
@@ -1353,10 +1353,10 @@ for flood in flood_types:
             color='insur',
             labels={'sum_' + flood + '_' + incgroup: 'Share of net income',
                     'nb_households_' + incgroup: 'nb of households',
-                    'insur': 'w/ insurance'},
+                    'insur': 'w/ anticipation'},
             barmode='group',
             hover_data={'sum_' + flood + '_' + incgroup: False},
-            title='Distribution of flood damages among income group '
+            title='Distribution of damages in flood zones among income group '
             + incgroup + ' (as share of net income)',
             template='plotly_white')
 
@@ -1431,10 +1431,10 @@ for flood in flood_types:
             color='insur',
             labels={'content_' + flood + '_' + incgroup: '(o.w. content)',
                     'nb_households_' + incgroup: 'nb of households',
-                    'insur': 'w/ insurance'},
+                    'insur': 'w/ anticipation'},
             barmode='group',
             hover_data={'content_' + flood + '_' + incgroup: False},
-            title='Distribution of flood damages among income group '
+            title='Distribution of damages in flood zones among income group '
             + incgroup + ' (as share of net income)',
             template='plotly_white')
 
@@ -1453,7 +1453,7 @@ for flood in flood_types:
 
 
 # Since we do not allow for substitution effects, income losses from flood
-# damages in the no-insurance case directly translate into a utility loss
+# damages in the no-anticipation case directly translate into a utility loss
 # through an income effect (note that spatial indifference does not hold in
 # this case). Realized utility levels cannot be directly compared however since
 # they only have an ordinal (as opposed to cardinal) meaning.
@@ -1550,10 +1550,10 @@ for flood in flood_types:
 
 # We then do the plots
 
-newnames_noinsur = {'Structures': 'Structures (w/o/ insurance)',
-                    'Contents': 'Contents (w/o/ insurance)'}
-newnames_insur = {'Structures': 'Structures (w/ insurance)',
-                  'Contents': 'Contents (w/ insurance)'}
+newnames_noinsur = {'Structures': 'Structures (w/o/ anticipation)',
+                    'Contents': 'Contents (w/o/ anticipation)'}
+newnames_insur = {'Structures': 'Structures (w/ anticipation)',
+                  'Contents': 'Contents (w/ anticipation)'}
 
 # First for fluvial floods
 
@@ -1565,7 +1565,7 @@ fig_fluvialu_noinsur = px.bar(
     color_discrete_sequence=px.colors.qualitative.Pastel1,
     title='Estimated annual damages from fluvial floods (in M rands, 2011)',
     labels={'index': 'Housing type', 'value': 'Annual damages',
-            'variable': 'Damage type'},
+            'variable': 'Damages'},
     opacity=0.8,
     template='plotly_white')
 
@@ -1585,7 +1585,7 @@ fig_fluvialu_insur = px.bar(
     color_discrete_sequence=px.colors.qualitative.Set1,
     title='Estimated annual damages from fluvial floods (in M rands, 2011)',
     labels={'index': 'Housing type', 'value': 'Annual damages',
-            'variable': 'Damage type'},
+            'variable': 'Damages'},
     opacity=0.8,
     template='plotly_white')
 
@@ -1614,7 +1614,7 @@ fig_pluvial_noinsur = px.bar(
     color_discrete_sequence=px.colors.qualitative.Pastel1,
     title='Estimated annual damages from pluvial floods (in M rands, 2011)',
     labels={'index': 'Housing type', 'value': 'Annual damages',
-            'variable': 'Damage type'},
+            'variable': 'Damages'},
     opacity=0.8,
     template='plotly_white')
 
@@ -1634,7 +1634,7 @@ fig_pluvial_insur = px.bar(
     color_discrete_sequence=px.colors.qualitative.Set1,
     title='Estimated annual damages from pluvial floods (in M rands, 2011)',
     labels={'index': 'Housing type', 'value': 'Annual damages',
-            'variable': 'Damage type'},
+            'variable': 'Damages'},
     opacity=0.8,
     template='plotly_white')
 
@@ -1663,7 +1663,7 @@ fig_coastal_noinsur = px.bar(
     color_discrete_sequence=px.colors.qualitative.Pastel1,
     title='Estimated annual damages from coastal floods (in M rands, 2011)',
     labels={'index': 'Housing type', 'value': 'Annual damages',
-            'variable': 'Damage type'},
+            'variable': 'Damages'},
     opacity=0.8,
     template='plotly_white')
 
@@ -1683,7 +1683,7 @@ fig_coastal_insur = px.bar(
     color_discrete_sequence=px.colors.qualitative.Set1,
     title='Estimated annual damages from coastal floods (in M rands, 2011)',
     labels={'index': 'Housing type', 'value': 'Annual damages',
-            'variable': 'Damage type'},
+            'variable': 'Damages'},
     opacity=0.8,
     template='plotly_white')
 
@@ -1720,7 +1720,7 @@ fig = px.choropleth_mapbox(
     mapbox_style='stamen-terrain',
     opacity=0.5,
     labels={'locations': 'Pixel ID', 'lon': 'Lon.', 'lat': 'Lat.',
-            'flood_deprec_content_formal': '% depreciation'},
+            'flood_deprec_content_formal': 'Deprec. rate'},
     title='Estimated fraction of capital destroyed due to floods'
     + ' (content damages)',
     color_continuous_scale="Reds",

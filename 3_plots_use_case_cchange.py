@@ -798,7 +798,7 @@ for housing_type in housing_types:
     ] = damage_maps_shareinc['cchange_shareinc']['flood_type_' + housing_type]
 
     # NB: we take the cchange case as a benchmark, since we want to show
-    # surplus damages from cchange. We'll rely on other maps to show
+    # increase damages from cchange. We'll rely on other maps to show
     # population moves and composition effects, and the extent to which they
     # explain what we observe.
     damage_map_compar_shareinc['nb_households_cc_' + housing_type] = (
@@ -953,7 +953,7 @@ fig = px.choropleth_mapbox(
             'damage_informal_pct': '% change (informal)',
             'damage_backyard': 'Informal backyards',
             'damage_backyard_pct': '% change (backyards)'},
-    title='Flood damage surplus from climate change (in rands, 2011)',
+    title='Flood damage increase from climate change (in rands, 2011)',
     color_continuous_scale="Picnic",
     color_continuous_midpoint=0,
     template='plotly_white',
@@ -1048,7 +1048,7 @@ for housing_type in housing_types:
                 'incgroup_cc_' + housing_type: 'Inc. group (w/ c.c.)',
                 'net_income_cc_' + housing_type: 'Net income (w/ c.c.)',
                 'rent_' + housing_type + '_pct': 'Rent (% change)'},
-        title='Flood damage surplus from climate change in ' + housing_type
+        title='Flood damage increase from climate change in ' + housing_type
         + ' housing (as share of net income)',
         color_continuous_scale="Picnic",
         color_continuous_midpoint=0,
@@ -1259,9 +1259,9 @@ for housing_type in housing_types:
                 'dwelling_size_' + housing_type + '_pct':
                     'Dwelling size (% change)',
                 'flood_deprec_struct_' + housing_type:
-                    'Struct. deprec. (% change)',
+                    'Struct. deprec. change',
                 'flood_deprec_content_' + housing_type:
-                    'Content deprec. (% change)',
+                    'Content deprec. change',
                 'rent_' + housing_type: 'Rent (total change)',
                 'rent_' + housing_type + '_pct': '% change'},
         title='Evolution of annual rent / m² under climate change in '
@@ -1379,7 +1379,7 @@ for flood in flood_types:
                     'cchange': 'w/ c.change'},
             barmode='group',
             hover_data={'sum_' + flood + '_' + incgroup: False},
-            title='Distribution of flood damages among income group '
+            title='Distribution of damages in flood zones among income group '
             + incgroup + ' (as share of net income)',
             template='plotly_white')
 
@@ -1457,7 +1457,7 @@ for flood in flood_types:
                     'cchange': 'w/ c.change'},
             barmode='group',
             hover_data={'content_' + flood + '_' + incgroup: False},
-            title='Distribution of flood damages among income group '
+            title='Distribution of damages in flood zones among income group '
             + incgroup + ' (as share of net income)',
             template='plotly_white')
 
@@ -1588,7 +1588,7 @@ fig_fluvialu_nocchange = px.bar(
     color_discrete_sequence=px.colors.qualitative.Set1,
     title='Estimated annual damages from fluvial floods (in M rands, 2011)',
     labels={'index': 'Housing type', 'value': 'Annual damages',
-            'variable': 'Damage type'},
+            'variable': 'Damages'},
     opacity=0.8,
     template='plotly_white')
 
@@ -1608,7 +1608,7 @@ fig_fluvialu_cchange = px.bar(
     color_discrete_sequence=px.colors.qualitative.Pastel1,
     title='Estimated annual damages from fluvial floods (in M rands, 2011)',
     labels={'index': 'Housing type', 'value': 'Annual damages',
-            'variable': 'Damage type'},
+            'variable': 'Damages'},
     opacity=0.8,
     template='plotly_white')
 
@@ -1637,7 +1637,7 @@ fig_pluvial_nocchange = px.bar(
     color_discrete_sequence=px.colors.qualitative.Set1,
     title='Estimated annual damages from pluvial floods (in M rands, 2011)',
     labels={'index': 'Housing type', 'value': 'Annual damages',
-            'variable': 'Damage type'},
+            'variable': 'Damages'},
     opacity=0.8,
     template='plotly_white')
 
@@ -1657,7 +1657,7 @@ fig_pluvial_cchange = px.bar(
     color_discrete_sequence=px.colors.qualitative.Pastel1,
     title='Estimated annual damages from pluvial floods (in M rands, 2011)',
     labels={'index': 'Housing type', 'value': 'Annual damages',
-            'variable': 'Damage type'},
+            'variable': 'Damages'},
     opacity=0.8,
     template='plotly_white')
 
@@ -1686,7 +1686,7 @@ fig_coastal_nocchange = px.bar(
     color_discrete_sequence=px.colors.qualitative.Set1,
     title='Estimated annual damages from coastal floods (in M rands, 2011)',
     labels={'index': 'Housing type', 'value': 'Annual damages',
-            'variable': 'Damage type'},
+            'variable': 'Damages'},
     opacity=0.8,
     template='plotly_white')
 
@@ -1706,7 +1706,7 @@ fig_coastal_cchange = px.bar(
     color_discrete_sequence=px.colors.qualitative.Pastel1,
     title='Estimated annual damages from coastal floods (in M rands, 2011)',
     labels={'index': 'Housing type', 'value': 'Annual damages',
-            'variable': 'Damage type'},
+            'variable': 'Damages'},
     opacity=0.8,
     template='plotly_white')
 
@@ -1746,7 +1746,7 @@ fig = px.choropleth_mapbox(
     mapbox_style='stamen-terrain',
     opacity=0.5,
     labels={'locations': 'Pixel ID', 'lon': 'Lon.', 'lat': 'Lat.',
-            'flood_deprec_content_formal': '% depreciation'},
+            'flood_deprec_content_formal': 'Deprec. rate'},
     title='Estimated fraction of capital destroyed due to floods'
     + ' without climate change (content damages)',
     color_continuous_scale="Reds",
@@ -1773,7 +1773,7 @@ fig = px.choropleth_mapbox(
     mapbox_style='stamen-terrain',
     opacity=0.5,
     labels={'locations': 'Pixel ID', 'lon': 'Lon.', 'lat': 'Lat.',
-            'flood_deprec_content_formal': '% depreciation'},
+            'flood_deprec_content_formal': 'Deprec. rate'},
     title='Estimated fraction of capital destroyed due to floods'
     + ' with climate change (content damages)',
     color_continuous_scale="Reds",
@@ -1800,7 +1800,7 @@ fig = px.choropleth_mapbox(
     mapbox_style='stamen-terrain',
     opacity=0.5,
     labels={'locations': 'Pixel ID', 'lon': 'Lon.', 'lat': 'Lat.',
-            'flood_deprec_content_formal': 'Deprec. (% change)'},
+            'flood_deprec_content_formal': 'Deprec. change'},
     title='Estimated change in fraction of capital destroyed due to floods'
     + ' with climate change (content damages)',
     color_continuous_scale="Reds",
@@ -1814,6 +1814,32 @@ fig.write_html(path_maps + "map_fract_K_destroyed_compar.html")
 fig.write_image(path_maps + "map_fract_K_destroyed_compar.png",
                 height=650, width=1000)
 
+equil_map_compar.loc[
+    equil_map_compar['flood_deprec_struct_formal'] == 0,
+    'flood_deprec_struct_formal'] = np.nan
+fig = px.choropleth_mapbox(
+    equil_map_compar,
+    geojson=geo_grid.geometry,
+    locations=geo_grid.index,
+    color='flood_deprec_struct_formal',
+    center={"lat": -33.92345542582841, "lon": 18.434424141913478},
+    zoom=9.25,
+    mapbox_style='stamen-terrain',
+    opacity=0.5,
+    labels={'locations': 'Pixel ID', 'lon': 'Lon.', 'lat': 'Lat.',
+            'flood_deprec_struct_formal': 'Deprec. change'},
+    title='Change in fraction of capital destroyed due to floods'
+    + ' with climate change (formal structure damages)',
+    color_continuous_scale="Reds",
+    template='plotly_white',
+    hover_data={'lon': ':.2f', 'lat': ':.2f',
+                'flood_deprec_struct_formal': ':+.2%'})
+fig.update_layout(margin={"r": 0, "t": 30, "l": 0, "b": 0})
+fig.update_traces(marker_line_width=0)
+# fig.show()
+fig.write_html(path_maps + "map_fract_K_destroyed_compar_FPstruct.html")
+fig.write_image(path_maps + "map_fract_K_destroyed_compar_FPstruct.png",
+                height=650, width=1000)
 
 # We then plot estimated amenity index
 
