@@ -12,7 +12,7 @@ Overview
 Resources
 ---------
 
-Documentation is freely available `here <https://cired.github.io/cape_town_NEDUM_Python/html/index.html>`__.
+Documentation is freely available `here <https://cired.github.io/cape_town_NEDUM_Python/>`__.
 
 The reference working paper used along the documentation is available `here <https://openknowledge.worldbank.org/handle/10986/31987?locale-attribute=fr>`__.
 

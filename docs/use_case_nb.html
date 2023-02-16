@@ -47,13 +47,13 @@
 <li class="toctree-l1"><a class="reference internal" href="guidelines.html">General framework</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Notebook: use cases</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#Flood-risks">Flood risks</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#Insurance-policy">Insurance policy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Anticipations">Anticipations</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#Introduction">Introduction</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#Inputs">Inputs</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#Aggregate-damages">Aggregate damages</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#Spatial-distribution-of-absolute-damages">Spatial distribution of absolute damages</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#Spatial-distribution-of-relative-damages">Spatial distribution of relative damages</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#Summay-welfare-statistics">Summay welfare statistics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Summary-welfare-statistics">Summary welfare statistics</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#Population-moves-and-composition-effect">Population moves and composition effect</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#Spatial-sorting-determinants-and-consumption-adaptation">Spatial sorting determinants and consumption adaptation</a></li>
 </ul>
@@ -63,9 +63,9 @@
 <li class="toctree-l4"><a class="reference internal" href="#id2">Aggregate damages</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#id3">Spatial distribution of absolute damages</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#id4">Spatial distribution of relative damages</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id5">Summay welfare statistics</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id6">Population moves and composition effect</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id7">Spatial sorting determinants and consumption adaptation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Summay-welfare-statistics">Summay welfare statistics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">Population moves and composition effect</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id6">Spatial sorting determinants and consumption adaptation</a></li>
 </ul>
 </li>
 </ul>
@@ -385,6 +385,7 @@ div.rendered_html tbody tr:hover {
 </style>
 <div class="section" id="Notebook:-use-cases">
 <h1>Notebook: use cases<a class="headerlink" href="#Notebook:-use-cases" title="Permalink to this heading"></a></h1>
+<p><strong>Preliminary remark</strong>: note that even if our model allows us to make predictions at a very granular level (500mx500m grid cell), no validation data exists at such a fine level of aggregation. This means that, even though we get good performance when aggregating simulated outcomes at the Small Place (SP) or Small Area Level (SAL), one should be cautious when interpreting results for an isolated grid cell.</p>
 <div class="section" id="Flood-risks">
 <h2>Flood risks<a class="headerlink" href="#Flood-risks" title="Permalink to this heading"></a></h2>
 <div class="nbinput nblast docutils container">
@@ -399,23 +400,23 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-<div class="section" id="Insurance-policy">
-<h3>Insurance policy<a class="headerlink" href="#Insurance-policy" title="Permalink to this heading"></a></h3>
+<div class="section" id="Anticipations">
+<h3>Anticipations<a class="headerlink" href="#Anticipations" title="Permalink to this heading"></a></h3>
 <div class="section" id="Introduction">
 <h4>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this heading"></a></h4>
-<p>Our model allows us to compare two polar cases: one in which agents (both on the supply and demand sides of the housing market) perfectly anticipate flood risks (based on existing global flood maps), and the other where they do not at all take them into account. Note that anticipations here can be understood as a mechanism of self-insurance whereby agents perfectly smooth consumption across states of the world by systematically paying for the expected cost of flood damages in any given year: we
-recall that ours is a static equilibrium model calibrated for baseline year 2011 (for which census data is available).</p>
-<p>It can be shown that self-insurance is a substitute for market insurance: our use case therefore boils down to comparative statics between perfect risk-based insurance - while remaining agnostic about the practical mix of schemes involved - and no insurance. It can also be shown that other ex-ante flood managements strategies - namely zoning and subsidized insurance - are second-best options that are easier to implement and less technically demanding, yet yield similar welfare gains. This adds
-to the generality of our findings.</p>
-<p>We want to make clear from the outset that we do not aim at explicitly modelling insurance choice and/or belief formation, but rather at showing their distributional welfare consequences within an urban economics framework that converges towards a long-run equilibrium. The current reality may be expressed as a convex combination of our two polar cases, and the difference in outcomes between the two should be interpreted as an upper bound on the achievable welfare gains/losses from implementing
-the corresponding policy. Also note that protection investments (either self-provided, market-based, or state-funded) are not modelled here and would require a separate use case, as they act like a complement to insurance.</p>
-<p>That being said, let us dig into the insurance case.</p>
+<p>Our model allows us to compare two polar cases: one in which agents (both on the supply and demand sides of the housing market) perfectly anticipate flood risks (based on existing global flood maps), and another where agents do not at all take flood risks into account in their construction, location, and housing consumption decisions. Note that anticipations here can be understood as a mechanism of self-insurance whereby agents would perfectly smooth consumption across states of the world in a
+given location by systematically facing (and paying for) the <em>expected</em> cost of flood damages in any given year.</p>
+<p>In this use case section, we present the results for the static equilibrium version of the model calibrated for baseline year 2011 (using available census data).</p>
+<p>We want to make clear from the outset that we do not aim to explicitly model belief formation regarding flood risks, but rather show the consequences when agents have information on flood risks and act upon this information, and when they do not have information at all. Note that the reality may be “in between” these two cases, with agents having partial or inaccurate information on flood risks. In a sense, our two polar cases may be interpreted as capturing an upper and a lower bound on agents’
+welfare (because having information on flood risks is preferable to not having information as agents are able to adapt their decisions). Also note that protection investments (either self-provided, market-based, or state-funded) are not modelled in this use case.</p>
+<p>Below, we start by presenting the inputs into the model before running the simulation and showing how floods affect the city and its residents.</p>
 </div>
 <div class="section" id="Inputs">
 <h4>Inputs<a class="headerlink" href="#Inputs" title="Permalink to this heading"></a></h4>
-<p>Our model allows us to distinguish between fluvial, pluvial, and coastal flood risks. Fluvial and pluvial flood risks are based upon FATHOM global flood maps, and coastal flood risks upon DELTARES global flood maps. Those maps are merged with the <em>City of Cape Town</em> (CoCT) analysis grid to obtain estimates of flood-prone area share and maximum flood depth levels for distinct return periods (corresponding to probabilities of ocurrence in any given year), at the grid cell level (500x500m). For
-reference, the climate conditions used to produce the flood maps are the ones prevailing in 2018, which we assume to be roughly in line with the ones prevailing at our baseline year. Also, our geographic units are 30 times bigger than the units used in the raw flood maps, hence we consider them as being of good enough quality for what we define as the “local” level. Then, this information is converted into an expected fraction of capital destroyed, leveraging estimates from the insurance
-literature. This measure varies across damage type (either building structures or good contents stored at home) and building materials (hence housing types) for damages on structures. The spatial distribution of such depreciation rate is shown below for damages on contents (which do not vary across housing types).</p>
+<p>Our model allows us to distinguish between fluvial, pluvial, and coastal flood risks. Fluvial and pluvial flood risks are based upon FATHOM global flood maps, and coastal flood risks upon DELTARES global flood maps. Those risks can either be considered in isolation or consolidated to form an aggregate flood risk where the aggregate flood risk is simply defined as the greatest risk of the three types of flood in a given location. Those flood maps are merged with the <em>City of Cape Town</em> (CoCT)
+analysis grid to obtain estimates (in each 500mx500m cell) of the share of the area that is flood-prone, and of the maximum flood depth levels for distinct return periods (corresponding to probabilities of occurrence in any given year). For reference, the climate conditions used to produce the flood maps are the ones prevailing in 2018, which we assume to be roughly in line with the ones prevailing at our baseline year. Because our geographic units are 30 times bigger than the units used in the
+raw flood maps, the flood data that we use is sufficiently granular to capture flood impacts at the grid cell level. In every cell, the flood data is converted into an <em>expected</em> fraction of capital destroyed, collapsing all return periods into one value, by leveraging estimates from the insurance literature. This measure depends on the damage type (either building structures or contents stored in those buildings). For damages to structures, it varies across housing types (which have different
+building materials). To illustrate this, we represent below the spatial distribution of the <em>expected</em> capital depreciation rate due to damages on contents (which do not vary across housing types) from aggregate flood risks.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
@@ -432,11 +433,13 @@ literature. This measure varies across damage type (either building structures o
 <img alt="_images/use_case_nb_11_0.png" src="_images/use_case_nb_11_0.png" />
 </div>
 </div>
-<p>As could be expected, flood exposure follows the coastline (for coastal flood risks), waterways (for fluvial flood risks), and topological depression areas (for pluvial flood risks). The distribution of its intensity is not obvious a priori however. Note that this is only a first step towards quantifying damages, as their final value also depends on the housing choices made by households: highly exposed but low-density areas such as the West front of the peninsula should feature relatively low
-damages. Also note that the flood maps used to calibrate this variable are so-called “undefended” flood maps. This means that they do not take into account existing infrastructure that may affect the spatial distribution of flood risks (as assessing this dimension on a global scale would provide noisy estimates at best). This is why we prefer to intepret our results in changes, rather than in levels: all else equal (including existing infrastructure), what is the impact of a change on a given
-dimension (for instance, insurance) over outcomes of the model?</p>
-<p>In our model, geography is also defined by several other dimensions, namely land availability per housing type, location-specific amenities (with an added disamenity factor for informal housing), and calibrated income net of commuting costs (accounting for distribution of commuters across job centers for different income groups). Although they do not play a key role in this specific use case, we plot some of them below for reference as they constitute the universe of exogenous factors that
-influence households’ endogenous location decisions.</p>
+<p>As expected, flood exposure follows the coastline (for coastal flood risks), waterways (for fluvial flood risks), and topological depression areas (for pluvial flood risks). The distribution of its intensity is not obvious a priori however. Note that this map of capital depreciation due to floods is only a first step towards quantifying damages, as their final value will also depend on the housing choices made by households. Highly exposed but low-density areas such as the West front of the
+peninsula should feature relatively low total damages. Also note that we used “undefended” flood maps, which do not take into account existing infrastructure that may affect the spatial distribution of flood risks. This is why, in what follows, we prefer to interpret our results in changes, rather than in levels. This will will answer the following question: all else equal (including existing infrastructure), what is the impact of a change on a given dimension (for instance, flood risk
+anticipation) over the outcomes of the model?</p>
+<p>In our model, geography is also defined by several other factors, namely land availability per housing type, location-specific amenities (with an added disamenity factor for informal housing), and income net of commuting costs in each grid cell (accounting for the distribution of commuters across job centers for different income groups). Although they do not play a key role in this specific use case, we plot some of these factors for reference as they influence households’ endogenous location
+decisions: we start with the estimated amenity index, then plot the <em>expected</em> income net of commuting costs for each income group in the model (1 being the poorest and 4 being the richest).</p>
+<p>We would like to underline that, although land availability (not plotted) is purely <strong>exogenous</strong> in the model, amenities and incomes are <strong>calibrated</strong> factors: the amenity index is estimated so as to fit the existence of local exogenous amenities (proximity to the ocean, slope, etc.), and incomes net of commuting costs are estimated so as to fit the exogenous number of jobs in each employment center (185 in the model), according to commuting choice theory. It is worth noting that such
+calibrated incomes do not correspond to observed income levels, but are theoretical constructs informative of agents’ location choices: they correspond to the best income agents could get should they choose to locate in any given area.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
@@ -453,7 +456,7 @@ influence households’ endogenous location decisions.</p>
 <img alt="_images/use_case_nb_14_0.png" src="_images/use_case_nb_14_0.png" />
 </div>
 </div>
-<p>As expected, we find high amenity values in the city centre and in specific areas well-endowed by nature.</p>
+<p>As expected, we find high amenity values in the city centre and in specific areas that are well-endowed by nature.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
@@ -518,12 +521,12 @@ influence households’ endogenous location decisions.</p>
 <img alt="_images/use_case_nb_19_0.png" src="_images/use_case_nb_19_0.png" />
 </div>
 </div>
-<p>As expected from a gravity-like commuting choice model, we find a negative income gradient around job centres, which correspond to heat peakpoints on the maps. Also note that job centre (and income) distribution becomes less dispersed as we climb the job ladder.</p>
-<p>Finally, note that even if our model allows us to make predictions at a very granular level, no validation data exists at such a fine level of aggregation. This means that, even though we get good performance when aggregating outcomes at the Small Place (SP) or Small Area Level (SAL), one should be cautious when interpreting results for an isolated grid cell.</p>
+<p>Due to commuting, the maps show a negative income gradient around job centers, which correspond to heat zones. Also note that relative spatial variations in net income are smaller for the richer groups as commuting represents a lower fraction of their income.</p>
+<p>We now focus on results from simulation of the model, starting with aggregated flood damages. We refer the reader to the technical documentation for a complete review of how the model works.</p>
 </div>
 <div class="section" id="Aggregate-damages">
 <h4>Aggregate damages<a class="headerlink" href="#Aggregate-damages" title="Permalink to this heading"></a></h4>
-<p>We refer the reader to the technical documentation for a complete review of how the model works. Let us focus here on the results in terms of flood damages. We plot below the distribution of aggregate annual damages across housing and damage types, comparing our two polar cases, for each flood type.</p>
+<p>We plot below the distribution of aggregate annual damages across housing and damage types, comparing our two polar cases, for each flood type.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
@@ -572,39 +575,33 @@ influence households’ endogenous location decisions.</p>
 <img alt="_images/use_case_nb_26_0.png" src="_images/use_case_nb_26_0.png" />
 </div>
 </div>
-<p>Several comments are in order. First, damages in formal housing are consistently bigger than in informal housing, and damages on structures also tend to outweigh damages on contents. This is because capital value of informal settlements / backyards is calibrated based on construction costs and is fairly low (hence the relative importance of contents in this category), whereas capital value of formal private housing (that is capital-intensive and can be built on several floors) is endogenously
-determined through supply and demand, and can get pretty high in dense locations. The bulk of overall population lives in formal private housing too, hence the observed results in spite of informal settlements / backyards being less protected from floods. Besides, informal housing dwelling units do not appear to be systematically located in zones with high flood exposure, contrary to what one may think at first. The capital value of formal subsidized housing structures is also calibrated based
-on construction costs but is typically higher than for informal housing. Finally, the population living in formal private housing is essentially made up of households belonging to the two richest income groups, with the two poorest concentrating in the other housing categories. Their higher amount of income available for consumption explains the relative importance of content damages in this category.</p>
-<p>Second, damages are higher in the no-insurance case than in the perfect-insurance case. This is to be expected given optimality conditions. The insurance margin also seems to play a relatively more important role in the formal private housing sector. This can be explained by the fact that it is the least constrained of the housing submarkets, either in terms of available locations, or supply and demand. What is more surprising is the differential role insurance seems to play across flood types.
-Again, this can be interpreted in terms of existing constraints. Pluvial flood zones are typically more dispersed than fluvial or coastal flood zones, hence are harder to avoid (the extensive margin). Independently, coastal flood zones are typically more valuable, hence a floor below which demand would not fall (the intensive margin).</p>
+<p>Several comments are in order. First, damages in formal housing are consistently bigger than in informal housing, and damages on structures also tend to outweigh damages on contents. This is because the replacement cost of informal settlements and backyard structures is <strong>calibrated</strong> based on construction costs and is fairly low (hence the relative importance of contents in this category), whereas the replacement cost of formal private housing is endogenously determined through supply and
+demand: we remind the reader that such housing can be built tall, hence high capital values in dense areas. The results also reflect the fact that the bulk of the population lives in formal private housing, hence the greater damages in formal housing although informal settlements and backyard structures are more vulnerable to floods. Besides, informal housing dwelling units do not appear to be systematically located in zones with high flood exposure. The replacement cost of formal subsidized
+housing structures is also <strong>calibrated</strong> based on construction costs but is typically higher than for informal housing. Finally, the population living in formal private housing is essentially made up of households belonging to the two richest income groups, with the two poorest concentrating in the other housing categories. Their higher amount of income available for consumption explains the relative importance of content damages in this category.</p>
+<p>Second, damages are higher in the no-anticipation case than in the perfect-anticipation case. This is to be expected. Anticipation also seems to play a relatively more important role in avoiding damages in the formal private housing sector. This can be explained by the fact that it is the least constrained of the housing submarkets, either in terms of available locations, or restriction on supply and demand. What is more surprising is the contrasted role anticipation seems to play across flood
+types. Again, this can be interpreted in terms of existing constraints: pluvial flood zones are typically more dispersed than fluvial or coastal flood zones, hence are harder to avoid (the extensive margin). Independently, coastal flood zones are typically more attractive, hence a floor below which demand would not fall.</p>
 <p>Third, damages also significantly vary in their magnitude across flood types:</p>
 <ul class="simple">
-<li><p>Total fluvial damages amount to roughly 280M ZAR (2011) with insurance and 570M ZAR (2011) without insurance (<strong>+104%</strong>)</p></li>
-<li><p>Total pluvial damages amount to roughly 145M ZAR (2011) with insurance and 165M ZAR (2011) without insurance (<strong>+14%</strong>)</p></li>
-<li><p>Total coastal damages amount to roughly 50M ZAR (2011) with insurance and 75M ZAR (2011) without insurance (<strong>+50%</strong>)</p></li>
+<li><p>Total fluvial damages amount to roughly 280M ZAR (2011) with anticipation and 570M ZAR (2011) without anticipation (<strong>+104%</strong>)</p></li>
+<li><p>Total pluvial damages amount to roughly 145M ZAR (2011) with anticipation and 165M ZAR (2011) without anticipation (<strong>+14%</strong>)</p></li>
+<li><p>Total coastal damages amount to roughly 50M ZAR (2011) with anticipation and 75M ZAR (2011) without anticipation (<strong>+50%</strong>)</p></li>
 </ul>
-<p>Using an inflation rate of 64% over the 2011-2021 period, and an exchange rate of 14.78 ZAR/USD, we get the following:</p>
+<p>Using an inflation rate of 64% over the 2011-2021 period, and an exchange rate of 14.78 ZAR/USD, we obtain the following equivalent amounts:</p>
 <ul class="simple">
-<li><p>Total fluvial damages amount to roughly 31M USD (2021) with insurance and 63M USD (2021) without insurance</p></li>
-<li><p>Total pluvial damages amount to roughly 16M USD (2021) with insurance and 18M USD (2021) without insurance</p></li>
-<li><p>Total coastal damages amount to roughly 6M USD (2021) with insurance and 8M USD (2021) without insurance</p></li>
+<li><p>Total fluvial damages amount to roughly 31M USD (2021) with anticipation and 63M USD (2021) without anticipation</p></li>
+<li><p>Total pluvial damages amount to roughly 16M USD (2021) with anticipation and 18M USD (2021) without anticipation</p></li>
+<li><p>Total coastal damages amount to roughly 6M USD (2021) with anticipation and 8M USD (2021) without anticipation</p></li>
 </ul>
-<p>For comparison, a 2021 report by the World Bank (“Flood Risk and Resilience of Coastal Cities in Sub-Saharan Africa”) gives values of 16M USD for rainwater (both fluvial and pluvial) flood damages, and 370,000 USD for coastal flood damages. The difference between the two estimations is essentially a question of methodology. Let us start by saying that, due to partial overlap, an exact estimation of rainwater flood damages cannot just be obtained as the sum of fluvial and pluvial flood damages in
-our case. Taking the maximum between the two in each grid cell, we obtain a value of 389M ZAR (2011) / 43M USD (2021) with insurance, and 675M ZAR (2011) / 75M USD (2021) without insurance (+74%). This is still a substantial overestimation for both flood types, especially coastal.</p>
-<p>Note that the report uses essentially the same flood maps as ours for rainwater flood risks, as well as the same Extreme Sea Level (ESL) inputs for coastal flood risks, albeit not the same Digital Elevation Model (DEM) used to spatialize discrete inputs. This should not generate a dramatic difference however. Urban exposure is based upon 2015 data, which we deem close enough to our 2011 baseline, and all construction is also considered as residential, since this is the most common building type.
-On that point, it is worth noting that both approaches only yield estimates of direct flood costs, and not indirect ones such as transport disruption, business losses, or loss of family income (which are shown to be important in the World Bank 2019 “Lifelines” report).</p>
-<p>Damage vulnerability curves (used to translate maximum flood depth into fraction of capital destroyed) are slightly different, but also in the same range. On that point, we actually think that we are improving on the report’s estimates, since we are using different functions to account for the variety of building materials used in structures, and the separate exposure of house contents. Besides, our depth-damage functions for structures were calibrated for the African context (as in the report),
-and the functions for contents were calibrated for the South African context more specifically, taking into account the cap on damageable share that is advocated for in the report.</p>
-<p>The key difference lies in the way the underlying value of vulnerable assets is estimated. The report uses satellite imagery to determine the extent of urban exposure, and multiplies this area by a (unique) maximum unitary damage value per m². Final damage estimates are then obtained by applying the depth-damage function to this total maximum value in each location . In contrast, urban extent and unitary value of underlying structures and contents are endogenous outcomes in our model: the city
-can be built on several floors, underlying values are heterogeneous, and can become very high in valuable areas. In fact, for a similar urban coverage, we find a total capital value for formal private housing structures that is very close to their estimate of the total exposed capital value of the city: since this is the housing category that drives most of the damages in absolute terms, our differences in results boil down to the way those values are distributed across the city in our model
-(they are typically high along the coast and in some flood-prone zones where there is high demand) and the value of associated contents, which we think is underestimated in the report.</p>
-<p>To give an element of comparison, the maximum unitary damage value they consider in the report (24.6 USD, 2021) is almost the same as the one we calibrate for the capital value of one surface unit of an informal “shack” (23.78 USD, 2021). We think this is too low to reflect the average capital value of the city, and one would find damage values even bigger than our estimates by using the same methodology with a higher reference point, such as the one taken for South Africa in the 2017 JRC
-technical report (“Global flood depth-damage functions”) that they cite (765 EUR, 2010 ; that is 1,018 USD, 2021 with 12% inflation and a 0.845 exchange rate). We therefore consider to be in the middle range.</p>
+<p>For comparison, a 2021 report by the World Bank (“Flood Risk and Resilience of Coastal Cities in Sub-Saharan Africa”) gives estimates of 16M USD for rainwater (both fluvial and pluvial) flood damages, and 370,000 USD for coastal flood damages. The difference between these estimates and ours is essentially a question of methodology. In our case, due to partial overlap, an exact estimation of rainwater flood damages cannot be obtained as the sum of fluvial and pluvial flood damages. Taking the
+maximum between the two in each grid cell (a conservative approach), we obtain an estimate of 389M ZAR (2011) / 43M USD (2021) with anticipations, and 675M ZAR (2011) / 75M USD (2021) without anticipations (+74%). This is still a substantial overestimation for both flood types, especially coastal.</p>
+<p>The key difference lies in the way the replacement cost of vulnerable assets is estimated. The report uses satellite imagery to determine the extent of urban exposure and multiplies this area by a (unique) maximum unitary damage value per m². Final damage estimates are then obtained by applying the depth-damage function to this total maximum value in each location. In contrast, urban extent and replacement cost of underlying structures and contents are endogenous outcomes in our model: the city
+can be built on several floors, underlying capital values are heterogeneous due to construction technology used, and they can become very high in attractive areas. In fact, we find a total replacement cost for formal private housing structures that is very close to the report’s estimate of the total exposed capital value of the city: since this is the housing category that drives most of the damages in absolute terms, the reason our results differ boils down to the way those values are
+distributed across the city in our model (they are typically high along the coast and in some flood-prone zones where there is high demand) and the value of associated contents, which could have been underestimated using the report’s methodology.</p>
 </div>
 <div class="section" id="Spatial-distribution-of-absolute-damages">
 <h4>Spatial distribution of absolute damages<a class="headerlink" href="#Spatial-distribution-of-absolute-damages" title="Permalink to this heading"></a></h4>
-<p>We now look at how those absolute damages are distributed across space.</p>
-<p>First, in the full-insurance case:</p>
+<p>We now look at how absolute damages are distributed across space.</p>
+<p>First, in the perfect-anticipation case:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
@@ -621,7 +618,7 @@ technical report (“Global flood depth-damage functions”) that they cite (765
 <img alt="_images/use_case_nb_33_0.png" src="_images/use_case_nb_33_0.png" />
 </div>
 </div>
-<p>Then, in the no-insurance case:</p>
+<p>Then, in the no-anticipation case:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
@@ -655,18 +652,15 @@ technical report (“Global flood depth-damage functions”) that they cite (765
 <img alt="_images/use_case_nb_37_0.png" src="_images/use_case_nb_37_0.png" />
 </div>
 </div>
-<p>As expected, damages are higher in the no-insurance case. In both cases, their spatial distribution roughly follows the distribution of flood exposure in populated areas (as will be made clear below). Also, the adjustment between the two essentially occurs in fluvial flood zones and some coastal ones, in the formal private sector.</p>
+<p>As expected, damages are higher in the no-anticipation case. In both cases, their spatial distribution roughly follows the distribution of flood exposure in populated areas (as will be made clear below). Also, the adjustment between the two essentially occurs in fluvial flood zones and some coastal ones, in the formal private sector.</p>
 </div>
 <div class="section" id="Spatial-distribution-of-relative-damages">
 <h4>Spatial distribution of relative damages<a class="headerlink" href="#Spatial-distribution-of-relative-damages" title="Permalink to this heading"></a></h4>
-<p>What is not apparent in the above figures are the welfare consequences of flood risks. Due to the spatial indifference condition (that holds in equilibrium), all households belonging to the same income group share a common utility level in the full-insurance case (with higher values as we climb the income ladder). Ex-ante, the same applies to the no-insurance case, with utility levels that are higher for all income groups since households live in a no-flood world. Ex-post, the discovery of the
-flood damages associated with their location and housing choices differentially affects their utilities (which will be typically lower than in the full-insurance case for exposed households): the spatial indifference condition does not hold anymore as we do not allow households to sort again.</p>
-<p>It is worth noting that, since utility is an ordinal (as opposed to cardinal) concept (at least for non-quasilinear functions), we cannot quantitatively interpret the difference in utility levels across scenarios: we may simply say that some households are made worse off or better off, but not by how much. In theory, welfare comparison is done by comparing (consumer) surplus across scenarios. However, this requires to fully back up supply and demand functions, which is often impossible without
-strong assumptions. What is usually done in such case is to come up with an income compensation scheme (either through compensating or equivalent variations) that would make households indifferent across scenarios. Conditional on residential location, (group-specific) income net of commuting costs is a state variable that only affects utility through the budget constraint (as opposed to consumption choices on housing and composite good): we therefore consider it to be the relevant margin for a
-compensation scheme. Still, since we do not have an analytical solution for utilities (which are determined as a simulation outcome), we would need to rewrite a (computationally intensive) algorithm to optimize over the values of income net of commuting costs (that vary across income group and city space) needed to reach a target utility level, given initial conditions.</p>
-<p>Also note that, in this specific case, we would need to compute ex-post utilities that vary at the local level in the no-insurance scenario. Given the granularity of our framework, this is not possible without a significant error margin. Besides, since we consider non-homothetic preferences with taste shocks, change in utilities does not directly identify equivalent (or compensating) variation, but only approximates it up to the first order. Since we are not studying infinitesimal changes here,
-we do not consider it to be a satisfying approximation.</p>
-<p>What we can do instead is to focus on direct welfare impacts through the gain/loss in net income, that abstract from general equilibrium effects (changes in location and consumption choices across scenarios) and only consider damage costs: this is what we plot below for different housing types (that have different flood vulnerability), between the full-insurance (taken as baseline) and the no-insurance cases. General equilibrium effects will be studied separately.</p>
+<p>What is not apparent in the above figures are the welfare consequences of flood risks. In the perfect-anticipation case, due to the spatial indifference condition that holds in equilibrium, all households belonging to the same income group share a common utility level (with higher values as we climb the income ladder). Ex-ante, the same applies to the no-anticipation case, with utility levels that are higher for all income groups since households believe that they live in a no-flood world.
+Ex-post, the discovery of the flood damages associated with their location and housing choices differentially affects their utilities (which will be typically lower than in the perfect-anticipation case for affected households). The spatial indifference condition only holds ex ante but not ex post as we do not allow households to residentially sort again after they have been hit by flood risks.</p>
+<p>It is worth noting that, from a theoretical point of view, the difference in utility levels across scenarios should not be quantitatively interpreted: we may simply say that some households are made worse off or better off comparing across scenarios.</p>
+<p>As a quantitative measure of how households are affected by floods, we report below damage costs as a share of <em>realized</em> net income, comparing the perfect-anticipation and no-anticipation cases. We report results separately for the different housing types (as their vulnerability to floods differs).</p>
+<p>Please note that the maps allow to compare damages in given locations, but the numbers and types of households and dwellings varies in these locations when comparing the perfect-anticipation and no-anticipation cases. We do not show plots for formal subsidized housing as their location is exogenous in our model, hence no changes occur across scenarios.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
@@ -715,16 +709,16 @@ we do not consider it to be a satisfying approximation.</p>
 <img alt="_images/use_case_nb_44_0.png" src="_images/use_case_nb_44_0.png" />
 </div>
 </div>
-<p>We do not show plots for formal subsidized housing as it is exogenous in our model, hence no changes occur across scenarios.</p>
-<p>As expected, flood damage surplus is globally positive in the no-insurance case. The corresponding net income loss globally follows the spatial distribution of total absolute damages for formal private housing, with a relative peak East of the airport where income group 2 (the second poorest) lives, and a relative trough near Rosebank where income group 4 (the richest) lives.</p>
-<p>Households living in formal private housing also seem to suffer the most (in relative terms) from flood damages. This should be nuanced however: although both structure and content damages have been included for the sake of comparability across maps, households living in formal private housing directly pay for content damages only in our model (as damages on structures are internalized by developers who own buildings). Taking only this margin into account, a quick look shows that damage exposure
-is in fact comparable with households living in informal settlements. Still, changes in rents would capture part of structural damages in the formal private sector, so that we can take the damage map as an upper bound in this case.</p>
-<p>Damages concentrate in the area East of Driftsands Nature Reserve for informal settlements, where income group 1 (the poorest) lives and flood risk exposure is important. The same analysis applies for informal backyards located North and South of the reserve (with an order of magnitude below).</p>
-<p>Fluvial flood risks remain the most important damage factor, even in relative terms.</p>
+<p>As expected, the change in flood damages is mostly positive when substracting outcomes in the perfect-anticipation case from outcomes in the no-anticipation case (i.e., flood damages are mostly greater in the no-anticipation case). The corresponding losses (in terms of net income shares) follow the spatial distribution of total absolute damages for formal private housing, with a relative peak East of the airport where income group 2 (the second poorest) lives, and a relative trough near Rosebank
+where income group 4 (the richest) lives.</p>
+<p>Households living in formal private housing also seem to suffer the most (in relative terms) from flood damages. This should be qualified however: although both structure and content damages have been included for the sake of comparability across maps, households living in formal private housing directly only pay for content damages in our model (as damages on structures are internalized by developers). Taking only content damages into account, a quick look shows that relative damage exposure is
+in fact comparable to that of households living in informal settlements. Still, changes in rents would capture part of structural damages in the formal private sector, so that we can take the map displayed for formal private housing as an upper bound on relative damages for the population subgroup who lives in such housing.</p>
+<p>Damages concentrate in the area East of Driftsands Nature Reserve for informal settlements, where income group 1 (the poorest) lives and flood risk exposure is important. The same analysis applies to informal backyard structures located North and South of the reserve (with a lower order of magnitude).</p>
+<p>Fluvial flood risks are the most important damage factor, even in relative terms.</p>
 </div>
-<div class="section" id="Summay-welfare-statistics">
-<h4>Summay welfare statistics<a class="headerlink" href="#Summay-welfare-statistics" title="Permalink to this heading"></a></h4>
-<p>To simplify welfare intepretation of the above, we plot the aggregate distribution of relative flood damages per income group. Since there is a high mass of households who do not live in flood-prone areas, the graphs only consider the subpopulation living in areas with a positive risk. In the interest of space, we only show results for fluvial flood risks (since they are the most impactful).</p>
+<div class="section" id="Summary-welfare-statistics">
+<h4>Summary welfare statistics<a class="headerlink" href="#Summary-welfare-statistics" title="Permalink to this heading"></a></h4>
+<p>Here, we plot the aggregate distribution of relative flood damages per income group. Since there is a high mass of households who do not live in flood-prone areas, the graphs only consider the subpopulation living in areas with a positive risk of floods. In the interest of space, we only show results for fluvial flood risks (since they are the most impactful).</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
@@ -738,7 +732,7 @@ is in fact comparable with households living in informal settlements. Still, cha
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/use_case_nb_49_0.png" src="_images/use_case_nb_49_0.png" />
+<img alt="_images/use_case_nb_48_0.png" src="_images/use_case_nb_48_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -754,7 +748,7 @@ is in fact comparable with households living in informal settlements. Still, cha
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/use_case_nb_50_0.png" src="_images/use_case_nb_50_0.png" />
+<img alt="_images/use_case_nb_49_0.png" src="_images/use_case_nb_49_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -770,7 +764,7 @@ is in fact comparable with households living in informal settlements. Still, cha
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/use_case_nb_51_0.png" src="_images/use_case_nb_51_0.png" />
+<img alt="_images/use_case_nb_50_0.png" src="_images/use_case_nb_50_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -786,32 +780,30 @@ is in fact comparable with households living in informal settlements. Still, cha
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/use_case_nb_52_0.png" src="_images/use_case_nb_52_0.png" />
+<img alt="_images/use_case_nb_51_0.png" src="_images/use_case_nb_51_0.png" />
 </div>
 </div>
-<p>Here is our interpretation:</p>
 <ul class="simple">
-<li><p>Overall exposure to flood risks decreases with income (conditional on income group population), even when flood risks are not taken into account (no-insurance case). This corresponds to the intuition that flood-prone areas are typically low-amenity areas located far from (high) income centres, as public services and economic activity historically developed away from them.</p></li>
-<li><p>More counter-intuitively, the tail of flood vulnerability does not necessarily becomes thinner as income increases. We see that as the outcome of two counteracting forces: on the one hand, the denominator effect of higher income is expected to offset the numerator effect of higher values in exposed structures and contents ; on the other, as marginal utility is decreasing with income, richer households may prove less sensitive to a change in incomes.</p></li>
-<li><p>The very long (but thin) tail of flood damages for income group 1 (with some households losing more than 100% of their income) is due to a few households living in formal subsidized housing that are located in flood-prone areas, as the cost of such housing structures is relatively high (compared to their income or the capital value of an informal “shack”). This is sustained in our model since we assume that all poor households would sort into such housing (when given the choice) due to their
-poor outside options. In practice, this would require the public planner to bail out such households. In any case, this does not affect our comparative statics, which is our key focus here (we recall that formal subsidized housing is exogenous).</p></li>
-<li><p>When including insurance, households typically reduce offset their vulnerability in high-damage brackets by moving to low-damage brackets.</p></li>
+<li><p>Overall exposure to flood risks decreases with income (conditional on income group population), even when flood risks are not taken into account by agents (no-anticipation case). This corresponds to the intuition that flood-prone areas are typically low-amenity areas located far from (high) income centres, as public services and economic activity historically developed away from them.</p></li>
+<li><p>More counter-intuitively, the tail of flood vulnerability does not necessarily become thinner as income increases. This is because, as marginal utility decreases with income, richer households may prove less sensitive to income changes. Hence, they may be willing to consume more, even at the risk of increased destruction.</p></li>
+<li><p>The very long (but thin) tail of flood damages for income group 1 (with some households losing more than 100% of their income) is due to a few households living in formal subsidized housing that are located in flood-prone areas, as the cost of these structures is relatively high (compared to their income). In practice, this would require authorities to bail out such households.</p></li>
+<li><p>When including anticipation, households typically reduce their vulnerability in high-risk flood zones by moving to similar lower-risk flood zones.</p></li>
 </ul>
-<p>This last point corresponds to the intuition we first have about insurance policy being welfare-improving. Although marginal utility of income (and income levels) are not the same for all households within one group, we provide some aggregate statistics to approximate the direct welfare impact of such policy (for fluvial flood risks only):</p>
+<p>More precisely:</p>
 <ul class="simple">
-<li><p>Average damages go from 9.83% of net income (for 104,723 households) to 3.37% (for 87,582 households) for income group 1 (397,395 households in total) between the no-insurance and full-insurance scenarios. Taking the exposed population in the no-insurance case as baseline (to include benefits to households who left flood zones entirely), <strong>this translates into a 7.01% gain in net income for 26% of the group population (or a 1.85% gain overall)</strong>.</p></li>
+<li><p>Average damages go from 9.83% of net income (for 104,723 households) to 3.37% (for 87,582 households) for income group 1 (397,395 households in total) between the no-anticipation and perfect-anticipation scenarios. Taking the exposed population in the no-anticipation case as baseline (to include benefits to households who left flood zones entirely), <strong>this translates into a 7.01% gain in net income for 26% of the group population (or a 1.85% gain overall)</strong>.</p></li>
 <li><p>Average damages go from 2.57% (for 32,789 households) to 0.60% (for 30,363 households) for income group 2 (172,435 households). <strong>This translates into a 2.01% gain in net income for 19% of the group population (or a 0.38% gain overall)</strong>.</p></li>
 <li><p>Average damages go from 3.08% (for 38,620 households) to 1.79% (for 36,593 households) for income group 3 (296,993 households). <strong>This translates into a 1.38% gain in net income for 13% of the group population (or a 0.18% gain overall)</strong>.</p></li>
 <li><p>Average damages go from 1.59% (for 22,624 households) to 0.76% (for 21,192 households) for income group 4 (162,676 households). <strong>This translates into a 0.88% gain in net income for 14% of the group population (or a 0.12% gain overall)</strong>.</p></li>
 </ul>
-<p>As expected, the welfare impact of the insurance policy roughly decreases with income. This would need to be compared to the cost of implementing (at least partially) such policy for a full-fledged cost-benefit analysis.</p>
+<p>As expected, the relative welfare gains associated with anticipations decrease with income.</p>
 </div>
 <div class="section" id="Population-moves-and-composition-effect">
 <h4>Population moves and composition effect<a class="headerlink" href="#Population-moves-and-composition-effect" title="Permalink to this heading"></a></h4>
-<p>As mentioned before, the above says nothing of the mix between extensive and intensive margin responses used to obtain those results. We therefore turn to these, under the understanding that we will only be able to make qualitative statements. Indeed, disentangling between both margins quantitatively would require to follow individual households across scenarios: since we do not know which households would move from a given flood zone to another, we do not know which part of the associated
-damage reduction is due to migration vs. consumption adaptation. We recall that those responses also affect welfare indirectly through general equilibrium effects, although we are not able to make quantitative statements about the relative importance of direct and indirect effects either.</p>
-<p>That being said, let us start with the extensive margin response.</p>
-<p>First, in the full-insurance case:</p>
+<p>As mentioned before, the above says nothing about the mix between location and housing choice responses leading to those results. We therefore turn to these, under the understanding that we will only be able to make qualitative statements. Indeed, disentangling between both types of response would require to follow individual households across scenarios: since we do not know which households would move from a given flood zone to another, we do not know which part of the associated damage
+reduction is due to relocation vs. housing consumption adaptation. Note that those responses also affect welfare indirectly through general equilibrium effects.</p>
+<p>Let us start with the relocation response.</p>
+<p>First, in the perfect-anticipation case:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
@@ -825,10 +817,10 @@ damage reduction is due to migration vs. consumption adaptation. We recall that
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/use_case_nb_59_0.png" src="_images/use_case_nb_59_0.png" />
+<img alt="_images/use_case_nb_58_0.png" src="_images/use_case_nb_58_0.png" />
 </div>
 </div>
-<p>Then, in the no-insurance case:</p>
+<p>Then, in the no-anticipation case:</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
@@ -842,7 +834,7 @@ damage reduction is due to migration vs. consumption adaptation. We recall that
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/use_case_nb_61_0.png" src="_images/use_case_nb_61_0.png" />
+<img alt="_images/use_case_nb_60_0.png" src="_images/use_case_nb_60_0.png" />
 </div>
 </div>
 <p>Finally, comparing the two:</p>
@@ -859,23 +851,21 @@ damage reduction is due to migration vs. consumption adaptation. We recall that
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/use_case_nb_63_0.png" src="_images/use_case_nb_63_0.png" />
+<img alt="_images/use_case_nb_62_0.png" src="_images/use_case_nb_62_0.png" />
 </div>
 </div>
-<p>Compared to previous versions of <em>NEDUM-2D</em>, we manage to predict well the high density in the Cape Flats (mostly through informal settlements in Khayelitsha and the Crossroads, but also formal subsidized housing in Delft and Nyanga), but slightly underestimate the density in the City Bowl. We do have a better fit for in-between neighborhoods however. The maps could be split across income groups or housing types, but we chose to display this information as hover data in the interest of space.</p>
-<p>Regarding the extensive margin response, we see that, when introducing insurance:</p>
+<p>We see that, when introducing anticipations:</p>
 <ul class="simple">
-<li><p>Most ouflows occur in highly vulnerable informal settlements East of Driftsands Nature Reserve (with some areas being completely abandoned), with an isolated move North of Paarlberg Nature Reserve. The effect is more dispersed, but nonetheless important, in formal private housing areas. Most people leaving the Cape Flats belong to income groups 1 and 2, while people from other suburbs tend to belong to income group 3.</p></li>
-<li><p>Inflows are more dispersed across Khayelitsha and in-between neighbourhoods (informal settlements and some formal private housing), plus isolated moves into Stellenbosch, Grabouw, and Atlantis (informal settlements).</p></li>
+<li><p>Most population ouflows occur in highly vulnerable informal settlements East of Driftsands Nature Reserve (with some areas being completely abandoned), with an isolated move North of Paarlberg Nature Reserve. The effect is more dispersed, but nonetheless important, in formal private housing areas. Most people leaving the Cape Flats belong to income groups 1 and 2, while people from other suburbs tend to belong to income group 3.</p></li>
+<li><p>Population inflows are more dispersed across Khayelitsha and in-between neighbourhoods (informal settlements and some formal private housing), plus isolated moves into Stellenbosch, Grabouw, and Atlantis (informal settlements).</p></li>
 </ul>
 <p>Although we cannot follow individual households, here is a tentative interpretation. Poor households (most of them living in informal settlements) are very constrained. Therefore, they may need to move far away from their original locations to offset their losses, hence the high dispersion observed. Richer households, in contrast, may afford to move closer to their original locations.</p>
-<p>Back to the welfare statements, this allows us to state that the extensive margin plays a significant role in observed damage reduction (when introducing insurance) for the two poorest income groups, but less so for the richest ones.</p>
-<p>Also note that, due to the strength of financial constraints, flood risks are rarely big enough to change the income hierarchy of places. Still, it may happen that some income groups replace other ones across scenarios. Since it actually happens in very few flood zones, we do not show this composition effect in the comparison map above (for the sake of readability): we only show hover data for the dominant income group in the no-insurance scenario, and the dominant one in the full-insurance
-scenario only when nobody lives in the area under no insurance. Likewise, in the comparison map showing flood damages as a share of net income (where we just show hover data for the no-insurance case), the value of changes in such places would be biased by this effect: again, this is not key.</p>
+<p>The relocation response plays a significant role in observed damage reduction (when introducing anticipations) for the two poorest income groups, but less so for the richest ones.</p>
 </div>
 <div class="section" id="Spatial-sorting-determinants-and-consumption-adaptation">
 <h4>Spatial sorting determinants and consumption adaptation<a class="headerlink" href="#Spatial-sorting-determinants-and-consumption-adaptation" title="Permalink to this heading"></a></h4>
-<p>Let us now turn to the determinants of observed spatial sorting, which will also explain the intensive margin response in terms of consumption adaptation. To do so, let us look at the evolution of rents across scenarios.</p>
+<p>Let us now turn to the determinants of observed spatial sorting, which will also explain the housing consumption response. To do so, let us look at the change in rents across scenarios.</p>
+<p>NB: We do not plot formal subsidized housing as it rented out / sold for free in the model.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
@@ -889,7 +879,7 @@ scenario only when nobody lives in the area under no insurance. Likewise, in the
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/use_case_nb_69_0.png" src="_images/use_case_nb_69_0.png" />
+<img alt="_images/use_case_nb_67_0.png" src="_images/use_case_nb_67_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -905,7 +895,7 @@ scenario only when nobody lives in the area under no insurance. Likewise, in the
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/use_case_nb_70_0.png" src="_images/use_case_nb_70_0.png" />
+<img alt="_images/use_case_nb_68_0.png" src="_images/use_case_nb_68_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -921,23 +911,22 @@ scenario only when nobody lives in the area under no insurance. Likewise, in the
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/use_case_nb_71_0.png" src="_images/use_case_nb_71_0.png" />
+<img alt="_images/use_case_nb_69_0.png" src="_images/use_case_nb_69_0.png" />
 </div>
 </div>
-<p>Again, we do not plot formal subsidized housing as it rented out / sold for free in the model.</p>
-<p>We see that the areas with the biggest changes in rents roughly correspond to inflow/outflow areas in the Cape Flats and distant suburbs. This makes sense as market rents reflect the willingness to pay of the highest-bidding income groups in the model. As outflow areas typically are high-risk flood zones (compared to inflow areas which typically are not flood zones), this reflects the updated valuations after introducing insurance (note that % change is set equal to zero in hover data when there
-are no households to compare to in one of the scenarios, as in previous maps).</p>
-<p>Flood zones closer to the city center (and in some coastal locations) typically feature smaller (yet significant) changes in rents, even when they are as exposed as zones located farther away. This corresponds to the intuition already mentioned that, since those typically are high-value areas, demand would not fall below a certain level, all the more so as households living there can afford to pay for flood damages. Consequently, they do not showcase substantial population flows. Population
-flows and rent changes sometimes even go in the opposite direction, as some households are willing to take advantage of lower rents. Likewise, if a fall in rent typically translates into a rise in housing consumption, it is not always the case (if households want to save on flood damages, for instance).</p>
-<p>In fact, market rents summarize both extensive and intensive margin responses that interact with each other, hence their tricky interpretation. Still, we can conclude that the intensive margin plays a more important (if ambiguous) role in observed damage reduction (when introducing insurance) for the two richest income groups, compared to the two poorest ones.</p>
+<p>We see that the areas with the biggest changes in rents roughly correspond to population inflow/outflow areas in the Cape Flats and distant suburbs. This makes sense as market rents reflect the willingness to pay of the highest-bidding income groups in the model. As outflow areas typically are high-risk flood zones (compared to inflow areas which typically are not flood zones), this reflects the updated land values after introducing anticipations.</p>
+<p>Flood zones closer to the city center (and in some coastal locations) typically feature smaller (yet significant) changes in rents, even when they are as exposed as zones located farther away. This corresponds to the intuition already mentioned that, since those typically are highly attractive areas, demand would not fall below a certain level, all the more so as households living there can afford to pay for flood damages. Consequently, they do not showcase substantial population flows.
+Population flows and rent changes sometimes even go in the opposite direction, as some households are willing to take advantage of lower rents. Likewise, if a fall in rent typically translates into a rise in housing consumption, it is not always the case (as housing consumption also responds to flood risks).</p>
+<p>In fact, relocation and housing consumption responses simultaneously determine changes in rents, hence the difficulty when trying to disentangle between the two. Still, given the spatial distributions of both population flows and rent changes, it seems that rich households (from income groups 3 and 4) adapt more by relocating, compared to poor households (from income groups 1 and 2) who are less mobile and have to adapt their housing consumption instead of moving to a place less exposed to flood
+risks.</p>
 </div>
 </div>
 <div class="section" id="Climate-change">
 <h3>Climate change<a class="headerlink" href="#Climate-change" title="Permalink to this heading"></a></h3>
 <div class="section" id="id1">
 <h4>Introduction<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h4>
-<p>We now take the full-insurance scenario as our baseline and simulate the effects of climate change. For coastal flood risks, we rely on specific flood maps provided by DELTARES, based upon IPCC’s RCP (Representative Concentration Pathway) 8.5 scenario projected onto 2050. Since FATHOM does not provide similar flood maps for rainwater flood risks, we consider dummy scenarios where we multiply all yearly probabilities by 2 (that is, we divide return periods by 2) for such flood types. Although we
-do not simulate the changes in affected areas in that case, we believe it is a good enough approximation since they are not likely to change much (as is the case when incorporating sea-level rise in coastal flood maps). Then, we picked the likelihood ratio to simulate changes in rainwater flood risks aligned with changes in coastal flood risks. This also appears when plotting the changes in flood capital depreciation, as we show below (for content damages).</p>
+<p>We now take the perfect-anticipation scenario as our baseline and simulate the effects of climate change. For coastal flood risks, we rely on specific flood maps provided by DELTARES, based upon IPCC’s RCP (Representative Concentration Pathway) 8.5 scenario projected onto 2050. Since FATHOM does not provide similar flood maps for rainwater flood risks, we consider dummy scenarios where we multiply all yearly probabilities by 2 (i.e., we divide return periods by 2) for such flood types.</p>
+<p>The below map represents the changes in flood capital depreciation for content damages for illustrative purposes.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
@@ -951,14 +940,14 @@ do not simulate the changes in affected areas in that case, we believe it is a g
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/use_case_nb_77_0.png" src="_images/use_case_nb_77_0.png" />
+<img alt="_images/use_case_nb_74_0.png" src="_images/use_case_nb_74_0.png" />
 </div>
 </div>
-<p>It should be noted that those scenarios are generally thought of as being relatively pessimistic. Also, we are not focusing on the accuracy of climate change predictions per se, but rather on the general trends climate change may generate in the city. As such, we are not too concerned about the choice of our scenarios, as long as they are coherent.</p>
+<p>It should be noted that those scenarios are generally thought of as being relatively pessimistic. Also, we are not focusing on the accuracy of climate change predictions per se, but rather on the general trends climate change may generate in the city.</p>
 </div>
 <div class="section" id="id2">
 <h4>Aggregate damages<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h4>
-<p>As before, we start by plotting aggregate damages per flood type across the two scenarios. Note that we do not consider a climate change scenario without insurance, since we expect it to yield similar patterns as the standard no-insurance case, but with bigger damage values. Besides, we are more specifically interested in how climate change may affect spatial sorting in the long run, which requires agents to take flood risks into account when making their decisions.</p>
+<p>As before, we start by plotting aggregate damages per flood type across the two scenarios. Note that we do not consider a climate change scenario without anticipations, since we expect it to yield similar patterns as the standard no-anticipation case, but with bigger damage values. Besides, we are more specifically interested in how climate change may affect spatial sorting in the long run, which requires agents to take flood risks into account when making their decisions.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
@@ -972,7 +961,7 @@ do not simulate the changes in affected areas in that case, we believe it is a g
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/use_case_nb_81_0.png" src="_images/use_case_nb_81_0.png" />
+<img alt="_images/use_case_nb_78_0.png" src="_images/use_case_nb_78_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -988,7 +977,7 @@ do not simulate the changes in affected areas in that case, we believe it is a g
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/use_case_nb_82_0.png" src="_images/use_case_nb_82_0.png" />
+<img alt="_images/use_case_nb_79_0.png" src="_images/use_case_nb_79_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -1004,10 +993,10 @@ do not simulate the changes in affected areas in that case, we believe it is a g
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/use_case_nb_83_0.png" src="_images/use_case_nb_83_0.png" />
+<img alt="_images/use_case_nb_80_0.png" src="_images/use_case_nb_80_0.png" />
 </div>
 </div>
-<p>First, we observe that the biggest change now occurs for pluvial flood risks, and not fluvial ones. The explanation is the same as before, but reversed: since pluvial flood zones are more spread out, climate change there is harder to avoid. Again, coastal flood zones fall in between as they typically are high-value areas where households prefer to adapt on the intensive rather than the extensive margin.</p>
+<p>First, we observe that the biggest change now occurs for pluvial flood risks, and not fluvial ones. The explanation is the same as before, but reversed: since pluvial flood zones are more spread out, climate change there is harder to avoid. Again, coastal flood zones fall in between as they typically are high-value areas where households prefer to adapt their housing consumption rather than their location choice.</p>
 </div>
 <div class="section" id="id3">
 <h4>Spatial distribution of absolute damages<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h4>
@@ -1025,27 +1014,20 @@ do not simulate the changes in affected areas in that case, we believe it is a g
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/use_case_nb_87_0.png" src="_images/use_case_nb_87_0.png" />
+<img alt="_images/use_case_nb_84_0.png" src="_images/use_case_nb_84_0.png" />
 </div>
 </div>
 <p>We observe that the change across scenarios is more widely spread (but also smaller per unit of land) than in the previous use case (which relates to the above interpretation, as pluvial flood risks are also less severe than fluvial ones).</p>
 </div>
 <div class="section" id="id4">
 <h4>Spatial distribution of relative damages<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h4>
-<p>As before, we also plot the spatial distribution of flood damages as a share of net income, to get an idea of direct welfare effects.</p>
-<p>However, contrary to the previous use case, the spatial indifference condition holds in the two scenarios, hence there is no need to re-compute utilities. As we have seen, comparing the utility levels across scenarios provide a first-order approximation of general equilibrium welfare effects (understood as equivalent variation here). Under climate change, we obtain that:</p>
-<ul class="simple">
-<li><p>Households from income group 1 only see their welfare marginally impacted (in a non-statistically significant way)</p></li>
-<li><p>Households from income group 2 are 0.07% worse off</p></li>
-<li><p>Households from income group 3 are 0.05% worse off</p></li>
-<li><p>Households from income group 4 are 0.05% worse off</p></li>
-</ul>
+<p>Here, the spatial indifference condition holds in both scenarios, hence we can look at the evolution of utility levels under climate change: - Households from income group 1 (excluding formal subsidized housing) only see their welfare marginally impacted (in a non-statistically significant way) - Households from income group 2 are 0.07% worse off - Households from income group 3 are 0.05% worse off - Households from income group 4 are 0.05% worse off</p>
 <p>Several comments are in order:</p>
 <ul class="simple">
-<li><p>The effects are negative, yet very small. This is not to downgrade the overall importance of climate change. This merely points to the fact that, when only considering flood monetary impacts on the housing market, climate change may be a secondary issue <strong>once we allow agents to arbitrage in space</strong>. This means that losses can be minimized once agents adapt to climate change and behave in an optimal way. <strong>However, this says nothing of the time span required to reach such equilibrium</strong>.</p></li>
-<li><p>We also caution the reader against taking those figures at face value. Indeed, we do not know the sign or the magnitude of second-order effects induced by non-homotheticity (households spend a smaller share of their budget on housing when their income increases) and taste shocks (households have idiosyncratic preferences for locations that capture the residual factors needed to obtain a unique equilibrium).</p></li>
-<li><p>Heterogeneous effects across income groups depend on their relative spatial distribution that we are going to study now</p></li>
+<li><p>The effects are negative, yet very small. This points to the fact that, when only considering flood monetary impacts on the housing market, climate change may be a secondary issue <strong>once we allow agents to arbitrage in space</strong>. <strong>However, our static simulations say nothing of the time span required for this adaptation to take place</strong>.</p></li>
+<li><p>Heterogeneous effects across income groups depend on their relative spatial distribution, which we now focus on.</p></li>
 </ul>
+<p>As before, we therefore plot the spatial distribution of flood damages as a share of net income. We remind the reader that such income losses do not directly translate into utility losses (given above).</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
@@ -1059,7 +1041,7 @@ do not simulate the changes in affected areas in that case, we believe it is a g
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/use_case_nb_91_0.png" src="_images/use_case_nb_91_0.png" />
+<img alt="_images/use_case_nb_88_0.png" src="_images/use_case_nb_88_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -1075,7 +1057,7 @@ do not simulate the changes in affected areas in that case, we believe it is a g
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/use_case_nb_92_0.png" src="_images/use_case_nb_92_0.png" />
+<img alt="_images/use_case_nb_89_0.png" src="_images/use_case_nb_89_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -1091,7 +1073,7 @@ do not simulate the changes in affected areas in that case, we believe it is a g
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/use_case_nb_93_0.png" src="_images/use_case_nb_93_0.png" />
+<img alt="_images/use_case_nb_90_0.png" src="_images/use_case_nb_90_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -1107,17 +1089,17 @@ do not simulate the changes in affected areas in that case, we believe it is a g
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/use_case_nb_94_0.png" src="_images/use_case_nb_94_0.png" />
+<img alt="_images/use_case_nb_91_0.png" src="_images/use_case_nb_91_0.png" />
 </div>
 </div>
 <p>Compared to the absolute damage map, we observe a relative peak in formal private relative damages South of Sunset Beach, and a relative trough near Rosebank and Claremont. It is simply because the first zone is populated by households from income group 3 and the second zone by households from income group 4.</p>
 <p>In informal settlements, some damage values increase in Khayelitsha and North of Table Mountain National Park, but the biggest changes occur North of Table Bay Nature Reserve: it is likely that households move from one point to another with close characteristics but less exposed to floods.</p>
-<p>In informal backyards, damage values are globally increasing: they concentrate in Khayelitsha, Delft, and Strand, where households are likely to be restricted in their movements. Another interpretation is that the increase in flood risks is not big enough to reach a tipping point that makes households migrate.</p>
-<p>In formal subsidized housing, households are immobile for sure (and are not taken into account when computing utility levels), and bear a more significant share of flood damages because of the relative importance of structure costs there. Damages are distributed in a similar way as for informal backyards, which suggests that backyarding might be a way for poor households to cope with such increasing costs.</p>
+<p>In informal backyards, damage values are increasing overall: they concentrate in Khayelitsha, Delft, and Strand, where households are likely to be restricted in their movements. Another interpretation is that the increase in flood risks is not large enough to reach a tipping point that makes households migrate.</p>
+<p>In formal subsidized housing, households are immobile, and bear a more significant share of flood damages because of the relative importance of structure costs there. Damages are distributed in a similar way as for informal backyards, which suggests that backyarding might be a way for poor households to cope with such increasing costs.</p>
 </div>
-<div class="section" id="id5">
-<h4>Summay welfare statistics<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h4>
-<p>As before, we plot the aggregate distribution of relative damages, this time for pluvial flood risks, which play the dominant role.</p>
+<div class="section" id="Summay-welfare-statistics">
+<h4>Summay welfare statistics<a class="headerlink" href="#Summay-welfare-statistics" title="Permalink to this heading"></a></h4>
+<p>As before, we plot the aggregate distribution of relative damages, this time for pluvial flood risks, which are dominant.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
@@ -1131,7 +1113,7 @@ do not simulate the changes in affected areas in that case, we believe it is a g
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/use_case_nb_98_0.png" src="_images/use_case_nb_98_0.png" />
+<img alt="_images/use_case_nb_95_0.png" src="_images/use_case_nb_95_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -1147,7 +1129,7 @@ do not simulate the changes in affected areas in that case, we believe it is a g
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/use_case_nb_99_0.png" src="_images/use_case_nb_99_0.png" />
+<img alt="_images/use_case_nb_96_0.png" src="_images/use_case_nb_96_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -1163,7 +1145,7 @@ do not simulate the changes in affected areas in that case, we believe it is a g
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/use_case_nb_100_0.png" src="_images/use_case_nb_100_0.png" />
+<img alt="_images/use_case_nb_97_0.png" src="_images/use_case_nb_97_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -1179,10 +1161,10 @@ do not simulate the changes in affected areas in that case, we believe it is a g
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/use_case_nb_101_0.png" src="_images/use_case_nb_101_0.png" />
+<img alt="_images/use_case_nb_98_0.png" src="_images/use_case_nb_98_0.png" />
 </div>
 </div>
-<p>Compared to fluvial flood risks, there are more households exposed and the thail is both thinner and shorter (if not for formal subsidized housing damages). As expected, we see exposure shifting from low-damage brackets to high-damage brackets when introducing climate change.</p>
+<p>Compared to fluvial flood risks, there are more exposed households and the tail is both thinner and shorter (if not for formal subsidized housing damages). As expected, we see exposure shifting from low-damage brackets to high-damage brackets when introducing climate change.</p>
 <p>We also provide some back-of-the-envelope calculation to approximate the direct welfare impact of climate change (for pluvial flood risks only):</p>
 <ul class="simple">
 <li><p>Average damages go from 0.67% of net income (for 366,265 households) to 1.34% (for 364,492 households) for income group 1 (397,395 households in total) between the no-climate change and the climate change scenarios. Taking the exposed population in the no-climate change case as baseline (to include benefits to households who left flood zones entirely), <strong>this translates into a 0.67% loss in net income for 92% of the group population (or a 0.62% loss overall)</strong>.</p></li>
@@ -1190,11 +1172,10 @@ do not simulate the changes in affected areas in that case, we believe it is a g
 <li><p>Average damages go from 0.10% (for 270,802 households) to 0.20% (for 270,786 households) for income group 3 (296,993 households). <strong>This translates into a 0.10% loss in net income for 91% of the group population (or a 0.09% loss overall)</strong>.</p></li>
 <li><p>Average damages go from 0.07% (for 128,747 households) to 0.13% (for 128,642 households) for income group 4 (162,676 households). <strong>This translates into a 0.07% loss in net income for 79% of the group population (or a 0.05% loss overall)</strong>.</p></li>
 </ul>
-<p>Note how these losses are partly offset through general equilibrium effects if we follow the first-order approximation from last section. Also note that the order of magnitude of both effects is in line (the discrepancy for the poorest income group being due to exogenous formal subsidized dwellers being excluded from endogenous utility level computation).</p>
 </div>
-<div class="section" id="id6">
-<h4>Population moves and composition effect<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h4>
-<p>Let us now dig into the extensive margin response.</p>
+<div class="section" id="id5">
+<h4>Population moves and composition effect<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h4>
+<p>Let us now focus on the relocation response.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
 </pre></div>
@@ -1208,14 +1189,14 @@ do not simulate the changes in affected areas in that case, we believe it is a g
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/use_case_nb_107_0.png" src="_images/use_case_nb_107_0.png" />
+<img alt="_images/use_case_nb_103_0.png" src="_images/use_case_nb_103_0.png" />
 </div>
 </div>
 <p>Main population outflows are spread out in specific locations in Stellenbosch, North of Table Mountain National Park, Athlone, Durbanville, and Bloubergstrand. Inflows concentrate in other areas of Athlone and Bloubergstrand. Overall, migrations remain limited in scope and do not seem to explain a significant share of damage changes under climate change.</p>
 </div>
-<div class="section" id="id7">
-<h4>Spatial sorting determinants and consumption adaptation<a class="headerlink" href="#id7" title="Permalink to this heading"></a></h4>
-<p>Let us now turn to the intensive margin response (again, we do not plot formal subsidized housing).</p>
+<div class="section" id="id6">
+<h4>Spatial sorting determinants and consumption adaptation<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h4>
+<p>Let us now turn to the housing consumption response (again, we do not plot formal subsidized housing).</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
 </pre></div>
@@ -1229,7 +1210,7 @@ do not simulate the changes in affected areas in that case, we believe it is a g
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/use_case_nb_111_0.png" src="_images/use_case_nb_111_0.png" />
+<img alt="_images/use_case_nb_107_0.png" src="_images/use_case_nb_107_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -1245,7 +1226,7 @@ do not simulate the changes in affected areas in that case, we believe it is a g
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/use_case_nb_112_0.png" src="_images/use_case_nb_112_0.png" />
+<img alt="_images/use_case_nb_108_0.png" src="_images/use_case_nb_108_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -1261,15 +1242,15 @@ do not simulate the changes in affected areas in that case, we believe it is a g
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/use_case_nb_113_0.png" src="_images/use_case_nb_113_0.png" />
+<img alt="_images/use_case_nb_109_0.png" src="_images/use_case_nb_109_0.png" />
 </div>
 </div>
-<p>In formal private housing, we observe big changes in rents in Athlone migration areas: households leave flood zones where rents decrease, and go to nearby unexposed places where rents increase. This masks less important (but still relevant) rent decreases East of the City Bowl and around Sunset Beach, following increases in flood risks. Those are not massive emigration areas, and households do seem to increase their housing consumption there: this explains the high damage values in absolute
-terms, at the same time as the low values in relative terms (rich households living there can afford to pay for flood damages). In other areas where rent does not move much, there is actually little response: households merely bear the changes in costs without adapting much.</p>
+<p>In formal private housing, we observe big changes in rents in Athlone migration areas: households leave flood zones where rents decrease, and go to nearby unexposed places where rents increase. This masks less important (but still relevant) rent decreases East of the City Bowl and around Sunset Beach, following increases in flood risks. Those are not massive outmigration areas, and households do seem to increase their housing consumption in those locations. In other areas where rent does not
+change much, households incur the increased costs without relocating much.</p>
 <p>In informal settlements, rent globally decreases, with troughs in Bloubergstrand and Khayelitsha. In the first zone, households move from one place to another so as to mitigate the rise in flood damages (as shown in the relative flood damage map). In the second zone, households do not seem to move much, and the rise in damages is mitigated by the fall in capital value (that is not compensated by a higher housing consumption). This is in line with the intuition that poor households are more
 sensitive to flood damages due to financial constraints.</p>
-<p>Finally, in informal backyards, the fall in rents is more dispersed. Again, there does not seem to be a massive extensive margin response, and households essentially bear the increase in costs.</p>
-<p>All in all, we observe the same types of adaptative behaviour as in the previous use case, with poor households who are more prone to mitigate the increase in flood damages (at the price of relatively bigger welfare loss), and a smaller role for the extensive margin response (compared to the intensive margin).</p>
+<p>Finally, in informal backyards, the fall in rents is more dispersed. Again, there does not seem to be a massive relocation response, and households essentially bear the increase in costs.</p>
+<p>All in all, we observe the same types of adaptative behaviour as in the previous use case, with poor households who are more sensitive to income losses and essentially adapt through housing consumption rather than relocation.</p>
 </div>
 </div>
 </div>
