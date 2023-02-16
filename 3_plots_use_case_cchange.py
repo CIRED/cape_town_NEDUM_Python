@@ -1904,7 +1904,7 @@ fig = px.choropleth_mapbox(
     opacity=0.5,
     labels={'locations': 'Pixel ID', 'lon': 'Lon.', 'lat': 'Lat.',
             '1': 'Net income'},
-    title='Theoretical annual income net of commuting costs for income group 1'
+    title='Estimated annual income net of commuting costs for income group 1'
     + ' (in habitable areas)',
     color_continuous_scale="Reds",
     template='plotly_white',
@@ -1927,7 +1927,7 @@ fig = px.choropleth_mapbox(
     opacity=0.5,
     labels={'locations': 'Pixel ID', 'lon': 'Lon.', 'lat': 'Lat.',
             '2': 'Net income'},
-    title='Theoretical annual income net of commuting costs for income group 2'
+    title='Estimated annual income net of commuting costs for income group 2'
     + ' (in habitable areas)',
     color_continuous_scale="Reds",
     template='plotly_white',
@@ -1950,7 +1950,7 @@ fig = px.choropleth_mapbox(
     opacity=0.5,
     labels={'locations': 'Pixel ID', 'lon': 'Lon.', 'lat': 'Lat.',
             '3': 'Net income'},
-    title='Theoretical annual income net of commuting costs for income group 3'
+    title='Estimated annual income net of commuting costs for income group 3'
     + ' (in habitable areas)',
     color_continuous_scale="Reds",
     template='plotly_white',
@@ -1973,7 +1973,7 @@ fig = px.choropleth_mapbox(
     opacity=0.5,
     labels={'locations': 'Pixel ID', 'lon': 'Lon.', 'lat': 'Lat.',
             '4': 'Net income'},
-    title='Theoretical annual income net of commuting costs for income group 4'
+    title='Estimated annual income net of commuting costs for income group 4'
     + ' (in habitable areas)',
     color_continuous_scale="Reds",
     template='plotly_white',

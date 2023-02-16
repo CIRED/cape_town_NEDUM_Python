@@ -43,7 +43,7 @@ path_floods = path_folder + "flood_maps/"
 
 # WE CREATE DIRECTORIES TO STORE OUTPUTS (IF NEEDED)
 
-path_use_case = path_outputs + 'use_case_insur/'
+path_use_case = path_outputs + 'use_case_anticip/'
 path_maps = path_use_case + 'maps/'
 path_charts = path_use_case + 'charts/'
 path_damage_distrib = path_charts + 'damage_distrib/'
@@ -137,45 +137,45 @@ all_dim = list(itertools.product(*list_dim))
 
 # We store them in a dictionary
 
-dict_damage_map_noinsur = {}
+dict_damage_map_noanticip = {}
 for dim in all_dim:
     table = pd.read_csv(
         path_outputs + list_scenarios[0] + '/tables/floods/'
         + dim[0] + '_' + dim[1] + '_' + dim[2] + '_2d_sim.csv',
         names=['damage'], header=None)
-    dict_damage_map_noinsur[dim[0] + '_' + dim[1] + '_' + dim[2]] = table
+    dict_damage_map_noanticip[dim[0] + '_' + dim[1] + '_' + dim[2]] = table
 
-dict_damage_map_insur = {}
+dict_damage_map_anticip = {}
 for dim in all_dim:
     table = pd.read_csv(
         path_outputs + list_scenarios[1] + '/tables/floods/'
         + dim[0] + '_' + dim[1] + '_' + dim[2] + '_2d_sim.csv',
         names=['damage'], header=None)
-    dict_damage_map_insur[dim[0] + '_' + dim[1] + '_' + dim[2]] = table
+    dict_damage_map_anticip[dim[0] + '_' + dim[1] + '_' + dim[2]] = table
 
-dict_damage_map_noinsur_shareinc = {}
+dict_damage_map_noanticip_shareinc = {}
 for dim in all_dim:
     table = pd.read_csv(
         path_outputs + list_scenarios[0] + '/tables/floods/'
         + dim[0] + '_' + dim[1] + '_' + dim[2] + '_2d_sim_shareinc.csv',
         names=['damage'], header=None)
-    dict_damage_map_noinsur_shareinc[dim[0] +
+    dict_damage_map_noanticip_shareinc[dim[0] +
                                      '_' + dim[1] + '_' + dim[2]] = table
 
-dict_damage_map_insur_shareinc = {}
+dict_damage_map_anticip_shareinc = {}
 for dim in all_dim:
     table = pd.read_csv(
         path_outputs + list_scenarios[1] + '/tables/floods/'
         + dim[0] + '_' + dim[1] + '_' + dim[2] + '_2d_sim_shareinc.csv',
         names=['damage'], header=None)
-    dict_damage_map_insur_shareinc[dim[0] +
+    dict_damage_map_anticip_shareinc[dim[0] +
                                    '_' + dim[1] + '_' + dim[2]] = table
 
 dict_damage_map = {}
-dict_damage_map["noinsur"] = dict_damage_map_noinsur
-dict_damage_map["insur"] = dict_damage_map_insur
-dict_damage_map["noinsur_shareinc"] = dict_damage_map_noinsur_shareinc
-dict_damage_map["insur_shareinc"] = dict_damage_map_insur_shareinc
+dict_damage_map["noanticip"] = dict_damage_map_noanticip
+dict_damage_map["anticip"] = dict_damage_map_anticip
+dict_damage_map["noanticip_shareinc"] = dict_damage_map_noanticip_shareinc
+dict_damage_map["anticip_shareinc"] = dict_damage_map_anticip_shareinc
 
 
 # OTHER EQUILIBRIUM OUTCOMES
@@ -315,9 +315,9 @@ print("Data processing")
 # We build an aggregate damage table to show on the map, and will display all
 # the additional information as hover data
 
-list_maps = ['noinsur', 'insur']
+list_maps = ['noanticip', 'anticip']
 damage_maps = {}
-list_maps_shareinc = ['noinsur_shareinc', 'insur_shareinc']
+list_maps_shareinc = ['noanticip_shareinc', 'anticip_shareinc']
 damage_maps_shareinc = {}
 
 for item in list_maps:
@@ -522,7 +522,7 @@ for item in list_maps_shareinc:
             'flood_type_' + housing_type] = 'coastal'
 
     # We also add some population info to display as hover data
-    if item == 'noinsur_shareinc':
+    if item == 'noanticip_shareinc':
         concat_damage_map['nb_households_formal'] = (
             dict_scenario_outcomes[list_scenarios[0]]['hh_per_htype'][0, :])
         concat_damage_map['nb_households_subsidized'] = (
@@ -558,7 +558,7 @@ for item in list_maps_shareinc:
                 dict_scenario_outcomes[list_scenarios[0]
                                        ]['net_income_' + housing_type])
 
-    elif item == 'insur_shareinc':
+    elif item == 'anticip_shareinc':
         concat_damage_map['nb_households_formal'] = (
             dict_scenario_outcomes[list_scenarios[1]]['hh_per_htype'][0, :])
         concat_damage_map['nb_households_subsidized'] = (
@@ -729,16 +729,16 @@ list_num_pct = ['max_val_pct', 'damage_formal_pct', 'damage_subsidized_pct',
 # We create the table for changes
 damage_map_compar = pd.DataFrame()
 damage_map_compar[list_num_var] = (
-    damage_maps['noinsur'][list_num_var] - damage_maps['insur'][list_num_var])
+    damage_maps['noanticip'][list_num_var] - damage_maps['anticip'][list_num_var])
 damage_map_compar[list_num_pct] = (
-    damage_maps['noinsur'][list_num_var] / damage_maps['insur'][list_num_var]
+    damage_maps['noanticip'][list_num_var] / damage_maps['anticip'][list_num_var]
     - 1)
 damage_map_compar['lon'] = geo_grid.lon
 damage_map_compar['lat'] = geo_grid.lat
-damage_map_compar['flood_type'] = damage_maps['noinsur']['flood_type']
+damage_map_compar['flood_type'] = damage_maps['noanticip']['flood_type']
 damage_map_compar.loc[
     damage_map_compar['flood_type'] == 'None', 'flood_type'
-] = damage_maps['insur']['flood_type']
+] = damage_maps['anticip']['flood_type']
 
 damage_map_compar = damage_map_compar.fillna(0)
 damage_map_compar = damage_map_compar.replace([np.inf, -np.inf], 0)
@@ -764,33 +764,33 @@ list_num_pct = [
 
 damage_map_compar_shareinc = pd.DataFrame()
 damage_map_compar_shareinc[list_num_var] = (
-    damage_maps_shareinc['noinsur_shareinc'][list_num_var]
-    - damage_maps_shareinc['insur_shareinc'][list_num_var])
+    damage_maps_shareinc['noanticip_shareinc'][list_num_var]
+    - damage_maps_shareinc['anticip_shareinc'][list_num_var])
 damage_map_compar_shareinc[list_num_pct] = (
-    damage_maps_shareinc['noinsur_shareinc'][list_num_var] /
-    damage_maps_shareinc['insur_shareinc'][list_num_var]
+    damage_maps_shareinc['noanticip_shareinc'][list_num_var] /
+    damage_maps_shareinc['anticip_shareinc'][list_num_var]
     - 1)
 damage_map_compar_shareinc['lon'] = geo_grid.lon
 damage_map_compar_shareinc['lat'] = geo_grid.lat
 
 for housing_type in housing_types:
     damage_map_compar_shareinc['flood_type_' + housing_type] = (
-        damage_maps_shareinc['noinsur_shareinc']['flood_type_' + housing_type])
+        damage_maps_shareinc['noanticip_shareinc']['flood_type_' + housing_type])
     damage_map_compar_shareinc.loc[
         damage_map_compar_shareinc['flood_type_' + housing_type] == 'None',
         'flood_type_' + housing_type
-    ] = damage_maps_shareinc['insur_shareinc']['flood_type_' + housing_type]
+    ] = damage_maps_shareinc['anticip_shareinc']['flood_type_' + housing_type]
     # NB: we take the no-anticipation case as a benchmark, since we want to show
     # increase damages from no anticipation. We'll rely on other maps to show
     # population moves and composition effects, and the extent to which they
     # explain what we observe
     damage_map_compar_shareinc['nb_households_' + housing_type] = (
-        damage_maps_shareinc['noinsur_shareinc'][
+        damage_maps_shareinc['noanticip_shareinc'][
             'nb_households_' + housing_type])
     damage_map_compar_shareinc['incgroup_' + housing_type] = (
-        damage_maps_shareinc['noinsur_shareinc']['incgroup_' + housing_type])
+        damage_maps_shareinc['noanticip_shareinc']['incgroup_' + housing_type])
     damage_map_compar_shareinc['net_income_' + housing_type] = (
-        damage_maps_shareinc['noinsur_shareinc']['net_income_' + housing_type])
+        damage_maps_shareinc['noanticip_shareinc']['net_income_' + housing_type])
 
 damage_map_compar_shareinc = damage_map_compar_shareinc.fillna(0)
 damage_map_compar_shareinc = damage_map_compar_shareinc.replace(
@@ -942,11 +942,11 @@ fig = px.choropleth_mapbox(
 fig.update_layout(margin={"r": 0, "t": 30, "l": 0, "b": 0})
 fig.update_traces(marker_line_width=0)
 # fig.show()
-fig.write_html(path_maps_abs_damages + "map_damages_compar_insur.html")
-fig.write_image(path_maps_abs_damages + "map_damages_compar_insur.png",
+fig.write_html(path_maps_abs_damages + "map_damages_compar_anticip.html")
+fig.write_image(path_maps_abs_damages + "map_damages_compar_anticip.png",
                 height=650, width=1000)
 
-print("map_damages_compar_insur done")
+print("map_damages_compar_anticip done")
 
 
 # #Then for damages in relative terms
@@ -1046,7 +1046,7 @@ for housing_type in housing_types:
                     + "/map_damages_compar_" + housing_type + ".png",
                     height=650, width=1000)
 
-    print("map_damages_compar_shareinc_insur_" + housing_type + " done")
+    print("map_damages_compar_shareinc_anticip_" + housing_type + " done")
 
 
 # PLOT OTHER EQUILIBRIUM OUTCOMES
@@ -1097,9 +1097,9 @@ for item in list_scenarios:
     # fig.show()
     type_map = ""
     if item == list_scenarios[0]:
-        type_map = "noinsur"
+        type_map = "noanticip"
     elif item == list_scenarios[1]:
-        type_map = "insur"
+        type_map = "anticip"
     fig.write_html(path_maps_pop_distrib + "map_pop_distrib_" + type_map
                    + ".html")
     fig.write_image(path_maps_pop_distrib + "map_pop_distrib_" + type_map
@@ -1147,11 +1147,11 @@ fig = px.choropleth_mapbox(
 fig.update_layout(margin={"r": 0, "t": 30, "l": 0, "b": 0})
 fig.update_traces(marker_line_width=0)
 # fig.show()
-fig.write_html(path_maps_pop_distrib + "map_pop_distrib_compar_insur.html")
-fig.write_image(path_maps_pop_distrib + "map_pop_distrib_compar_insur.png",
+fig.write_html(path_maps_pop_distrib + "map_pop_distrib_compar_anticip.html")
+fig.write_image(path_maps_pop_distrib + "map_pop_distrib_compar_anticip.png",
                 height=650, width=1000)
 
-print("map_pop_distrib_compar_insur done")
+print("map_pop_distrib_compar_anticip done")
 
 
 # Then we plot rent distribution (housing-type-specific)
@@ -1204,9 +1204,9 @@ for housing_type in housing_types:
         # fig.show()
         type_map = ""
         if item == list_scenarios[0]:
-            type_map = "noinsur"
+            type_map = "noanticip"
         elif item == list_scenarios[1]:
-            type_map = "insur"
+            type_map = "anticip"
         fig.write_html(path_maps_rent_distrib + housing_type
                        + "/map_rent_distrib_" + type_map + "_" + housing_type
                        + ".html")
@@ -1258,14 +1258,14 @@ for housing_type in housing_types:
     fig.update_traces(marker_line_width=0)
     # fig.show()
     fig.write_html(path_maps_rent_distrib + housing_type
-                   + "/map_rent_distrib_compar_insur_" + housing_type + ".html"
+                   + "/map_rent_distrib_compar_anticip_" + housing_type + ".html"
                    )
     fig.write_image(path_maps_rent_distrib + housing_type
-                    + "/map_rent_distrib_compar_insur_" + housing_type
+                    + "/map_rent_distrib_compar_anticip_" + housing_type
                     + ".png", height=650, width=1000
                     )
 
-    print("map_rent_distrib_compar_insur_" + housing_type + " done")
+    print("map_rent_distrib_compar_anticip_" + housing_type + " done")
 
 
 # NOW LET US PLOT DAMAGE DISTRIBUTION ACROSS INCOME GROUPS IN ONE DIMENSION
@@ -1278,11 +1278,11 @@ list_incgroup = ['1', '2', '3', '4']
 # housing type
 for item in list_maps_shareinc:
     for incgroup in list_incgroup:
-        if item == 'noinsur_shareinc':
+        if item == 'noanticip_shareinc':
             damage_maps_shareinc[item]['nb_households_' + incgroup] = (
                 dict_scenario_outcomes[list_scenarios[0]]['hh_per_incgroup'][
                     int(incgroup) - 1, :])
-        elif item == 'insur_shareinc':
+        elif item == 'anticip_shareinc':
             damage_maps_shareinc[item]['nb_households_' + incgroup] = (
                 dict_scenario_outcomes[list_scenarios[1]]['hh_per_incgroup'][
                     int(incgroup) - 1, :])
@@ -1319,20 +1319,20 @@ for item in list_maps_shareinc:
 # NB: Write somewhere where the rest of households is (on top of aggregate
 # satistics)!
 
-damage_maps_shareinc['noinsur_shareinc']['insur'] = 'No'
-damage_maps_shareinc['insur_shareinc']['insur'] = 'Yes'
+damage_maps_shareinc['noanticip_shareinc']['anticip'] = 'No'
+damage_maps_shareinc['anticip_shareinc']['anticip'] = 'Yes'
 damage_maps_shareinc_concat = pd.concat(
-    [damage_maps_shareinc['insur_shareinc'],
-     damage_maps_shareinc['noinsur_shareinc']])
+    [damage_maps_shareinc['anticip_shareinc'],
+     damage_maps_shareinc['noanticip_shareinc']])
 
-damage_maps['noinsur']['insur'] = 'No'
-damage_maps['insur']['insur'] = 'Yes'
+damage_maps['noanticip']['anticip'] = 'No'
+damage_maps['anticip']['anticip'] = 'Yes'
 damage_maps_concat = pd.concat(
-    [damage_maps['insur'],
-     damage_maps['noinsur']])
+    [damage_maps['anticip'],
+     damage_maps['noanticip']])
 
-equil_maps[list_scenarios[0]]['insur'] = 'No'
-equil_maps[list_scenarios[1]]['insur'] = 'Yes'
+equil_maps[list_scenarios[0]]['anticip'] = 'No'
+equil_maps[list_scenarios[1]]['anticip'] = 'Yes'
 equil_maps_concat = pd.concat(
     [equil_maps[list_scenarios[1]],
      equil_maps[list_scenarios[0]]])
@@ -1350,10 +1350,10 @@ for flood in flood_types:
                     'sum_' + flood + '_' + incgroup] > 0],
             x='sum_' + flood + '_' + incgroup,
             y='nb_households_' + incgroup,
-            color='insur',
+            color='anticip',
             labels={'sum_' + flood + '_' + incgroup: 'Share of net income',
                     'nb_households_' + incgroup: 'nb of households',
-                    'insur': 'w/ anticipation'},
+                    'anticip': 'w/ anticipation'},
             barmode='group',
             hover_data={'sum_' + flood + '_' + incgroup: False},
             title='Distribution of damages in flood zones among income group '
@@ -1361,66 +1361,66 @@ for flood in flood_types:
             template='plotly_white')
 
         try:
-            noinsur_avg = np.average(
-                damage_maps_shareinc['noinsur_shareinc'].loc[
-                    damage_maps_shareinc['noinsur_shareinc'
+            noanticip_avg = np.average(
+                damage_maps_shareinc['noanticip_shareinc'].loc[
+                    damage_maps_shareinc['noanticip_shareinc'
                                          ]['sum_' + flood + '_' + incgroup]
                     > 0, 'sum_' + flood + '_' + incgroup],
-                weights=damage_maps_shareinc['noinsur_shareinc'].loc[
-                    damage_maps_shareinc['noinsur_shareinc'
+                weights=damage_maps_shareinc['noanticip_shareinc'].loc[
+                    damage_maps_shareinc['noanticip_shareinc'
                                          ]['sum_' + flood + '_' + incgroup]
                     > 0, 'nb_households_' + incgroup]
             )
         except ZeroDivisionError:
-            noinsur_avg = 0
+            noanticip_avg = 0
 
-        noinsur_pop = np.nansum(
-            damage_maps_shareinc['noinsur_shareinc'].loc[
-                damage_maps_shareinc['noinsur_shareinc'
+        noanticip_pop = np.nansum(
+            damage_maps_shareinc['noanticip_shareinc'].loc[
+                damage_maps_shareinc['noanticip_shareinc'
                                      ]['sum_' + flood + '_' + incgroup]
                 > 0, 'nb_households_' + incgroup]
         )
 
         try:
-            insur_avg = np.average(
-                damage_maps_shareinc['insur_shareinc'].loc[
-                    damage_maps_shareinc['insur_shareinc'
+            anticip_avg = np.average(
+                damage_maps_shareinc['anticip_shareinc'].loc[
+                    damage_maps_shareinc['anticip_shareinc'
                                          ]['sum_' + flood + '_' + incgroup]
                     > 0, 'sum_' + flood + '_' + incgroup],
-                weights=damage_maps_shareinc['insur_shareinc'].loc[
-                    damage_maps_shareinc['insur_shareinc'
+                weights=damage_maps_shareinc['anticip_shareinc'].loc[
+                    damage_maps_shareinc['anticip_shareinc'
                                          ]['sum_' + flood + '_' + incgroup]
                     > 0, 'nb_households_' + incgroup]
             )
         except ZeroDivisionError:
-            insur_avg = 0
+            anticip_avg = 0
 
-        insur_pop = np.nansum(
-            damage_maps_shareinc['insur_shareinc'].loc[
-                damage_maps_shareinc['insur_shareinc'
+        anticip_pop = np.nansum(
+            damage_maps_shareinc['anticip_shareinc'].loc[
+                damage_maps_shareinc['anticip_shareinc'
                                      ]['sum_' + flood + '_' + incgroup]
                 > 0, 'nb_households_' + incgroup]
         )
 
-        agg_stat_rel_damages.at[0, 'insur_avg_' + flood + '_' + incgroup
-                                ] = insur_avg
-        agg_stat_rel_damages.at[0, 'noinsur_avg_' + flood + '_' + incgroup
-                                ] = noinsur_avg
-        agg_stat_rel_damages.at[0, 'insur_pop_' + flood + '_' + incgroup
-                                ] = insur_pop
-        agg_stat_rel_damages.at[0, 'noinsur_pop_' + flood + '_' + incgroup
-                                ] = noinsur_pop
+        agg_stat_rel_damages.at[0, 'anticip_avg_' + flood + '_' + incgroup
+                                ] = anticip_avg
+        agg_stat_rel_damages.at[0, 'noanticip_avg_' + flood + '_' + incgroup
+                                ] = noanticip_avg
+        agg_stat_rel_damages.at[0, 'anticip_pop_' + flood + '_' + incgroup
+                                ] = anticip_pop
+        agg_stat_rel_damages.at[0, 'noanticip_pop_' + flood + '_' + incgroup
+                                ] = noanticip_pop
 
         dist_sum.update_layout(
             # xaxis=dict(tickmode='linear', tick0=0, dtick=0.01),
             yaxis_title='Total nb of households'
         )
         dist_sum.write_html(path_damage_distrib_total + flood + "_damage_dist_"
-                            + incgroup + "_insur_sum.html")
+                            + incgroup + "_anticip_sum.html")
         dist_sum.write_image(path_damage_distrib_total + flood
-                             + "_damage_dist_" + incgroup + "_insur_sum.png",
+                             + "_damage_dist_" + incgroup + "_anticip_sum.png",
                              height=650, width=1000)
-        print(flood + "_damage_dist_" + incgroup + "_insur_sum done")
+        print(flood + "_damage_dist_" + incgroup + "_anticip_sum done")
 
         dist_content = px.histogram(
             damage_maps_shareinc_concat.loc[
@@ -1428,10 +1428,10 @@ for flood in flood_types:
                     'content_' + flood + '_' + incgroup] > 0],
             x='content_' + flood + '_' + incgroup,
             y='nb_households_' + incgroup,
-            color='insur',
+            color='anticip',
             labels={'content_' + flood + '_' + incgroup: '(o.w. content)',
                     'nb_households_' + incgroup: 'nb of households',
-                    'insur': 'w/ anticipation'},
+                    'anticip': 'w/ anticipation'},
             barmode='group',
             hover_data={'content_' + flood + '_' + incgroup: False},
             title='Distribution of damages in flood zones among income group '
@@ -1444,12 +1444,12 @@ for flood in flood_types:
         )
         dist_content.write_html(
             path_damage_distrib_content + flood + "_damage_dist_" + incgroup
-            + "_insur_content.html")
+            + "_anticip_content.html")
         dist_content.write_image(
             path_damage_distrib_content + flood + "_damage_dist_" + incgroup
-            + "_insur_content.png", height=650, width=1000)
+            + "_anticip_content.png", height=650, width=1000)
 
-        print(flood + "_damage_dist_" + incgroup + "_insur_content done")
+        print(flood + "_damage_dist_" + incgroup + "_anticip_content done")
 
 
 # Since we do not allow for substitution effects, income losses from flood
@@ -1480,7 +1480,7 @@ for indic in yes_no:
                 dict_agg_damages[
                     indic + '_' + flood + '_' + housing + '_' + damage
                 ] = damage_maps_concat.loc[
-                    damage_maps_concat['insur'] == indic,
+                    damage_maps_concat['anticip'] == indic,
                     flood + '_' + housing + '_' + damage].sum()
 
 for flood in flood_types:
@@ -1498,69 +1498,69 @@ dict_df_agg_damages = {}
 
 for flood in flood_types:
 
-    df_agg_damages_insur = pd.DataFrame()
-    df_agg_damages_insur.at[0, 'Structures'] = (
+    df_agg_damages_anticip = pd.DataFrame()
+    df_agg_damages_anticip.at[0, 'Structures'] = (
         dict_agg_damages['Yes_' + flood + '_formal_structure'])
-    df_agg_damages_insur.at[0, 'Contents'] = (
+    df_agg_damages_anticip.at[0, 'Contents'] = (
         dict_agg_damages['Yes_' + flood + '_formal_content'])
-    df_agg_damages_insur.at[1, 'Structures'] = (
+    df_agg_damages_anticip.at[1, 'Structures'] = (
         dict_agg_damages['Yes_' + flood + '_subsidized_structure'])
-    df_agg_damages_insur.at[1, 'Contents'] = (
+    df_agg_damages_anticip.at[1, 'Contents'] = (
         dict_agg_damages['Yes_' + flood + '_subsidized_content'])
-    df_agg_damages_insur.at[2, 'Structures'] = (
+    df_agg_damages_anticip.at[2, 'Structures'] = (
         dict_agg_damages['Yes_' + flood + '_informal_structure'])
-    df_agg_damages_insur.at[2, 'Contents'] = (
+    df_agg_damages_anticip.at[2, 'Contents'] = (
         dict_agg_damages['Yes_' + flood + '_informal_content'])
-    df_agg_damages_insur.at[3, 'Structures'] = (
+    df_agg_damages_anticip.at[3, 'Structures'] = (
         dict_agg_damages['Yes_' + flood + '_backyard_structure'])
-    df_agg_damages_insur.at[3, 'Contents'] = (
+    df_agg_damages_anticip.at[3, 'Contents'] = (
         dict_agg_damages['Yes_' + flood + '_backyard_content'])
 
-    df_agg_damages_insur.rename(index={
+    df_agg_damages_anticip.rename(index={
         0: 'Formal private', 1: 'Formal subsidized', 2: 'Informal settlements',
         3: 'Informal backyards'}, inplace=True)
-    df_agg_damages_insur = df_agg_damages_insur / 1000000
+    df_agg_damages_anticip = df_agg_damages_anticip / 1000000
 
-    df_agg_damages_noinsur = pd.DataFrame()
-    df_agg_damages_noinsur.at[0, 'Structures'] = (
+    df_agg_damages_noanticip = pd.DataFrame()
+    df_agg_damages_noanticip.at[0, 'Structures'] = (
         dict_agg_damages['No_' + flood + '_formal_structure'])
-    df_agg_damages_noinsur.at[0, 'Contents'] = (
+    df_agg_damages_noanticip.at[0, 'Contents'] = (
         dict_agg_damages['No_' + flood + '_formal_content'])
-    df_agg_damages_noinsur.at[1, 'Structures'] = (
+    df_agg_damages_noanticip.at[1, 'Structures'] = (
         dict_agg_damages['No_' + flood + '_subsidized_structure'])
-    df_agg_damages_noinsur.at[1, 'Contents'] = (
+    df_agg_damages_noanticip.at[1, 'Contents'] = (
         dict_agg_damages['No_' + flood + '_subsidized_content'])
-    df_agg_damages_noinsur.at[2, 'Structures'] = (
+    df_agg_damages_noanticip.at[2, 'Structures'] = (
         dict_agg_damages['No_' + flood + '_informal_structure'])
-    df_agg_damages_noinsur.at[2, 'Contents'] = (
+    df_agg_damages_noanticip.at[2, 'Contents'] = (
         dict_agg_damages['No_' + flood + '_informal_content'])
-    df_agg_damages_noinsur.at[3, 'Structures'] = (
+    df_agg_damages_noanticip.at[3, 'Structures'] = (
         dict_agg_damages['No_' + flood + '_backyard_structure'])
-    df_agg_damages_noinsur.at[3, 'Contents'] = (
+    df_agg_damages_noanticip.at[3, 'Contents'] = (
         dict_agg_damages['No_' + flood + '_backyard_content'])
 
-    df_agg_damages_noinsur.rename(index={
+    df_agg_damages_noanticip.rename(index={
         0: 'Formal private', 1: 'Formal subsidized', 2: 'Informal settlements',
         3: 'Informal backyards'}, inplace=True)
-    df_agg_damages_noinsur = df_agg_damages_noinsur / 1000000
+    df_agg_damages_noanticip = df_agg_damages_noanticip / 1000000
 
-    dict_df_agg_damages[flood + '_insur'] = df_agg_damages_insur
-    dict_df_agg_damages[flood + '_noinsur'] = df_agg_damages_noinsur
+    dict_df_agg_damages[flood + '_anticip'] = df_agg_damages_anticip
+    dict_df_agg_damages[flood + '_noanticip'] = df_agg_damages_noanticip
 
 
 # We then do the plots
 
-newnames_noinsur = {'Structures': 'Structures (w/o/ anticipation)',
+newnames_noanticip = {'Structures': 'Structures (w/o/ anticipation)',
                     'Contents': 'Contents (w/o/ anticipation)'}
-newnames_insur = {'Structures': 'Structures (w/ anticipation)',
+newnames_anticip = {'Structures': 'Structures (w/ anticipation)',
                   'Contents': 'Contents (w/ anticipation)'}
 
 # First for fluvial floods
 
-fig_fluvialu_noinsur = px.bar(
-    dict_df_agg_damages['fluvialu_noinsur'],
-    x=dict_df_agg_damages['fluvialu_noinsur'].index,
-    y=dict_df_agg_damages['fluvialu_noinsur'].columns,
+fig_fluvialu_noanticip = px.bar(
+    dict_df_agg_damages['fluvialu_noanticip'],
+    x=dict_df_agg_damages['fluvialu_noanticip'].index,
+    y=dict_df_agg_damages['fluvialu_noanticip'].columns,
     barmode='group',
     color_discrete_sequence=px.colors.qualitative.Pastel1,
     title='Estimated annual damages from fluvial floods (in M rands, 2011)',
@@ -1569,18 +1569,18 @@ fig_fluvialu_noinsur = px.bar(
     opacity=0.8,
     template='plotly_white')
 
-fig_fluvialu_noinsur.for_each_trace(
+fig_fluvialu_noanticip.for_each_trace(
     lambda t: t.update(
-        name=newnames_noinsur[t.name],
-        legendgroup=newnames_noinsur[t.name],
+        name=newnames_noanticip[t.name],
+        legendgroup=newnames_noanticip[t.name],
         hovertemplate=t.hovertemplate.replace(
-         t.name, newnames_noinsur[t.name])
+         t.name, newnames_noanticip[t.name])
     ))
 
-fig_fluvialu_insur = px.bar(
-    dict_df_agg_damages['fluvialu_insur'],
-    x=dict_df_agg_damages['fluvialu_insur'].index,
-    y=dict_df_agg_damages['fluvialu_insur'].columns,
+fig_fluvialu_anticip = px.bar(
+    dict_df_agg_damages['fluvialu_anticip'],
+    x=dict_df_agg_damages['fluvialu_anticip'].index,
+    y=dict_df_agg_damages['fluvialu_anticip'].columns,
     barmode='group',
     color_discrete_sequence=px.colors.qualitative.Set1,
     title='Estimated annual damages from fluvial floods (in M rands, 2011)',
@@ -1589,27 +1589,27 @@ fig_fluvialu_insur = px.bar(
     opacity=0.8,
     template='plotly_white')
 
-fig_fluvialu_insur.for_each_trace(
+fig_fluvialu_anticip.for_each_trace(
     lambda t: t.update(
-        name=newnames_insur[t.name],
-        legendgroup=newnames_insur[t.name],
+        name=newnames_anticip[t.name],
+        legendgroup=newnames_anticip[t.name],
         hovertemplate=t.hovertemplate.replace(
-         t.name, newnames_insur[t.name])
+         t.name, newnames_anticip[t.name])
     ))
 
-fig_fluvialu = go.Figure(fig_fluvialu_noinsur)
-fig_fluvialu = fig_fluvialu.add_traces(fig_fluvialu_insur.data)
+fig_fluvialu = go.Figure(fig_fluvialu_noanticip)
+fig_fluvialu = fig_fluvialu.add_traces(fig_fluvialu_anticip.data)
 # fig_fluvialu.show()
-fig_fluvialu.write_html(path_charts + "fluvialu_sim_damage_sum_insur.html")
-fig_fluvialu.write_image(path_charts + "fluvialu_sim_damage_sum_insur.png",
+fig_fluvialu.write_html(path_charts + "fluvialu_sim_damage_sum_anticip.html")
+fig_fluvialu.write_image(path_charts + "fluvialu_sim_damage_sum_anticip.png",
                          height=650, width=1000)
 
 # Then for pluvial floods
 
-fig_pluvial_noinsur = px.bar(
-    dict_df_agg_damages['pluvial_noinsur'],
-    x=dict_df_agg_damages['pluvial_noinsur'].index,
-    y=dict_df_agg_damages['pluvial_noinsur'].columns,
+fig_pluvial_noanticip = px.bar(
+    dict_df_agg_damages['pluvial_noanticip'],
+    x=dict_df_agg_damages['pluvial_noanticip'].index,
+    y=dict_df_agg_damages['pluvial_noanticip'].columns,
     barmode='group',
     color_discrete_sequence=px.colors.qualitative.Pastel1,
     title='Estimated annual damages from pluvial floods (in M rands, 2011)',
@@ -1618,18 +1618,18 @@ fig_pluvial_noinsur = px.bar(
     opacity=0.8,
     template='plotly_white')
 
-fig_pluvial_noinsur.for_each_trace(
+fig_pluvial_noanticip.for_each_trace(
     lambda t: t.update(
-        name=newnames_noinsur[t.name],
-        legendgroup=newnames_noinsur[t.name],
+        name=newnames_noanticip[t.name],
+        legendgroup=newnames_noanticip[t.name],
         hovertemplate=t.hovertemplate.replace(
-         t.name, newnames_noinsur[t.name])
+         t.name, newnames_noanticip[t.name])
     ))
 
-fig_pluvial_insur = px.bar(
-    dict_df_agg_damages['pluvial_insur'],
-    x=dict_df_agg_damages['pluvial_insur'].index,
-    y=dict_df_agg_damages['pluvial_insur'].columns,
+fig_pluvial_anticip = px.bar(
+    dict_df_agg_damages['pluvial_anticip'],
+    x=dict_df_agg_damages['pluvial_anticip'].index,
+    y=dict_df_agg_damages['pluvial_anticip'].columns,
     barmode='group',
     color_discrete_sequence=px.colors.qualitative.Set1,
     title='Estimated annual damages from pluvial floods (in M rands, 2011)',
@@ -1638,27 +1638,27 @@ fig_pluvial_insur = px.bar(
     opacity=0.8,
     template='plotly_white')
 
-fig_pluvial_insur.for_each_trace(
+fig_pluvial_anticip.for_each_trace(
     lambda t: t.update(
-        name=newnames_insur[t.name],
-        legendgroup=newnames_insur[t.name],
+        name=newnames_anticip[t.name],
+        legendgroup=newnames_anticip[t.name],
         hovertemplate=t.hovertemplate.replace(
-         t.name, newnames_insur[t.name])
+         t.name, newnames_anticip[t.name])
     ))
 
-fig_pluvial = go.Figure(fig_pluvial_noinsur)
-fig_pluvial = fig_pluvial.add_traces(fig_pluvial_insur.data)
+fig_pluvial = go.Figure(fig_pluvial_noanticip)
+fig_pluvial = fig_pluvial.add_traces(fig_pluvial_anticip.data)
 # fig_pluvial.show()
-fig_pluvial.write_html(path_charts + "pluvial_sim_damage_sum_insur.html")
-fig_pluvial.write_image(path_charts + "pluvial_sim_damage_sum_insur.png",
+fig_pluvial.write_html(path_charts + "pluvial_sim_damage_sum_anticip.html")
+fig_pluvial.write_image(path_charts + "pluvial_sim_damage_sum_anticip.png",
                         height=650, width=1000)
 
 # Finally for coastal floods
 
-fig_coastal_noinsur = px.bar(
-    dict_df_agg_damages['coastal_noinsur'],
-    x=dict_df_agg_damages['coastal_noinsur'].index,
-    y=dict_df_agg_damages['coastal_noinsur'].columns,
+fig_coastal_noanticip = px.bar(
+    dict_df_agg_damages['coastal_noanticip'],
+    x=dict_df_agg_damages['coastal_noanticip'].index,
+    y=dict_df_agg_damages['coastal_noanticip'].columns,
     barmode='group',
     color_discrete_sequence=px.colors.qualitative.Pastel1,
     title='Estimated annual damages from coastal floods (in M rands, 2011)',
@@ -1667,18 +1667,18 @@ fig_coastal_noinsur = px.bar(
     opacity=0.8,
     template='plotly_white')
 
-fig_coastal_noinsur.for_each_trace(
+fig_coastal_noanticip.for_each_trace(
     lambda t: t.update(
-        name=newnames_noinsur[t.name],
-        legendgroup=newnames_noinsur[t.name],
+        name=newnames_noanticip[t.name],
+        legendgroup=newnames_noanticip[t.name],
         hovertemplate=t.hovertemplate.replace(
-         t.name, newnames_noinsur[t.name])
+         t.name, newnames_noanticip[t.name])
     ))
 
-fig_coastal_insur = px.bar(
-    dict_df_agg_damages['coastal_insur'],
-    x=dict_df_agg_damages['coastal_insur'].index,
-    y=dict_df_agg_damages['coastal_insur'].columns,
+fig_coastal_anticip = px.bar(
+    dict_df_agg_damages['coastal_anticip'],
+    x=dict_df_agg_damages['coastal_anticip'].index,
+    y=dict_df_agg_damages['coastal_anticip'].columns,
     barmode='group',
     color_discrete_sequence=px.colors.qualitative.Set1,
     title='Estimated annual damages from coastal floods (in M rands, 2011)',
@@ -1687,19 +1687,19 @@ fig_coastal_insur = px.bar(
     opacity=0.8,
     template='plotly_white')
 
-fig_coastal_insur.for_each_trace(
+fig_coastal_anticip.for_each_trace(
     lambda t: t.update(
-        name=newnames_insur[t.name],
-        legendgroup=newnames_insur[t.name],
+        name=newnames_anticip[t.name],
+        legendgroup=newnames_anticip[t.name],
         hovertemplate=t.hovertemplate.replace(
-         t.name, newnames_insur[t.name])
+         t.name, newnames_anticip[t.name])
     ))
 
-fig_coastal = go.Figure(fig_coastal_noinsur)
-fig_coastal = fig_coastal.add_traces(fig_coastal_insur.data)
+fig_coastal = go.Figure(fig_coastal_noanticip)
+fig_coastal = fig_coastal.add_traces(fig_coastal_anticip.data)
 # fig_coastal.show()
-fig_coastal.write_html(path_charts + "coastal_sim_damage_sum_insur.html")
-fig_coastal.write_image(path_charts + "coastal_sim_damage_sum_insur.png",
+fig_coastal.write_html(path_charts + "coastal_sim_damage_sum_anticip.html")
+fig_coastal.write_image(path_charts + "coastal_sim_damage_sum_anticip.png",
                         height=650, width=1000)
 
 
@@ -1797,7 +1797,7 @@ fig = px.choropleth_mapbox(
     opacity=0.5,
     labels={'locations': 'Pixel ID', 'lon': 'Lon.', 'lat': 'Lat.',
             '1': 'Net income'},
-    title='Theoretical annual income net of commuting costs for income group 1'
+    title='Estimated annual income net of commuting costs for income group 1'
     + ' (in habitable areas)',
     color_continuous_scale="Reds",
     template='plotly_white',
@@ -1905,11 +1905,11 @@ equil_maps_concat.to_csv(path_use_case + 'equil_maps_concat.csv')
 equil_map_compar.to_csv(path_use_case + 'equil_map_compar.csv')
 agg_stat_rel_damages.to_csv(path_use_case + 'agg_stat_rel_damages.csv')
 
-utility_noinsur = pd.DataFrame(
+utility_noanticip = pd.DataFrame(
     dict_scenario_outcomes[list_scenarios[0]]['utility'])
-utility_insur = pd.DataFrame(
+utility_anticip = pd.DataFrame(
     dict_scenario_outcomes[list_scenarios[1]]['utility'])
-utility_noinsur.to_csv(
-    path_use_case + 'utility_noinsur.csv')
-utility_insur.to_csv(
-    path_use_case + 'utility_insur.csv')
+utility_noanticip.to_csv(
+    path_use_case + 'utility_noanticip.csv')
+utility_anticip.to_csv(
+    path_use_case + 'utility_anticip.csv')
