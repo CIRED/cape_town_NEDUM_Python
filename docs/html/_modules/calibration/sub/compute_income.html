@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>calibration.sub.compute_income &mdash; NEDUM-2D for CoCT  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> NEDUM-2D for CoCT
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme_link.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../guidelines.html">General framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../use_case_nb.html">Notebook: use cases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../main_nb.html">Notebook: run model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../calib_nb.html">Notebook: run calibration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api_ref.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../technical_doc.html">Technical documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../appendix.html">Appendix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../bibliography.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../license_rst.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">NEDUM-2D for CoCT</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>calibration.sub.compute_income</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for calibration.sub.compute_income</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.io</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">math</span>
+
+
+<div class="viewcode-block" id="import_transport_costs"><a class="viewcode-back" href="../../../api_ref.html#calibration.sub.compute_income.import_transport_costs">[docs]</a><span class="k">def</span> <span class="nf">import_transport_costs</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">yearTraffic</span><span class="p">,</span>
+                           <span class="n">households_per_income_class</span><span class="p">,</span>
+                           <span class="n">spline_inflation</span><span class="p">,</span> <span class="n">spline_fuel</span><span class="p">,</span>
+                           <span class="n">spline_population_income_distribution</span><span class="p">,</span>
+                           <span class="n">spline_income_distribution</span><span class="p">,</span> <span class="n">path_precalc_inp</span><span class="p">,</span>
+                           <span class="n">path_precalc_transp</span><span class="p">,</span> <span class="n">dim</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute monetary and time costs from commuting for some given year.</span>
+
+<span class="sd">    This function leverages the CoCT&#39;s EMME/2 transport model for inputs.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    grid : DataFrame</span>
+<span class="sd">        Table yielding, for each grid cell (24,014), its x and y</span>
+<span class="sd">        (centroid) coordinates, and its distance (in km) to the city</span>
+<span class="sd">    param : dict</span>
+<span class="sd">        Dictionary of default parameters</span>
+<span class="sd">    yearTraffic : int</span>
+<span class="sd">        Year for which we want to run the function</span>
+<span class="sd">    households_per_income_class : ndarray(float64)</span>
+<span class="sd">        Exogenous total number of households per income group (excluding people</span>
+<span class="sd">        out of employment, for 4 groups)</span>
+<span class="sd">    spline_inflation : interp1d</span>
+<span class="sd">        Linear interpolation for inflation rate (in base 100 relative to</span>
+<span class="sd">        baseline year) over the years (baseline year set at 0)</span>
+<span class="sd">    spline_fuel : interp1d</span>
+<span class="sd">        Linear interpolation for fuel price (in rands per km)</span>
+<span class="sd">        over the years (baseline year set at 0)</span>
+<span class="sd">    spline_population_income_distribution : interp1d</span>
+<span class="sd">        Linear interpolation for total population per income group in the data</span>
+<span class="sd">        (12) over the years (baseline year set at 0)</span>
+<span class="sd">    spline_income_distribution : interp1d</span>
+<span class="sd">        Linear interpolation for median annual income (in rands) per income</span>
+<span class="sd">        group in the data (12) over the years (baseline year set at 0)</span>
+<span class="sd">    path_precalc_inp : str</span>
+<span class="sd">        Path for precalcuted input data (calibrated parameters)</span>
+<span class="sd">    path_precalc_transp : str</span>
+<span class="sd">        Path for precalcuted transport inputs (intermediate outputs from</span>
+<span class="sd">        commuting choice model)</span>
+<span class="sd">    dim : str</span>
+<span class="sd">        Geographic level of analysis at which we want to run the commuting</span>
+<span class="sd">        choice model: should be set to &quot;GRID&quot; or &quot;SP&quot;</span>
+<span class="sd">    options : dict</span>
+<span class="sd">        Dictionary of default options</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    timeOutput : ndarray(float64, ndim=3)</span>
+<span class="sd">        Duration (in min) of a round trip for each transport mode (5) between</span>
+<span class="sd">        each selected geographic unit and each selected job center (185)</span>
+<span class="sd">        centroids</span>
+<span class="sd">    distanceOutput : ndarray(float64, ndim=3)</span>
+<span class="sd">        Distance (in km) of a one-way trip for each transport mode (5) between</span>
+<span class="sd">        each selected geographic unit and each selected job center (185)</span>
+<span class="sd">        centroids. Note that distances actually do not change across transport</span>
+<span class="sd">        modes.</span>
+<span class="sd">    monetaryCost : ndarray(float64, ndim=3)</span>
+<span class="sd">        Annual monetary cost (in rands) of a round trip for each transport mode</span>
+<span class="sd">        (5) between each selected geographic unit and each selected job center</span>
+<span class="sd">        (185) centroids</span>
+<span class="sd">    costTime : ndarray(float64, ndim=3)</span>
+<span class="sd">        Daily share of working time spent commuting for each transport mode</span>
+<span class="sd">        (5) between each selected geographic unit and each selected job center</span>
+<span class="sd">        (185) centroids. This will be multiplied by expected income to get the</span>
+<span class="sd">        opportunity cost of time.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># STEP 1: IMPORT TRAVEL TIMES AND COSTS</span>
+
+    <span class="c1"># Import travel times and distances</span>
+    <span class="n">transport_times</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">path_precalc_inp</span>
+                                       <span class="o">+</span> <span class="s1">&#39;Transport_times_&#39;</span> <span class="o">+</span> <span class="n">dim</span><span class="p">)</span>
+
+    <span class="c1"># Public fares per km: see Pfeiffer et al. (appendix B2)</span>
+    <span class="c1"># This is based on Roux (2013), table 4.15 : fares are regressed on</span>
+    <span class="c1"># distance thresholds. The intercept defines the fixed component and the</span>
+    <span class="c1"># slope defines the variable component (see Transport-costs.xlsx in Aux</span>
+    <span class="c1"># data)</span>
+
+    <span class="c1"># Note that we take into account the difference in inflation between the</span>
+    <span class="c1"># year the data was collected and the year of our analysis (can be set to</span>
+    <span class="c1"># other value than baseline)</span>
+    <span class="c1"># NB: 40 in variable cost correspond to 20 working days per month, times</span>
+    <span class="c1"># 2 for the round trip</span>
+    <span class="n">priceTrainPerKM</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="mf">0.164</span> <span class="o">*</span> <span class="n">spline_inflation</span><span class="p">(</span><span class="mi">2011</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;baseline_year&quot;</span><span class="p">])</span>
+        <span class="o">/</span> <span class="n">spline_inflation</span><span class="p">(</span><span class="mi">2013</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;baseline_year&quot;</span><span class="p">])</span>
+                            <span class="p">)</span>
+    <span class="n">priceTrainFixedMonth</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="mf">4.48</span> <span class="o">*</span> <span class="mi">40</span> <span class="o">*</span> <span class="n">spline_inflation</span><span class="p">(</span><span class="mi">2011</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;baseline_year&quot;</span><span class="p">])</span>
+        <span class="o">/</span> <span class="n">spline_inflation</span><span class="p">(</span><span class="mi">2013</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;baseline_year&quot;</span><span class="p">])</span>
+        <span class="p">)</span>
+    <span class="c1"># Note that bus and taxi had been interverted in Basile&#39;s code</span>
+    <span class="n">priceBusPerKM</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="mf">0.785</span> <span class="o">*</span> <span class="n">spline_inflation</span><span class="p">(</span><span class="mi">2011</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;baseline_year&quot;</span><span class="p">])</span>
+        <span class="o">/</span> <span class="n">spline_inflation</span><span class="p">(</span><span class="mi">2013</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;baseline_year&quot;</span><span class="p">])</span>
+        <span class="p">)</span>
+    <span class="n">priceBusFixedMonth</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="mf">4.32</span> <span class="o">*</span> <span class="mi">40</span> <span class="o">*</span> <span class="n">spline_inflation</span><span class="p">(</span><span class="mi">2011</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;baseline_year&quot;</span><span class="p">])</span>
+        <span class="o">/</span> <span class="n">spline_inflation</span><span class="p">(</span><span class="mi">2013</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;baseline_year&quot;</span><span class="p">])</span>
+        <span class="p">)</span>
+    <span class="c1"># priceTaxiPerKM = (</span>
+    <span class="c1">#     0.785 * spline_inflation(2011 - param[&quot;baseline_year&quot;])</span>
+    <span class="c1">#     / spline_inflation(2013 - param[&quot;baseline_year&quot;])</span>
+    <span class="c1">#     )</span>
+    <span class="c1"># priceTaxiFixedMonth = (</span>
+    <span class="c1">#     4.32 * 40 * spline_inflation(2011 - param[&quot;baseline_year&quot;])</span>
+    <span class="c1">#     / spline_inflation(2013 - param[&quot;baseline_year&quot;])</span>
+    <span class="c1">#     )</span>
+    <span class="n">priceTaxiPerKM</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="mf">0.522</span> <span class="o">*</span> <span class="n">spline_inflation</span><span class="p">(</span><span class="mi">2011</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;baseline_year&quot;</span><span class="p">])</span>
+        <span class="o">/</span> <span class="n">spline_inflation</span><span class="p">(</span><span class="mi">2013</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;baseline_year&quot;</span><span class="p">])</span>
+        <span class="p">)</span>
+    <span class="n">priceTaxiFixedMonth</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="mf">6.24</span> <span class="o">*</span> <span class="mi">40</span> <span class="o">*</span> <span class="n">spline_inflation</span><span class="p">(</span><span class="mi">2011</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;baseline_year&quot;</span><span class="p">])</span>
+        <span class="o">/</span> <span class="n">spline_inflation</span><span class="p">(</span><span class="mi">2013</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;baseline_year&quot;</span><span class="p">])</span>
+        <span class="p">)</span>
+    <span class="c1"># priceBusPerKM = (</span>
+    <span class="c1">#     0.522 * spline_inflation(2011 - param[&quot;baseline_year&quot;])</span>
+    <span class="c1">#     / spline_inflation(2013 - param[&quot;baseline_year&quot;])</span>
+    <span class="c1">#     )</span>
+    <span class="c1"># priceBusFixedMonth = (</span>
+    <span class="c1">#     6.24 * 40 * spline_inflation(2011 - param[&quot;baseline_year&quot;])</span>
+    <span class="c1">#     / spline_inflation(2013 - param[&quot;baseline_year&quot;])</span>
+    <span class="c1">#     )</span>
+
+    <span class="c1"># Again, we correct for inflation with respect to year the function is run</span>
+    <span class="n">inflation</span> <span class="o">=</span> <span class="n">spline_inflation</span><span class="p">(</span><span class="n">yearTraffic</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;correct_infla_base&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">infla_base</span> <span class="o">=</span> <span class="n">spline_inflation</span><span class="p">(</span><span class="mi">2012</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;baseline_year&quot;</span><span class="p">])</span>
+    <span class="k">elif</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;correct_infla_base&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">infla_base</span> <span class="o">=</span> <span class="n">spline_inflation</span><span class="p">(</span><span class="mi">2011</span> <span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;baseline_year&quot;</span><span class="p">])</span>
+    <span class="n">priceTrainPerKM</span> <span class="o">=</span> <span class="n">priceTrainPerKM</span> <span class="o">*</span> <span class="n">inflation</span> <span class="o">/</span> <span class="n">infla_base</span>
+    <span class="n">priceTrainFixedMonth</span> <span class="o">=</span> <span class="n">priceTrainFixedMonth</span> <span class="o">*</span> <span class="n">inflation</span> <span class="o">/</span> <span class="n">infla_base</span>
+    <span class="n">priceTaxiPerKM</span> <span class="o">=</span> <span class="n">priceTaxiPerKM</span> <span class="o">*</span> <span class="n">inflation</span> <span class="o">/</span> <span class="n">infla_base</span>
+    <span class="n">priceTaxiFixedMonth</span> <span class="o">=</span> <span class="n">priceTaxiFixedMonth</span> <span class="o">*</span> <span class="n">inflation</span> <span class="o">/</span> <span class="n">infla_base</span>
+    <span class="n">priceBusPerKM</span> <span class="o">=</span> <span class="n">priceBusPerKM</span> <span class="o">*</span> <span class="n">inflation</span> <span class="o">/</span> <span class="n">infla_base</span>
+    <span class="n">priceBusFixedMonth</span> <span class="o">=</span> <span class="n">priceBusFixedMonth</span> <span class="o">*</span> <span class="n">inflation</span> <span class="o">/</span> <span class="n">infla_base</span>
+    <span class="n">priceFuelPerKM</span> <span class="o">=</span> <span class="n">spline_fuel</span><span class="p">(</span><span class="n">yearTraffic</span><span class="p">)</span>
+
+    <span class="c1"># Private fixed costs, in rands (variable is already defined by</span>
+    <span class="c1"># priceFuelPerKM)</span>
+    <span class="c1"># See Pfeiffer et al. (appendix B2) : corresponds to monthly vehicle</span>
+    <span class="c1"># depreciation in 2011</span>
+    <span class="n">priceFixedVehiculeMonth</span> <span class="o">=</span> <span class="mi">400</span>
+    <span class="n">priceFixedVehiculeMonth</span> <span class="o">=</span> <span class="n">priceFixedVehiculeMonth</span> <span class="o">*</span> <span class="n">inflation</span> <span class="o">/</span> <span class="n">infla_base</span>
+
+    <span class="c1"># STEP 2: TRAVEL TIMES AND COSTS AS MATRIX</span>
+
+    <span class="c1"># Parameters: see Pfeiffer et al. (appendix B2)</span>
+    <span class="c1"># We assume 8 working hours per day and 20 working days per month</span>
+    <span class="c1"># numberDaysPerYear = 235</span>
+    <span class="n">numberDaysPerYear</span> <span class="o">=</span> <span class="mi">240</span>
+    <span class="n">numberHourWorkedPerDay</span> <span class="o">=</span> <span class="mi">8</span>
+
+    <span class="c1"># Time taken by each mode for a round trip (in sec)</span>
+    <span class="c1"># Includes walking time to station and other features from EMME/2 model</span>
+    <span class="n">timeOutput</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;durationTrain&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+         <span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;durationTrain&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="n">timeOutput</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="c1"># To get walking times, we take 2 times the distances by car (to get trips</span>
+    <span class="c1"># in both directions) multiplied by 1.2 (sinusoity coefficient), divided</span>
+    <span class="c1"># by the walking speed (in km/h), which we multiply by 60 to get minutes</span>
+    <span class="c1"># NB: see Viguié et al. (2014), table B.1, for sinusoity estimate</span>
+
+    <span class="c1"># if options[&quot;correct_round_trip&quot;] == 1:</span>
+    <span class="c1">#     # Note that we do have some negative durations: their number is small</span>
+    <span class="c1">#     # so we just convert them to zero</span>
+    <span class="c1">#     timeOutput[:, :, 0] = (transport_times[&quot;distanceCar&quot;]</span>
+    <span class="c1">#                            / param[&quot;walking_speed&quot;] * 60 * 60 * 1.2 * 2)</span>
+    <span class="c1">#     timeOutput[:, :, 0][np.isnan(transport_times[&quot;durationCar&quot;])</span>
+    <span class="c1">#                         ] = np.nan</span>
+    <span class="c1">#     timeOutput[:, :, 1] = (</span>
+    <span class="c1">#          copy.deepcopy(transport_times[&quot;durationTrain&quot;])*2)</span>
+    <span class="c1">#     timeOutput[:, :, 1][transport_times[&quot;durationTrain&quot;] &lt; 0] = 0</span>
+    <span class="c1">#     timeOutput[:, :, 2] = copy.deepcopy(transport_times[&quot;durationCar&quot;])*2</span>
+    <span class="c1">#     timeOutput[:, :, 2][transport_times[&quot;durationCar&quot;] &lt; 0] = 0</span>
+    <span class="c1">#     timeOutput[:, :, 3] = (</span>
+    <span class="c1">#         copy.deepcopy(transport_times[&quot;durationMinibus&quot;])*2)</span>
+    <span class="c1">#     timeOutput[:, :, 3][transport_times[&quot;durationMinibus&quot;] &lt; 0] = 0</span>
+    <span class="c1">#     timeOutput[:, :, 4] = copy.deepcopy(transport_times[&quot;durationBus&quot;])*2</span>
+    <span class="c1">#     timeOutput[:, :, 4][transport_times[&quot;durationBus&quot;] &lt; 0] = 0</span>
+
+    <span class="c1"># Note that we do have some negative durations: their number is small,</span>
+    <span class="c1"># so we just convert them to zero</span>
+    <span class="n">timeOutput</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;distanceCar&quot;</span><span class="p">]</span>
+                           <span class="o">/</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;walking_speed&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mf">1.2</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">timeOutput</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">][</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;durationCar&quot;</span><span class="p">])]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">timeOutput</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;durationTrain&quot;</span><span class="p">])</span>
+    <span class="n">timeOutput</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">][</span><span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;durationTrain&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">timeOutput</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;durationCar&quot;</span><span class="p">])</span>
+    <span class="n">timeOutput</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">2</span><span class="p">][</span><span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;durationCar&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">timeOutput</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;durationMinibus&quot;</span><span class="p">])</span>
+    <span class="n">timeOutput</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">3</span><span class="p">][</span><span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;durationMinibus&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">timeOutput</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;durationBus&quot;</span><span class="p">])</span>
+    <span class="n">timeOutput</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">4</span><span class="p">][</span><span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;durationBus&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># Length (in km) using each mode</span>
+    <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;correct_round_trip&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">multiplierPrice</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">timeOutput</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+        <span class="n">multiplierPrice</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="n">multiplierPrice</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">timeOutput</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+        <span class="n">multiplierPrice</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;distanceCar&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span>
+        <span class="n">multiplierPrice</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;distanceCar&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span>
+        <span class="n">multiplierPrice</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;distanceCar&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span>
+        <span class="n">multiplierPrice</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;distanceCar&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span>
+    <span class="k">elif</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;correct_round_trip&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">multiplierPrice</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">timeOutput</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+        <span class="n">multiplierPrice</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="n">multiplierPrice</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">timeOutput</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+        <span class="n">multiplierPrice</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;distanceCar&quot;</span><span class="p">]</span>
+        <span class="n">multiplierPrice</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;distanceCar&quot;</span><span class="p">]</span>
+        <span class="n">multiplierPrice</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;distanceCar&quot;</span><span class="p">]</span>
+        <span class="n">multiplierPrice</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;distanceCar&quot;</span><span class="p">]</span>
+
+    <span class="c1"># Convert the results to annual cost</span>
+    <span class="n">pricePerKM</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+    <span class="n">pricePerKM</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="n">pricePerKM</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">pricePerKM</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">priceTrainPerKM</span><span class="o">*</span><span class="n">numberDaysPerYear</span>
+    <span class="n">pricePerKM</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">priceFuelPerKM</span><span class="o">*</span><span class="n">numberDaysPerYear</span>
+    <span class="n">pricePerKM</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">priceTaxiPerKM</span><span class="o">*</span><span class="n">numberDaysPerYear</span>
+    <span class="n">pricePerKM</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">priceBusPerKM</span><span class="o">*</span><span class="n">numberDaysPerYear</span>
+
+    <span class="c1"># Simple distances (useful for residence-workplace distance distribution)</span>
+    <span class="n">distanceOutput</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">timeOutput</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+    <span class="n">distanceOutput</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="n">distanceOutput</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;distanceCar&quot;</span><span class="p">]</span>
+    <span class="n">distanceOutput</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;distanceCar&quot;</span><span class="p">]</span>
+    <span class="n">distanceOutput</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;distanceCar&quot;</span><span class="p">]</span>
+    <span class="n">distanceOutput</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;distanceCar&quot;</span><span class="p">]</span>
+    <span class="n">distanceOutput</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">transport_times</span><span class="p">[</span><span class="s2">&quot;distanceCar&quot;</span><span class="p">]</span>
+
+    <span class="c1"># STEP 3 : MONETARY AND TIME COSTS</span>
+
+    <span class="c1"># Monetary price per year (for each employment center)</span>
+    <span class="c1"># NB: 12 is for number of months in a year</span>
+    <span class="n">monetaryCost</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">185</span><span class="p">,</span> <span class="n">timeOutput</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">5</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">index2</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">):</span>
+        <span class="n">monetaryCost</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">index2</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">pricePerKM</span><span class="p">[</span><span class="n">index2</span><span class="p">]</span>
+                                      <span class="o">*</span> <span class="n">multiplierPrice</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">index2</span><span class="p">])</span>
+    <span class="c1">#  Train</span>
+    <span class="n">monetaryCost</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">monetaryCost</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">priceTrainFixedMonth</span> <span class="o">*</span> <span class="mi">12</span>
+    <span class="c1">#  Private car</span>
+    <span class="n">monetaryCost</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">monetaryCost</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">priceFixedVehiculeMonth</span>
+                             <span class="o">*</span> <span class="mi">12</span><span class="p">)</span>
+    <span class="c1">#  Minibus/taxi</span>
+    <span class="n">monetaryCost</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">monetaryCost</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">priceTaxiFixedMonth</span> <span class="o">*</span> <span class="mi">12</span>
+    <span class="c1">#  Bus</span>
+    <span class="n">monetaryCost</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">monetaryCost</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">4</span><span class="p">]</span> <span class="o">+</span> <span class="n">priceBusFixedMonth</span> <span class="o">*</span> <span class="mi">12</span>
+
+    <span class="c1"># We assume that people not travelling a certain distance have an extra</span>
+    <span class="c1"># high cost of doing so</span>
+    <span class="n">monetaryCost</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">monetaryCost</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="mi">5</span>
+
+    <span class="c1"># Daily share of working time spent commuting (all values in sec)</span>
+    <span class="c1"># NB: The time cost parameter is a proportionality factor between time</span>
+    <span class="c1"># and monetary values. By default, it is set as 1: the welfare loss from</span>
+    <span class="c1"># time spent commuting directly translates into foregone wages.</span>
+    <span class="n">costTime</span> <span class="o">=</span> <span class="p">(</span><span class="n">timeOutput</span> <span class="o">*</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;time_cost&quot;</span><span class="p">]</span>
+                <span class="o">/</span> <span class="p">(</span><span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="n">numberHourWorkedPerDay</span><span class="p">))</span>
+
+    <span class="c1"># We assume that people not travelling a certain distance have an extra</span>
+    <span class="c1"># high cost of doing so</span>
+    <span class="n">costTime</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">costTime</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">return</span> <span class="n">timeOutput</span><span class="p">,</span> <span class="n">distanceOutput</span><span class="p">,</span> <span class="n">monetaryCost</span><span class="p">,</span> <span class="n">costTime</span></div>
+
+
+<div class="viewcode-block" id="EstimateIncome"><a class="viewcode-back" href="../../../api_ref.html#calibration.sub.compute_income.EstimateIncome">[docs]</a><span class="k">def</span> <span class="nf">EstimateIncome</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">timeOutput</span><span class="p">,</span> <span class="n">distanceOutput</span><span class="p">,</span> <span class="n">monetaryCost</span><span class="p">,</span> <span class="n">costTime</span><span class="p">,</span>
+                   <span class="n">job_centers</span><span class="p">,</span> <span class="n">average_income</span><span class="p">,</span> <span class="n">income_distribution</span><span class="p">,</span>
+                   <span class="n">list_lambda</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Estimate incomes per job center and number of commuters per distance bin.</span>
+
+<span class="sd">    This function leverages the commutingSolve() function to iterate over</span>
+<span class="sd">    income values until the target number of commuters for each job center is</span>
+<span class="sd">    reached. This allows to compute incomes per job center (and income group)</span>
+<span class="sd">    and to find the split of commuters across distance-from-CBD brackets, for</span>
+<span class="sd">    several values of the gravity parameter (from commuting choice model).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    param : dict</span>
+<span class="sd">        Dictionary of default options</span>
+<span class="sd">    timeOutput : ndarray(float64, ndim=3)</span>
+<span class="sd">        Duration (in min) of a round trip for each transport mode (5) between</span>
+<span class="sd">        each selected geographic unit and each selected job center (185)</span>
+<span class="sd">        centroids</span>
+<span class="sd">    distanceOutput : ndarray(float64, ndim=3)</span>
+<span class="sd">        Distance (in km) of a one-way trip for each transport mode (5) between</span>
+<span class="sd">        each selected geographic unit and each selected job center (185)</span>
+<span class="sd">        centroids. Note that distances actually do not change across transport</span>
+<span class="sd">        modes.</span>
+<span class="sd">    monetaryCost : ndarray(float64, ndim=3)</span>
+<span class="sd">        Annual monetary cost (in rands) of a round trip for each transport mode</span>
+<span class="sd">        (5) between each selected geographic unit and each selected job center</span>
+<span class="sd">        (185) centroids</span>
+<span class="sd">    costTime : ndarray(float64, ndim=3)</span>
+<span class="sd">        Daily share of working time spent commuting for each transport mode</span>
+<span class="sd">        (5) between each selected geographic unit and each selected job center</span>
+<span class="sd">        (185) centroids. This will be multiplied by expected income to get the</span>
+<span class="sd">        opportunity cost of time.</span>
+<span class="sd">    job_centers : ndarray(float64, ndim=2)</span>
+<span class="sd">        Number of jobs in each selected job center (185) per income group (4).</span>
+<span class="sd">        Remember that we rescale the number of individual jobs to reflect total</span>
+<span class="sd">        household employment, as our income and population data are for</span>
+<span class="sd">        households only: one job basically provides employment for two people.</span>
+<span class="sd">        This simplification allows to model households as a single</span>
+<span class="sd">        representative agent and to abstract from a two-body problem.</span>
+<span class="sd">        Empirically, this holds on aggregate as households&#39; position on the</span>
+<span class="sd">        labor market is often determined by one household head.</span>
+<span class="sd">    average_income : ndarray(float64)</span>
+<span class="sd">        Average median income for each income group in the model (4)</span>
+<span class="sd">    income_distribution : ndarray(uint16, ndim=2)</span>
+<span class="sd">        Exogenous number of households in each Small Place (1,046) for each</span>
+<span class="sd">        income group in the model (4)</span>
+<span class="sd">    list_lambda : ndarray(float64)</span>
+<span class="sd">        List of values over which to scan for the gravity parameter used in</span>
+<span class="sd">        the commuting choice model</span>
+<span class="sd">    options : dict</span>
+<span class="sd">        Dictionary of default options</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    incomeCentersSave : ndarary(float64, ndim=3)</span>
+<span class="sd">        Calibrated annual household income (in rands) for each income group (4)</span>
+<span class="sd">        and each selected job center (185), for each scanned value of the</span>
+<span class="sd">        gravity parameter</span>
+<span class="sd">    distanceDistribution : ndarray(float64, ndim=2)</span>
+<span class="sd">        Share of residence-workplace distances in each 5-km from CBD bracket</span>
+<span class="sd">        for each scanned value of the gravity parameter</span>
+<span class="sd">    scoreMatrix : ndarray(float64, ndim=2)</span>
+<span class="sd">        Ratio of simulated over observed (rescaled) number of jobs for each</span>
+<span class="sd">        income group (4) and each scanned value of the gravity parameter:</span>
+<span class="sd">        defines an error metric for the quality of our calibration</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Setting time and space</span>
+    <span class="n">annualToHourly</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">8</span><span class="o">*</span><span class="mi">20</span><span class="o">*</span><span class="mi">12</span><span class="p">)</span>
+    <span class="n">monetary_cost</span> <span class="o">=</span> <span class="n">monetaryCost</span> <span class="o">*</span> <span class="n">annualToHourly</span>
+    <span class="c1">#  Corresponds to the brackets for which we have aggregate statistics on</span>
+    <span class="c1">#  the number of commuters to fit our calibration</span>
+    <span class="n">bracketsDistance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">200</span><span class="p">])</span>
+
+    <span class="c1">#  We initialize output matrices</span>
+    <span class="n">incomeCentersSave</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">job_centers</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]),</span> <span class="mi">4</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_lambda</span><span class="p">)))</span>
+    <span class="n">distanceDistribution</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+        <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">bracketsDistance</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_lambda</span><span class="p">)))</span>
+    <span class="n">scoreMatrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">list_lambda</span><span class="p">),</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;nb_of_income_classes&quot;</span><span class="p">]))</span>
+
+    <span class="c1"># We begin simulations for different values of lambda</span>
+
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_lambda</span><span class="p">)):</span>
+
+        <span class="n">param_lambda</span> <span class="o">=</span> <span class="n">list_lambda</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Estimating for lambda = &#39;</span><span class="p">,</span> <span class="n">param_lambda</span><span class="p">)</span>
+
+        <span class="c1"># We initialize output vectors for each lambda</span>
+        <span class="n">incomeCentersAll</span> <span class="o">=</span> <span class="o">-</span><span class="n">math</span><span class="o">.</span><span class="n">inf</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">job_centers</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]),</span> <span class="mi">4</span><span class="p">))</span>
+        <span class="n">distanceDistributionGroup</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">bracketsDistance</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+
+        <span class="c1"># We run separate simulations for each income group</span>
+
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;nb_of_income_classes&quot;</span><span class="p">]):</span>
+
+            <span class="c1"># (Employed) household size varies with income group / transport</span>
+            <span class="c1"># costs: we select the income group of interest</span>
+            <span class="n">householdSize</span> <span class="o">=</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;household_size&quot;</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+            <span class="c1"># Same for &quot;average&quot; income (which needs to be adapted to hourly</span>
+            <span class="c1"># from income data)</span>
+            <span class="n">averageIncomeGroup</span> <span class="o">=</span> <span class="n">average_income</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">annualToHourly</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;incomes for group &#39;</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+
+            <span class="c1"># We consider job centers where selected income group represents</span>
+            <span class="c1"># more than 1/4 of the number-of-jobs threshold (used to select</span>
+            <span class="c1"># job centers among transport zones): it allows to avoid marginal</span>
+            <span class="c1"># crossings between income classes and job centers, hence reduces</span>
+            <span class="c1"># the number of equations to solve and makes optimization faster</span>
+            <span class="c1"># (+ no corner cases)</span>
+
+            <span class="c1"># NB: numeric solver (gradient descent) does not work when</span>
+            <span class="c1"># function is not always differentiable (which is the case here as,</span>
+            <span class="c1"># above/below some utility threshold, we have tipping effects),</span>
+            <span class="c1"># hence we code our own solver to remain in the interior</span>
+
+            <span class="n">whichCenters</span> <span class="o">=</span> <span class="n">job_centers</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">600</span>
+            <span class="c1"># whichCenters = (</span>
+            <span class="c1">#     job_centers[:, j] &gt; param[&quot;job_center_threshold&quot;] / 4)</span>
+            <span class="n">popCenters</span> <span class="o">=</span> <span class="n">job_centers</span><span class="p">[</span><span class="n">whichCenters</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+
+            <span class="c1"># We reweight population in each income group per SP to make it</span>
+            <span class="c1"># comparable with population in SELECTED job centers</span>
+            <span class="c1"># Note that unemployed population is not included! This is</span>
+            <span class="c1"># important with what follows.</span>
+            <span class="c1"># Also note that SP data includes more areas than included in grid</span>
+            <span class="n">popResidence</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">income_distribution</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span>
+                <span class="o">*</span> <span class="nb">sum</span><span class="p">(</span><span class="n">job_centers</span><span class="p">[</span><span class="n">whichCenters</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
+                <span class="o">/</span> <span class="nb">sum</span><span class="p">(</span><span class="n">income_distribution</span><span class="p">[:,</span> <span class="n">j</span><span class="p">])</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Numeric parameters come from trial and error and do not change</span>
+            <span class="c1"># results a priori: they just help convergence</span>
+            <span class="n">maxIter</span> <span class="o">=</span> <span class="mi">1000</span>
+            <span class="n">tolerance</span> <span class="o">=</span> <span class="mf">0.01</span>
+            <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">factorConvergenge</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="mf">0.01</span> <span class="o">/</span> <span class="mi">100</span>
+                    <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">param_lambda</span><span class="o">**</span><span class="mi">10</span> <span class="o">/</span> <span class="mi">10</span><span class="o">**</span><span class="mi">10</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">10</span><span class="o">**</span><span class="mi">10</span><span class="p">))</span>
+                    <span class="p">)</span>
+            <span class="k">elif</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">factorConvergenge</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="mf">0.002</span> <span class="o">/</span> <span class="mi">100</span>
+                    <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">param_lambda</span><span class="o">**</span><span class="mi">10</span> <span class="o">/</span> <span class="mi">10</span><span class="o">**</span><span class="mi">10</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">10</span><span class="o">**</span><span class="mi">10</span><span class="p">))</span>
+                    <span class="p">)</span>
+            <span class="k">elif</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">factorConvergenge</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="mf">0.001</span> <span class="o">/</span> <span class="mi">100</span>
+                    <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">param_lambda</span><span class="o">**</span><span class="mi">10</span> <span class="o">/</span> <span class="mi">10</span><span class="o">**</span><span class="mi">10</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">10</span><span class="o">**</span><span class="mi">10</span><span class="p">))</span>
+                    <span class="p">)</span>
+            <span class="k">elif</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">factorConvergenge</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="mf">0.0008</span> <span class="o">/</span> <span class="mi">100</span>
+                    <span class="o">*</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">param_lambda</span><span class="o">**</span><span class="mi">10</span> <span class="o">/</span> <span class="mi">10</span><span class="o">**</span><span class="mi">10</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">10</span><span class="o">**</span><span class="mi">10</span><span class="p">))</span>
+                    <span class="p">)</span>
+
+            <span class="nb">iter</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">popCenters</span><span class="p">),</span> <span class="n">maxIter</span><span class="p">))</span>
+            <span class="n">scoreIter</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">maxIter</span><span class="p">)</span>
+            <span class="n">errorMax</span> <span class="o">=</span> <span class="mi">1</span>
+
+            <span class="c1"># Initializing the solver</span>
+            <span class="n">incomeCenters</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">sum</span><span class="p">(</span><span class="n">whichCenters</span><span class="p">),</span> <span class="n">maxIter</span><span class="p">))</span>
+            <span class="n">incomeCenters</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">averageIncomeGroup</span>
+                <span class="o">*</span> <span class="p">(</span><span class="n">popCenters</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">popCenters</span><span class="p">))</span>
+                <span class="o">**</span> <span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="c1"># Initial error corresponds to the difference between observed</span>
+            <span class="c1"># and simulated population working in each job center</span>
+            <span class="n">error</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">_</span> <span class="o">=</span> <span class="n">commutingSolve</span><span class="p">(</span>
+                <span class="n">incomeCenters</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">averageIncomeGroup</span><span class="p">,</span> <span class="n">popCenters</span><span class="p">,</span>
+                <span class="n">popResidence</span><span class="p">,</span> <span class="n">monetary_cost</span><span class="p">,</span> <span class="n">costTime</span><span class="p">,</span> <span class="n">param_lambda</span><span class="p">,</span>
+                <span class="n">householdSize</span><span class="p">,</span> <span class="n">whichCenters</span><span class="p">,</span> <span class="n">bracketsDistance</span><span class="p">,</span> <span class="n">distanceOutput</span><span class="p">,</span>
+                <span class="n">options</span><span class="p">)</span>
+
+            <span class="c1"># Then we iterate by adding to each job center income the average</span>
+            <span class="c1"># value of income per income group, weighted by the importance of</span>
+            <span class="c1"># the error relative to the observed job center population: if we</span>
+            <span class="c1"># underestimate the population, we increase the income</span>
+            <span class="k">while</span> <span class="p">((</span><span class="nb">iter</span> <span class="o">&lt;=</span> <span class="n">maxIter</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">errorMax</span> <span class="o">&gt;</span> <span class="n">tolerance</span><span class="p">)):</span>
+
+                <span class="n">incomeCenters</span><span class="p">[:,</span> <span class="nb">iter</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">incomeCenters</span><span class="p">[:,</span> <span class="nb">max</span><span class="p">(</span><span class="nb">iter</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span>
+                    <span class="o">+</span> <span class="n">factorConvergenge</span>
+                    <span class="o">*</span> <span class="n">averageIncomeGroup</span>
+                    <span class="o">*</span> <span class="n">error</span><span class="p">[:,</span> <span class="nb">max</span><span class="p">(</span><span class="nb">iter</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)]</span>
+                    <span class="o">/</span> <span class="n">popCenters</span>
+                <span class="p">)</span>
+
+                <span class="c1"># We also update the error term and store some values</span>
+                <span class="c1"># before iterating over</span>
+                <span class="n">error</span><span class="p">[:,</span> <span class="nb">iter</span><span class="p">],</span> <span class="n">_</span> <span class="o">=</span> <span class="n">commutingSolve</span><span class="p">(</span>
+                    <span class="n">incomeCenters</span><span class="p">[:,</span> <span class="nb">iter</span><span class="p">],</span> <span class="n">averageIncomeGroup</span><span class="p">,</span> <span class="n">popCenters</span><span class="p">,</span>
+                    <span class="n">popResidence</span><span class="p">,</span> <span class="n">monetary_cost</span><span class="p">,</span> <span class="n">costTime</span><span class="p">,</span> <span class="n">param_lambda</span><span class="p">,</span>
+                    <span class="n">householdSize</span><span class="p">,</span> <span class="n">whichCenters</span><span class="p">,</span> <span class="n">bracketsDistance</span><span class="p">,</span>
+                    <span class="n">distanceOutput</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+
+                <span class="n">errorMax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">error</span><span class="p">[:,</span> <span class="nb">iter</span><span class="p">]</span> <span class="o">/</span> <span class="n">popCenters</span><span class="p">))</span>
+                <span class="n">scoreIter</span><span class="p">[</span><span class="nb">iter</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">error</span><span class="p">[:,</span> <span class="nb">iter</span><span class="p">]</span> <span class="o">/</span> <span class="n">popCenters</span><span class="p">))</span>
+
+                <span class="nb">iter</span> <span class="o">=</span> <span class="nb">iter</span> <span class="o">+</span> <span class="mi">1</span>
+
+                <span class="c1"># print(iter)</span>
+                <span class="c1"># print(&quot;errorMax = &quot; + str(errorMax))</span>
+                <span class="c1"># print(&quot;errorMean = &quot;</span>
+                <span class="c1">#       + str(np.nanmean(np.abs(error[:, iter] / popCenters))))</span>
+
+            <span class="c1"># At the end of the process, we keep the minimum score, and define</span>
+            <span class="c1"># the corresponding best solution for some lambda and income group</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nb">iter</span> <span class="o">&gt;</span> <span class="n">maxIter</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">scoreBest</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">scoreIter</span><span class="p">)</span>
+                <span class="n">scoreMatrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">scoreBest</span>
+                <span class="n">bestSolution</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">scoreIter</span><span class="p">)</span>
+                <span class="n">incomeCenters</span><span class="p">[:,</span> <span class="nb">iter</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">incomeCenters</span><span class="p">[:,</span> <span class="n">bestSolution</span><span class="p">]</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39; - max iteration reached - mean error&#39;</span><span class="p">,</span> <span class="n">scoreBest</span><span class="p">)</span>
+
+            <span class="c1"># If we manage to have a maximum error that falls under the</span>
+            <span class="c1"># tolerance threshold, we leave the loop and consider the solution</span>
+            <span class="c1"># corresponding to the latest iteration</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">scoreBest</span> <span class="o">=</span> <span class="n">scoreIter</span><span class="p">[</span><span class="nb">iter</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">scoreMatrix</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">scoreBest</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39; - computed - max error&#39;</span><span class="p">,</span> <span class="n">errorMax</span><span class="p">)</span>
+                <span class="c1"># print(str(iter-1))</span>
+
+            <span class="c1"># We also get (for the given income group) the number of commuters</span>
+            <span class="c1"># for all job centers in given distance brackets</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">distanceDistributionGroup</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">commutingSolve</span><span class="p">(</span>
+                <span class="n">incomeCenters</span><span class="p">[:,</span> <span class="nb">iter</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">averageIncomeGroup</span><span class="p">,</span> <span class="n">popCenters</span><span class="p">,</span>
+                <span class="n">popResidence</span><span class="p">,</span> <span class="n">monetary_cost</span><span class="p">,</span> <span class="n">costTime</span><span class="p">,</span> <span class="n">param_lambda</span><span class="p">,</span>
+                <span class="n">householdSize</span><span class="p">,</span> <span class="n">whichCenters</span><span class="p">,</span> <span class="n">bracketsDistance</span><span class="p">,</span> <span class="n">distanceOutput</span><span class="p">,</span>
+                <span class="n">options</span><span class="p">)</span>
+
+            <span class="c1"># We rescale calibrated incomes to stick to overall income data</span>
+            <span class="c1"># scale: remember that we only computed them for a subset of the</span>
+            <span class="c1"># population. This allows income levels to be more representative</span>
+            <span class="c1"># (although this does not change anything in relative terms)</span>
+            <span class="c1"># NB: note that here, the way we define &quot;average&quot; income from the</span>
+            <span class="c1"># data actually impact the rescaling</span>
+            <span class="n">incomeCentersRescaled</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">incomeCenters</span><span class="p">[:,</span> <span class="nb">iter</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="o">*</span> <span class="n">averageIncomeGroup</span>
+                <span class="o">/</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">incomeCenters</span><span class="p">[:,</span> <span class="nb">iter</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">popCenters</span><span class="p">)</span>
+                    <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">popCenters</span><span class="p">))</span>
+            <span class="p">)</span>
+
+            <span class="c1"># Then we update the output matrix for the given income group</span>
+            <span class="c1"># (with lambda still fixed)</span>
+            <span class="n">incomeCentersAll</span><span class="p">[</span><span class="n">whichCenters</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">incomeCentersRescaled</span>
+
+        <span class="c1"># We can now loop over different values of lambda and store values back</span>
+        <span class="c1"># in yearly format for incomes</span>
+        <span class="n">incomeCentersSave</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">incomeCentersAll</span> <span class="o">/</span> <span class="n">annualToHourly</span>
+
+        <span class="c1"># Likewise, for each value of lambda, we store the % of total commuters</span>
+        <span class="c1"># for each distance bracket</span>
+        <span class="n">distanceDistribution</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">distanceDistributionGroup</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">distanceDistributionGroup</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">incomeCentersSave</span><span class="p">,</span> <span class="n">distanceDistribution</span><span class="p">,</span> <span class="n">scoreMatrix</span></div>
+
+
+<div class="viewcode-block" id="compute_ODflows"><a class="viewcode-back" href="../../../api_ref.html#calibration.sub.compute_income.compute_ODflows">[docs]</a><span class="k">def</span> <span class="nf">compute_ODflows</span><span class="p">(</span><span class="n">householdSize</span><span class="p">,</span> <span class="n">monetaryCost</span><span class="p">,</span> <span class="n">costTime</span><span class="p">,</span> <span class="n">incomeCentersFull</span><span class="p">,</span>
+                    <span class="n">whichCenters</span><span class="p">,</span> <span class="n">param_lambda</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute probability distribution and transport costs of commuting pairs.</span>
+
+<span class="sd">    This function applies theoretical formulas from the commuting choice model,</span>
+<span class="sd">    for a given income group and a given gravity parameter (see math appendix</span>
+<span class="sd">    for more details).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    householdSize : float</span>
+<span class="sd">        Average number of employed workers per household for one income class</span>
+<span class="sd">        (corresponds to 2 times the employment rate)</span>
+<span class="sd">    monetaryCost : ndarray(float64, ndim=3)</span>
+<span class="sd">        Hourly monetary cost (in rands) of a round trip for each transport mode</span>
+<span class="sd">        (5) between each selected geographic unit and each selected job center</span>
+<span class="sd">        (185) centroids</span>
+<span class="sd">    costTime : ndarray(float64, ndim=3)</span>
+<span class="sd">        Daily share of working time spent commuting for each transport mode</span>
+<span class="sd">        (5) between each selected geographic unit and each selected job center</span>
+<span class="sd">        (185) centroids. This will be multiplied by expected income to get the</span>
+<span class="sd">        opportunity cost of time.</span>
+<span class="sd">    incomeCentersFull : ndarray(float64)</span>
+<span class="sd">        Hourly household income (in rands) for some income group and some</span>
+<span class="sd">        iteration, per selected job center, rescaled to match income</span>
+<span class="sd">        distribution across the overall population</span>
+<span class="sd">    whichCenters : ndarray(bool)</span>
+<span class="sd">        Dummy variable allowing the narrow selection of job centers used for</span>
+<span class="sd">        income calibration for a given income group, among pre-selected job</span>
+<span class="sd">        centers (185)</span>
+<span class="sd">    param_lambda : float64</span>
+<span class="sd">        Tested value for the gravity parameter used in the commuting choice</span>
+<span class="sd">        model</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    transportCostModes : ndarray(float64, ndim=3)</span>
+<span class="sd">        Expected (hourly) total commuting cost (in rands) for one agent,</span>
+<span class="sd">        for all (narrowly) selected job centers, all SPs of residence (1046),</span>
+<span class="sd">        and all transport modes (5)</span>
+<span class="sd">    transportCost : ndarray(float64, ndim=2)</span>
+<span class="sd">        Expected (hourly) total commuting cost (in rands) for one agent,</span>
+<span class="sd">        for all (narrowly) selected job centers and all SPs of residence</span>
+<span class="sd">        (1046): corresponds to min(transportCostModes) across transport modes.</span>
+<span class="sd">    ODflows : ndarray(float64, ndim=2)</span>
+<span class="sd">        Probability, for a given income group, to work in each (narrowly)</span>
+<span class="sd">        selected job center for each potential SP of residence (1046)</span>
+<span class="sd">    valueMax : ndarray(float64, ndim=2)</span>
+<span class="sd">        Numerical parameter for each commuting pair that prevents logarithms</span>
+<span class="sd">        and exponentials used in calculations from diverging towards infinity:</span>
+<span class="sd">        it corresponds to the maximum argument for exponentials that appear in</span>
+<span class="sd">        the formula for transportCost: this is not used as an input in other</span>
+<span class="sd">        functions and is just included here for reference</span>
+<span class="sd">    minIncome : ndarray(float64)</span>
+<span class="sd">        Numerical parameter for each SP of residence that prevents logarithms</span>
+<span class="sd">        and exponentials used in calculations from diverging towards infinity:</span>
+<span class="sd">        it corresponds to minus the minimum argument for exponentials that</span>
+<span class="sd">        appear in the formula for ODflows: this is not used as an input in</span>
+<span class="sd">        other functions and is just included here for reference</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># We first compute expected (hourly) total commuting cost per mode</span>
+    <span class="c1"># Note that incomeCentersFull is already defined at the household level,</span>
+    <span class="c1"># whereas monetaryCost is defined at the individual level: hence, we need</span>
+    <span class="c1"># to multiply monetaryCost by householdsSize to get the value of the</span>
+    <span class="c1"># monetary costs for all members of the households</span>
+    <span class="n">transportCostModes</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">householdSize</span> <span class="o">*</span> <span class="n">monetaryCost</span><span class="p">[</span><span class="n">whichCenters</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+        <span class="o">+</span> <span class="p">(</span><span class="n">costTime</span><span class="p">[</span><span class="n">whichCenters</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">incomeCentersFull</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">])</span>
+    <span class="p">)</span>
+
+    <span class="c1"># This prevents exponentials/logarithms from diverging towards infinity</span>
+    <span class="c1"># This is neutral on the result and is set by trial and error</span>
+    <span class="n">valueMax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span><span class="n">param_lambda</span> <span class="o">*</span> <span class="n">transportCostModes</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mi">500</span>
+
+    <span class="c1"># We get expected commuting cost by minimizing transportCostModes across</span>
+    <span class="c1"># transport modes. This yields the formula below (see log-sum</span>
+    <span class="c1"># specification in math appendix)</span>
+
+    <span class="c1"># Note that the valueMax term ensures some minimal value for the</span>
+    <span class="c1"># exponential term, hence a value sufficiently bigger than zero in the</span>
+    <span class="c1"># logarithm term. Then, its impact is cancelled out by substracting it</span>
+    <span class="c1"># aside from the log-term.</span>
+
+    <span class="c1"># Actually, this is not needed in this version of the model</span>
+    <span class="c1"># if options[&quot;prevent_exp_overflow&quot;] == 1:</span>
+    <span class="c1">#     transportCost = (</span>
+    <span class="c1">#         - 1 / param_lambda</span>
+    <span class="c1">#         * np.log(</span>
+    <span class="c1">#             np.nansum(np.exp(- param_lambda * transportCostModes</span>
+    <span class="c1">#                               + valueMax[:, :, None]), 2))</span>
+    <span class="c1">#         - valueMax</span>
+    <span class="c1">#     )</span>
+    <span class="n">transportCost</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="o">-</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">param_lambda</span>
+        <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span> <span class="n">param_lambda</span> <span class="o">*</span> <span class="n">transportCostModes</span><span class="p">),</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Also for exponential/logarithm convergence</span>
+    <span class="n">minIncome</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nanmax</span><span class="p">(</span>
+        <span class="n">param_lambda</span> <span class="o">*</span> <span class="p">(</span><span class="n">incomeCentersFull</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">-</span> <span class="n">transportCost</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="mi">700</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Then, we compute probability distribution of each commuting pair, from</span>
+    <span class="c1"># discrete choice modelling.</span>
+    <span class="c1"># Note that the minIncome term ensures that the values in the exponential</span>
+    <span class="c1"># terms do not grow too big. Then, its impact is cancelled out as it</span>
+    <span class="c1"># appears both in the numerator and the denominator of the fraction.</span>
+    <span class="c1"># NB: here, we need to divide by the scale factor (typo in Pfeiffer et al.)</span>
+
+    <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;prevent_exp_overflow&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">ODflows</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">param_lambda</span> <span class="o">*</span> <span class="p">(</span><span class="n">incomeCentersFull</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">-</span> <span class="n">transportCost</span><span class="p">)</span>
+                   <span class="o">-</span> <span class="n">minIncome</span><span class="p">)</span>
+            <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">param_lambda</span>
+                       <span class="o">*</span> <span class="p">(</span><span class="n">incomeCentersFull</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">-</span> <span class="n">transportCost</span><span class="p">)</span>
+                       <span class="o">-</span> <span class="n">minIncome</span><span class="p">),</span>
+                <span class="mi">0</span><span class="p">)[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;prevent_exp_overflow&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">ODflows</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">param_lambda</span> <span class="o">*</span> <span class="p">(</span><span class="n">incomeCentersFull</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">-</span> <span class="n">transportCost</span><span class="p">))</span>
+            <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">param_lambda</span>
+                       <span class="o">*</span> <span class="p">(</span><span class="n">incomeCentersFull</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">-</span> <span class="n">transportCost</span><span class="p">)),</span>
+                <span class="mi">0</span><span class="p">)[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">transportCostModes</span><span class="p">,</span> <span class="n">transportCost</span><span class="p">,</span> <span class="n">ODflows</span><span class="p">,</span> <span class="n">valueMax</span><span class="p">,</span> <span class="n">minIncome</span></div>
+
+
+<div class="viewcode-block" id="commutingSolve"><a class="viewcode-back" href="../../../api_ref.html#calibration.sub.compute_income.commutingSolve">[docs]</a><span class="k">def</span> <span class="nf">commutingSolve</span><span class="p">(</span><span class="n">incomeCentersTemp</span><span class="p">,</span> <span class="n">averageIncomeGroup</span><span class="p">,</span> <span class="n">popCenters</span><span class="p">,</span>
+                   <span class="n">popResidence</span><span class="p">,</span> <span class="n">monetaryCost</span><span class="p">,</span> <span class="n">costTime</span><span class="p">,</span> <span class="n">param_lambda</span><span class="p">,</span>
+                   <span class="n">householdSize</span><span class="p">,</span> <span class="n">whichCenters</span><span class="p">,</span> <span class="n">bracketsDistance</span><span class="p">,</span>
+                   <span class="n">distanceOutput</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Compute error and distribution for job allocation simulated from incomes.</span>
+
+<span class="sd">    This function leverages the compute_ODflows() function to compute a</span>
+<span class="sd">    theoretical equivalent to number of jobs in each (narrowly) selected job</span>
+<span class="sd">    center, and the distribution of those jobs across pre-defined</span>
+<span class="sd">    distance-from-CBD brackets.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    incomeCentersTemp : ndarray(float64)</span>
+<span class="sd">        Hourly household income (in rands) for some income group and some</span>
+<span class="sd">        iteration, per selected job center</span>
+<span class="sd">    averageIncomeGroup : float64</span>
+<span class="sd">        Average hourly median income (from data) for some income group</span>
+<span class="sd">    popCenters : ndarray(float64)</span>
+<span class="sd">        Number of jobs in each (narrowly) selected job center for some income</span>
+<span class="sd">        group. Remember that we further restrict the set of selected job</span>
+<span class="sd">        centers when calibrating incomes per income group for the sake of</span>
+<span class="sd">        numerical simplicity. Also remember that we rescale the number of</span>
+<span class="sd">        individual jobs to reflect total household employment, as our income</span>
+<span class="sd">        and population data are for households only: one job basically provides</span>
+<span class="sd">        employment for two people.</span>
+<span class="sd">        This simplification allows to model households as a single</span>
+<span class="sd">        representative agent and to abstract from a two-body problem.</span>
+<span class="sd">        Empirically, this holds on aggregate as households&#39; position on the</span>
+<span class="sd">        labor market is often determined by one household head.</span>
+<span class="sd">    popResidence : ndarray(float64)</span>
+<span class="sd">        Number of households living in each SP (1046), per income group (4):</span>
+<span class="sd">        comes from census data and does not include people not working</span>
+<span class="sd">    monetaryCost : ndarray(float64, ndim=3)</span>
+<span class="sd">        Hourly monetary cost (in rands) of a round trip for each transport mode</span>
+<span class="sd">        (5) between each selected geographic unit and each selected job center</span>
+<span class="sd">        (185) centroids</span>
+<span class="sd">    costTime : ndarray(float64, ndim=3)</span>
+<span class="sd">        Daily share of working time spent commuting for each transport mode</span>
+<span class="sd">        (5) between each selected geographic unit and each selected job center</span>
+<span class="sd">        (185) centroids. This will be multiplied by expected income to get the</span>
+<span class="sd">        opportunity cost of time.</span>
+<span class="sd">    param_lambda : float64</span>
+<span class="sd">        Tested value for the gravity parameter used in the commuting choice</span>
+<span class="sd">        model</span>
+<span class="sd">    householdSize : float</span>
+<span class="sd">        Average number of employed workers per household for one income class</span>
+<span class="sd">        (corresponds to 2 times the employment rate)</span>
+<span class="sd">    whichCenters : ndarray(bool)</span>
+<span class="sd">        Dummy variable allowing the narrow selection of job centers used for</span>
+<span class="sd">        income calibration for a given income group, among pre-selected job</span>
+<span class="sd">        centers (185)</span>
+<span class="sd">    bracketsDistance : ndarray(int32)</span>
+<span class="sd">        Array of floor values for distance brackets used to select the set of</span>
+<span class="sd">        incomes + gravity parameter that best fit the distribution of</span>
+<span class="sd">        residence-workplace distances according to those brackets</span>
+<span class="sd">    distanceOutput : ndarray(float64, ndim=3)</span>
+<span class="sd">        Distance (in km) of a one-way trip for each transport mode (5) between</span>
+<span class="sd">        each selected geographic unit and each selected job center (185)</span>
+<span class="sd">        centroids. Note that distances actually do not change across transport</span>
+<span class="sd">        modes.</span>
+<span class="sd">    options : dict</span>
+<span class="sd">        Dictionary of default options</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    score : ndarray(float64)</span>
+<span class="sd">        Difference between observed and simulated population working in each</span>
+<span class="sd">        (narrowly) selected job center (for a given income group)</span>
+<span class="sd">    nbCommuters : ndarray(float64)</span>
+<span class="sd">        Number of commuters in each pre-defined distance bracket, for a given</span>
+<span class="sd">        income group</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># We redress the average income in each group per job center to match</span>
+    <span class="c1"># income data, as resulting ODflows (see below) must be matched with</span>
+    <span class="c1"># popResidence (defined for the overall population, and not a subset of</span>
+    <span class="c1"># narrowly selected job centers)</span>
+    <span class="n">incomeCentersFull</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">incomeCentersTemp</span>
+        <span class="o">*</span> <span class="n">averageIncomeGroup</span>
+        <span class="o">/</span> <span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">incomeCentersTemp</span> <span class="o">*</span> <span class="n">popCenters</span><span class="p">)</span>
+            <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">popCenters</span><span class="p">)))</span>
+    <span class="p">)</span>
+
+    <span class="c1"># We are essentially interested in the ODflows matrix, that is the</span>
+    <span class="c1"># probability, for a given income group, to work in each (narrowly)</span>
+    <span class="c1"># selected job center for each potential SP of residence</span>
+    <span class="n">transportCostModes</span><span class="p">,</span> <span class="n">transportCost</span><span class="p">,</span> <span class="n">ODflows</span><span class="p">,</span> <span class="o">*</span><span class="n">_</span> <span class="o">=</span> <span class="n">compute_ODflows</span><span class="p">(</span>
+        <span class="n">householdSize</span><span class="p">,</span> <span class="n">monetaryCost</span><span class="p">,</span> <span class="n">costTime</span><span class="p">,</span> <span class="n">incomeCentersFull</span><span class="p">,</span>
+        <span class="n">whichCenters</span><span class="p">,</span> <span class="n">param_lambda</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+
+    <span class="c1"># We compare the true population distribution with its theoretical</span>
+    <span class="c1"># equivalent computed from simulated income distribution: the closer</span>
+    <span class="c1"># the score is to zero, the better (see math appendix)</span>
+
+    <span class="c1"># NB: correction is not needed a priori, as income distribution data from</span>
+    <span class="c1"># SP does not include people out of employment</span>
+    <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;correct_eq3&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">score</span> <span class="o">=</span> <span class="p">(</span><span class="n">popCenters</span>
+                 <span class="o">-</span> <span class="p">(</span><span class="n">householdSize</span> <span class="o">/</span> <span class="mi">2</span>
+                    <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">popResidence</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">ODflows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+                 <span class="p">)</span>
+    <span class="k">elif</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;correct_eq3&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">score</span> <span class="o">=</span> <span class="p">(</span><span class="n">popCenters</span>
+                 <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">popResidence</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">ODflows</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+    <span class="c1"># We also return the total number of commuters (in a given income group)</span>
+    <span class="c1"># for (narrowly) selected job centers in predefined distance brackets</span>
+    <span class="n">nbCommuters</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">bracketsDistance</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">bracketsDistance</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">which</span> <span class="o">=</span> <span class="p">((</span><span class="n">distanceOutput</span><span class="p">[</span><span class="n">whichCenters</span><span class="p">,</span> <span class="p">:]</span> <span class="o">&gt;</span> <span class="n">bracketsDistance</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+                 <span class="o">&amp;</span> <span class="p">(</span><span class="n">distanceOutput</span><span class="p">[</span><span class="n">whichCenters</span><span class="p">,</span> <span class="p">:]</span> <span class="o">&lt;=</span> <span class="n">bracketsDistance</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+                 <span class="o">&amp;</span> <span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">distanceOutput</span><span class="p">[</span><span class="n">whichCenters</span><span class="p">,</span> <span class="p">:])))</span>
+        <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;correct_eq3&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">nbCommuters</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">which</span> <span class="o">*</span> <span class="n">ODflows</span> <span class="o">*</span> <span class="n">popResidence</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:])</span>
+                <span class="o">*</span> <span class="p">(</span><span class="n">householdSize</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;correct_eq3&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">nbCommuters</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">which</span> <span class="o">*</span> <span class="n">ODflows</span> <span class="o">*</span> <span class="n">popResidence</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]))</span>
+
+    <span class="k">return</span> <span class="n">score</span><span class="p">,</span> <span class="n">nbCommuters</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Thomas Monnier.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

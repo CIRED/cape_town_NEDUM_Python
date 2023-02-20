@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>outputs.export_outputs_floods &mdash; NEDUM-2D for CoCT  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> NEDUM-2D for CoCT
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme_link.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../guidelines.html">General framework</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../use_case_nb.html">Notebook: use cases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../main_nb.html">Notebook: run model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../calib_nb.html">Notebook: run calibration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_ref.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../technical_doc.html">Technical documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../appendix.html">Appendix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../bibliography.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../license_rst.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">NEDUM-2D for CoCT</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>outputs.export_outputs_floods</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for outputs.export_outputs_floods</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+
+<span class="kn">import</span> <span class="nn">outputs.flood_outputs</span> <span class="k">as</span> <span class="nn">outfld</span>
+
+
+<span class="c1"># %% Floods</span>
+
+<div class="viewcode-block" id="validation_flood"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs_floods.validation_flood">[docs]</a><span class="k">def</span> <span class="nf">validation_flood</span><span class="p">(</span><span class="n">stats1</span><span class="p">,</span> <span class="n">stats2</span><span class="p">,</span> <span class="n">legend1</span><span class="p">,</span> <span class="n">legend2</span><span class="p">,</span> <span class="n">type_flood</span><span class="p">,</span>
+                     <span class="n">path_plots</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Validation bar plot for household spatial distribution across flood zones.</span>
+
+<span class="sd">    The validation is done across some selected return periods for illustrative</span>
+<span class="sd">    purposes. Breakdown is given by housing type. The output plots show the</span>
+<span class="sd">    average maximum flood depth level to which households are exposed, and the</span>
+<span class="sd">    total number of households living in flood-prone areas.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    stats1 : DataFrame</span>
+<span class="sd">        Table summarizing, for a given flood type and each associated return</span>
+<span class="sd">        period, the estimated total number of households per housing type</span>
+<span class="sd">        living in flood-prone areas, and the associated average maximum flood</span>
+<span class="sd">        depth level. We expect validation data here.</span>
+<span class="sd">    stats2 : DataFrame</span>
+<span class="sd">        Table summarizing, for a given flood type and each associated return</span>
+<span class="sd">        period, the estimated total number of households per housing type</span>
+<span class="sd">        living in flood-prone areas, and the associated average maximum flood</span>
+<span class="sd">        depth level. We expect simulation results here.</span>
+<span class="sd">    legend1 : str</span>
+<span class="sd">        Legend for first data frame</span>
+<span class="sd">    legend2 : str</span>
+<span class="sd">        Legend for second data frame</span>
+<span class="sd">    type_flood : str</span>
+<span class="sd">        Type of flood risk considered, used to define output file name</span>
+<span class="sd">    path_plots : str</span>
+<span class="sd">        Path for saving output plots</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Formal private&quot;</span><span class="p">,</span> <span class="s2">&quot;Formal subsidized&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;Informal </span><span class="se">\n</span><span class="s2"> settlements&quot;</span><span class="p">,</span> <span class="s2">&quot;Informal </span><span class="se">\n</span><span class="s2"> backyards&quot;</span><span class="p">]</span>
+
+    <span class="c1"># FLOOD DEPTH</span>
+
+    <span class="c1"># First for validation data</span>
+    <span class="c1"># RP = 20 yrs</span>
+    <span class="n">flood_depth_20_1</span> <span class="o">=</span> <span class="p">[</span><span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_formal</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                        <span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_subsidized</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                        <span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_informal</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                        <span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_backyard</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
+    <span class="c1"># RP = 50 yrs</span>
+    <span class="n">flood_depth_50_1</span> <span class="o">=</span> <span class="p">[</span><span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_formal</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+                        <span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_subsidized</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+                        <span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_informal</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+                        <span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_backyard</span><span class="p">[</span><span class="mi">3</span><span class="p">]]</span>
+    <span class="c1"># RP = 100 yrs</span>
+    <span class="n">flood_depth_100_1</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_formal</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_subsidized</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+        <span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_informal</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_backyard</span><span class="p">[</span><span class="mi">5</span><span class="p">]]</span>
+
+    <span class="c1"># Then for simulation</span>
+    <span class="c1"># RP = 20 yrs</span>
+    <span class="n">flood_depth_20_2</span> <span class="o">=</span> <span class="p">[</span><span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_formal</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                        <span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_subsidized</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                        <span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_informal</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                        <span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_backyard</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
+    <span class="c1"># RP = 50 yrs</span>
+    <span class="n">flood_depth_50_2</span> <span class="o">=</span> <span class="p">[</span><span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_formal</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+                        <span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_subsidized</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+                        <span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_informal</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+                        <span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_backyard</span><span class="p">[</span><span class="mi">3</span><span class="p">]]</span>
+    <span class="c1"># RP = 100 yrs</span>
+    <span class="n">flood_depth_100_2</span> <span class="o">=</span> <span class="p">[</span><span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_formal</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+                         <span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_subsidized</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+                         <span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_informal</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+                         <span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_backyard</span><span class="p">[</span><span class="mi">5</span><span class="p">]]</span>
+
+    <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;#FF9999&#39;</span><span class="p">,</span> <span class="s1">&#39;#00BFFF&#39;</span><span class="p">,</span> <span class="s1">&#39;#C1FFC1&#39;</span><span class="p">,</span> <span class="s1">&#39;#CAE1FF&#39;</span><span class="p">,</span> <span class="s1">&#39;#FFDEAD&#39;</span><span class="p">]</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">label</span><span class="p">))</span>
+    <span class="n">barWidth</span> <span class="o">=</span> <span class="mf">0.25</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_depth_20_1</span><span class="p">),</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="s1">&#39;20 years&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_depth_50_1</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_depth_20_1</span><span class="p">),</span>
+            <span class="n">bottom</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_depth_20_1</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;50 years&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_depth_100_1</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_depth_50_1</span><span class="p">),</span>
+            <span class="n">bottom</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_depth_50_1</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+            <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;100 years&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="n">barWidth</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_depth_20_2</span><span class="p">),</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="n">barWidth</span><span class="p">,</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_depth_50_2</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_depth_20_2</span><span class="p">),</span>
+            <span class="n">bottom</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_depth_20_2</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="n">barWidth</span><span class="p">,</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_depth_100_2</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_depth_50_2</span><span class="p">),</span>
+            <span class="n">bottom</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_depth_50_2</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+            <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="n">barWidth</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+    <span class="c1"># plt.ylim(0, 1)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.1</span><span class="p">,</span>
+             <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span>
+                 <span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_formal</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_formal</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                 <span class="p">)</span> <span class="o">+</span> <span class="mf">0.002</span><span class="p">,</span>
+             <span class="n">legend1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.1</span><span class="p">,</span>
+             <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span>
+                 <span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_subsidized</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+                 <span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_subsidized</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                 <span class="p">)</span> <span class="o">+</span> <span class="mf">0.002</span><span class="p">,</span>
+             <span class="n">legend1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.1</span><span class="p">,</span>
+             <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span>
+                 <span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_informal</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_informal</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                 <span class="p">)</span> <span class="o">+</span> <span class="mf">0.002</span><span class="p">,</span>
+             <span class="n">legend1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.1</span><span class="p">,</span>
+             <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span>
+                 <span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_backyard</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_backyard</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                 <span class="p">)</span> <span class="o">+</span> <span class="mf">0.002</span><span class="p">,</span>
+             <span class="n">legend1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.15</span><span class="p">,</span>
+             <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span>
+                 <span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_formal</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_formal</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                 <span class="p">)</span> <span class="o">+</span> <span class="mf">0.002</span><span class="p">,</span>
+             <span class="n">legend2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.15</span><span class="p">,</span>
+             <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span>
+                 <span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_subsidized</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+                 <span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_subsidized</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                 <span class="p">)</span> <span class="o">+</span> <span class="mf">0.002</span><span class="p">,</span>
+             <span class="n">legend2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.15</span><span class="p">,</span>
+             <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span>
+                 <span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_informal</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_informal</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                 <span class="p">)</span> <span class="o">+</span> <span class="mf">0.002</span><span class="p">,</span>
+             <span class="n">legend2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.15</span><span class="p">,</span>
+             <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span>
+                 <span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_backyard</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_backyard</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+                 <span class="p">)</span> <span class="o">+</span> <span class="mf">0.002</span><span class="p">,</span>
+             <span class="n">legend2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Average flood depth (m)&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;validation_flood_depth_&#39;</span> <span class="o">+</span> <span class="n">type_flood</span> <span class="o">+</span> <span class="s1">&#39;.png&#39;</span><span class="p">)</span>
+    <span class="c1"># plt.show()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="c1"># FLOOD-PRONE AREA</span>
+
+    <span class="n">flood_area_20_1</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">stats1</span><span class="o">.</span><span class="n">fraction_formal_in_flood_prone_area</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+        <span class="n">stats1</span><span class="o">.</span><span class="n">fraction_subsidized_in_flood_prone_area</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+        <span class="n">stats1</span><span class="o">.</span><span class="n">fraction_informal_in_flood_prone_area</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+        <span class="n">stats1</span><span class="o">.</span><span class="n">fraction_backyard_in_flood_prone_area</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
+    <span class="n">flood_area_50_1</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">stats1</span><span class="o">.</span><span class="n">fraction_formal_in_flood_prone_area</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+        <span class="n">stats1</span><span class="o">.</span><span class="n">fraction_subsidized_in_flood_prone_area</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+        <span class="n">stats1</span><span class="o">.</span><span class="n">fraction_informal_in_flood_prone_area</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+        <span class="n">stats1</span><span class="o">.</span><span class="n">fraction_backyard_in_flood_prone_area</span><span class="p">[</span><span class="mi">3</span><span class="p">]]</span>
+    <span class="n">flood_area_100_1</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">stats1</span><span class="o">.</span><span class="n">fraction_formal_in_flood_prone_area</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+        <span class="n">stats1</span><span class="o">.</span><span class="n">fraction_subsidized_in_flood_prone_area</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+        <span class="n">stats1</span><span class="o">.</span><span class="n">fraction_informal_in_flood_prone_area</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+        <span class="n">stats1</span><span class="o">.</span><span class="n">fraction_backyard_in_flood_prone_area</span><span class="p">[</span><span class="mi">5</span><span class="p">]]</span>
+
+    <span class="n">flood_area_20_2</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">stats2</span><span class="o">.</span><span class="n">fraction_formal_in_flood_prone_area</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+        <span class="n">stats2</span><span class="o">.</span><span class="n">fraction_subsidized_in_flood_prone_area</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+        <span class="n">stats2</span><span class="o">.</span><span class="n">fraction_informal_in_flood_prone_area</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+        <span class="n">stats2</span><span class="o">.</span><span class="n">fraction_backyard_in_flood_prone_area</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
+    <span class="n">flood_area_50_2</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">stats2</span><span class="o">.</span><span class="n">fraction_formal_in_flood_prone_area</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+        <span class="n">stats2</span><span class="o">.</span><span class="n">fraction_subsidized_in_flood_prone_area</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+        <span class="n">stats2</span><span class="o">.</span><span class="n">fraction_informal_in_flood_prone_area</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+        <span class="n">stats2</span><span class="o">.</span><span class="n">fraction_backyard_in_flood_prone_area</span><span class="p">[</span><span class="mi">3</span><span class="p">]]</span>
+    <span class="n">flood_area_100_2</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">stats2</span><span class="o">.</span><span class="n">fraction_formal_in_flood_prone_area</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+        <span class="n">stats2</span><span class="o">.</span><span class="n">fraction_subsidized_in_flood_prone_area</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+        <span class="n">stats2</span><span class="o">.</span><span class="n">fraction_informal_in_flood_prone_area</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+        <span class="n">stats2</span><span class="o">.</span><span class="n">fraction_backyard_in_flood_prone_area</span><span class="p">[</span><span class="mi">5</span><span class="p">]]</span>
+
+    <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;#FF9999&#39;</span><span class="p">,</span> <span class="s1">&#39;#00BFFF&#39;</span><span class="p">,</span> <span class="s1">&#39;#C1FFC1&#39;</span><span class="p">,</span> <span class="s1">&#39;#CAE1FF&#39;</span><span class="p">,</span> <span class="s1">&#39;#FFDEAD&#39;</span><span class="p">]</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">label</span><span class="p">))</span>
+    <span class="n">barWidth</span> <span class="o">=</span> <span class="mf">0.25</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">flood_area_20_1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span>
+            <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;20 years&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_area_50_1</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_area_20_1</span><span class="p">),</span>
+            <span class="n">bottom</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_area_20_1</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;50 years&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_area_100_1</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_area_50_1</span><span class="p">),</span>
+            <span class="n">bottom</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_area_50_1</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;100 years&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="n">barWidth</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_area_20_2</span><span class="p">),</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="n">barWidth</span><span class="p">,</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_area_50_2</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_area_20_2</span><span class="p">),</span>
+            <span class="n">bottom</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_area_20_2</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="n">barWidth</span><span class="p">,</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_area_100_2</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_area_50_2</span><span class="p">),</span>
+            <span class="n">bottom</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_area_50_2</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">)</span>
+
+    <span class="c1"># plt.legend(loc=&#39;upper right&#39;)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="n">barWidth</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+        <span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.1</span><span class="p">,</span>
+        <span class="n">stats1</span><span class="o">.</span><span class="n">fraction_formal_in_flood_prone_area</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="n">legend1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+        <span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.1</span><span class="p">,</span>
+        <span class="n">stats1</span><span class="o">.</span><span class="n">fraction_subsidized_in_flood_prone_area</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="n">legend1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+        <span class="n">r</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.1</span><span class="p">,</span>
+        <span class="n">stats1</span><span class="o">.</span><span class="n">fraction_informal_in_flood_prone_area</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="n">legend1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+        <span class="n">r</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.1</span><span class="p">,</span>
+        <span class="n">stats1</span><span class="o">.</span><span class="n">fraction_backyard_in_flood_prone_area</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="n">legend1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+        <span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.15</span><span class="p">,</span>
+        <span class="n">stats2</span><span class="o">.</span><span class="n">fraction_formal_in_flood_prone_area</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="n">legend2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+        <span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.15</span><span class="p">,</span>
+        <span class="n">stats2</span><span class="o">.</span><span class="n">fraction_subsidized_in_flood_prone_area</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="n">legend2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+        <span class="n">r</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.15</span><span class="p">,</span>
+        <span class="n">stats2</span><span class="o">.</span><span class="n">fraction_informal_in_flood_prone_area</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="n">legend2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+        <span class="n">r</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.15</span><span class="p">,</span>
+        <span class="n">stats2</span><span class="o">.</span><span class="n">fraction_backyard_in_flood_prone_area</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="n">legend2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Dwellings in flood-prone areas&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;validation_flood_proportion_&#39;</span>
+                <span class="o">+</span> <span class="n">type_flood</span> <span class="o">+</span> <span class="s1">&#39;.png&#39;</span><span class="p">)</span>
+    <span class="c1"># plt.show()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="validation_flood_coastal"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs_floods.validation_flood_coastal">[docs]</a><span class="k">def</span> <span class="nf">validation_flood_coastal</span><span class="p">(</span><span class="n">stats1</span><span class="p">,</span> <span class="n">stats2</span><span class="p">,</span> <span class="n">legend1</span><span class="p">,</span> <span class="n">legend2</span><span class="p">,</span> <span class="n">type_flood</span><span class="p">,</span>
+                             <span class="n">path_plots</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Validation bar plot for household spatial distribution across flood zones.</span>
+
+<span class="sd">    The validation is done across some selected return periods for illustrative</span>
+<span class="sd">    purposes. Breakdown is given by housing type. The output plots show the</span>
+<span class="sd">    average maximum flood depth level to which households are exposed, and the</span>
+<span class="sd">    total number of households living in flood-prone areas. This function is</span>
+<span class="sd">    specific to coastal floods as the underlying flood maps are not available</span>
+<span class="sd">    for the same return periods as fluvial / pluvial flood maps.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    stats1 : DataFrame</span>
+<span class="sd">        Table summarizing, for a given flood type and each associated return</span>
+<span class="sd">        period, the estimated total number of households per housing type</span>
+<span class="sd">        living in flood-prone areas, and the associated average maximum flood</span>
+<span class="sd">        depth level. We expect validation data here.</span>
+<span class="sd">    stats2 : DataFrame</span>
+<span class="sd">        Table summarizing, for a given flood type and each associated return</span>
+<span class="sd">        period, the estimated total number of households per housing type</span>
+<span class="sd">        living in flood-prone areas, and the associated average maximum flood</span>
+<span class="sd">        depth level. We expect simulation results here.</span>
+<span class="sd">    legend1 : str</span>
+<span class="sd">        Legend for first data frame</span>
+<span class="sd">    legend2 : str</span>
+<span class="sd">        Legend for second data frame</span>
+<span class="sd">    type_flood : str</span>
+<span class="sd">        Type of flood risk considered, used to define output file name</span>
+<span class="sd">    path_plots : str</span>
+<span class="sd">        Path for saving output plots</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">label</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Formal private&quot;</span><span class="p">,</span> <span class="s2">&quot;Formal subsidized&quot;</span><span class="p">,</span>
+             <span class="s2">&quot;Informal </span><span class="se">\n</span><span class="s2"> settlements&quot;</span><span class="p">,</span> <span class="s2">&quot;Informal </span><span class="se">\n</span><span class="s2"> backyards&quot;</span><span class="p">]</span>
+
+    <span class="c1"># FLOOD DEPTH</span>
+
+    <span class="c1"># First for validation data</span>
+    <span class="c1"># RP = 25 yrs</span>
+    <span class="n">flood_depth_25_1</span> <span class="o">=</span> <span class="p">[</span><span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_formal</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+                        <span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_subsidized</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+                        <span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_informal</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+                        <span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_backyard</span><span class="p">[</span><span class="mi">4</span><span class="p">]]</span>
+    <span class="c1"># RP = 50 yrs</span>
+    <span class="n">flood_depth_50_1</span> <span class="o">=</span> <span class="p">[</span><span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_formal</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+                        <span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_subsidized</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+                        <span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_informal</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+                        <span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_backyard</span><span class="p">[</span><span class="mi">5</span><span class="p">]]</span>
+    <span class="c1"># RP = 100 yrs</span>
+    <span class="n">flood_depth_100_1</span> <span class="o">=</span> <span class="p">[</span><span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_formal</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+                         <span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_subsidized</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+                         <span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_informal</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+                         <span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_backyard</span><span class="p">[</span><span class="mi">6</span><span class="p">]]</span>
+
+    <span class="c1"># Then for simulation</span>
+    <span class="c1"># RP = 20 yrs</span>
+    <span class="n">flood_depth_25_2</span> <span class="o">=</span> <span class="p">[</span><span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_formal</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+                        <span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_subsidized</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+                        <span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_informal</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+                        <span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_backyard</span><span class="p">[</span><span class="mi">4</span><span class="p">]]</span>
+    <span class="c1"># RP = 50 yrs</span>
+    <span class="n">flood_depth_50_2</span> <span class="o">=</span> <span class="p">[</span><span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_formal</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+                        <span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_subsidized</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+                        <span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_informal</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+                        <span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_backyard</span><span class="p">[</span><span class="mi">5</span><span class="p">]]</span>
+    <span class="c1"># RP = 100 yrs</span>
+    <span class="n">flood_depth_100_2</span> <span class="o">=</span> <span class="p">[</span><span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_formal</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+                         <span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_subsidized</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+                         <span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_informal</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+                         <span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_backyard</span><span class="p">[</span><span class="mi">6</span><span class="p">]]</span>
+
+    <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;#FF9999&#39;</span><span class="p">,</span> <span class="s1">&#39;#00BFFF&#39;</span><span class="p">,</span> <span class="s1">&#39;#C1FFC1&#39;</span><span class="p">,</span> <span class="s1">&#39;#CAE1FF&#39;</span><span class="p">,</span> <span class="s1">&#39;#FFDEAD&#39;</span><span class="p">]</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">label</span><span class="p">))</span>
+    <span class="n">barWidth</span> <span class="o">=</span> <span class="mf">0.25</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_depth_25_1</span><span class="p">),</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="s1">&#39;25 years&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_depth_50_1</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_depth_25_1</span><span class="p">),</span>
+            <span class="n">bottom</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_depth_25_1</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;50 years&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_depth_100_1</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_depth_50_1</span><span class="p">),</span>
+            <span class="n">bottom</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_depth_50_1</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+            <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;100 years&#39;</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="n">barWidth</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_depth_25_2</span><span class="p">),</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="n">barWidth</span><span class="p">,</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_depth_50_2</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_depth_25_2</span><span class="p">),</span>
+            <span class="n">bottom</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_depth_25_2</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="n">barWidth</span><span class="p">,</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_depth_100_2</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_depth_50_2</span><span class="p">),</span>
+            <span class="n">bottom</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_depth_50_2</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+            <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="n">barWidth</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+    <span class="c1"># plt.ylim(0, 1)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.1</span><span class="p">,</span>
+             <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span>
+                 <span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_formal</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_formal</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+                 <span class="p">)</span> <span class="o">+</span> <span class="mf">0.01</span><span class="p">,</span>
+             <span class="n">legend1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.1</span><span class="p">,</span>
+             <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span>
+                 <span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_subsidized</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+                 <span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_subsidized</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+                 <span class="p">)</span> <span class="o">+</span> <span class="mf">0.01</span><span class="p">,</span>
+             <span class="n">legend1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.1</span><span class="p">,</span>
+             <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span>
+                 <span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_informal</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_informal</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+                 <span class="p">)</span> <span class="o">+</span> <span class="mf">0.01</span><span class="p">,</span>
+             <span class="n">legend1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.1</span><span class="p">,</span>
+             <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span>
+                 <span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_backyard</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">stats1</span><span class="o">.</span><span class="n">flood_depth_backyard</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+                 <span class="p">)</span> <span class="o">+</span> <span class="mf">0.01</span><span class="p">,</span>
+             <span class="n">legend1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.15</span><span class="p">,</span>
+             <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span>
+                 <span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_formal</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_formal</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+                 <span class="p">)</span> <span class="o">+</span> <span class="mf">0.01</span><span class="p">,</span>
+             <span class="n">legend2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.15</span><span class="p">,</span>
+             <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span>
+                 <span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_subsidized</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+                 <span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_subsidized</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+                 <span class="p">)</span> <span class="o">+</span> <span class="mf">0.01</span><span class="p">,</span>
+             <span class="n">legend2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.15</span><span class="p">,</span>
+             <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span>
+                 <span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_informal</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_informal</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+                 <span class="p">)</span> <span class="o">+</span> <span class="mf">0.01</span><span class="p">,</span>
+             <span class="n">legend2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.15</span><span class="p">,</span>
+             <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span>
+                 <span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_backyard</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">stats2</span><span class="o">.</span><span class="n">flood_depth_backyard</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+                 <span class="p">)</span> <span class="o">+</span> <span class="mf">0.01</span><span class="p">,</span>
+             <span class="n">legend2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Average flood depth (m)&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;validation_flood_depth_&#39;</span> <span class="o">+</span> <span class="n">type_flood</span> <span class="o">+</span> <span class="s1">&#39;.png&#39;</span><span class="p">)</span>
+    <span class="c1"># plt.show()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="c1"># FLOOD-PRONE AREA</span>
+
+    <span class="n">flood_area_25_1</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">stats1</span><span class="o">.</span><span class="n">fraction_formal_in_flood_prone_area</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+        <span class="n">stats1</span><span class="o">.</span><span class="n">fraction_subsidized_in_flood_prone_area</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+        <span class="n">stats1</span><span class="o">.</span><span class="n">fraction_informal_in_flood_prone_area</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+        <span class="n">stats1</span><span class="o">.</span><span class="n">fraction_backyard_in_flood_prone_area</span><span class="p">[</span><span class="mi">4</span><span class="p">]]</span>
+    <span class="n">flood_area_50_1</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">stats1</span><span class="o">.</span><span class="n">fraction_formal_in_flood_prone_area</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+        <span class="n">stats1</span><span class="o">.</span><span class="n">fraction_subsidized_in_flood_prone_area</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+        <span class="n">stats1</span><span class="o">.</span><span class="n">fraction_informal_in_flood_prone_area</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+        <span class="n">stats1</span><span class="o">.</span><span class="n">fraction_backyard_in_flood_prone_area</span><span class="p">[</span><span class="mi">5</span><span class="p">]]</span>
+    <span class="n">flood_area_100_1</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">stats1</span><span class="o">.</span><span class="n">fraction_formal_in_flood_prone_area</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+        <span class="n">stats1</span><span class="o">.</span><span class="n">fraction_subsidized_in_flood_prone_area</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+        <span class="n">stats1</span><span class="o">.</span><span class="n">fraction_informal_in_flood_prone_area</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+        <span class="n">stats1</span><span class="o">.</span><span class="n">fraction_backyard_in_flood_prone_area</span><span class="p">[</span><span class="mi">6</span><span class="p">]]</span>
+    <span class="n">flood_area_25_2</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">stats2</span><span class="o">.</span><span class="n">fraction_formal_in_flood_prone_area</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+        <span class="n">stats2</span><span class="o">.</span><span class="n">fraction_subsidized_in_flood_prone_area</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+        <span class="n">stats2</span><span class="o">.</span><span class="n">fraction_informal_in_flood_prone_area</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+        <span class="n">stats2</span><span class="o">.</span><span class="n">fraction_backyard_in_flood_prone_area</span><span class="p">[</span><span class="mi">4</span><span class="p">]]</span>
+    <span class="n">flood_area_50_2</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">stats2</span><span class="o">.</span><span class="n">fraction_formal_in_flood_prone_area</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+        <span class="n">stats2</span><span class="o">.</span><span class="n">fraction_subsidized_in_flood_prone_area</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+        <span class="n">stats2</span><span class="o">.</span><span class="n">fraction_informal_in_flood_prone_area</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+        <span class="n">stats2</span><span class="o">.</span><span class="n">fraction_backyard_in_flood_prone_area</span><span class="p">[</span><span class="mi">5</span><span class="p">]]</span>
+    <span class="n">flood_area_100_2</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">stats2</span><span class="o">.</span><span class="n">fraction_formal_in_flood_prone_area</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+        <span class="n">stats2</span><span class="o">.</span><span class="n">fraction_subsidized_in_flood_prone_area</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+        <span class="n">stats2</span><span class="o">.</span><span class="n">fraction_informal_in_flood_prone_area</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span>
+        <span class="n">stats2</span><span class="o">.</span><span class="n">fraction_backyard_in_flood_prone_area</span><span class="p">[</span><span class="mi">6</span><span class="p">]]</span>
+
+    <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;#FF9999&#39;</span><span class="p">,</span> <span class="s1">&#39;#00BFFF&#39;</span><span class="p">,</span> <span class="s1">&#39;#C1FFC1&#39;</span><span class="p">,</span> <span class="s1">&#39;#CAE1FF&#39;</span><span class="p">,</span> <span class="s1">&#39;#FFDEAD&#39;</span><span class="p">]</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">label</span><span class="p">))</span>
+    <span class="n">barWidth</span> <span class="o">=</span> <span class="mf">0.25</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">flood_area_25_1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span>
+            <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;25 years&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_area_50_1</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_area_25_1</span><span class="p">),</span>
+            <span class="n">bottom</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_area_25_1</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;50 years&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_area_100_1</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_area_50_1</span><span class="p">),</span>
+            <span class="n">bottom</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_area_50_1</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;100 years&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="n">barWidth</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_area_25_2</span><span class="p">),</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="n">barWidth</span><span class="p">,</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_area_50_2</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_area_25_2</span><span class="p">),</span>
+            <span class="n">bottom</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_area_25_2</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="n">barWidth</span><span class="p">,</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_area_100_2</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_area_50_2</span><span class="p">),</span>
+            <span class="n">bottom</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">flood_area_50_2</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+            <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">)</span>
+
+    <span class="c1"># plt.legend(loc=&#39;upper right&#39;)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">r</span> <span class="o">+</span> <span class="n">barWidth</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+        <span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.1</span><span class="p">,</span>
+        <span class="n">stats1</span><span class="o">.</span><span class="n">fraction_formal_in_flood_prone_area</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">+</span> <span class="mi">20</span><span class="p">,</span>
+        <span class="n">legend1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+        <span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.1</span><span class="p">,</span>
+        <span class="n">stats1</span><span class="o">.</span><span class="n">fraction_subsidized_in_flood_prone_area</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">+</span> <span class="mi">20</span><span class="p">,</span>
+        <span class="n">legend1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+        <span class="n">r</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.1</span><span class="p">,</span>
+        <span class="n">stats1</span><span class="o">.</span><span class="n">fraction_informal_in_flood_prone_area</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">+</span> <span class="mi">20</span><span class="p">,</span>
+        <span class="n">legend1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+        <span class="n">r</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.1</span><span class="p">,</span>
+        <span class="n">stats1</span><span class="o">.</span><span class="n">fraction_backyard_in_flood_prone_area</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">+</span> <span class="mi">20</span><span class="p">,</span>
+        <span class="n">legend1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+        <span class="n">r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.15</span><span class="p">,</span>
+        <span class="n">stats2</span><span class="o">.</span><span class="n">fraction_formal_in_flood_prone_area</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">+</span> <span class="mi">20</span><span class="p">,</span>
+        <span class="n">legend2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+        <span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.15</span><span class="p">,</span>
+        <span class="n">stats2</span><span class="o">.</span><span class="n">fraction_subsidized_in_flood_prone_area</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">+</span> <span class="mi">20</span><span class="p">,</span>
+        <span class="n">legend2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+        <span class="n">r</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.15</span><span class="p">,</span>
+        <span class="n">stats2</span><span class="o">.</span><span class="n">fraction_informal_in_flood_prone_area</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">+</span> <span class="mi">20</span><span class="p">,</span>
+        <span class="n">legend2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
+        <span class="n">r</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.15</span><span class="p">,</span>
+        <span class="n">stats2</span><span class="o">.</span><span class="n">fraction_backyard_in_flood_prone_area</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">+</span> <span class="mi">20</span><span class="p">,</span>
+        <span class="n">legend2</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Dwellings in flood-prone areas&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;validation_flood_proportion_&#39;</span>
+                <span class="o">+</span> <span class="n">type_flood</span> <span class="o">+</span> <span class="s1">&#39;.png&#39;</span><span class="p">)</span>
+    <span class="c1"># plt.show()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="valid_damages"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs_floods.valid_damages">[docs]</a><span class="k">def</span> <span class="nf">valid_damages</span><span class="p">(</span><span class="n">damages1</span><span class="p">,</span> <span class="n">damages2</span><span class="p">,</span> <span class="n">path_plots</span><span class="p">,</span> <span class="n">flood_categ</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Validation bar plot for estimated damages for a given flood type.</span>
+
+<span class="sd">    Breakdown is given by housing type as depth-damage functions used to</span>
+<span class="sd">    estimate costs are specific to building materials. Here, we just annualize</span>
+<span class="sd">    previously estimated total damages across available return periods. The</span>
+<span class="sd">    function returns two separate plots for damages done to housing structures</span>
+<span class="sd">    and contents.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    damages1 : DataFrame</span>
+<span class="sd">        Table yielding, for each return period and housing types, the estimated</span>
+<span class="sd">        total damages in terms of housing structures and contents. Here, we</span>
+<span class="sd">        expect simulation results.</span>
+<span class="sd">    damages2 : DataFrame</span>
+<span class="sd">        Table yielding, for each return period and housing types, the estimated</span>
+<span class="sd">        total damages in terms of housing structures and contents. Here, we</span>
+<span class="sd">        expect validation data.</span>
+<span class="sd">    path_plots : str</span>
+<span class="sd">        Path for saving output plots</span>
+<span class="sd">    flood_categ : str</span>
+<span class="sd">        Type of flood risk considered, used to define output file name</span>
+<span class="sd">    options : dict</span>
+<span class="sd">        Dictionary of default options</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.spines.right&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.spines.top&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;xtick.bottom&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;xtick.labelbottom&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;ytick.left&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;ytick.labelleft&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">data1</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">[</span><span class="n">outfld</span><span class="o">.</span><span class="n">annualize_damages</span><span class="p">(</span>
+            <span class="n">damages1</span><span class="o">.</span><span class="n">formal_structure_damages</span><span class="p">,</span> <span class="n">flood_categ</span><span class="p">,</span> <span class="s1">&#39;formal&#39;</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+            <span class="o">/</span> <span class="mi">1000000</span><span class="p">,</span>
+         <span class="n">outfld</span><span class="o">.</span><span class="n">annualize_damages</span><span class="p">(</span>
+             <span class="n">damages1</span><span class="o">.</span><span class="n">subsidized_structure_damages</span><span class="p">,</span> <span class="n">flood_categ</span><span class="p">,</span> <span class="s1">&#39;subsidized&#39;</span><span class="p">,</span>
+             <span class="n">options</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000000</span><span class="p">,</span>
+         <span class="n">outfld</span><span class="o">.</span><span class="n">annualize_damages</span><span class="p">(</span>
+             <span class="n">damages1</span><span class="o">.</span><span class="n">informal_structure_damages</span><span class="p">,</span> <span class="n">flood_categ</span><span class="p">,</span> <span class="s1">&#39;informal&#39;</span><span class="p">,</span>
+             <span class="n">options</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000000</span><span class="p">,</span>
+         <span class="n">outfld</span><span class="o">.</span><span class="n">annualize_damages</span><span class="p">(</span>
+             <span class="n">damages1</span><span class="o">.</span><span class="n">backyard_structure_damages</span><span class="p">,</span> <span class="n">flood_categ</span><span class="p">,</span> <span class="s1">&#39;backyard&#39;</span><span class="p">,</span>
+             <span class="n">options</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000000</span><span class="p">],</span>
+        <span class="p">[</span><span class="n">outfld</span><span class="o">.</span><span class="n">annualize_damages</span><span class="p">(</span>
+            <span class="n">damages1</span><span class="o">.</span><span class="n">formal_content_damages</span><span class="p">,</span> <span class="n">flood_categ</span><span class="p">,</span> <span class="s1">&#39;formal&#39;</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+            <span class="o">/</span> <span class="mi">1000000</span><span class="p">,</span>
+         <span class="n">outfld</span><span class="o">.</span><span class="n">annualize_damages</span><span class="p">(</span>
+             <span class="n">damages1</span><span class="o">.</span><span class="n">subsidized_content_damages</span><span class="p">,</span> <span class="n">flood_categ</span><span class="p">,</span> <span class="s1">&#39;subsidized&#39;</span><span class="p">,</span>
+             <span class="n">options</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000000</span><span class="p">,</span>
+         <span class="n">outfld</span><span class="o">.</span><span class="n">annualize_damages</span><span class="p">(</span>
+             <span class="n">damages1</span><span class="o">.</span><span class="n">informal_content_damages</span><span class="p">,</span> <span class="n">flood_categ</span><span class="p">,</span> <span class="s1">&#39;informal&#39;</span><span class="p">,</span>
+             <span class="n">options</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000000</span><span class="p">,</span>
+         <span class="n">outfld</span><span class="o">.</span><span class="n">annualize_damages</span><span class="p">(</span>
+             <span class="n">damages1</span><span class="o">.</span><span class="n">backyard_content_damages</span><span class="p">,</span> <span class="n">flood_categ</span><span class="p">,</span> <span class="s1">&#39;backyard&#39;</span><span class="p">,</span>
+             <span class="n">options</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000000</span><span class="p">]</span>
+        <span class="p">]</span>
+    <span class="n">data2</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">[</span><span class="n">outfld</span><span class="o">.</span><span class="n">annualize_damages</span><span class="p">(</span>
+            <span class="n">damages2</span><span class="o">.</span><span class="n">formal_structure_damages</span><span class="p">,</span> <span class="n">flood_categ</span><span class="p">,</span> <span class="s1">&#39;formal&#39;</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+            <span class="o">/</span> <span class="mi">1000000</span><span class="p">,</span>
+         <span class="n">outfld</span><span class="o">.</span><span class="n">annualize_damages</span><span class="p">(</span>
+             <span class="n">damages2</span><span class="o">.</span><span class="n">subsidized_structure_damages</span><span class="p">,</span> <span class="n">flood_categ</span><span class="p">,</span> <span class="s1">&#39;subsidized&#39;</span><span class="p">,</span>
+             <span class="n">options</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000000</span><span class="p">,</span>
+         <span class="n">outfld</span><span class="o">.</span><span class="n">annualize_damages</span><span class="p">(</span>
+             <span class="n">damages2</span><span class="o">.</span><span class="n">informal_structure_damages</span><span class="p">,</span> <span class="n">flood_categ</span><span class="p">,</span> <span class="s1">&#39;informal&#39;</span><span class="p">,</span>
+             <span class="n">options</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000000</span><span class="p">,</span>
+         <span class="n">outfld</span><span class="o">.</span><span class="n">annualize_damages</span><span class="p">(</span>
+             <span class="n">damages2</span><span class="o">.</span><span class="n">backyard_structure_damages</span><span class="p">,</span> <span class="n">flood_categ</span><span class="p">,</span> <span class="s1">&#39;backyard&#39;</span><span class="p">,</span>
+             <span class="n">options</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000000</span><span class="p">],</span>
+        <span class="p">[</span><span class="n">outfld</span><span class="o">.</span><span class="n">annualize_damages</span><span class="p">(</span>
+            <span class="n">damages2</span><span class="o">.</span><span class="n">formal_content_damages</span><span class="p">,</span> <span class="n">flood_categ</span><span class="p">,</span> <span class="s1">&#39;formal&#39;</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+            <span class="o">/</span> <span class="mi">1000000</span><span class="p">,</span>
+         <span class="n">outfld</span><span class="o">.</span><span class="n">annualize_damages</span><span class="p">(</span>
+             <span class="n">damages2</span><span class="o">.</span><span class="n">subsidized_content_damages</span><span class="p">,</span> <span class="n">flood_categ</span><span class="p">,</span> <span class="s1">&#39;subsidized&#39;</span><span class="p">,</span>
+             <span class="n">options</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000000</span><span class="p">,</span>
+         <span class="n">outfld</span><span class="o">.</span><span class="n">annualize_damages</span><span class="p">(</span>
+             <span class="n">damages2</span><span class="o">.</span><span class="n">informal_content_damages</span><span class="p">,</span> <span class="n">flood_categ</span><span class="p">,</span> <span class="s1">&#39;informal&#39;</span><span class="p">,</span>
+             <span class="n">options</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000000</span><span class="p">,</span>
+         <span class="n">outfld</span><span class="o">.</span><span class="n">annualize_damages</span><span class="p">(</span>
+             <span class="n">damages2</span><span class="o">.</span><span class="n">backyard_content_damages</span><span class="p">,</span> <span class="n">flood_categ</span><span class="p">,</span> <span class="s1">&#39;backyard&#39;</span><span class="p">,</span>
+             <span class="n">options</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000000</span><span class="p">]</span>
+        <span class="p">]</span>
+    <span class="n">barWidth</span> <span class="o">=</span> <span class="mf">0.25</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;#FF9999&#39;</span><span class="p">,</span> <span class="s1">&#39;#00BFFF&#39;</span><span class="p">,</span> <span class="s1">&#39;#C1FFC1&#39;</span><span class="p">,</span> <span class="s1">&#39;#CAE1FF&#39;</span><span class="p">,</span> <span class="s1">&#39;#FFDEAD&#39;</span><span class="p">]</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span>
+        <span class="n">X</span> <span class="o">-</span> <span class="n">barWidth</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">data1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Structures (sim)&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span>
+        <span class="n">X</span> <span class="o">+</span> <span class="n">barWidth</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">data2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Structures (data)&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="c1"># plt.ylim(0, 25)</span>
+    <span class="n">quarter</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Formal private&quot;</span><span class="p">,</span> <span class="s2">&quot;Formal subsidized&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;Informal </span><span class="se">\n</span><span class="s2"> settlements&quot;</span><span class="p">,</span> <span class="s2">&quot;Informal </span><span class="se">\n</span><span class="s2"> in backyards&quot;</span><span class="p">]</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">quarter</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Million R per year&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;valid_&#39;</span> <span class="o">+</span> <span class="n">flood_categ</span>
+                <span class="o">+</span> <span class="s1">&#39;_structures_damages.png&#39;</span><span class="p">)</span>
+    <span class="c1"># plt.show()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span>
+        <span class="n">X</span> <span class="o">-</span> <span class="n">barWidth</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">data1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Contents (sim)&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span>
+        <span class="n">X</span> <span class="o">+</span> <span class="n">barWidth</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">data2</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Contents (data)&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="c1"># plt.ylim(0, 25)</span>
+    <span class="n">quarter</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Formal private&quot;</span><span class="p">,</span> <span class="s2">&quot;Formal subsidized&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;Informal </span><span class="se">\n</span><span class="s2"> settlements&quot;</span><span class="p">,</span> <span class="s2">&quot;Informal </span><span class="se">\n</span><span class="s2"> in backyards&quot;</span><span class="p">]</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">quarter</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Million R per year&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="s1">&#39;valid_&#39;</span> <span class="o">+</span> <span class="n">flood_categ</span> <span class="o">+</span> <span class="s1">&#39;_contents_damages.png&#39;</span><span class="p">)</span>
+    <span class="c1"># plt.show()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="simul_damages"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs_floods.simul_damages">[docs]</a><span class="k">def</span> <span class="nf">simul_damages</span><span class="p">(</span><span class="n">damages</span><span class="p">,</span> <span class="n">path_plots</span><span class="p">,</span> <span class="n">flood_categ</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Bar plot for estimated damages for a given flood type.</span>
+
+<span class="sd">    Breakdown is given by housing type as depth-damage functions used to</span>
+<span class="sd">    estimate costs are specific to building materials. Here, we just annualize</span>
+<span class="sd">    previously estimated total damages across available return periods. The</span>
+<span class="sd">    function returns two separate plots for damages done to housing structures</span>
+<span class="sd">    and contents. This function (as opposed to plot_damages) is specifically</span>
+<span class="sd">    used for subsequent periods when validation data is not available.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    damages : DataFrame</span>
+<span class="sd">        Table yielding, for each return period and housing types, the estimated</span>
+<span class="sd">        total damages in terms of housing structures and contents</span>
+<span class="sd">    path_plots : str</span>
+<span class="sd">        Path for saving output plots</span>
+<span class="sd">    flood_categ : str</span>
+<span class="sd">        Type of flood risk considered, used to define output file name</span>
+<span class="sd">    options : dict</span>
+<span class="sd">        Dictionary of default options</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.spines.right&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;axes.spines.top&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;xtick.bottom&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;xtick.labelbottom&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;ytick.left&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;ytick.labelleft&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">[</span><span class="n">outfld</span><span class="o">.</span><span class="n">annualize_damages</span><span class="p">(</span>
+            <span class="n">damages</span><span class="o">.</span><span class="n">formal_structure_damages</span><span class="p">,</span> <span class="n">flood_categ</span><span class="p">,</span> <span class="s1">&#39;formal&#39;</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+            <span class="o">/</span> <span class="mi">1000000</span><span class="p">,</span>
+         <span class="n">outfld</span><span class="o">.</span><span class="n">annualize_damages</span><span class="p">(</span>
+             <span class="n">damages</span><span class="o">.</span><span class="n">subsidized_structure_damages</span><span class="p">,</span> <span class="n">flood_categ</span><span class="p">,</span> <span class="s1">&#39;subsidized&#39;</span><span class="p">,</span>
+             <span class="n">options</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000000</span><span class="p">,</span>
+         <span class="n">outfld</span><span class="o">.</span><span class="n">annualize_damages</span><span class="p">(</span>
+             <span class="n">damages</span><span class="o">.</span><span class="n">informal_structure_damages</span><span class="p">,</span> <span class="n">flood_categ</span><span class="p">,</span> <span class="s1">&#39;informal&#39;</span><span class="p">,</span>
+             <span class="n">options</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000000</span><span class="p">,</span>
+         <span class="n">outfld</span><span class="o">.</span><span class="n">annualize_damages</span><span class="p">(</span>
+             <span class="n">damages</span><span class="o">.</span><span class="n">backyard_structure_damages</span><span class="p">,</span> <span class="n">flood_categ</span><span class="p">,</span> <span class="s1">&#39;backyard&#39;</span><span class="p">,</span>
+             <span class="n">options</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000000</span><span class="p">],</span>
+        <span class="p">[</span><span class="n">outfld</span><span class="o">.</span><span class="n">annualize_damages</span><span class="p">(</span>
+            <span class="n">damages</span><span class="o">.</span><span class="n">formal_content_damages</span><span class="p">,</span> <span class="n">flood_categ</span><span class="p">,</span> <span class="s1">&#39;formal&#39;</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+            <span class="o">/</span> <span class="mi">1000000</span><span class="p">,</span>
+         <span class="n">outfld</span><span class="o">.</span><span class="n">annualize_damages</span><span class="p">(</span>
+             <span class="n">damages</span><span class="o">.</span><span class="n">subsidized_content_damages</span><span class="p">,</span> <span class="n">flood_categ</span><span class="p">,</span> <span class="s1">&#39;subsidized&#39;</span><span class="p">,</span>
+             <span class="n">options</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000000</span><span class="p">,</span>
+         <span class="n">outfld</span><span class="o">.</span><span class="n">annualize_damages</span><span class="p">(</span>
+             <span class="n">damages</span><span class="o">.</span><span class="n">informal_content_damages</span><span class="p">,</span> <span class="n">flood_categ</span><span class="p">,</span> <span class="s1">&#39;informal&#39;</span><span class="p">,</span>
+             <span class="n">options</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000000</span><span class="p">,</span>
+         <span class="n">outfld</span><span class="o">.</span><span class="n">annualize_damages</span><span class="p">(</span>
+             <span class="n">damages</span><span class="o">.</span><span class="n">backyard_content_damages</span><span class="p">,</span> <span class="n">flood_categ</span><span class="p">,</span> <span class="s1">&#39;backyard&#39;</span><span class="p">,</span>
+             <span class="n">options</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000000</span><span class="p">]</span>
+        <span class="p">]</span>
+
+    <span class="n">barWidth</span> <span class="o">=</span> <span class="mf">0.25</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;#FF9999&#39;</span><span class="p">,</span> <span class="s1">&#39;#00BFFF&#39;</span><span class="p">,</span> <span class="s1">&#39;#C1FFC1&#39;</span><span class="p">,</span> <span class="s1">&#39;#CAE1FF&#39;</span><span class="p">,</span> <span class="s1">&#39;#FFDEAD&#39;</span><span class="p">]</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span>
+        <span class="n">X</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Structures&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="c1"># plt.ylim(0, 25)</span>
+    <span class="n">quarter</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Formal private&quot;</span><span class="p">,</span> <span class="s2">&quot;Formal subsidized&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;Informal </span><span class="se">\n</span><span class="s2"> settlements&quot;</span><span class="p">,</span> <span class="s2">&quot;Informal </span><span class="se">\n</span><span class="s2"> in backyards&quot;</span><span class="p">]</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">quarter</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Million R per year&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="n">flood_categ</span> <span class="o">+</span> <span class="s1">&#39;_structures_damages.png&#39;</span><span class="p">)</span>
+    <span class="c1"># plt.show()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span>
+        <span class="n">X</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Contents&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="c1"># plt.ylim(0, 25)</span>
+    <span class="n">quarter</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Formal private&quot;</span><span class="p">,</span> <span class="s2">&quot;Formal subsidized&quot;</span><span class="p">,</span>
+               <span class="s2">&quot;Informal </span><span class="se">\n</span><span class="s2"> settlements&quot;</span><span class="p">,</span> <span class="s2">&quot;Informal </span><span class="se">\n</span><span class="s2"> in backyards&quot;</span><span class="p">]</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">quarter</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Million R per year&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="n">flood_categ</span> <span class="o">+</span> <span class="s1">&#39;_contents_damages.png&#39;</span><span class="p">)</span>
+    <span class="c1"># plt.show()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="simul_damages_time"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs_floods.simul_damages_time">[docs]</a><span class="k">def</span> <span class="nf">simul_damages_time</span><span class="p">(</span><span class="n">list_damages</span><span class="p">,</span> <span class="n">path_plots</span><span class="p">,</span> <span class="n">path_tables</span><span class="p">,</span>
+                       <span class="n">flood_categ</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plot evolution of aggregate annualized damages per housing type over time.</span>
+
+<span class="sd">    The function returns different plots for each housing type. Again, they</span>
+<span class="sd">    are broken down across structures and contents damages. The value obtained</span>
+<span class="sd">    for each year corresponds to the annualized value of the damages summed</span>
+<span class="sd">    across all locations.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    list_damages : list</span>
+<span class="sd">        List, for each simulation year, of the output of the</span>
+<span class="sd">        outputs.flood_outputs.compute_damages_2d function: a dictionary</span>
+<span class="sd">        yielding, for each return period, the estimated damages per grid cell</span>
+<span class="sd">        (24,014) and housing type (4) in terms of housing structures and</span>
+<span class="sd">        contents</span>
+<span class="sd">    path_plots : str</span>
+<span class="sd">        Path for saving output plots</span>
+<span class="sd">    path_tables : str</span>
+<span class="sd">        Path for saving output plots</span>
+<span class="sd">    flood_categ : str</span>
+<span class="sd">        Type of flood risk considered, used to define output file name</span>
+<span class="sd">    options : dict</span>
+<span class="sd">        Dictionary of default options</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">list_data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">damages</span> <span class="ow">in</span> <span class="n">list_damages</span><span class="p">:</span>
+        <span class="n">new_damages</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">damages</span><span class="p">:</span>
+            <span class="n">new_damages</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">damages</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">clean_damages</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">new_damages</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;index&#39;</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">[</span><span class="n">outfld</span><span class="o">.</span><span class="n">annualize_damages</span><span class="p">(</span>
+                <span class="n">clean_damages</span><span class="o">.</span><span class="n">formal_structure_damages</span><span class="p">,</span> <span class="n">flood_categ</span><span class="p">,</span>
+                <span class="s1">&#39;formal&#39;</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000000</span><span class="p">,</span>
+             <span class="n">outfld</span><span class="o">.</span><span class="n">annualize_damages</span><span class="p">(</span>
+                 <span class="n">clean_damages</span><span class="o">.</span><span class="n">subsidized_structure_damages</span><span class="p">,</span> <span class="n">flood_categ</span><span class="p">,</span>
+                 <span class="s1">&#39;subsidized&#39;</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000000</span><span class="p">,</span>
+             <span class="n">outfld</span><span class="o">.</span><span class="n">annualize_damages</span><span class="p">(</span>
+                 <span class="n">clean_damages</span><span class="o">.</span><span class="n">informal_structure_damages</span><span class="p">,</span>
+                 <span class="n">flood_categ</span><span class="p">,</span> <span class="s1">&#39;informal&#39;</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000000</span><span class="p">,</span>
+             <span class="n">outfld</span><span class="o">.</span><span class="n">annualize_damages</span><span class="p">(</span>
+                 <span class="n">clean_damages</span><span class="o">.</span><span class="n">backyard_structure_damages</span><span class="p">,</span>
+                 <span class="n">flood_categ</span><span class="p">,</span> <span class="s1">&#39;backyard&#39;</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000000</span><span class="p">],</span>
+            <span class="p">[</span><span class="n">outfld</span><span class="o">.</span><span class="n">annualize_damages</span><span class="p">(</span>
+                <span class="n">clean_damages</span><span class="o">.</span><span class="n">formal_content_damages</span><span class="p">,</span>
+                <span class="n">flood_categ</span><span class="p">,</span> <span class="s1">&#39;formal&#39;</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000000</span><span class="p">,</span>
+             <span class="n">outfld</span><span class="o">.</span><span class="n">annualize_damages</span><span class="p">(</span>
+                 <span class="n">clean_damages</span><span class="o">.</span><span class="n">subsidized_content_damages</span><span class="p">,</span>
+                 <span class="n">flood_categ</span><span class="p">,</span> <span class="s1">&#39;subsidized&#39;</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000000</span><span class="p">,</span>
+             <span class="n">outfld</span><span class="o">.</span><span class="n">annualize_damages</span><span class="p">(</span>
+                 <span class="n">clean_damages</span><span class="o">.</span><span class="n">informal_content_damages</span><span class="p">,</span>
+                 <span class="n">flood_categ</span><span class="p">,</span> <span class="s1">&#39;informal&#39;</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000000</span><span class="p">,</span>
+             <span class="n">outfld</span><span class="o">.</span><span class="n">annualize_damages</span><span class="p">(</span>
+                 <span class="n">clean_damages</span><span class="o">.</span><span class="n">backyard_content_damages</span><span class="p">,</span>
+                 <span class="n">flood_categ</span><span class="p">,</span> <span class="s1">&#39;backyard&#39;</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span> <span class="o">/</span> <span class="mi">1000000</span><span class="p">]</span>
+            <span class="p">]</span>
+        <span class="n">list_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="n">list_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">list_data</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path_tables</span> <span class="o">+</span> <span class="n">flood_categ</span> <span class="o">+</span> <span class="s1">&#39;evol_damages&#39;</span><span class="p">,</span> <span class="n">list_data</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">flood_categ</span> <span class="o">+</span> <span class="s1">&#39;evol_damages table saved&#39;</span><span class="p">)</span>
+
+    <span class="n">years_simul</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2011</span><span class="p">,</span> <span class="mi">2011</span> <span class="o">+</span> <span class="mi">30</span><span class="p">)</span>
+    <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;#FF9999&#39;</span><span class="p">,</span> <span class="s1">&#39;#00BFFF&#39;</span><span class="p">,</span> <span class="s1">&#39;#C1FFC1&#39;</span><span class="p">,</span> <span class="s1">&#39;#CAE1FF&#39;</span><span class="p">,</span> <span class="s1">&#39;#FFDEAD&#39;</span><span class="p">]</span>
+
+    <span class="c1"># It is best to separate housing types for visualisation</span>
+
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">years_simul</span><span class="p">,</span> <span class="n">list_data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Structure&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">years_simul</span><span class="p">,</span> <span class="n">list_data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Contents&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span>
+        <span class="n">mpl</span><span class="o">.</span><span class="n">ticker</span><span class="o">.</span><span class="n">StrMethodFormatter</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{x:,.0f}</span><span class="s1">&#39;</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Million R per year&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="n">flood_categ</span> <span class="o">+</span> <span class="s1">&#39;_evol_FP_damages.png&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">flood_categ</span> <span class="o">+</span> <span class="s1">&#39;_evol_FP_damages done&#39;</span><span class="p">)</span>
+
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">years_simul</span><span class="p">,</span> <span class="n">list_data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Structure&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">years_simul</span><span class="p">,</span> <span class="n">list_data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Contents&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span>
+        <span class="n">mpl</span><span class="o">.</span><span class="n">ticker</span><span class="o">.</span><span class="n">StrMethodFormatter</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{x:,.0f}</span><span class="s1">&#39;</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Million R per year)&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="n">flood_categ</span> <span class="o">+</span> <span class="s1">&#39;_evol_FS_damages.png&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">flood_categ</span> <span class="o">+</span> <span class="s1">&#39;_evol_FS_damages done&#39;</span><span class="p">)</span>
+
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">years_simul</span><span class="p">,</span> <span class="n">list_data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Structure&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">years_simul</span><span class="p">,</span> <span class="n">list_data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Contents&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span>
+        <span class="n">mpl</span><span class="o">.</span><span class="n">ticker</span><span class="o">.</span><span class="n">StrMethodFormatter</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{x:,.0f}</span><span class="s1">&#39;</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Million R per year&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="n">flood_categ</span> <span class="o">+</span> <span class="s1">&#39;_evol_IS_damages.png&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">flood_categ</span> <span class="o">+</span> <span class="s1">&#39;_evol_IS_damages done&#39;</span><span class="p">)</span>
+
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">years_simul</span><span class="p">,</span> <span class="n">list_data</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Structure&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">years_simul</span><span class="p">,</span> <span class="n">list_data</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Contents&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span>
+        <span class="n">mpl</span><span class="o">.</span><span class="n">ticker</span><span class="o">.</span><span class="n">StrMethodFormatter</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{x:,.0f}</span><span class="s1">&#39;</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Million R per year&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="n">flood_categ</span> <span class="o">+</span> <span class="s1">&#39;_evol_IB_damages.png&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">flood_categ</span> <span class="o">+</span> <span class="s1">&#39;_evol_IB_damages dones&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="round_nearest"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs_floods.round_nearest">[docs]</a><span class="k">def</span> <span class="nf">round_nearest</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return rounded value to nearest decimal number above some threshold.</span>
+
+<span class="sd">    This is a technical calculation that is called by the</span>
+<span class="sd">    plot_flood_severity_distrib function: it will allow to split values across</span>
+<span class="sd">    bins, while discarding small values (smaller than half bar width) to avoid</span>
+<span class="sd">    a peak at the origin of the plot.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : Series</span>
+<span class="sd">        Any series of numbers with many decimals</span>
+<span class="sd">    a : float</span>
+<span class="sd">        Level below which we want to discard below which we want to</span>
+<span class="sd">        discard small values</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float</span>
+<span class="sd">        Value rounded to the nearest decimal</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">x</span> <span class="o">/</span> <span class="n">a</span><span class="p">)</span> <span class="o">*</span> <span class="n">a</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="plot_flood_severity_distrib"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs_floods.plot_flood_severity_distrib">[docs]</a><span class="k">def</span> <span class="nf">plot_flood_severity_distrib</span><span class="p">(</span><span class="n">barWidth</span><span class="p">,</span> <span class="n">transparency</span><span class="p">,</span> <span class="n">dictio</span><span class="p">,</span> <span class="n">flood_type</span><span class="p">,</span>
+                                <span class="n">path_plots</span><span class="p">,</span> <span class="n">ylim</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Bar plot distribution of households across flood zones of varying severity.</span>
+
+<span class="sd">    Only selected return periods are shown for illustrative purposes. Output</span>
+<span class="sd">    plot is specific to a given flood type and is broken down into income</span>
+<span class="sd">    groups as a proxy of households&#39; vulnerability. Households are grouped into</span>
+<span class="sd">    bins for different maximum flood depth levels in their residential location</span>
+<span class="sd">    and the resulting population distribution is displayed without the majority</span>
+<span class="sd">    living in low-risk zones (below the flood depth level given by barWidth</span>
+<span class="sd">    argument), to preserve plot readability.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    barWidth : float</span>
+<span class="sd">        Bar width argument expected by pyplot: ocrresponds to the step used to</span>
+<span class="sd">        group maximum flood depth (in m) levels into bins</span>
+<span class="sd">    transparency : list</span>
+<span class="sd">        List of transparency indices to distinguish across plotted return</span>
+<span class="sd">        periods</span>
+<span class="sd">    dictio : dict</span>
+<span class="sd">        Dictionary yielding, for each return period of a given flood type, the</span>
+<span class="sd">        spatial distribution of households broken into income groups, along</span>
+<span class="sd">        with the maximum flood depth level and fraction of flood-prone area in</span>
+<span class="sd">        their residential location</span>
+<span class="sd">    flood_type : TYPE</span>
+<span class="sd">        Code for flood type used as the first component of dictionary keys</span>
+<span class="sd">    path_plots : str</span>
+<span class="sd">        Path for saving output plots</span>
+<span class="sd">    ylim : int</span>
+<span class="sd">        Maximum value on the y-axis</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">flood_type</span> <span class="o">==</span> <span class="s2">&quot;FD&quot;</span><span class="p">:</span>
+        <span class="n">df_1</span> <span class="o">=</span> <span class="n">dictio</span><span class="p">[</span><span class="n">flood_type</span> <span class="o">+</span> <span class="s1">&#39;_20yr&#39;</span><span class="p">]</span>
+        <span class="n">df_2</span> <span class="o">=</span> <span class="n">dictio</span><span class="p">[</span><span class="n">flood_type</span> <span class="o">+</span> <span class="s1">&#39;_50yr&#39;</span><span class="p">]</span>
+        <span class="n">df_3</span> <span class="o">=</span> <span class="n">dictio</span><span class="p">[</span><span class="n">flood_type</span> <span class="o">+</span> <span class="s1">&#39;_100yr&#39;</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">flood_type</span> <span class="o">==</span> <span class="s2">&quot;FU&quot;</span><span class="p">:</span>
+        <span class="n">df_1</span> <span class="o">=</span> <span class="n">dictio</span><span class="p">[</span><span class="n">flood_type</span> <span class="o">+</span> <span class="s1">&#39;_20yr&#39;</span><span class="p">]</span>
+        <span class="n">df_2</span> <span class="o">=</span> <span class="n">dictio</span><span class="p">[</span><span class="n">flood_type</span> <span class="o">+</span> <span class="s1">&#39;_50yr&#39;</span><span class="p">]</span>
+        <span class="n">df_3</span> <span class="o">=</span> <span class="n">dictio</span><span class="p">[</span><span class="n">flood_type</span> <span class="o">+</span> <span class="s1">&#39;_100yr&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">flood_type</span> <span class="o">==</span> <span class="s2">&quot;P&quot;</span><span class="p">:</span>
+        <span class="n">df_1</span> <span class="o">=</span> <span class="n">dictio</span><span class="p">[</span><span class="n">flood_type</span> <span class="o">+</span> <span class="s1">&#39;_20yr&#39;</span><span class="p">]</span>
+        <span class="n">df_2</span> <span class="o">=</span> <span class="n">dictio</span><span class="p">[</span><span class="n">flood_type</span> <span class="o">+</span> <span class="s1">&#39;_50yr&#39;</span><span class="p">]</span>
+        <span class="n">df_3</span> <span class="o">=</span> <span class="n">dictio</span><span class="p">[</span><span class="n">flood_type</span> <span class="o">+</span> <span class="s1">&#39;_100yr&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">flood_type</span> <span class="o">==</span> <span class="s2">&quot;C_MERITDEM_1&quot;</span><span class="p">:</span>
+        <span class="n">df_1</span> <span class="o">=</span> <span class="n">dictio</span><span class="p">[</span><span class="n">flood_type</span> <span class="o">+</span> <span class="s1">&#39;_0025&#39;</span><span class="p">]</span>
+        <span class="n">df_2</span> <span class="o">=</span> <span class="n">dictio</span><span class="p">[</span><span class="n">flood_type</span> <span class="o">+</span> <span class="s1">&#39;_0050&#39;</span><span class="p">]</span>
+        <span class="n">df_3</span> <span class="o">=</span> <span class="n">dictio</span><span class="p">[</span><span class="n">flood_type</span> <span class="o">+</span> <span class="s1">&#39;_0100&#39;</span><span class="p">]</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">df_1</span><span class="o">.</span><span class="n">flood_depth</span><span class="p">,</span> <span class="n">df_1</span><span class="o">.</span><span class="n">sim_poor</span><span class="p">,</span> <span class="n">df_1</span><span class="o">.</span><span class="n">sim_midpoor</span><span class="p">,</span>
+                  <span class="n">df_1</span><span class="o">.</span><span class="n">sim_midrich</span><span class="p">,</span> <span class="n">df_1</span><span class="o">.</span><span class="n">sim_rich</span><span class="p">,</span>
+                  <span class="n">df_2</span><span class="o">.</span><span class="n">flood_depth</span><span class="p">,</span> <span class="n">df_2</span><span class="o">.</span><span class="n">sim_poor</span><span class="p">,</span> <span class="n">df_2</span><span class="o">.</span><span class="n">sim_midpoor</span><span class="p">,</span>
+                  <span class="n">df_2</span><span class="o">.</span><span class="n">sim_midrich</span><span class="p">,</span> <span class="n">df_2</span><span class="o">.</span><span class="n">sim_rich</span><span class="p">,</span>
+                  <span class="n">df_3</span><span class="o">.</span><span class="n">flood_depth</span><span class="p">,</span> <span class="n">df_3</span><span class="o">.</span><span class="n">sim_poor</span><span class="p">,</span> <span class="n">df_3</span><span class="o">.</span><span class="n">sim_midpoor</span><span class="p">,</span>
+                  <span class="n">df_3</span><span class="o">.</span><span class="n">sim_midrich</span><span class="p">,</span> <span class="n">df_3</span><span class="o">.</span><span class="n">sim_rich</span><span class="p">])),</span>
+        <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;x_1&quot;</span><span class="p">,</span> <span class="s2">&quot;ypoor_1&quot;</span><span class="p">,</span> <span class="s2">&quot;ymidpoor_1&quot;</span><span class="p">,</span> <span class="s2">&quot;ymidrich_1&quot;</span><span class="p">,</span> <span class="s2">&quot;yrich_1&quot;</span><span class="p">,</span>
+                 <span class="s2">&quot;x_2&quot;</span><span class="p">,</span> <span class="s2">&quot;ypoor_2&quot;</span><span class="p">,</span> <span class="s2">&quot;ymidpoor_2&quot;</span><span class="p">,</span> <span class="s2">&quot;ymidrich_2&quot;</span><span class="p">,</span> <span class="s2">&quot;yrich_2&quot;</span><span class="p">,</span>
+                 <span class="s2">&quot;x_3&quot;</span><span class="p">,</span> <span class="s2">&quot;ypoor_3&quot;</span><span class="p">,</span> <span class="s2">&quot;ymidpoor_3&quot;</span><span class="p">,</span> <span class="s2">&quot;ymidrich_3&quot;</span><span class="p">,</span> <span class="s2">&quot;yrich_3&quot;</span><span class="p">])</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;round_1&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">round_nearest</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">x_1</span><span class="p">,</span> <span class="n">barWidth</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;round_2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">round_nearest</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">x_2</span><span class="p">,</span> <span class="n">barWidth</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;round_3&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">round_nearest</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">x_3</span><span class="p">,</span> <span class="n">barWidth</span><span class="p">)</span>
+    <span class="n">new_df_1</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;round_1&quot;</span><span class="p">,</span> <span class="s2">&quot;ypoor_1&quot;</span><span class="p">,</span> <span class="s2">&quot;ymidpoor_1&quot;</span><span class="p">,</span> <span class="s2">&quot;ymidrich_1&quot;</span><span class="p">,</span> <span class="s2">&quot;yrich_1&quot;</span><span class="p">]</span>
+                  <span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;round_1&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">new_df_1</span><span class="p">[</span><span class="s2">&quot;rounded&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_df_1</span><span class="o">.</span><span class="n">index</span>
+    <span class="n">new_df_2</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;round_2&quot;</span><span class="p">,</span> <span class="s2">&quot;ypoor_2&quot;</span><span class="p">,</span> <span class="s2">&quot;ymidpoor_2&quot;</span><span class="p">,</span> <span class="s2">&quot;ymidrich_2&quot;</span><span class="p">,</span> <span class="s2">&quot;yrich_2&quot;</span><span class="p">]</span>
+                  <span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;round_2&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">new_df_2</span><span class="p">[</span><span class="s2">&quot;rounded&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_df_2</span><span class="o">.</span><span class="n">index</span>
+    <span class="n">new_df_3</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s2">&quot;round_3&quot;</span><span class="p">,</span> <span class="s2">&quot;ypoor_3&quot;</span><span class="p">,</span> <span class="s2">&quot;ymidpoor_3&quot;</span><span class="p">,</span> <span class="s2">&quot;ymidrich_3&quot;</span><span class="p">,</span> <span class="s2">&quot;yrich_3&quot;</span><span class="p">]</span>
+                  <span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;round_3&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">new_df_3</span><span class="p">[</span><span class="s2">&quot;rounded&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_df_3</span><span class="o">.</span><span class="n">index</span>
+
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
+
+    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">new_df_1</span><span class="o">.</span><span class="n">rounded</span><span class="p">[</span><span class="n">barWidth</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="n">new_df_1</span><span class="o">.</span><span class="n">ypoor_1</span><span class="p">[</span><span class="n">barWidth</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span>
+                 <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;royalblue&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">transparency</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                 <span class="n">label</span><span class="o">=</span><span class="s1">&#39;20 years&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">new_df_2</span><span class="o">.</span><span class="n">rounded</span><span class="p">[</span><span class="n">barWidth</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="n">new_df_2</span><span class="o">.</span><span class="n">ypoor_2</span><span class="p">[</span><span class="n">barWidth</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span>
+                 <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;cornflowerblue&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">transparency</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                 <span class="n">label</span><span class="o">=</span><span class="s1">&#39;50 years&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">new_df_3</span><span class="o">.</span><span class="n">rounded</span><span class="p">[</span><span class="n">barWidth</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="n">new_df_3</span><span class="o">.</span><span class="n">ypoor_3</span><span class="p">[</span><span class="n">barWidth</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span>
+                 <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;lightsteelblue&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">transparency</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                 <span class="n">label</span><span class="o">=</span><span class="s1">&#39;100 years&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Households (nb)&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Severity of floods (m)&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span>
+        <span class="n">mpl</span><span class="o">.</span><span class="n">ticker</span><span class="o">.</span><span class="n">StrMethodFormatter</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{x:,.0f}</span><span class="s1">&#39;</span><span class="p">))</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Poor&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">ylim</span><span class="p">])</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">new_df_1</span><span class="o">.</span><span class="n">rounded</span><span class="p">[</span><span class="n">barWidth</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="n">new_df_1</span><span class="o">.</span><span class="n">ymidpoor_1</span><span class="p">[</span><span class="n">barWidth</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span>
+                 <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;royalblue&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">transparency</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                 <span class="n">label</span><span class="o">=</span><span class="s1">&#39;25 years&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">new_df_2</span><span class="o">.</span><span class="n">rounded</span><span class="p">[</span><span class="n">barWidth</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="n">new_df_2</span><span class="o">.</span><span class="n">ymidpoor_2</span><span class="p">[</span><span class="n">barWidth</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span>
+                 <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;cornflowerblue&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">transparency</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                 <span class="n">label</span><span class="o">=</span><span class="s1">&#39;50 years&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">new_df_3</span><span class="o">.</span><span class="n">rounded</span><span class="p">[</span><span class="n">barWidth</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="n">new_df_3</span><span class="o">.</span><span class="n">ymidpoor_3</span><span class="p">[</span><span class="n">barWidth</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span>
+                 <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;lightsteelblue&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">transparency</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                 <span class="n">label</span><span class="o">=</span><span class="s1">&#39;100 years&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Households (nb)&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Severity of floods (m)&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span>
+        <span class="n">mpl</span><span class="o">.</span><span class="n">ticker</span><span class="o">.</span><span class="n">StrMethodFormatter</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{x:,.0f}</span><span class="s1">&#39;</span><span class="p">))</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Mid-poor&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">ylim</span><span class="p">])</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">new_df_1</span><span class="o">.</span><span class="n">rounded</span><span class="p">[</span><span class="n">barWidth</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="n">new_df_1</span><span class="o">.</span><span class="n">ymidrich_1</span><span class="p">[</span><span class="n">barWidth</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span>
+                 <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;royalblue&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">transparency</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                 <span class="n">label</span><span class="o">=</span><span class="s1">&#39;25 years&#39;</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">new_df_2</span><span class="o">.</span><span class="n">rounded</span><span class="p">[</span><span class="n">barWidth</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="n">new_df_2</span><span class="o">.</span><span class="n">ymidrich_2</span><span class="p">[</span><span class="n">barWidth</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span>
+                 <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;cornflowerblue&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">transparency</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                 <span class="n">label</span><span class="o">=</span><span class="s1">&#39;50 years&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">new_df_3</span><span class="o">.</span><span class="n">rounded</span><span class="p">[</span><span class="n">barWidth</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="n">new_df_3</span><span class="o">.</span><span class="n">ymidrich_3</span><span class="p">[</span><span class="n">barWidth</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span>
+                 <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;lightsteelblue&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">transparency</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                 <span class="n">label</span><span class="o">=</span><span class="s1">&#39;100 years&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Households (nb)&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Severity of floods (m)&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span>
+        <span class="n">mpl</span><span class="o">.</span><span class="n">ticker</span><span class="o">.</span><span class="n">StrMethodFormatter</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{x:,.0f}</span><span class="s1">&#39;</span><span class="p">))</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Mid-rich&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">ylim</span><span class="p">])</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">new_df_1</span><span class="o">.</span><span class="n">rounded</span><span class="p">[</span><span class="n">barWidth</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="n">new_df_1</span><span class="o">.</span><span class="n">yrich_1</span><span class="p">[</span><span class="n">barWidth</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span>
+                 <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;royalblue&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">transparency</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                 <span class="n">label</span><span class="o">=</span><span class="s1">&#39;25 years&#39;</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">new_df_2</span><span class="o">.</span><span class="n">rounded</span><span class="p">[</span><span class="n">barWidth</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="n">new_df_2</span><span class="o">.</span><span class="n">yrich_2</span><span class="p">[</span><span class="n">barWidth</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span>
+                 <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;cornflowerblue&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">transparency</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                 <span class="n">label</span><span class="o">=</span><span class="s1">&#39;50 years&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">new_df_3</span><span class="o">.</span><span class="n">rounded</span><span class="p">[</span><span class="n">barWidth</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="n">new_df_3</span><span class="o">.</span><span class="n">yrich_3</span><span class="p">[</span><span class="n">barWidth</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span>
+                 <span class="n">width</span><span class="o">=</span><span class="n">barWidth</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;lightsteelblue&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">transparency</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                 <span class="n">label</span><span class="o">=</span><span class="s1">&#39;100 years&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Households (nb)&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Severity of floods (m)&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span>
+        <span class="n">mpl</span><span class="o">.</span><span class="n">ticker</span><span class="o">.</span><span class="n">StrMethodFormatter</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{x:,.0f}</span><span class="s1">&#39;</span><span class="p">))</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Rich&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">ylim</span><span class="p">])</span>
+    <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_plots</span> <span class="o">+</span> <span class="n">flood_type</span> <span class="o">+</span> <span class="s1">&#39;_severity_distrib.png&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Thomas Monnier.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notebook: use cases &mdash; NEDUM-2D for CoCT  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+        <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Notebook: run model" href="main_nb.html" />
+    <link rel="prev" title="General framework" href="guidelines.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> NEDUM-2D for CoCT
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme_link.html">Setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guidelines.html">General framework</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Notebook: use cases</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Flood-risks">Flood risks</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Anticipations">Anticipations</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#Introduction">Introduction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Inputs">Inputs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Aggregate-damages">Aggregate damages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Spatial-distribution-of-absolute-damages">Spatial distribution of absolute damages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Spatial-distribution-of-relative-damages">Spatial distribution of relative damages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Summary-welfare-statistics">Summary welfare statistics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Population-moves-and-composition-effect">Population moves and composition effect</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Spatial-sorting-determinants-and-consumption-adaptation">Spatial sorting determinants and consumption adaptation</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#Climate-change">Climate change</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Introduction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id2">Aggregate damages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id3">Spatial distribution of absolute damages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id4">Spatial distribution of relative damages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Summay-welfare-statistics">Summay welfare statistics</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id5">Population moves and composition effect</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id6">Spatial sorting determinants and consumption adaptation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="main_nb.html">Notebook: run model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calib_nb.html">Notebook: run calibration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_ref.html">API reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="technical_doc.html">Technical documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix.html">Appendix</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bibliography.html">Bibliography</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license_rst.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">NEDUM-2D for CoCT</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Notebook: use cases</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/use_case_nb.nblink.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt *,
+div.nbinput.container div.input_area pre,
+div.nboutput.container div.output_area pre,
+div.nbinput.container div.input_area .highlight,
+div.nboutput.container div.output_area .highlight {
+    border: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+div.nbinput.container > div[class*=highlight],
+div.nboutput.container > div[class*=highlight] {
+    margin: 0;
+}
+
+div.nbinput.container div.prompt *,
+div.nboutput.container div.prompt * {
+    background: none;
+}
+
+div.nboutput.container div.output_area .highlight,
+div.nboutput.container div.output_area pre {
+    background: unset;
+}
+
+div.nboutput.container div.output_area div.highlight {
+    color: unset;  /* override Pygments text color */
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    /*background: #f5f5f5;*/
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+    margin: 0;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt .copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+.jp-RenderedHTMLCommon table,
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+.jp-RenderedHTMLCommon thead,
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+.jp-RenderedHTMLCommon tr,
+.jp-RenderedHTMLCommon th,
+.jp-RenderedHTMLCommon td,
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+.jp-RenderedHTMLCommon th,
+div.rendered_html th {
+  font-weight: bold;
+}
+.jp-RenderedHTMLCommon tbody tr:nth-child(odd),
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+.jp-RenderedHTMLCommon tbody tr:hover,
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="Notebook:-use-cases">
+<h1>Notebook: use cases<a class="headerlink" href="#Notebook:-use-cases" title="Permalink to this heading"></a></h1>
+<p><strong>Preliminary remark</strong>: note that even if our model allows us to make predictions at a very granular level (500mx500m grid cell), no validation data exists at such a fine level of aggregation. This means that, even though we get good performance when aggregating simulated outcomes at the Small Place (SP) or Small Area Level (SAL), one should be cautious when interpreting results for an isolated grid cell.</p>
+<div class="section" id="Flood-risks">
+<h2>Flood risks<a class="headerlink" href="#Flood-risks" title="Permalink to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Preamble</span>
+
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="n">path_code</span> <span class="o">=</span> <span class="s1">&#39;..&#39;</span>
+<span class="n">path_outputs</span> <span class="o">=</span> <span class="n">path_code</span> <span class="o">+</span> <span class="s1">&#39;/Output/&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="Anticipations">
+<h3>Anticipations<a class="headerlink" href="#Anticipations" title="Permalink to this heading"></a></h3>
+<div class="section" id="Introduction">
+<h4>Introduction<a class="headerlink" href="#Introduction" title="Permalink to this heading"></a></h4>
+<p>Our model allows us to compare two polar cases: one in which agents (both on the supply and demand sides of the housing market) perfectly anticipate flood risks (based on existing global flood maps), and another where agents do not at all take flood risks into account in their construction, location, and housing consumption decisions. Note that anticipations here can be understood as a mechanism of self-insurance whereby agents would perfectly smooth consumption across states of the world in a
+given location by systematically facing (and paying for) the <em>expected</em> cost of flood damages in any given year.</p>
+<p>In this use case section, we present the results for the static equilibrium version of the model calibrated for baseline year 2011 (using available census data).</p>
+<p>We want to make clear from the outset that we do not aim to explicitly model belief formation regarding flood risks, but rather show the consequences when agents have information on flood risks and act upon this information, and when they do not have information at all. Note that the reality may be “in between” these two cases, with agents having partial or inaccurate information on flood risks. In a sense, our two polar cases may be interpreted as capturing an upper and a lower bound on agents’
+welfare (because having information on flood risks is preferable to not having information as agents are able to adapt their decisions). Also note that protection investments (either self-provided, market-based, or state-funded) are not modelled in this use case.</p>
+<p>Below, we start by presenting the inputs into the model before running the simulation and showing how floods affect the city and its residents.</p>
+</div>
+<div class="section" id="Inputs">
+<h4>Inputs<a class="headerlink" href="#Inputs" title="Permalink to this heading"></a></h4>
+<p>Our model allows us to distinguish between fluvial, pluvial, and coastal flood risks. Fluvial and pluvial flood risks are based upon FATHOM global flood maps, and coastal flood risks upon DELTARES global flood maps. Those risks can either be considered in isolation or consolidated to form an aggregate flood risk where the aggregate flood risk is simply defined as the greatest risk of the three types of flood in a given location. Those flood maps are merged with the <em>City of Cape Town</em> (CoCT)
+analysis grid to obtain estimates (in each 500mx500m cell) of the share of the area that is flood-prone, and of the maximum flood depth levels for distinct return periods (corresponding to probabilities of occurrence in any given year). For reference, the climate conditions used to produce the flood maps are the ones prevailing in 2018, which we assume to be roughly in line with the ones prevailing at our baseline year. Because our geographic units are 30 times bigger than the units used in the
+raw flood maps, the flood data that we use is sufficiently granular to capture flood impacts at the grid cell level. In every cell, the flood data is converted into an <em>expected</em> fraction of capital destroyed, collapsing all return periods into one value, by leveraging estimates from the insurance literature. This measure depends on the damage type (either building structures or contents stored in those buildings). For damages to structures, it varies across housing types (which have different
+building materials). To illustrate this, we represent below the spatial distribution of the <em>expected</em> capital depreciation rate due to damages on contents (which do not vary across housing types) from aggregate flood risks.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_anticip/maps/map_fract_K_destroyed.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_11_0.png" src="_images/use_case_nb_11_0.png" />
+</div>
+</div>
+<p>As expected, flood exposure follows the coastline (for coastal flood risks), waterways (for fluvial flood risks), and topological depression areas (for pluvial flood risks). The distribution of its intensity is not obvious a priori however. Note that this map of capital depreciation due to floods is only a first step towards quantifying damages, as their final value will also depend on the housing choices made by households. Highly exposed but low-density areas such as the West front of the
+peninsula should feature relatively low total damages. Also note that we used “undefended” flood maps, which do not take into account existing infrastructure that may affect the spatial distribution of flood risks. This is why, in what follows, we prefer to interpret our results in changes, rather than in levels. This will will answer the following question: all else equal (including existing infrastructure), what is the impact of a change on a given dimension (for instance, flood risk
+anticipation) over the outcomes of the model?</p>
+<p>In our model, geography is also defined by several other factors, namely land availability per housing type, location-specific amenities (with an added disamenity factor for informal housing), and income net of commuting costs in each grid cell (accounting for the distribution of commuters across job centers for different income groups). Although they do not play a key role in this specific use case, we plot some of these factors for reference as they influence households’ endogenous location
+decisions: we start with the estimated amenity index, then plot the <em>expected</em> income net of commuting costs for each income group in the model (1 being the poorest and 4 being the richest).</p>
+<p>We would like to underline that, although land availability (not plotted) is purely <strong>exogenous</strong> in the model, amenities and incomes are <strong>calibrated</strong> factors: the amenity index is estimated so as to fit the existence of local exogenous amenities (proximity to the ocean, slope, etc.), and incomes net of commuting costs are estimated so as to fit the exogenous number of jobs in each employment center (185 in the model), according to commuting choice theory. It is worth noting that such
+calibrated incomes do not correspond to observed income levels, but are theoretical constructs informative of agents’ location choices: they correspond to the best income agents could get should they choose to locate in any given area.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_anticip/maps/map_amenities.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_14_0.png" src="_images/use_case_nb_14_0.png" />
+</div>
+</div>
+<p>As expected, we find high amenity values in the city centre and in specific areas that are well-endowed by nature.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_anticip/maps/map_netincome_1.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_16_0.png" src="_images/use_case_nb_16_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_anticip/maps/map_netincome_2.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_17_0.png" src="_images/use_case_nb_17_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_anticip/maps/map_netincome_3.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_18_0.png" src="_images/use_case_nb_18_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_anticip/maps/map_netincome_4.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_19_0.png" src="_images/use_case_nb_19_0.png" />
+</div>
+</div>
+<p>Due to commuting, the maps show a negative income gradient around job centers, which correspond to heat zones. Also note that relative spatial variations in net income are smaller for the richer groups as commuting represents a lower fraction of their income.</p>
+<p>We now focus on results from simulation of the model, starting with aggregated flood damages. We refer the reader to the technical documentation for a complete review of how the model works.</p>
+</div>
+<div class="section" id="Aggregate-damages">
+<h4>Aggregate damages<a class="headerlink" href="#Aggregate-damages" title="Permalink to this heading"></a></h4>
+<p>We plot below the distribution of aggregate annual damages across housing and damage types, comparing our two polar cases, for each flood type.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_anticip/charts/fluvialu_sim_damage_sum_anticip.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_24_0.png" src="_images/use_case_nb_24_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_anticip/charts/pluvial_sim_damage_sum_anticip.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_25_0.png" src="_images/use_case_nb_25_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_anticip/charts/coastal_sim_damage_sum_anticip.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_26_0.png" src="_images/use_case_nb_26_0.png" />
+</div>
+</div>
+<p>Several comments are in order. First, damages in formal housing are consistently bigger than in informal housing, and damages on structures also tend to outweigh damages on contents. This is because the replacement cost of informal settlements and backyard structures is <strong>calibrated</strong> based on construction costs and is fairly low (hence the relative importance of contents in this category), whereas the replacement cost of formal private housing is endogenously determined through supply and
+demand: we remind the reader that such housing can be built tall, hence high capital values in dense areas. The results also reflect the fact that the bulk of the population lives in formal private housing, hence the greater damages in formal housing although informal settlements and backyard structures are more vulnerable to floods. Besides, informal housing dwelling units do not appear to be systematically located in zones with high flood exposure. The replacement cost of formal subsidized
+housing structures is also <strong>calibrated</strong> based on construction costs but is typically higher than for informal housing. Finally, the population living in formal private housing is essentially made up of households belonging to the two richest income groups, with the two poorest concentrating in the other housing categories. Their higher amount of income available for consumption explains the relative importance of content damages in this category.</p>
+<p>Second, damages are higher in the no-anticipation case than in the perfect-anticipation case. This is to be expected. Anticipation also seems to play a relatively more important role in avoiding damages in the formal private housing sector. This can be explained by the fact that it is the least constrained of the housing submarkets, either in terms of available locations, or restriction on supply and demand. What is more surprising is the contrasted role anticipation seems to play across flood
+types. Again, this can be interpreted in terms of existing constraints: pluvial flood zones are typically more dispersed than fluvial or coastal flood zones, hence are harder to avoid (the extensive margin). Independently, coastal flood zones are typically more attractive, hence a floor below which demand would not fall.</p>
+<p>Third, damages also significantly vary in their magnitude across flood types:</p>
+<ul class="simple">
+<li><p>Total fluvial damages amount to roughly 280M ZAR (2011) with anticipation and 570M ZAR (2011) without anticipation (<strong>+104%</strong>)</p></li>
+<li><p>Total pluvial damages amount to roughly 145M ZAR (2011) with anticipation and 165M ZAR (2011) without anticipation (<strong>+14%</strong>)</p></li>
+<li><p>Total coastal damages amount to roughly 50M ZAR (2011) with anticipation and 75M ZAR (2011) without anticipation (<strong>+50%</strong>)</p></li>
+</ul>
+<p>Using an inflation rate of 64% over the 2011-2021 period, and an exchange rate of 14.78 ZAR/USD, we obtain the following equivalent amounts:</p>
+<ul class="simple">
+<li><p>Total fluvial damages amount to roughly 31M USD (2021) with anticipation and 63M USD (2021) without anticipation</p></li>
+<li><p>Total pluvial damages amount to roughly 16M USD (2021) with anticipation and 18M USD (2021) without anticipation</p></li>
+<li><p>Total coastal damages amount to roughly 6M USD (2021) with anticipation and 8M USD (2021) without anticipation</p></li>
+</ul>
+<p>For comparison, a 2021 report by the World Bank (“Flood Risk and Resilience of Coastal Cities in Sub-Saharan Africa”) gives estimates of 16M USD for rainwater (both fluvial and pluvial) flood damages, and 370,000 USD for coastal flood damages. The difference between these estimates and ours is essentially a question of methodology. In our case, due to partial overlap, an exact estimation of rainwater flood damages cannot be obtained as the sum of fluvial and pluvial flood damages. Taking the
+maximum between the two in each grid cell (a conservative approach), we obtain an estimate of 389M ZAR (2011) / 43M USD (2021) with anticipations, and 675M ZAR (2011) / 75M USD (2021) without anticipations (+74%). This is still a substantial overestimation for both flood types, especially coastal.</p>
+<p>The key difference lies in the way the replacement cost of vulnerable assets is estimated. The report uses satellite imagery to determine the extent of urban exposure and multiplies this area by a (unique) maximum unitary damage value per m². Final damage estimates are then obtained by applying the depth-damage function to this total maximum value in each location. In contrast, urban extent and replacement cost of underlying structures and contents are endogenous outcomes in our model: the city
+can be built on several floors, underlying capital values are heterogeneous due to construction technology used, and they can become very high in attractive areas. In fact, we find a total replacement cost for formal private housing structures that is very close to the report’s estimate of the total exposed capital value of the city: since this is the housing category that drives most of the damages in absolute terms, the reason our results differ boils down to the way those values are
+distributed across the city in our model (they are typically high along the coast and in some flood-prone zones where there is high demand) and the value of associated contents, which could have been underestimated using the report’s methodology.</p>
+</div>
+<div class="section" id="Spatial-distribution-of-absolute-damages">
+<h4>Spatial distribution of absolute damages<a class="headerlink" href="#Spatial-distribution-of-absolute-damages" title="Permalink to this heading"></a></h4>
+<p>We now look at how absolute damages are distributed across space.</p>
+<p>First, in the perfect-anticipation case:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_anticip/maps/abs_damages/map_damages_anticip.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_33_0.png" src="_images/use_case_nb_33_0.png" />
+</div>
+</div>
+<p>Then, in the no-anticipation case:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_anticip/maps/abs_damages/map_damages_noanticip.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_35_0.png" src="_images/use_case_nb_35_0.png" />
+</div>
+</div>
+<p>Finally, comparing the two:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_anticip/maps/abs_damages/map_damages_compar_anticip.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_37_0.png" src="_images/use_case_nb_37_0.png" />
+</div>
+</div>
+<p>As expected, damages are higher in the no-anticipation case. In both cases, their spatial distribution roughly follows the distribution of flood exposure in populated areas (as will be made clear below). Also, the adjustment between the two essentially occurs in fluvial flood zones and some coastal ones, in the formal private sector.</p>
+</div>
+<div class="section" id="Spatial-distribution-of-relative-damages">
+<h4>Spatial distribution of relative damages<a class="headerlink" href="#Spatial-distribution-of-relative-damages" title="Permalink to this heading"></a></h4>
+<p>What is not apparent in the above figures are the welfare consequences of flood risks. In the perfect-anticipation case, due to the spatial indifference condition that holds in equilibrium, all households belonging to the same income group share a common utility level (with higher values as we climb the income ladder). Ex-ante, the same applies to the no-anticipation case, with utility levels that are higher for all income groups since households believe that they live in a no-flood world.
+Ex-post, the discovery of the flood damages associated with their location and housing choices differentially affects their utilities (which will be typically lower than in the perfect-anticipation case for affected households). The spatial indifference condition only holds ex ante but not ex post as we do not allow households to residentially sort again after they have been hit by flood risks.</p>
+<p>It is worth noting that, from a theoretical point of view, the difference in utility levels across scenarios should not be quantitatively interpreted: we may simply say that some households are made worse off or better off comparing across scenarios.</p>
+<p>As a quantitative measure of how households are affected by floods, we report below damage costs as a share of <em>realized</em> net income, comparing the perfect-anticipation and no-anticipation cases. We report results separately for the different housing types (as their vulnerability to floods differs).</p>
+<p>Please note that the maps allow to compare damages in given locations, but the numbers and types of households and dwellings varies in these locations when comparing the perfect-anticipation and no-anticipation cases. We do not show plots for formal subsidized housing as their location is exogenous in our model, hence no changes occur across scenarios.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_anticip/maps/rel_damages/formal/map_damages_compar_formal.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_42_0.png" src="_images/use_case_nb_42_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_anticip/maps/rel_damages/informal/map_damages_compar_informal.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_43_0.png" src="_images/use_case_nb_43_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_anticip/maps/rel_damages/backyard/map_damages_compar_backyard.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_44_0.png" src="_images/use_case_nb_44_0.png" />
+</div>
+</div>
+<p>As expected, the change in flood damages is mostly positive when substracting outcomes in the perfect-anticipation case from outcomes in the no-anticipation case (i.e., flood damages are mostly greater in the no-anticipation case). The corresponding losses (in terms of net income shares) follow the spatial distribution of total absolute damages for formal private housing, with a relative peak East of the airport where income group 2 (the second poorest) lives, and a relative trough near Rosebank
+where income group 4 (the richest) lives.</p>
+<p>Households living in formal private housing also seem to suffer the most (in relative terms) from flood damages. This should be qualified however: although both structure and content damages have been included for the sake of comparability across maps, households living in formal private housing directly only pay for content damages in our model (as damages on structures are internalized by developers). Taking only content damages into account, a quick look shows that relative damage exposure is
+in fact comparable to that of households living in informal settlements. Still, changes in rents would capture part of structural damages in the formal private sector, so that we can take the map displayed for formal private housing as an upper bound on relative damages for the population subgroup who lives in such housing.</p>
+<p>Damages concentrate in the area East of Driftsands Nature Reserve for informal settlements, where income group 1 (the poorest) lives and flood risk exposure is important. The same analysis applies to informal backyard structures located North and South of the reserve (with a lower order of magnitude).</p>
+<p>Fluvial flood risks are the most important damage factor, even in relative terms.</p>
+</div>
+<div class="section" id="Summary-welfare-statistics">
+<h4>Summary welfare statistics<a class="headerlink" href="#Summary-welfare-statistics" title="Permalink to this heading"></a></h4>
+<p>Here, we plot the aggregate distribution of relative flood damages per income group. Since there is a high mass of households who do not live in flood-prone areas, the graphs only consider the subpopulation living in areas with a positive risk of floods. In the interest of space, we only show results for fluvial flood risks (since they are the most impactful).</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_anticip/charts/damage_distrib/total/fluvialu_damage_dist_1_anticip_sum.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_48_0.png" src="_images/use_case_nb_48_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_anticip/charts/damage_distrib/total/fluvialu_damage_dist_2_anticip_sum.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_49_0.png" src="_images/use_case_nb_49_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_anticip/charts/damage_distrib/total/fluvialu_damage_dist_3_anticip_sum.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_50_0.png" src="_images/use_case_nb_50_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_anticip/charts/damage_distrib/total/fluvialu_damage_dist_4_anticip_sum.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_51_0.png" src="_images/use_case_nb_51_0.png" />
+</div>
+</div>
+<ul class="simple">
+<li><p>Overall exposure to flood risks decreases with income (conditional on income group population), even when flood risks are not taken into account by agents (no-anticipation case). This corresponds to the intuition that flood-prone areas are typically low-amenity areas located far from (high) income centres, as public services and economic activity historically developed away from them.</p></li>
+<li><p>More counter-intuitively, the tail of flood vulnerability does not necessarily become thinner as income increases. This is because, as marginal utility decreases with income, richer households may prove less sensitive to income changes. Hence, they may be willing to consume more, even at the risk of increased destruction.</p></li>
+<li><p>The very long (but thin) tail of flood damages for income group 1 (with some households losing more than 100% of their income) is due to a few households living in formal subsidized housing that are located in flood-prone areas, as the cost of these structures is relatively high (compared to their income). In practice, this would require authorities to bail out such households.</p></li>
+<li><p>When including anticipation, households typically reduce their vulnerability in high-risk flood zones by moving to similar lower-risk flood zones.</p></li>
+</ul>
+<p>More precisely:</p>
+<ul class="simple">
+<li><p>Average damages go from 9.83% of net income (for 104,723 households) to 3.37% (for 87,582 households) for income group 1 (397,395 households in total) between the no-anticipation and perfect-anticipation scenarios. Taking the exposed population in the no-anticipation case as baseline (to include benefits to households who left flood zones entirely), <strong>this translates into a 7.01% gain in net income for 26% of the group population (or a 1.85% gain overall)</strong>.</p></li>
+<li><p>Average damages go from 2.57% (for 32,789 households) to 0.60% (for 30,363 households) for income group 2 (172,435 households). <strong>This translates into a 2.01% gain in net income for 19% of the group population (or a 0.38% gain overall)</strong>.</p></li>
+<li><p>Average damages go from 3.08% (for 38,620 households) to 1.79% (for 36,593 households) for income group 3 (296,993 households). <strong>This translates into a 1.38% gain in net income for 13% of the group population (or a 0.18% gain overall)</strong>.</p></li>
+<li><p>Average damages go from 1.59% (for 22,624 households) to 0.76% (for 21,192 households) for income group 4 (162,676 households). <strong>This translates into a 0.88% gain in net income for 14% of the group population (or a 0.12% gain overall)</strong>.</p></li>
+</ul>
+<p>As expected, the relative welfare gains associated with anticipations decrease with income.</p>
+</div>
+<div class="section" id="Population-moves-and-composition-effect">
+<h4>Population moves and composition effect<a class="headerlink" href="#Population-moves-and-composition-effect" title="Permalink to this heading"></a></h4>
+<p>As mentioned before, the above says nothing about the mix between location and housing choice responses leading to those results. We therefore turn to these, under the understanding that we will only be able to make qualitative statements. Indeed, disentangling between both types of response would require to follow individual households across scenarios: since we do not know which households would move from a given flood zone to another, we do not know which part of the associated damage
+reduction is due to relocation vs. housing consumption adaptation. Note that those responses also affect welfare indirectly through general equilibrium effects.</p>
+<p>Let us start with the relocation response.</p>
+<p>First, in the perfect-anticipation case:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_anticip/maps/pop_distrib/map_pop_distrib_anticip.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_58_0.png" src="_images/use_case_nb_58_0.png" />
+</div>
+</div>
+<p>Then, in the no-anticipation case:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_anticip/maps/pop_distrib/map_pop_distrib_noanticip.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_60_0.png" src="_images/use_case_nb_60_0.png" />
+</div>
+</div>
+<p>Finally, comparing the two:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_anticip/maps/pop_distrib/map_pop_distrib_compar_anticip.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_62_0.png" src="_images/use_case_nb_62_0.png" />
+</div>
+</div>
+<p>We see that, when introducing anticipations:</p>
+<ul class="simple">
+<li><p>Most population ouflows occur in highly vulnerable informal settlements East of Driftsands Nature Reserve (with some areas being completely abandoned), with an isolated move North of Paarlberg Nature Reserve. The effect is more dispersed, but nonetheless important, in formal private housing areas. Most people leaving the Cape Flats belong to income groups 1 and 2, while people from other suburbs tend to belong to income group 3.</p></li>
+<li><p>Population inflows are more dispersed across Khayelitsha and in-between neighbourhoods (informal settlements and some formal private housing), plus isolated moves into Stellenbosch, Grabouw, and Atlantis (informal settlements).</p></li>
+</ul>
+<p>Although we cannot follow individual households, here is a tentative interpretation. Poor households (most of them living in informal settlements) are very constrained. Therefore, they may need to move far away from their original locations to offset their losses, hence the high dispersion observed. Richer households, in contrast, may afford to move closer to their original locations.</p>
+<p>The relocation response plays a significant role in observed damage reduction (when introducing anticipations) for the two poorest income groups, but less so for the richest ones.</p>
+</div>
+<div class="section" id="Spatial-sorting-determinants-and-consumption-adaptation">
+<h4>Spatial sorting determinants and consumption adaptation<a class="headerlink" href="#Spatial-sorting-determinants-and-consumption-adaptation" title="Permalink to this heading"></a></h4>
+<p>Let us now turn to the determinants of observed spatial sorting, which will also explain the housing consumption response. To do so, let us look at the change in rents across scenarios.</p>
+<p>NB: We do not plot formal subsidized housing as it rented out / sold for free in the model.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_anticip/maps/rent_distrib/formal/map_rent_distrib_compar_anticip_formal.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_67_0.png" src="_images/use_case_nb_67_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_anticip/maps/rent_distrib/informal/map_rent_distrib_compar_anticip_informal.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_68_0.png" src="_images/use_case_nb_68_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_anticip/maps/rent_distrib/backyard/map_rent_distrib_compar_anticip_backyard.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_69_0.png" src="_images/use_case_nb_69_0.png" />
+</div>
+</div>
+<p>We see that the areas with the biggest changes in rents roughly correspond to population inflow/outflow areas in the Cape Flats and distant suburbs. This makes sense as market rents reflect the willingness to pay of the highest-bidding income groups in the model. As outflow areas typically are high-risk flood zones (compared to inflow areas which typically are not flood zones), this reflects the updated land values after introducing anticipations.</p>
+<p>Flood zones closer to the city center (and in some coastal locations) typically feature smaller (yet significant) changes in rents, even when they are as exposed as zones located farther away. This corresponds to the intuition already mentioned that, since those typically are highly attractive areas, demand would not fall below a certain level, all the more so as households living there can afford to pay for flood damages. Consequently, they do not showcase substantial population flows.
+Population flows and rent changes sometimes even go in the opposite direction, as some households are willing to take advantage of lower rents. Likewise, if a fall in rent typically translates into a rise in housing consumption, it is not always the case (as housing consumption also responds to flood risks).</p>
+<p>In fact, relocation and housing consumption responses simultaneously determine changes in rents, hence the difficulty when trying to disentangle between the two. Still, given the spatial distributions of both population flows and rent changes, it seems that rich households (from income groups 3 and 4) adapt more by relocating, compared to poor households (from income groups 1 and 2) who are less mobile and have to adapt their housing consumption instead of moving to a place less exposed to flood
+risks.</p>
+</div>
+</div>
+<div class="section" id="Climate-change">
+<h3>Climate change<a class="headerlink" href="#Climate-change" title="Permalink to this heading"></a></h3>
+<div class="section" id="id1">
+<h4>Introduction<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h4>
+<p>We now take the perfect-anticipation scenario as our baseline and simulate the effects of climate change. For coastal flood risks, we rely on specific flood maps provided by DELTARES, based upon IPCC’s RCP (Representative Concentration Pathway) 8.5 scenario projected onto 2050. Since FATHOM does not provide similar flood maps for rainwater flood risks, we consider dummy scenarios where we multiply all yearly probabilities by 2 (i.e., we divide return periods by 2) for such flood types.</p>
+<p>The below map represents the changes in flood capital depreciation for content damages for illustrative purposes.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_cchange/maps/map_fract_K_destroyed_compar.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_74_0.png" src="_images/use_case_nb_74_0.png" />
+</div>
+</div>
+<p>It should be noted that those scenarios are generally thought of as being relatively pessimistic. Also, we are not focusing on the accuracy of climate change predictions per se, but rather on the general trends climate change may generate in the city.</p>
+</div>
+<div class="section" id="id2">
+<h4>Aggregate damages<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h4>
+<p>As before, we start by plotting aggregate damages per flood type across the two scenarios. Note that we do not consider a climate change scenario without anticipations, since we expect it to yield similar patterns as the standard no-anticipation case, but with bigger damage values. Besides, we are more specifically interested in how climate change may affect spatial sorting in the long run, which requires agents to take flood risks into account when making their decisions.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_cchange/charts/fluvialu_sim_damage_sum_cchange.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_78_0.png" src="_images/use_case_nb_78_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_cchange/charts/pluvial_sim_damage_sum_cchange.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_79_0.png" src="_images/use_case_nb_79_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_cchange/charts/coastal_sim_damage_sum_cchange.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_80_0.png" src="_images/use_case_nb_80_0.png" />
+</div>
+</div>
+<p>First, we observe that the biggest change now occurs for pluvial flood risks, and not fluvial ones. The explanation is the same as before, but reversed: since pluvial flood zones are more spread out, climate change there is harder to avoid. Again, coastal flood zones fall in between as they typically are high-value areas where households prefer to adapt their housing consumption rather than their location choice.</p>
+</div>
+<div class="section" id="id3">
+<h4>Spatial distribution of absolute damages<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h4>
+<p>We go on with the spatial distribution of absolute damages.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_cchange/maps/abs_damages/map_damages_compar_cchange.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_84_0.png" src="_images/use_case_nb_84_0.png" />
+</div>
+</div>
+<p>We observe that the change across scenarios is more widely spread (but also smaller per unit of land) than in the previous use case (which relates to the above interpretation, as pluvial flood risks are also less severe than fluvial ones).</p>
+</div>
+<div class="section" id="id4">
+<h4>Spatial distribution of relative damages<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h4>
+<p>Here, the spatial indifference condition holds in both scenarios, hence we can look at the evolution of utility levels under climate change: - Households from income group 1 (excluding formal subsidized housing) only see their welfare marginally impacted (in a non-statistically significant way) - Households from income group 2 are 0.07% worse off - Households from income group 3 are 0.05% worse off - Households from income group 4 are 0.05% worse off</p>
+<p>Several comments are in order:</p>
+<ul class="simple">
+<li><p>The effects are negative, yet very small. This points to the fact that, when only considering flood monetary impacts on the housing market, climate change may be a secondary issue <strong>once we allow agents to arbitrage in space</strong>. <strong>However, our static simulations say nothing of the time span required for this adaptation to take place</strong>.</p></li>
+<li><p>Heterogeneous effects across income groups depend on their relative spatial distribution, which we now focus on.</p></li>
+</ul>
+<p>As before, we therefore plot the spatial distribution of flood damages as a share of net income. We remind the reader that such income losses do not directly translate into utility losses (given above).</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_cchange/maps/rel_damages/formal/map_damages_compar_formal.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_88_0.png" src="_images/use_case_nb_88_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_cchange/maps/rel_damages/informal/map_damages_compar_informal.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_89_0.png" src="_images/use_case_nb_89_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_cchange/maps/rel_damages/backyard/map_damages_compar_backyard.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_90_0.png" src="_images/use_case_nb_90_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_cchange/maps/rel_damages/subsidized/map_damages_compar_subsidized.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_91_0.png" src="_images/use_case_nb_91_0.png" />
+</div>
+</div>
+<p>Compared to the absolute damage map, we observe a relative peak in formal private relative damages South of Sunset Beach, and a relative trough near Rosebank and Claremont. It is simply because the first zone is populated by households from income group 3 and the second zone by households from income group 4.</p>
+<p>In informal settlements, some damage values increase in Khayelitsha and North of Table Mountain National Park, but the biggest changes occur North of Table Bay Nature Reserve: it is likely that households move from one point to another with close characteristics but less exposed to floods.</p>
+<p>In informal backyards, damage values are increasing overall: they concentrate in Khayelitsha, Delft, and Strand, where households are likely to be restricted in their movements. Another interpretation is that the increase in flood risks is not large enough to reach a tipping point that makes households migrate.</p>
+<p>In formal subsidized housing, households are immobile, and bear a more significant share of flood damages because of the relative importance of structure costs there. Damages are distributed in a similar way as for informal backyards, which suggests that backyarding might be a way for poor households to cope with such increasing costs.</p>
+</div>
+<div class="section" id="Summay-welfare-statistics">
+<h4>Summay welfare statistics<a class="headerlink" href="#Summay-welfare-statistics" title="Permalink to this heading"></a></h4>
+<p>As before, we plot the aggregate distribution of relative damages, this time for pluvial flood risks, which are dominant.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_cchange/charts/damage_distrib/total/pluvial_damage_dist_1_cchange_sum.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_95_0.png" src="_images/use_case_nb_95_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_cchange/charts/damage_distrib/total/pluvial_damage_dist_2_cchange_sum.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_96_0.png" src="_images/use_case_nb_96_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_cchange/charts/damage_distrib/total/pluvial_damage_dist_3_cchange_sum.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_97_0.png" src="_images/use_case_nb_97_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_cchange/charts/damage_distrib/total/pluvial_damage_dist_4_cchange_sum.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_98_0.png" src="_images/use_case_nb_98_0.png" />
+</div>
+</div>
+<p>Compared to fluvial flood risks, there are more exposed households and the tail is both thinner and shorter (if not for formal subsidized housing damages). As expected, we see exposure shifting from low-damage brackets to high-damage brackets when introducing climate change.</p>
+<p>We also provide some back-of-the-envelope calculation to approximate the direct welfare impact of climate change (for pluvial flood risks only):</p>
+<ul class="simple">
+<li><p>Average damages go from 0.67% of net income (for 366,265 households) to 1.34% (for 364,492 households) for income group 1 (397,395 households in total) between the no-climate change and the climate change scenarios. Taking the exposed population in the no-climate change case as baseline (to include benefits to households who left flood zones entirely), <strong>this translates into a 0.67% loss in net income for 92% of the group population (or a 0.62% loss overall)</strong>.</p></li>
+<li><p>Average damages go from 0.12% (for 166,655 households) to 0.23% (for 166,511 households) for income group 2 (172,435 households). <strong>This translates into a 0.12% loss in net income for 97% of the group population (or a 0.11% loss overall)</strong>.</p></li>
+<li><p>Average damages go from 0.10% (for 270,802 households) to 0.20% (for 270,786 households) for income group 3 (296,993 households). <strong>This translates into a 0.10% loss in net income for 91% of the group population (or a 0.09% loss overall)</strong>.</p></li>
+<li><p>Average damages go from 0.07% (for 128,747 households) to 0.13% (for 128,642 households) for income group 4 (162,676 households). <strong>This translates into a 0.07% loss in net income for 79% of the group population (or a 0.05% loss overall)</strong>.</p></li>
+</ul>
+</div>
+<div class="section" id="id5">
+<h4>Population moves and composition effect<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h4>
+<p>Let us now focus on the relocation response.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_cchange/maps/pop_distrib/map_pop_distrib_compar_cchange.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_103_0.png" src="_images/use_case_nb_103_0.png" />
+</div>
+</div>
+<p>Main population outflows are spread out in specific locations in Stellenbosch, North of Table Mountain National Park, Athlone, Durbanville, and Bloubergstrand. Inflows concentrate in other areas of Athlone and Bloubergstrand. Overall, migrations remain limited in scope and do not seem to explain a significant share of damage changes under climate change.</p>
+</div>
+<div class="section" id="id6">
+<h4>Spatial sorting determinants and consumption adaptation<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h4>
+<p>Let us now turn to the housing consumption response (again, we do not plot formal subsidized housing).</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_cchange/maps/rent_distrib/formal/map_rent_distrib_compar_cchange_formal.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_107_0.png" src="_images/use_case_nb_107_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_cchange/maps/rent_distrib/informal/map_rent_distrib_compar_cchange_informal.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_108_0.png" src="_images/use_case_nb_108_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_outputs</span> <span class="o">+</span> <span class="s1">&#39;use_case_cchange/maps/rent_distrib/backyard/map_rent_distrib_compar_cchange_backyard.png&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="_images/use_case_nb_109_0.png" src="_images/use_case_nb_109_0.png" />
+</div>
+</div>
+<p>In formal private housing, we observe big changes in rents in Athlone migration areas: households leave flood zones where rents decrease, and go to nearby unexposed places where rents increase. This masks less important (but still relevant) rent decreases East of the City Bowl and around Sunset Beach, following increases in flood risks. Those are not massive outmigration areas, and households do seem to increase their housing consumption in those locations. In other areas where rent does not
+change much, households incur the increased costs without relocating much.</p>
+<p>In informal settlements, rent globally decreases, with troughs in Bloubergstrand and Khayelitsha. In the first zone, households move from one place to another so as to mitigate the rise in flood damages (as shown in the relative flood damage map). In the second zone, households do not seem to move much, and the rise in damages is mitigated by the fall in capital value (that is not compensated by a higher housing consumption). This is in line with the intuition that poor households are more
+sensitive to flood damages due to financial constraints.</p>
+<p>Finally, in informal backyards, the fall in rents is more dispersed. Again, there does not seem to be a massive relocation response, and households essentially bear the increase in costs.</p>
+<p>All in all, we observe the same types of adaptative behaviour as in the previous use case, with poor households who are more sensitive to income losses and essentially adapt through housing consumption rather than relocation.</p>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="guidelines.html" class="btn btn-neutral float-left" title="General framework" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="main_nb.html" class="btn btn-neutral float-right" title="Notebook: run model" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Thomas Monnier.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
