@@ -27,27 +27,36 @@ The standard urban economic model - as envisioned by :cite:t:`alonso`, :cite:t:`
 
 According to this model, if there is one major city center, rents and population density will be maximum there, and decrease when moving away. To reach this main conclusion (among others), the model makes a number of simplifying assumptions, most of which can be relaxed in more elaborate models to obtain more realistic results (see :cite:t:`duranton`) [#f1]_.
 
-The key hypothesis of this set of models is that, in the long run, land use patterns reach a stationary equilibrium in which (similar) agents share a common utility level. Put in other words, they cannot reach a higher utility level by changing locations, which allows to rationalize the observed land use patterns through optimizing behaviours. It should be noted that, without further assumptions, it is not guaranteed that such spatial equilibrium is indeed optimal in terms of welfare. We therefore need to distinguish between a positive approach (adopted in **NEDUM-2D**) and a normative approach to urban economics.
+The key hypothesis of this set of models is that, in the long run, land use patterns reach a stationary equilibrium in which (similar) agents share a common utility level. Put in other words, they cannot reach a higher utility level by changing locations, which allows to rationalize the observed land use patterns through optimization behaviours. It should be noted that, without further assumptions, it is not guaranteed that such spatial equilibrium is indeed optimal in terms of welfare. We therefore need to distinguish between a positive approach (adopted in **NEDUM-2D**) and a normative approach to urban economics.
 
 The interest of such models grounded in economic theory compared to other land use and transport integrated (LUTI) simulation models [#f2]_ lies in their relative tractability and potential for causal interpretation (:cite:t:`arnott`). 
 
-^^^^^^^^^^^^^^^^^^^^^
-Previous developments
-^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Past and current developments
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-**NEDUM-2D**, for instance, which was initially developed for the Paris metropolitan area (:cite:t:`viguie`), belongs to this category of models. It directly applies a discrete two-dimensional version of the standard urban monocentric model for residential land use with several transport modes (see :cite:t:`fujita`) on a grid of pixels, accounting for zoning and land availability constraints defined at the pixel level. This allows for more realistic land use patterns than the basic model with a linear city. 
+**NEDUM-2D**, for instance, belongs to this category of models. It directly applies a discrete two-dimensional version of the standard urban monocentric model for residential land use with several transport modes (see :cite:t:`fujita`) on a grid of pixels, accounting for zoning and land availability constraints defined at the pixel level. This allows for more realistic land use patterns than the basic model with a linear city. 
 
-Furthermore, as indicated by its name, **NEDUM-2D** is a dynamic model that accounts for the fact that urban stationary equilibria may not exist: when population, transport prices, or incomes vary, housing infrastructure cannot adapt rapidly to changing conditions and is always out of equilibrium. Such inertia is imposed as a constraint on the theoretical equilibrium, which remains the basis for explaining observed land use patterns.
+Furthermore, as indicated by its name, **NEDUM-2D** is a dynamic model that accounts for the fact that urban stationary equilibria may not exist: when population, transport prices, or incomes vary, housing infrastructure cannot adapt rapidly to changing conditions and is always out of equilibrium. To compute the dynamics, a static equilibrium at the initial state is computed first. Then, time-moving variables are updated and housing supply inertia is imposed as a constraint on the model. The dynamic equilibrium (for each subsequent period) is therefore obtained as a result of this new constrained optimization. If one is only interested in the long-term outcome and not in how the adjustments play out through time, one may just look at the static outcome of the model (with end values for time-moving variables).
 
-From its inception, **NEDUM-2D** was also designed to simulate prospective scenarios within the framework of mitigation and adaptation policies at the local scale: urban sprawl, climate vulnerability, as well as transport-related greenhouse gas emissions were included in the model. 
+Below is a non-exhaustive list of publications where **NEDUM-2D** has been used so far, classified by policy question:
 
-In subsequent versions, **NEDUM-2D** has been used within urban contexts as diverse as those of Buenos Aires, Toulouse, Wuhan, London...
+* A first set of papers look at **urban climate policies**.
+   * *Within the context of Paris, France*, :cite:t:`synergies` study trade-offs and synergies between a greenbelt policy, a zoning policy to reduce flood risk, and a transportation subsidy. In particular, they find that flood zoning and greenbelt policies can only be accepted if combined with transportation policies. :cite:t:`carbon` study the impacts of a carbon or gasoline tax more specifically and find that reducing commuting-related emissions requires lower (and more acceptable) tax levels in the presence of dense public transportation. :cite:t:`viguie` find that the main drivers of urban sprawl and climate and flood vulnerability appear to be local demographic growth and local policies, and not global factors such as energy and transport prices. A direct consequence is that very strict urban policies – including reconstruction – would become necessary to control emissions from urban transportation if technologies (global factors driving most of transport-related greenhouse gas emissions) reveal unable to do so. :cite:t:`ride_sharing` study the rebound effects associated with ride-sharing and find that they end up dividing the $CO_2$ emission savings by a factor ranging from 2 to 3. :cite:t:`rebound` further disentangle between a route choice effect, a modal shift effect, a distance effect, and a relocation effect: they find that the observed rebound mostly comes from the modal shift effect, supplemented as ride-sharing develops by the distance effect. This has direct consequences as to the efficiency of complementary policies such as improving public transit, reducing road capacity or increasing the cost of car travel.
+   * *Within the context of Buenos Aires, Argentina*, :cite:t:`buses` look at trade-offs and synergies between a public transport subsidy, an income compensation scheme and a construction subsidiy scheme. They find that the replacement of the transit subsidy by a lump-sum transfer is globally welfare-improving and does not lead to higher $CO_2$ emissions, but may have harsh redistributive impacts for captive transit users in some areas. Medium-term adjustments of land and housing prices would partially mitigate the negative impacts of higher transport costs for tenants, but would further hurt homeowners.
+   * *At the global scale*, :cite:t:`ghg` look at trade-offs and synergies between four representative climate policies: bus rapid transit, fuel tax, fuel efficiency, and urban growth boundary (UGB). They find that all policies except UGB are globally welfare-increasing and capture most of the emission reductions. They also point to high heterogeneity across cities and highlight that there is no one-size-fits-all optimal policy to mitigate urban transport emissions.
+* Another set of papers focus on the potential of **land value capture** to fund urban infrastructure investment. :cite:t:`rent_capture` do so for public transport networks in *Paris, France*; and :cite:t:`avner` for flood mitigation works in *Buenos Aires, Argentina*. They both find that, in most cases, the land value creation would be sufficient to justify the investments.
+* Still another set of papers look at flood management policies through the lens of **moral hazard**. :cite:t:`hazard` study three strategies - risk-based insurance, zoning, and subsidized insurance - *within the context of Paris, France*. :cite:t:`hazard_bis` refine their approach. They both find that in a first-best setting, risk-based insurance maximizes social welfare. However, depending on flood characteristics, implementing a zoning policy or subsidized insurance is close to optimal and can be more feasible.
+* :cite:t:`pfeiffer` provide a strong **methodological contribution** by making the model polycentric, and by introducing heterogeneous income groups, as well as informal housing situations that coexist with market and state-driven formal housing.
+   * This last point is important to adapt previous approaches within the context of developing countries [#f3]_. As a proof of concept, :cite:t:`pfeiffer` simulate a **UGB** policy in *Cape Town, South Africa*. They find that demand for informal housing increases as a response to associated land supply restrictions and the higher formal land prices that ensue, uncovering a key housing market mechanism that is mostly absent in developed countries. They also simulate different scenarios for the **construction of subsidized housing** and find that, in the specific case of Cape Town, more construction speeds up the substitution of backyarding to traditional informal settlements. This is a noticeable trend as ongoing discussions in South Africa revolve around the facilitation of such dwelling arrangements to increase access to affordable housing and to stimulate densification.
+   * The version of **NEDUM-2D** developed here builds upon this model, by introducing vulnerability to flood risks as in :cite:t:`avner`, but for the *City of Cape Town* (CoCT). The specific mechanisms that we uncover are detailed in :doc:`../use_case_nb`.
+   * In a similar fashion, :cite:t:`fuel_tax` use it to study the impact of a fuel tax on both spatial and income inequalities (also in the CoCT). They find that the poorest households, living in informal settlements or subsidized housing, have few or no ways to adapt to changes in fuel prices by changing housing type, adjusting their dwelling sizes or locations, or shifting transportation modes. Low-income households living in formal housing also remain impacted by the tax over the long term due to complex effects driven by the competition with richer households on the housing market. Complementary policies promoting a functioning labor market that allows people to change jobs easily, affordable public transportation, or subsidies helping low-income households to rent houses closer to employment centers are also shown to be key to enable the social acceptability of climate policies.
 
 ^^^^^^^^^^^^^^^^^^^^^
 Overview of the model
 ^^^^^^^^^^^^^^^^^^^^^
 
-In its latest implementation, :cite:t:`pfeiffer` further refine the model by making it polycentric, and by introducing heterogeneous income groups, as well as informal housing situations that coexist with market and state-driven formal housing. The model is calibrated for the *City of Cape Town* (CoCT) and indeed allows to account for key features of cities in the developing world [#f3]_.
+Our model is calibrated for the CoCT with data from the 2011 National Census.
 
 .. figure:: images/empl_loc.png 
    :scale: 70% 
@@ -56,9 +65,9 @@ In its latest implementation, :cite:t:`pfeiffer` further refine the model by mak
 
    Employment locations used in the simulation, by income group (*Source*: :cite:t:`pfeiffer`)
 
-More specifically, it considers two types of land and housing informality: informal settlements in predetermined locations (which is akin to squatting as in :cite:t:`brueckner`) and a rental market for backyard structures erected by owners of state-driven subsidized housing as modeled by :cite:t:`brueckner2`. It then integrates these elements within a closed-city model (with exogenous population growth) and simulates developers’ construction decisions as well as the housing and location choices of households from different income groups at a distance from several employment subcenters (while accounting for state-driven subsidized housing programs, natural constraints, amenities, zoning, transport options, and the costs associated with each transport mode).
+We consider four income groups (to study distributional effects) and four land / housing types: formal private housing (FP), formal subsidized housing (FS), informal settlements (IS), and informal backyard structures (IB). We assume that informal settlements are located in predetermined locations, and correspond to squatting described in :cite:t:`brueckner`. We also assume a rental market for backyard structures erected by owners of state-driven subsidized housing as modeled by :cite:t:`brueckner2`. We then integrate these elements within a closed-city model (with exogenous population growth) and simulate developers’ construction decisions, as well as the housing consumption and location choices of households at a distance from several employment centers (while accounting for state-driven subsidized housing programs, natural constraints, amenities, zoning, transport options, and the costs associated with each transport mode).
 
-It has displayed good performance, as shown by the validation plots below:
+The model has displayed good performance, as shown by the validation plots below:
 
 .. figure:: images/global_valid.png 
    :scale: 70% 
@@ -74,14 +83,14 @@ It has displayed good performance, as shown by the validation plots below:
 
    Allocation of households to housing types and spatial distributions (*Source*: :cite:t:`pfeiffer`)
 
-Current work at the *World Bank* has been focusing on incorporating vulnerability to flood risks in this version of the model, by distinguishing between fluvial, pluvial, and coastal floods. Typically, fluvial floods are one-off, hard-to-predict water overflows from rivers, whereas pluvial floods designate rather seasonal surface water floods or flash floods, caused by extreme rainfall independently of an overflowing water body. Coastal floods encompass hard-to-predict storm surges, periodic tides, and gradual, if uncertain, sea-level rise. The associated risks that we consider include:
+Regarding flood risks, we distinguish between fluvial, pluvial, and coastal floods. Typically, fluvial floods are one-off, hard-to-predict water overflows from rivers, whereas pluvial floods designate rather seasonal surface water floods or flash floods, caused by extreme rainfall independently of an overflowing water body. Coastal floods encompass hard-to-predict storm surges, periodic tides, and gradual (if uncertain) sea-level rise. The associated risks that we consider are:
 
 * Structural damages: building depreciation caused by flood damages
 * Contents damages: destruction of part of households’ belongings due to floods
 
-We believe that those are the main channels through which flood risks directly affect the city patterns :cite:p:`pharoah` [#fQSE]_. Agents internalize those risks (or not) by considering the annualized value of those damages (based on probabilistic flood maps) as an added term in the depreciation of their housing capital and of their quantity of goods consumed (assimilated to a composite good) [#fmyopic]_.
+We believe that those are the main channels through which flood risks directly affect the city patterns :cite:p:`pharoah` [#fQSE]_. Agents internalize those risks (or not) by considering the expected annual value of those damages (based on probabilistic flood maps) as an added term in the depreciation of their housing capital and of their quantity of goods consumed (assimilated to a composite good) [#fmyopic]_.
 
-As before, the model allows to simulate how their behaviour might be affected by future demographic, climate, and policy scenarios.
+As with previous versions, our model allows to simulate how households' behaviour may evolve according to future demographic, climate, and policy scenarios. As a proof of concept, we develop two comparative statics in :doc:`../use_case_nb`: one comparing scenarios with and without flood risk anticipation, and another one comparing scenarios with and without climate change.
 
 |
 
@@ -101,6 +110,8 @@ Secondly, the fact that informal settlements and backyarding locations are exoge
 
 Finally, there is an externality associated with the use of land for informal settlements and for publicly subsidized housing as these areas are somehow taken away from developable land that would otherwise be available for private formal housing. This affects the supply and demand for formal housing by restricting the set of potential locations available for private formal development, while accommodating a potentially large number of urban residents in the informal sector [#f4]_.
 
+The specific mechanisms associated with flood risks are detailed in :doc:`../use_case_nb`.
+
 
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 Interpretation of results
@@ -108,7 +119,7 @@ Interpretation of results
 
 **It should be noted that prospective scenarios only represent conceivable futures that may inform cost-benefit analysis, and have no predictive value per se, as many phenomena are neglected to preserve tractability**. 
 
-As such, **NEDUM-2D** only makes predictions with respect to some simplifying assumptions (exogenous land availability and subsidized housing, etc.) and some economic mechanisms (housing supply and demand) described above [#f5]_. Although it is calibrated to stick closely to reality at present time, the number of parameters fed into the model is restricted to avoid overfitting and extreme sensitivity of the outputs to initial conditions. 
+As such, **NEDUM-2D** only makes predictions with respect to some simplifying assumptions (exogenous land availability and subsidized housing, etc.) and economic mechanisms (housing supply and demand) described above [#f5]_. Although it is calibrated to stick closely to reality at the initial state, the number of parameters fed into the model is restricted to avoid overfitting and extreme sensitivity of the outputs to initial conditions. 
 
 Indeed, the aim of such a model is to provide simulations for the future, with the largest external validity possible in the absence of observable counterfactuals. For them to be informative, they need to display complex direct and indirect effects while keeping tractable the mechanisms that cause them, hence the need to restrict the number of such mechanisms that are interacting in equilibrium. 
 

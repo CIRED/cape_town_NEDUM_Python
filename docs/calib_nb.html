@@ -435,7 +435,7 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="section" id="Define-file-paths">
 <h3>Define file paths<a class="headerlink" href="#Define-file-paths" title="Permalink to this heading"></a></h3>
-<p>This corresponds to the architecture described in the README file (introduction tab of the documentation): the data folder is not hosted on the Github repository and should be placed in the root folder enclosing the repo</p>
+<p>This corresponds to the architecture described in the README file (introduction tab of the documentation): the data folder is not hosted on the Github repository and should be placed in the root folder enclosing the repo.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
@@ -558,8 +558,8 @@ div.rendered_html tbody tr:hover {
 </div>
 <div class="section" id="Finally,-we-set-options-regarding-data-processing">
 <h4>Finally, we set options regarding data processing<a class="headerlink" href="#Finally,-we-set-options-regarding-data-processing" title="Permalink to this heading"></a></h4>
-<p>Default is set at zero to save computing time (data is simply loaded in the model)</p>
-<p>NB: this is only needed to create the data for the first time, or when the source is changed, so that pre-processed data is updated</p>
+<p>Default is set at zero to save computing time (data is simply loaded in the model).</p>
+<p>NB: this is only needed to create the data for the first time, or when the source is changed, so that pre-processed data is updated.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
 </pre></div>
@@ -834,7 +834,7 @@ Formal backyard structures (two floors)
 </div>
 <div class="section" id="Obtain-number-of-formal-private-housing-units-per-SP">
 <h3>Obtain number of formal private housing units per SP<a class="headerlink" href="#Obtain-number-of-formal-private-housing-units-per-SP" title="Permalink to this heading"></a></h3>
-<p>NB: it is not clear whether RDP are included in SP formal count, and if they should be taken out based on imperfect cadastral estimations. For reference, we include the two options.</p>
+<p>NB: It is not clear whether RDP are included in SP formal count, and if they should be taken out based on imperfect cadastral estimations. For reference, we include the two options.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
@@ -878,14 +878,13 @@ Formal backyard structures (two floors)
 </pre></div>
 </div>
 </div>
-<p>Given the uncertainty surrounding RDP counts, we take the second option as default and prefer to rely on sample selection (see below) to exclude the SPs where RDP housing is likely to drive most of our results</p>
+<p>Given the uncertainty surrounding RDP counts, we take the second option as default and prefer to rely on sample selection (see below) to exclude the SPs where RDP housing is likely to drive most of our results.</p>
 </div>
 <div class="section" id="Sample-selection">
 <h3>Sample selection<a class="headerlink" href="#Sample-selection" title="Permalink to this heading"></a></h3>
-<p>As the relations we are going to estimate are only true for the formal private sector, we exclude SPs in the bottom quintile of property prices and for which more than 5% of households are reported to live in informal housing (settlements + backyards). We also exclude “rural” SPs (i.e., those that are large, with a small share than can be urbanized). This is more specific to the regression that is going to allow us to estimates parameter of the construction function (fit on building density),
-hence the name of the selected_density variable.</p>
-<p>We also add options to consider other criteria, namely we offer to exclude poorest income group (which is in effect crowded out from the formal sector), as well as Mitchell’s Plain (as its housing market is very specific) and far-away land (where SPs are too big for aggregates to be representative of micro conditions).</p>
-<p>NB: This sample will be used as such for the calibration of construction function parameters. The regression used comes from the definition of housing supply / building density in equilibrium, hence the name of the variable</p>
+<p>As the relations we are going to estimate are only true for the formal private sector, we exclude SPs in the bottom quintile of property prices and for which more than 5% of households are reported to live in informal housing (settlements + backyards). We also exclude “rural” SPs (i.e., those that are large, with a small share than can be urbanized). This is more specific to the regression allowing us to estimate parameters of the construction function (fit on building density), hence the name
+of the selected_density variable.</p>
+<p>We also add options to consider other criteria, namely we offer to exclude the poorest income group (which is in effect crowded out from the formal sector), as well as Mitchell’s Plain (as its housing market is very specific) and far-away land (where SPs are too big for aggregates to be representative of micro conditions).</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
@@ -984,7 +983,7 @@ Notes:
 [WinError 183] Cannot create a file when that file already exists: &#39;../Data/precalculated_inputs/&#39;
 </pre></div></div>
 </div>
-<p>NB: The results are automatically saved for later use in simulations</p>
+<p>NB: The results are automatically saved for later use in simulations.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
@@ -1022,9 +1021,9 @@ coeff_A = 0.030595011996082885
 <div class="section" id="Calibrate-incomes-and-gravity-parameter">
 <h2>Calibrate incomes and gravity parameter<a class="headerlink" href="#Calibrate-incomes-and-gravity-parameter" title="Permalink to this heading"></a></h2>
 <p>We scan values for the gravity parameter to estimate incomes as a function of it. The value range is set by trial and error: the wider the range you want to test, the longer. In principle, we should find a value within a coarse interval before going to the finer level: this may require several iterations if the underlying data changes.</p>
-<p>NB: we do that as it is too long and complex to run a solver directly.</p>
+<p>NB: We conduct scanning as it is too long and complex to run a solver directly.</p>
 <p>Then, we select the income-gravity pair that best fits the distribution of commuters over distance from the CBD.</p>
-<p>NB: we need to proceed in two steps as there is no separate identification of the gravity parameter and the net incomes.</p>
+<p>NB: We need to proceed in two steps as there is no separate identification of the gravity parameter and the net incomes.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
@@ -1127,7 +1126,7 @@ incomes for group  3
 lambda = 13.959999999999999
 </pre></div></div>
 </div>
-<p>Note that incomes are fitted to reproduce the observed distribution of jobs across income groups (in selected job centers), based on commuting choice model.</p>
+<p>Note that incomes are fitted to reproduce the observed distribution of jobs across income groups (in selected job centers), based on the commuting choice model.</p>
 <div class="section" id="Let-us-first-visualize-inputs">
 <h3>Let us first visualize inputs<a class="headerlink" href="#Let-us-first-visualize-inputs" title="Permalink to this heading"></a></h3>
 <div class="nbinput nblast docutils container">
@@ -1176,7 +1175,7 @@ lambda = 13.959999999999999
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/calib_nb_63_0.png" src="_images/calib_nb_63_0.png" />
+<img alt="_images/calib_nb_62_0.png" src="_images/calib_nb_62_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -1215,7 +1214,7 @@ lambda = 13.959999999999999
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/calib_nb_64_0.png" src="_images/calib_nb_64_0.png" />
+<img alt="_images/calib_nb_63_0.png" src="_images/calib_nb_63_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -1254,7 +1253,7 @@ lambda = 13.959999999999999
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/calib_nb_65_0.png" src="_images/calib_nb_65_0.png" />
+<img alt="_images/calib_nb_64_0.png" src="_images/calib_nb_64_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -1293,7 +1292,7 @@ lambda = 13.959999999999999
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/calib_nb_66_0.png" src="_images/calib_nb_66_0.png" />
+<img alt="_images/calib_nb_65_0.png" src="_images/calib_nb_65_0.png" />
 </div>
 </div>
 </div>
@@ -1365,7 +1364,7 @@ lambda = 13.959999999999999
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/calib_nb_70_0.png" src="_images/calib_nb_70_0.png" />
+<img alt="_images/calib_nb_69_0.png" src="_images/calib_nb_69_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -1390,7 +1389,7 @@ lambda = 13.959999999999999
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/calib_nb_71_0.png" src="_images/calib_nb_71_0.png" />
+<img alt="_images/calib_nb_70_0.png" src="_images/calib_nb_70_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -1415,7 +1414,7 @@ lambda = 13.959999999999999
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/calib_nb_72_0.png" src="_images/calib_nb_72_0.png" />
+<img alt="_images/calib_nb_71_0.png" src="_images/calib_nb_71_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -1440,7 +1439,7 @@ lambda = 13.959999999999999
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/calib_nb_73_0.png" src="_images/calib_nb_73_0.png" />
+<img alt="_images/calib_nb_72_0.png" src="_images/calib_nb_72_0.png" />
 </div>
 </div>
 </div>
@@ -1627,11 +1626,11 @@ amenity_map done
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/calib_nb_83_1.png" src="_images/calib_nb_83_1.png" />
+<img alt="_images/calib_nb_82_1.png" src="_images/calib_nb_82_1.png" />
 </div>
 </div>
 <p>Note the the local amenity index is only as good as the underlying exogenous amenity covariates used for prediction: this can be updated in future work.</p>
-<p>NB: In what follows, since disamenity index calibration relies on the model fit and is not computed a priori (contrary to other parameters), the options set in the preamble should be the same as the ones used in the main script, so that the calibrated values are in line with the structural assumptions used</p>
+<p>NB: In what follows, since disamenity index calibration relies on the model fit and is not computed a priori (contrary to other parameters), the options set in the preamble should be the same as the ones used in the main script, so that the calibrated values are in line with the structural assumptions used there.</p>
 <div class="section" id="We-start-with-a-general-(not-location-specific)-calibration">
 <h3>We start with a general (not location-specific) calibration<a class="headerlink" href="#We-start-with-a-general-(not-location-specific)-calibration" title="Permalink to this heading"></a></h3>
 <div class="nbinput nblast docutils container">
@@ -1687,7 +1686,7 @@ amenity_map done
 ** Calibration: 36 iterations **
 </pre></div></div>
 </div>
-<p>We are going to compute the initial state equilibrium for each pair of parameters, and retain the one that best fits the observed number of households in informal settlements + backyards</p>
+<p>We are going to compute the initial state equilibrium for each pair of parameters, and retain the one that best fits the observed number of households in informal settlements + backyards.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
 </pre></div>

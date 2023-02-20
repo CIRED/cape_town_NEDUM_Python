@@ -46,7 +46,7 @@ Installation
 	├── 2_plots_inputs.py (exports basic plots and tables for input data)
 	├── 2_plots_simul.py (exports basic plots and tables for subsequent dynamic simulations)
 	├── 3_plots_use_case_cchange.py (exports interactive plots and tables for c.change use case)
-	├── 3_plots_use_case_insur.py (exports interactive plots and tables for insurance use case)
+	├── 3_plots_use_case_anticip.py (exports interactive plots and tables for insurance use case)
 	├── 4_use_case_nb_empty.ipynb (Jupyter notebook that loads and comments on use case outputs)
 	└── 4_use_case_nb_full.ipynb (Jupyter notebook that loads and comments on use case outputs)
 
@@ -72,8 +72,8 @@ Installation
 * If needed, run the ``0_calib_nb`` notebook (either in .py or .ipynb format) to calibrate parameters again (under ``precalculated_inputs``) if underlying data (in ``data_Cape_Town``) has changed. A static copy is shown in the documentation for illustrative purposes.
 * Execute the ``1_main_nb`` notebook (either in .py or .ipynb format) to run the simulations and obtain a preview of results. Outcomes will be automatically saved in a dedicated subfolder (according to a naming convention defined in the preamble of the script) under the ``Output`` directory. A static copy is shown in the documentation for illustrative purposes.
 * Run the ``2_plots`` scripts to export static tables and figures in dedicated subfolders. ``2_plots_inputs.py`` plots input data that does not change across scenarios (output is saved in dedicated subfolders under the ``Output`` directory). ``2_plots_equil.py`` plots outcomes for the initial state static equilibrium. Output changes across scenarios and is saved under the specific subfolder created at previous step with ``1_main_nb``. ``2_plots_simul.py`` plots outcomes for dynamic simulations over subsequent periods. Output is saved in same directory as for ``2_plots_equil.py``: we have created a separate script in case the end user is not interested in the dynamics (which are long to loop over). In case of discrepancies, we recommend using ``2_plots_equil.py`` for each period individually.
-* Run the ``3_plots_use_case_anticip.py`` and ``3_plots_use_case_cchange.py`` to export the interactive plots and tables associated with respectively the insurance and climate change use cases that we developed for this iteration of the model. This requires to run both ``1_main_nb`` and ``2_plots_equil.py`` for the scenarios used in each script (with and without insurance, with and without climate change). Those options can be modified in the preamble of the scripts (see :doc:`../technical_doc` for more details).
-* Run the ``4_use_case_nb_empty.ipynb`` notebook to recover key interactive plots from ``3_plots_use_case_anticip.py`` and ``3_plots_use_case_cchange.py`` with associated comments and interpretation. As the interactive plots are too heavy to save or load as a ``.html`` page, we save the file without the associated output. ``4_use_case_nb_full.ipynb`` provides a static version with cached output (without the possibility to zoom or hover over the plots), that is shown in the documentation for illustrative purposes.
+* Run the ``3_plots_use_case_anticip.py`` and ``3_plots_use_case_cchange.py`` to export (in a specific subfolder) the interactive plots and tables associated with respectively the anticipation and climate change use cases that we developed for this version of the model. This requires to run both ``1_main_nb`` and ``2_plots_equil.py`` for the scenarios used in each script (with and without anticipation, with and without climate change). The options that define which scenario to run can be modified in the preamble of the scripts (see :doc:`../technical_doc` for more details).
+* Run the ``4_use_case_nb_empty.ipynb`` notebook to recover key interactive plots from ``3_plots_use_case_anticip.py`` and ``3_plots_use_case_cchange.py`` with associated comments and interpretation. As the interactive plots are too heavy to save or load as a ``.html`` page, we save the notebook without the associated output. ``4_use_case_nb_full.ipynb`` provides a static version with cached output (without the possibility to zoom in and out or display information by hovering over the plots), that is shown in the documentation for illustrative purposes.
 * See :doc:`../technical_doc` for more details on running custom simulations. Note that to keep ``.py`` and ``.ipynb`` versions of the same script in sync, one needs to pair them by setting up Jupytext locally.
 
 ----------
@@ -81,13 +81,13 @@ Versioning
 ----------
 
 * The ``gh_pages`` branch contains the latest update of the code and is set as default. If you want to modify the code, please fork the repository and start from this branch, as this is the one used in this documentation.
-* All other branches are deprecated
+* All other branches are deprecated.
 
 -----------------
 About the authors
 -----------------
 
-The development of the **NEDUM-2D** model was initiated at *CIRED* in 2014. Coordinated by Vincent Viguié, it involved over the years, in alphabetic order, Paolo Avner, Stéphane Hallegattte, Charlotte Liotta, Thomas Monnier, Basile Pfeiffer, Claus Rabe, Julie Rozenberg, and Harris Selod.
+The development of the **NEDUM-2D** model was initiated at *CIRED* in 2014. Coordinated by Vincent Viguié, it involved over the years, in alphabetic order: Paolo Avner, Stéphane Hallegattte, Charlotte Liotta, Thomas Monnier, Basile Pfeiffer, Claus Rabe, Julie Rozenberg, and Harris Selod.
 
 .. _meta_link:
 
@@ -95,7 +95,7 @@ The development of the **NEDUM-2D** model was initiated at *CIRED* in 2014. Coor
 Meta
 ----
 
-If you find **NEDUM-2D** useful, please kindly cite our last paper:
+If you find **NEDUM-2D** useful, please kindly cite our latest paper:
 
 .. code-block:: latex
 

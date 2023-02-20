@@ -45,7 +45,7 @@ import outputs.flood_outputs as outfld
 # ### Define file paths
 
 # This corresponds to the architecture described in the README file
-# (introduction tab of the documentation): the data folder is not hosted
+# (setup tab of the documentation): the data folder is not hosted
 # on the Github repository and should be placed in the root folder enclosing
 # the repo.
 
@@ -1191,12 +1191,12 @@ Image(path_output_plots + "evol_nb_households_htype.png")
 
 # The graph above can direcly be interpreted given the land-use scenarios we provided.
 #
-# From 2011 to 2020, formal subsidized housing construction follows the trend discribed in the Housing Pipeline, and population grows along with income inequality and other time-moving variables. Due to increased competition from the two richest income groups, some mid-poor households are in effect crowded out of the formal private sector (which can explain the fall before 2015) and redirect themselves towards informal backyards, and informal settlements to a lesser extent. Those absorb most of population growth. Those trends hold until 2020, except for the blip in 2015, which we suspect to be linked with a jump in computed housing supply inertia (see above).
+# From 2011 to 2020, formal subsidized housing construction follows the trend described in the Housing Pipeline, and population grows along with income inequality and other time-moving variables. Due to increased competition from the two richest income groups, some mid-poor households are in effect crowded out of the formal private sector (which can explain the fall before 2015) and redirect themselves towards informal backyards, and informal settlements to a lesser extent. Those absorb most of population growth. Those trends hold until 2020, except for the blip in 2015.
 #
-# In 2020, the construction rate of formal subdized housing decreases, and a first round of areas become available for informal settlements: as expected, informal settlements begin to play a more substantial role compared to informal backyards, that even decrease until 2025: this is due to the new commuting opportunities on offer (it may become profitable to switch from settlements to backyards when they are located closer to job centres). Formal private units also start increasing again as the last mid-poor income groups leave the submarket.
+# In 2020, the construction rate of formal subdized housing decreases, and a first round of areas become available for informal settlements: as expected, informal settlements begin to play a more important role compared to informal backyards, that even decrease until 2025: this is due to the new commuting opportunities on offer (it may become profitable to switch from settlements to backyards when they are located closer to job centres). Formal private units also start increasing again as the last mid-poor income groups leave the submarket.
 #
-# New areas for informal settlements become available in 2023, 2025, and 2030. The most significant break in trends occur in 2025, as the areas on offer do not seem anymore to be interesting enough to keep sucking in households from informal backyards (whose number starts increasing again).
+# New areas for informal settlements become available in 2023, 2025, and 2030. The most significant break in trends occurs in 2025, as the areas on offer do not seem anymore to be interesting enough to keep sucking in households from informal backyards (whose number starts increasing again).
 #
-# We cap the analysis at 2035 as we get a big simulation error metric, and such low precision risks to take simulations out of equilibrium path. This (and other estimation errors) can be corrected by fine-tuning the numerical parameters in the compute_equilibrium function.
+# We cap the analysis at 2035 as we find a subtantial error term after, and such low precision risks taking the simulations out of the equilibrium path. This (and other estimation errors) can be corrected by fine-tuning the numerical parameters in the compute_equilibrium function.
 
 # The quick analysis above shows the kind of interpretation we can make with NEDUM-2D. Dynamic paths can be simulated for other outcomes and other underlying scenarios, and the results can also be compared across cross-sections to get comparative statics (regarding structural assumptions such as flood anticipations, for instance).

@@ -44,7 +44,7 @@ import outputs.export_outputs as outexp
 # This corresponds to the architecture described in the README file
 # (introduction tab of the documentation): the data folder is not hosted
 # on the Github repository and should be placed in the root folder enclosing
-# the repo
+# the repo.
 
 path_code = '..'
 path_folder = path_code + '/Data/'
@@ -119,10 +119,10 @@ options["fuel_price_scenario"] = 2
 # #### Finally, we set options regarding data processing
 
 # Default is set at zero to save computing time
-# (data is simply loaded in the model)
+# (data is simply loaded in the model).
 #
 # NB: this is only needed to create the data for the first time, or when the
-# source is changed, so that pre-processed data is updated
+# source is changed, so that pre-processed data is updated.
 
 # Dummy for converting small-area-level (SAL) data into grid-level data
 # (used for result validation)
@@ -304,7 +304,7 @@ elif options["correct_dominant_incgrp"] == 1:
 
 # ### Obtain number of formal private housing units per SP
 
-# NB: it is not clear whether RDP are included in SP formal count, and
+# NB: It is not clear whether RDP are included in SP formal count, and
 # if they should be taken out based on imperfect cadastral estimations.
 # For reference, we include the two options.
 
@@ -349,7 +349,7 @@ elif options["substract_RDP_from_formal"] == 0:
 
 # Given the uncertainty surrounding RDP counts, we take the second option as
 # default and prefer to rely on sample selection (see below) to exclude the SPs
-# where RDP housing is likely to drive most of our results
+# where RDP housing is likely to drive most of our results.
 
 # ### Sample selection
 
@@ -358,20 +358,15 @@ elif options["substract_RDP_from_formal"] == 0:
 # prices and for which more than 5% of households are reported to live in
 # informal housing (settlements + backyards). We also exclude "rural" SPs
 # (i.e., those that are large, with a small share than can be urbanized).
-# This is more specific to the regression that is going to allow us to
-# estimates parameter of the construction function (fit on building density),
+# This is more specific to the regression allowing us to
+# estimate parameters of the construction function (fit on building density),
 # hence the name of the selected_density variable.
 
 # We also add options to consider other criteria, namely we offer to
-# exclude poorest income group (which is in effect crowded out from the
+# exclude the poorest income group (which is in effect crowded out from the
 # formal sector), as well as Mitchell's Plain (as its housing market is
 # very specific) and far-away land (where SPs are too big for aggregates to
 # be representative of micro conditions).
-
-# NB: This sample will be used as such for the calibration of construction
-# function parameters. The regression used comes from the definition of
-# housing supply / building density in equilibrium, hence the name of the
-# variable
 
 # region
 if options["correct_selected_density"] == 0:
@@ -426,7 +421,7 @@ coeff_b, coeff_a, coeffKappa = calmain.estim_construct_func_param(
     data_number_formal, data_income_group, selected_density,
     path_data, path_precalc_inp, path_folder)
 
-# NB: The results are automatically saved for later use in simulations
+# NB: The results are automatically saved for later use in simulations.
 
 # region
 # We update parameter vector
@@ -456,12 +451,12 @@ np.save(path_precalc_inp + 'calibratedHousing_kappa.npy',
 # within a coarse interval before going to the finer level: this may require
 # several iterations if the underlying data changes.
 #
-# NB: we do that as it is too long and complex to run a solver directly.
+# NB: We conduct scanning as it is too long and complex to run a solver directly.
 
 # Then, we select the income-gravity pair that best fits the distribution
 # of commuters over distance from the CBD.
 #
-# NB: we need to proceed in two steps as there is no separate identification
+# NB: We need to proceed in two steps as there is no separate identification
 # of the gravity parameter and the net incomes.
 
 # We start by selecting the range over which we want to scan
@@ -500,7 +495,7 @@ np.save(path_precalc_inp + 'incomeCentersKeep.npy',
 # endregion
 
 # Note that incomes are fitted to reproduce the observed distribution of jobs
-# across income groups (in selected job centers), based on commuting choice
+# across income groups (in selected job centers), based on the commuting choice
 # model.
 
 # ### Let us first visualize inputs
@@ -799,7 +794,7 @@ Image(path_input_plots + "amenity_map.png")
 # NB: In what follows, since disamenity index calibration relies on the model fit and is not
 # computed a priori (contrary to other parameters), the options set in the
 # preamble should be the same as the ones used in the main script, so that
-# the calibrated values are in line with the structural assumptions used
+# the calibrated values are in line with the structural assumptions used there.
 
 # ### We start with a general (not location-specific) calibration
 
@@ -832,7 +827,7 @@ print(f"** Calibration: {number_total_iterations} iterations **")
 
 # We are going to compute the initial state equilibrium for each pair of
 # parameters, and retain the one that best fits the observed number of
-# households in informal settlements + backyards
+# households in informal settlements + backyards.
 
 import equilibrium.compute_equilibrium as eqcmp
 for i in range(0, len(list_amenity_backyard)):
