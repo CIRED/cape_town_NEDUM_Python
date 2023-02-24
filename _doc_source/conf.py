@@ -31,7 +31,7 @@ extensions = ['sphinxcontrib.bibtex', 'sphinx.ext.autodoc', 'sphinx.ext.coverage
 'sphinx.ext.viewcode', 'myst_parser', 'nbsphinx', 'nbsphinx_link']
 bibtex_bibfiles = ['refs.bib']
 bibtex_encoding = 'latin'
-bibtex_default_style = 'unsrt'
+bibtex_default_style = 'plain'
 bibtex_reference_style = 'author_year'
 nbsphinx_execute = 'never'
 nbsphinx_codecell_lexer = 'python3'
