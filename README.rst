@@ -6,7 +6,7 @@ Setup
 Overview
 --------
 
-**NEDUM-2D** (Non-Equilibrium Dynamic Urban Model) is a tool for simulating land-use patterns across a city in two dimensions. The initial rationale for its development was to make urban simulations more realistic by modelling deviations from theoretical static equilibria caused by inertia in the adaptive behaviour of households and developers over time. The current version developed for the *City of Cape Town* (CoCT) incorporates several transportation modes, employment centres, income groups, and housing types, to provide even more realistic prospective scenarios, while remaining tractable in terms of causal mechanisms at play. It allows to model the spatial impact of policies with a special interest for cities in developing countries, such as informal housing regulation and localized flood protection investments.
+**NEDUM-2D** (Non-Equilibrium Dynamic Urban Model) is a tool for simulating land-use patterns across a city in two dimensions. The initial rationale for its development was to have a simple and tractable urban simulation model, based on core urban economic principles, able to reproduce some of the most striking stylized facts observed across cities worldwide, with the goal of studying the impacts of land-use and transport policies on environmental and welfare outcomes. One core addition of **NEDUM-2D** was the introduction of inertia in adaptative responses from households and developers to policy shocks, to study their consequences on transition costs. The current version developed for the *City of Cape Town* (CoCT) incorporates several transportation modes, employment centres, income groups, and housing types, to provide even more realistic prospective scenarios, while remaining tractable in terms of causal mechanisms at play. It allows to model the spatial impact of policies with a special interest for cities in developing countries, such as informal housing regulation and localized flood protection investments.
 
 ---------
 Resources
@@ -67,6 +67,8 @@ Installation
 	├── Output
 	└── code capetown python
 
+Note that we do not host the data on GitHub, but that it is available upon request.
+
 **Step 3**: Launch **NEDUM-2D**
 
 * If needed, run the ``0_calib_nb`` notebook (either in .py or .ipynb format) to calibrate parameters again (under ``precalculated_inputs``) if underlying data (in ``data_Cape_Town``) has changed. A static copy is shown in the documentation for illustrative purposes.
@@ -87,7 +89,7 @@ Versioning
 About the authors
 -----------------
 
-The development of the **NEDUM-2D** model was initiated at *CIRED* in 2014. Coordinated by Vincent Viguié, it involved over the years, in alphabetic order: Paolo Avner, Stéphane Hallegattte, Charlotte Liotta, Thomas Monnier, Basile Pfeiffer, Claus Rabe, Julie Rozenberg, and Harris Selod.
+The development of the **NEDUM-2D** model was initiated at *CIRED* in 2009. Coordinated by Vincent Viguié, it involved over the years, in alphabetic order: Paolo Avner, Stéphane Hallegattte, Charlotte Liotta, Thomas Monnier, Basile Pfeiffer, Claus Rabe, Julie Rozenberg, and Harris Selod.
 
 .. _meta_link:
 
@@ -95,7 +97,7 @@ The development of the **NEDUM-2D** model was initiated at *CIRED* in 2014. Coor
 Meta
 ----
 
-If you find **NEDUM-2D** useful, please kindly cite our latest paper:
+If you find **NEDUM-2D** useful, please kindly cite our paper:
 
 .. code-block:: latex
 

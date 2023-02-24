@@ -52,7 +52,7 @@ To store the output in a dedicated folder, we create a name associated to the pa
 Assumptions
 ^^^^^^^^^^^
 
-Note that, in our model, we consider three endogenous housing markets (whose allocation is computed in equilibrium) - namely, formal private housing, informal backyards (erected in the backyard of formal subsidized housing dwelling units), and informal settlements (in predetermined locations) [#f2]_ - one exogenous housing market (whose allocation is directly taken from the data) - the RDP (Reconstruction and Development Programme) formal subsidized housing [#f3]_ - and four income groups.
+Note that, in the model, we consider three endogenous housing markets (whose allocation is computed in equilibrium) - namely, formal private housing, informal backyards (erected in the backyard of formal subsidized housing dwelling units), and informal settlements (in predetermined locations) [#f2]_ - one exogenous housing market (whose allocation is directly taken from the data) - the RDP (Reconstruction and Development Programme) formal subsidized housing [#f3]_ - and four income groups.
 
 By default, only agents from the poorest income group have access to RDP housing units. Without loss of generality, we assume that the price of such dwellings is zero, and that they are allocated randomly to the fraction of poorest agents they can host, the rest being rationed out of the formal subsidized housing market. Then, the two poorest income groups sort across formal private housing, informal backyards, and informal settlements; whereas the two richest only choose to live in the formal private housing units. Those assumptions are passed into the code through the ``income_class_by_housing_type`` parameter. We believe that this is a good approximation of reality. Also note that, although the two richest income groups are identical in terms of housing options, we distinguish between them to better account for income heterogeneity and spatial sorting along income lines in our simulations, while keeping the model sufficiently simple to be solved numerically.
 
@@ -101,14 +101,14 @@ As :math:`L^h(x)` is going to vary across time periods, the first part of the ``
    :align: center
    :alt: map for estimated timing of future informal settlements
 
-   Estimated timing of future new informal settlements (*Source*: :cite:t:`pfeiffer`)
+   Estimated timing of future new informal settlements (*Source*: expert estimates)
 
 .. figure:: images/WBUS2_Land_occupation_probability.png 
    :scale: 15% 
    :align: center
    :alt: map for estimated probability of future informal settlements
 
-   Estimated probability of future new informal settlements (*Source*: :cite:t:`pfeiffer`)
+   Estimated probability of future new informal settlements (*Source*: expert estimates)
 
 The ``import_coeff_land`` function then takes those outputs as arguments and reweight them by a housing-specific maximum land-use parameter. This parameter allows to reduce the development potential of each area to its housing component (accounting for roads, for instance). The share of pixel area available for formal private housing (in a given period) is simply defined as the share of pixel area available for unconstrained development, minus the shares dedicated to the other housing types, times its own maximum land use parameter:
 
@@ -133,7 +133,7 @@ Flood data
 
 Flood data is processed through the ``import_init_floods_data``, ``compute_fraction_capital_destroyed``, and ``import_full_floods_data`` functions.
 
-The ``import_init_floods_data`` function imports the pre-processed flood maps from FATHOM (fluvial and pluvial), and DELTARES (coastal). Those maps yield for each grid cell an estimate of the pixel share that is exposed to a flood of some maximum depth level, reached in a given year with a probability equal to the inverse of their return period. For instance, a flood map corresponding to a return period of 100 years considers events that have a 1/100 chance of occurring in any given year.
+The ``import_init_floods_data`` function imports the pre-processed flood maps from FATHOM :cite:p:`sampson` for fluvial and pluvial risks, and DELTARES :cite:p:`deltares` for coastal risks. Those maps yield for each grid cell an estimate of the pixel share that is exposed to a flood of some maximum depth level, reached in a given year with a probability equal to the inverse of their return period. For instance, a flood map corresponding to a return period of 100 years considers events that have a 1/100 chance of occurring in any given year.
 
 .. figure:: ../../Output/input_plots/P_100yr_map_depth.png
    :scale: 70% 
@@ -533,7 +533,7 @@ Then, we proceed in three steps. We first compute a new unconstrained equilibriu
    :lines: 278-281
    :lineno-start: 278
 
-This law of motion reflects the fact that formal private housing stock depreciates with time and that developers respond to price incentives with delay as in :cite:t:`vhallegatte`, hence might differ from the one computed as an unconstrained equilibrium output. Formally, this corresponds to:
+This law of motion reflects the fact that formal private housing stock depreciates with time and that developers respond to price incentives with delay as in :cite:t:`synergies`, hence might differ from the one computed as an unconstrained equilibrium output. Formally, this corresponds to:
 
 .. math::
 
@@ -890,11 +890,11 @@ Of course, even if we define values for all locations on the map, this parameter
 
 .. [#f7] Note that we add an option to discount the most likely / less serious pluvial flood risks for formal private housing, then for formal subsidized and informal backyard structures. This is to account for the fact that such (more or less concrete) structures are better protected from run-offs, which is not an information provided by the flood maps.
 
-.. [#f8] For the purpose of this model, it is therefore equivalent to assume complete market insurance or self-insurance. We may actually have an incomplete combination of the two, which we could simulate by putting weights on our two perfect-anticipations and no-anticipations polar cases. Note however that we do not model endogenous self-protection investments, and that assessing exogenous public protection investments would require custom flood maps in the spirit of :cite:t:`avner`.
+.. [#f8] For the purpose of this model, it is therefore equivalent to assume complete market insurance or self-insurance :cite:p:`hazard`. We may actually have an incomplete combination of the two, which we could simulate by putting weights on our two perfect-anticipations and no-anticipations polar cases. Note however that we do not model endogenous self-protection investments, and that assessing exogenous public protection investments would require custom flood maps in the spirit of :cite:t:`avner`.
 
 .. [#active_pop] Note that, in our framework, unemployment is taken as a phenomenon that occurs part of the year (through the ``household_size`` parameter that defines the employment rate of a household). We therefore abstract from structural unemployment phenomena. Also note that residential choice relies on the resolution of a prior commuting choice problem. Therefore, we only simulate the spatial distribution of people that are part of the labour force (with representative households accounting for two active individuals). The underlying population data (see inputs.data.import_macro_data function) covers all households living in the city (we have no information on individuals): the reweighting procedure we follow by default therefore leads us to simulate the spatial distribution of all households as if they were active, with an equal share of inactive households allocated to each income group. If we had access to more accurate data allowing us to sample out inactive households, we could follow the alternative reweighting procedure (with the ``unempl_reweight`` option) that applies a different rate to each income group based on its respective (un)employment rate, since all no-income households could then be considered as unemployed. Taking the reasoning further, we could even take people "working from home" (mostly informal labourers) out of the "active" population since they do not take part in commuting either.
 
-.. [#f9] We remind the reader that, according to the spatial indifference hypothesis, all similar households share a common (maximum attainable) utility level in equilibrium. In our model, households only differ a priori in their income class, which is why we have a unique utility level for each income class. Intuitively, the richer the household, the bigger the utility level, as a higher income translates into a bigger choice set. If such utility levels can be compared in ordinal terms, no direct welfare assessment can be derived in cardinal terms: utilities must be converted into income equivalents first. A further remark is that income levels are a proxy for household heterogeneity in the housing market. As such, they encompass several correlated dimensions (such as race). However, we have strong evidence that residential mobility is not significantly impeded by those other factors, even within the South African context, hence our focus on income as the prime determinant of spatial sorting :cite:p:`leroux`. Also note that income groups could themselves be endogenized (including unemployment) to study interactions between the housing and the labor market, although we leave that for future work.
+.. [#f9] We remind the reader that, according to the spatial indifference hypothesis, all similar households share a common (maximum attainable) utility level in equilibrium. In the model, households only differ a priori in their income class, which is why we have a unique utility level for each income class. Intuitively, the richer the household, the bigger the utility level, as a higher income translates into a bigger choice set. If such utility levels can be compared in ordinal terms, no direct welfare assessment can be derived in cardinal terms: utilities must be converted into income equivalents first. A further remark is that income levels are a proxy for household heterogeneity in the housing market. As such, they encompass several correlated dimensions (such as race). However, we have strong evidence that residential mobility is not significantly impeded by those other factors, even within the South African context, hence our focus on income as the prime determinant of spatial sorting :cite:p:`leroux`. Also note that income groups could themselves be endogenized (including unemployment) to study interactions between the housing and the labor market, although we leave that for future work.
 
 .. [#f10] When we overestimate the population, we increase the utility level, and conversely. Indeed, a higher utility translates into a higher land consumption (all other things equal) for the same land available, hence a lower accommodable number of people.
 

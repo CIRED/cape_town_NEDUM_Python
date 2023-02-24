@@ -895,7 +895,7 @@ Image(path_output_plots + 'hsupply_rdp_2d_sim.png')
 
 # We do observe that informal settlements are somewhat denser than other housing types. This seems to indicate that horizontal densification dominates vertical densification within the context of the CoCT. Indeed, even though formal private housing can be built high, it is less constrained in terms of land availability and can spread out more, leaving some open space. On the contrary, as informal settlements are more constrained and can only expand horizontally, they end up using most of the available land.
 #
-# NB: Note that our model does not allow us to disentangle between high structures with small dwelling units and low structures with big dwelling units within the formal private housing sector.
+# NB: Note that the model does not allow us to disentangle between high structures with small dwelling units and low structures with big dwelling units within the formal private housing sector.
 
 # #### Now, let us look at land prices (in rands / m²)
 
