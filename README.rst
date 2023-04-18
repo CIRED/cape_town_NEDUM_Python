@@ -2,6 +2,40 @@
 Setup
 =====
 
+..
+	Logo order: WB, GFDRR, CSP, NT, CIRED, SECO, CoCT
+
+..
+	.. image:: picture.jpeg
+	   :height: 100px
+	   :width: 200 px
+	   :scale: 50 %
+	   :alt: alternate text
+	   :align: right
+
+.. image:: images/GFDRR-logo.png
+	:width: 99 %
+	:alt: Global Facility for Disaster Reduction and Recovery logo
+
+.. image:: images/NT-Logo.jpg
+	:width: 49.5 %
+	:alt: National Treasury logo
+.. image:: images/CSP-Logo-CMYK.jpg
+	:width: 49.5 %
+	:alt: Cities Support Programme logo
+
+.. image:: images/SECO-logo.jpg
+	:width: 49.5 %
+	:alt: State Secretariat for Economic Affairs logo
+.. image:: images/COCT-logo.jpeg
+	:width: 49.5 %
+	:alt: City of Cape Town logo
+
+.. image:: images/Logo_CIRED.png
+	:width: 15 %
+	:alt: Centre International de Recherche sur l’Environnement et le Développement logo
+	:align: center
+
 --------
 Overview
 --------
@@ -118,7 +152,7 @@ For internal reference within the CoCT, please contact kristoff.potgieter@capeto
 
 |
 
-Thomas Monnier - `Website <https://tlmonnier.github.io>`_ - `Github <https://github.com/TLMonnier>`_ - `Twitter <https://twitter.com/TLMonnier>`_ - thomas.monnier@ensae.fr
+User guide conception: Thomas Monnier - `Website <https://tlmonnier.github.io>`_ - `Github <https://github.com/TLMonnier>`_ - `Twitter <https://twitter.com/TLMonnier>`_ - thomas.monnier@ensae.fr
 
 Distributed under the GNU GENERAL PUBLIC LICENSE.
 

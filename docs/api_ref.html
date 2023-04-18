@@ -16,6 +16,7 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
@@ -29,11 +30,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> NEDUM-2D for CoCT
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            NEDUM-2D for CoCT
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -48,32 +53,144 @@
 <li class="toctree-l1"><a class="reference internal" href="calib_nb.html">Notebook: run calibration</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#inputs">Inputs</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#module-inputs.parameters_and_options">Set parameters and options</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-inputs.data">Import data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-inputs.parameters_and_options">Set parameters and options</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#inputs.parameters_and_options.compute_agricultural_rent"><code class="docutils literal notranslate"><span class="pre">compute_agricultural_rent()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#inputs.parameters_and_options.import_construction_parameters"><code class="docutils literal notranslate"><span class="pre">import_construction_parameters()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#inputs.parameters_and_options.import_options"><code class="docutils literal notranslate"><span class="pre">import_options()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#inputs.parameters_and_options.import_param"><code class="docutils literal notranslate"><span class="pre">import_param()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-inputs.data">Import data</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#inputs.data.compute_fraction_capital_destroyed"><code class="docutils literal notranslate"><span class="pre">compute_fraction_capital_destroyed()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#inputs.data.convert_income_distribution"><code class="docutils literal notranslate"><span class="pre">convert_income_distribution()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#inputs.data.gen_small_areas_to_grid"><code class="docutils literal notranslate"><span class="pre">gen_small_areas_to_grid()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#inputs.data.import_amenities"><code class="docutils literal notranslate"><span class="pre">import_amenities()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#inputs.data.import_coeff_land"><code class="docutils literal notranslate"><span class="pre">import_coeff_land()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#inputs.data.import_full_floods_data"><code class="docutils literal notranslate"><span class="pre">import_full_floods_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#inputs.data.import_grid"><code class="docutils literal notranslate"><span class="pre">import_grid()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#inputs.data.import_households_data"><code class="docutils literal notranslate"><span class="pre">import_households_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#inputs.data.import_housing_limit"><code class="docutils literal notranslate"><span class="pre">import_housing_limit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#inputs.data.import_hypothesis_housing_type"><code class="docutils literal notranslate"><span class="pre">import_hypothesis_housing_type()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#inputs.data.import_income_classes_data"><code class="docutils literal notranslate"><span class="pre">import_income_classes_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#inputs.data.import_init_floods_data"><code class="docutils literal notranslate"><span class="pre">import_init_floods_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#inputs.data.import_land_use"><code class="docutils literal notranslate"><span class="pre">import_land_use()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#inputs.data.import_macro_data"><code class="docutils literal notranslate"><span class="pre">import_macro_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#inputs.data.import_sal_data"><code class="docutils literal notranslate"><span class="pre">import_sal_data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#inputs.data.import_transport_data"><code class="docutils literal notranslate"><span class="pre">import_transport_data()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#equilibrium">Equilibrium</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#module-equilibrium.compute_equilibrium">Compute equilibrium</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-equilibrium.run_simulations">Run simulations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-equilibrium.functions_dynamic">Dynamic functions</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-equilibrium.sub.compute_outputs">Compute intermediate outputs</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-equilibrium.sub.functions_solver">Define optimality conditions for solver</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-equilibrium.compute_equilibrium">Compute equilibrium</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#equilibrium.compute_equilibrium.compute_equilibrium"><code class="docutils literal notranslate"><span class="pre">compute_equilibrium()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-equilibrium.run_simulations">Run simulations</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#equilibrium.run_simulations.run_simulation"><code class="docutils literal notranslate"><span class="pre">run_simulation()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-equilibrium.functions_dynamic">Dynamic functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#equilibrium.functions_dynamic.compute_average_income"><code class="docutils literal notranslate"><span class="pre">compute_average_income()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#equilibrium.functions_dynamic.evolution_housing_supply"><code class="docutils literal notranslate"><span class="pre">evolution_housing_supply()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#equilibrium.functions_dynamic.import_scenarios"><code class="docutils literal notranslate"><span class="pre">import_scenarios()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#equilibrium.functions_dynamic.interpolate_interest_rate"><code class="docutils literal notranslate"><span class="pre">interpolate_interest_rate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-equilibrium.sub.compute_outputs">Compute intermediate outputs</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#equilibrium.sub.compute_outputs.compute_outputs"><code class="docutils literal notranslate"><span class="pre">compute_outputs()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-equilibrium.sub.functions_solver">Define optimality conditions for solver</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#equilibrium.sub.functions_solver.compute_dwelling_size_formal"><code class="docutils literal notranslate"><span class="pre">compute_dwelling_size_formal()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#equilibrium.sub.functions_solver.compute_housing_supply_backyard"><code class="docutils literal notranslate"><span class="pre">compute_housing_supply_backyard()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#equilibrium.sub.functions_solver.compute_housing_supply_formal"><code class="docutils literal notranslate"><span class="pre">compute_housing_supply_formal()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#equilibrium.sub.functions_solver.explicit_qfunc"><code class="docutils literal notranslate"><span class="pre">explicit_qfunc()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#calibration">Calibration</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#module-calibration.calib_main_func">Main functions for calibration</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-calibration.sub.compute_income">Calibrate income net of commuting costs and gravity parameter</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-calibration.sub.estimate_parameters_by_optimization">Estimate utility function parameters by optimization</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-calibration.sub.estimate_parameters_by_scanning">Estimate utility function parameters by scanning</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-calibration.sub.import_amenities">Import exogenous amenities (for amenity index)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-calibration.sub.import_employment_data">Import employment data (for income and gravity)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-calibration.sub.loglikelihood">Log-likelihood (for utility function parameters)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-calibration.calib_main_func">Main functions for calibration</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#calibration.calib_main_func.estim_construct_func_param"><code class="docutils literal notranslate"><span class="pre">estim_construct_func_param()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#calibration.calib_main_func.estim_incomes_and_gravity"><code class="docutils literal notranslate"><span class="pre">estim_incomes_and_gravity()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#calibration.calib_main_func.estim_util_func_param"><code class="docutils literal notranslate"><span class="pre">estim_util_func_param()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-calibration.sub.compute_income">Calibrate income net of commuting costs and gravity parameter</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#calibration.sub.compute_income.EstimateIncome"><code class="docutils literal notranslate"><span class="pre">EstimateIncome()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#calibration.sub.compute_income.commutingSolve"><code class="docutils literal notranslate"><span class="pre">commutingSolve()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#calibration.sub.compute_income.compute_ODflows"><code class="docutils literal notranslate"><span class="pre">compute_ODflows()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#calibration.sub.compute_income.import_transport_costs"><code class="docutils literal notranslate"><span class="pre">import_transport_costs()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-calibration.sub.estimate_parameters_by_optimization">Estimate utility function parameters by optimization</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#calibration.sub.estimate_parameters_by_optimization.EstimateParametersByOptimization"><code class="docutils literal notranslate"><span class="pre">EstimateParametersByOptimization()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-calibration.sub.estimate_parameters_by_scanning">Estimate utility function parameters by scanning</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#calibration.sub.estimate_parameters_by_scanning.EstimateParametersByScanning"><code class="docutils literal notranslate"><span class="pre">EstimateParametersByScanning()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-calibration.sub.import_amenities">Import exogenous amenities (for amenity index)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#calibration.sub.import_amenities.import_exog_amenities"><code class="docutils literal notranslate"><span class="pre">import_exog_amenities()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-calibration.sub.import_employment_data">Import employment data (for income and gravity)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#calibration.sub.import_employment_data.import_employment_data"><code class="docutils literal notranslate"><span class="pre">import_employment_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-calibration.sub.loglikelihood">Log-likelihood (for utility function parameters)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#calibration.sub.loglikelihood.LogLikelihoodModel"><code class="docutils literal notranslate"><span class="pre">LogLikelihoodModel()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#outputs">Outputs</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#module-outputs.export_outputs">Process and display general values</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-outputs.flood_outputs">Process values related to floods</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-outputs.export_outputs_floods">Display values related to floods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-outputs.export_outputs">Process and display general values</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#outputs.export_outputs.export_map"><code class="docutils literal notranslate"><span class="pre">export_map()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs.export_outputs.from_df_to_gdf"><code class="docutils literal notranslate"><span class="pre">from_df_to_gdf()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs.export_outputs.import_employment_geodata"><code class="docutils literal notranslate"><span class="pre">import_employment_geodata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs.export_outputs.plot_average_income"><code class="docutils literal notranslate"><span class="pre">plot_average_income()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs.export_outputs.plot_income_net_of_commuting_costs"><code class="docutils literal notranslate"><span class="pre">plot_income_net_of_commuting_costs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs.export_outputs.retrieve_name"><code class="docutils literal notranslate"><span class="pre">retrieve_name()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs.export_outputs.simul_housing_demand"><code class="docutils literal notranslate"><span class="pre">simul_housing_demand()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs.export_outputs.simul_pop_housing_types"><code class="docutils literal notranslate"><span class="pre">simul_pop_housing_types()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs.export_outputs.simul_pop_htype_income"><code class="docutils literal notranslate"><span class="pre">simul_pop_htype_income()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs.export_outputs.simul_pop_income_groups"><code class="docutils literal notranslate"><span class="pre">simul_pop_income_groups()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs.export_outputs.simulation_housing_price"><code class="docutils literal notranslate"><span class="pre">simulation_housing_price()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs.export_outputs.valid_housing_demand"><code class="docutils literal notranslate"><span class="pre">valid_housing_demand()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs.export_outputs.valid_housing_price"><code class="docutils literal notranslate"><span class="pre">valid_housing_price()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs.export_outputs.valid_housing_supply"><code class="docutils literal notranslate"><span class="pre">valid_housing_supply()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs.export_outputs.valid_housing_supply_noland"><code class="docutils literal notranslate"><span class="pre">valid_housing_supply_noland()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs.export_outputs.valid_pop_housing_type"><code class="docutils literal notranslate"><span class="pre">valid_pop_housing_type()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs.export_outputs.valid_pop_housing_types"><code class="docutils literal notranslate"><span class="pre">valid_pop_housing_types()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs.export_outputs.valid_pop_htype_income"><code class="docutils literal notranslate"><span class="pre">valid_pop_htype_income()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs.export_outputs.valid_pop_income_groups"><code class="docutils literal notranslate"><span class="pre">valid_pop_income_groups()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs.export_outputs.validation_density"><code class="docutils literal notranslate"><span class="pre">validation_density()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-outputs.flood_outputs">Process values related to floods</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#outputs.flood_outputs.annualize_damages"><code class="docutils literal notranslate"><span class="pre">annualize_damages()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs.flood_outputs.compute_content_cost"><code class="docutils literal notranslate"><span class="pre">compute_content_cost()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs.flood_outputs.compute_damages"><code class="docutils literal notranslate"><span class="pre">compute_damages()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs.flood_outputs.compute_damages_2d"><code class="docutils literal notranslate"><span class="pre">compute_damages_2d()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs.flood_outputs.compute_formal_structure_cost"><code class="docutils literal notranslate"><span class="pre">compute_formal_structure_cost()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs.flood_outputs.compute_stats_per_housing_type"><code class="docutils literal notranslate"><span class="pre">compute_stats_per_housing_type()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs.flood_outputs.compute_stats_per_income_group"><code class="docutils literal notranslate"><span class="pre">compute_stats_per_income_group()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs.flood_outputs.create_flood_dict"><code class="docutils literal notranslate"><span class="pre">create_flood_dict()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-outputs.export_outputs_floods">Display values related to floods</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#outputs.export_outputs_floods.plot_flood_severity_distrib"><code class="docutils literal notranslate"><span class="pre">plot_flood_severity_distrib()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs.export_outputs_floods.round_nearest"><code class="docutils literal notranslate"><span class="pre">round_nearest()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs.export_outputs_floods.simul_damages"><code class="docutils literal notranslate"><span class="pre">simul_damages()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs.export_outputs_floods.simul_damages_time"><code class="docutils literal notranslate"><span class="pre">simul_damages_time()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs.export_outputs_floods.valid_damages"><code class="docutils literal notranslate"><span class="pre">valid_damages()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs.export_outputs_floods.validation_flood"><code class="docutils literal notranslate"><span class="pre">validation_flood()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#outputs.export_outputs_floods.validation_flood_coastal"><code class="docutils literal notranslate"><span class="pre">validation_flood_coastal()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -97,8 +214,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>API reference</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">API reference</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/api_ref.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -108,31 +225,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  
-<style>
-/* CSS overrides for sphinx_rtd_theme */
-
-/* 24px margin */
-.nbinput.nblast.container,
-.nboutput.nblast.container {
-    margin-bottom: 19px;  /* padding has already 5px */
-}
-
-/* ... except between code cells! */
-.nblast.container + .nbinput.container {
-    margin-top: -19px;
-}
-
-.admonition > p:before {
-    margin-right: 4px;  /* make room for the exclamation icon */
-}
-
-/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
-.math {
-    text-align: unset;
-}
-</style>
-<div class="section" id="api-reference">
+  <div class="section" id="api-reference">
 <h1>API reference<a class="headerlink" href="#api-reference" title="Permalink to this heading"></a></h1>
 <div class="section" id="inputs">
 <h2>Inputs<a class="headerlink" href="#inputs" title="Permalink to this heading"></a></h2>
@@ -3239,7 +3332,7 @@ depth level. We expect simulation results here.</p></li>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, Thomas Monnier.</p>
+    <p>&#169; Copyright 2023, Global Facility for Disaster Reduction and Recovery (The World Bank).</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

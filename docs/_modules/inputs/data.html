@@ -16,6 +16,7 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -27,11 +28,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> NEDUM-2D for CoCT
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            NEDUM-2D for CoCT
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -64,9 +69,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">Module code</a> &raquo;</li>
-      <li>inputs.data</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">inputs.data</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -90,7 +95,7 @@
 
 
 <div class="viewcode-block" id="import_grid"><a class="viewcode-back" href="../../api_ref.html#inputs.data.import_grid">[docs]</a><span class="k">def</span> <span class="nf">import_grid</span><span class="p">(</span><span class="n">path_data</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Import standard geographic grid from the City of Cape Town.</span>
 
 <span class="sd">    Parameters</span>
@@ -122,7 +127,7 @@
 
 
 <div class="viewcode-block" id="import_amenities"><a class="viewcode-back" href="../../api_ref.html#inputs.data.import_amenities">[docs]</a><span class="k">def</span> <span class="nf">import_amenities</span><span class="p">(</span><span class="n">path_precalc_inp</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Import calibrated amenity index.</span>
 
 <span class="sd">    Parameters</span>
@@ -154,7 +159,7 @@
 
 
 <div class="viewcode-block" id="import_hypothesis_housing_type"><a class="viewcode-back" href="../../api_ref.html#inputs.data.import_hypothesis_housing_type">[docs]</a><span class="k">def</span> <span class="nf">import_hypothesis_housing_type</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Define housing market accessibility hypotheses.</span>
 
 <span class="sd">    Returns</span>
@@ -178,7 +183,7 @@
 
 
 <div class="viewcode-block" id="import_income_classes_data"><a class="viewcode-back" href="../../api_ref.html#inputs.data.import_income_classes_data">[docs]</a><span class="k">def</span> <span class="nf">import_income_classes_data</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">path_data</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Import population and average income per income class in the model.</span>
 
 <span class="sd">    Parameters</span>
@@ -277,7 +282,7 @@
 
 
 <div class="viewcode-block" id="import_households_data"><a class="viewcode-back" href="../../api_ref.html#inputs.data.import_households_data">[docs]</a><span class="k">def</span> <span class="nf">import_households_data</span><span class="p">(</span><span class="n">path_precalc_inp</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Import geographic data with class distributions for households.</span>
 
 <span class="sd">    Parameters</span>
@@ -384,7 +389,7 @@
 
 
 <div class="viewcode-block" id="import_macro_data"><a class="viewcode-back" href="../../api_ref.html#inputs.data.import_macro_data">[docs]</a><span class="k">def</span> <span class="nf">import_macro_data</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">path_scenarios</span><span class="p">,</span> <span class="n">path_folder</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Import interest rate and population per housing type.</span>
 
 <span class="sd">    Parameters</span>
@@ -485,7 +490,7 @@
 
 <div class="viewcode-block" id="import_land_use"><a class="viewcode-back" href="../../api_ref.html#inputs.data.import_land_use">[docs]</a><span class="k">def</span> <span class="nf">import_land_use</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">options</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">data_rdp</span><span class="p">,</span> <span class="n">housing_types</span><span class="p">,</span>
                     <span class="n">housing_type_data</span><span class="p">,</span> <span class="n">path_data</span><span class="p">,</span> <span class="n">path_folder</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return linear regression spline estimates for housing building paths.</span>
 
 <span class="sd">    This function imports scenarios about land use availability for several</span>
@@ -979,7 +984,7 @@
 
 <div class="viewcode-block" id="import_coeff_land"><a class="viewcode-back" href="../../api_ref.html#inputs.data.import_coeff_land">[docs]</a><span class="k">def</span> <span class="nf">import_coeff_land</span><span class="p">(</span><span class="n">spline_land_constraints</span><span class="p">,</span> <span class="n">spline_land_backyard</span><span class="p">,</span>
                       <span class="n">spline_land_informal</span><span class="p">,</span> <span class="n">spline_land_RDP</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Update land availability ratios for a given year.</span>
 
 <span class="sd">    This function updates the land availability regression splines to account</span>
@@ -1037,7 +1042,7 @@
 
 
 <div class="viewcode-block" id="import_housing_limit"><a class="viewcode-back" href="../../api_ref.html#inputs.data.import_housing_limit">[docs]</a><span class="k">def</span> <span class="nf">import_housing_limit</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">param</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return maximum allowed housing supply in and out of historic city radius.</span>
 
 <span class="sd">    Parameters</span>
@@ -1067,7 +1072,7 @@
 
 
 <div class="viewcode-block" id="import_init_floods_data"><a class="viewcode-back" href="../../api_ref.html#inputs.data.import_init_floods_data">[docs]</a><span class="k">def</span> <span class="nf">import_init_floods_data</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">path_folder</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Import raw flood data and damage functions.</span>
 
 <span class="sd">    More specifically, damage functions (taken from the literature) associate</span>
@@ -1261,7 +1266,7 @@
 
 <div class="viewcode-block" id="compute_fraction_capital_destroyed"><a class="viewcode-back" href="../../api_ref.html#inputs.data.compute_fraction_capital_destroyed">[docs]</a><span class="k">def</span> <span class="nf">compute_fraction_capital_destroyed</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">type_flood</span><span class="p">,</span> <span class="n">damage_function</span><span class="p">,</span>
                                        <span class="n">housing_type</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute expected fraction of capital destroyed by floods.</span>
 
 <span class="sd">    To go from discrete to continuous estimates of flood damages, we linearly</span>
@@ -1483,7 +1488,7 @@
 
 
 <div class="viewcode-block" id="import_full_floods_data"><a class="viewcode-back" href="../../api_ref.html#inputs.data.import_full_floods_data">[docs]</a><span class="k">def</span> <span class="nf">import_full_floods_data</span><span class="p">(</span><span class="n">options</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">path_folder</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute expected fraction of capital destroyed by floods across space.</span>
 
 <span class="sd">    This function applies theoretical formulas to flood maps to get the</span>
@@ -1962,7 +1967,7 @@
                           <span class="n">spline_population_income_distribution</span><span class="p">,</span>
                           <span class="n">spline_income_distribution</span><span class="p">,</span>
                           <span class="n">path_precalc_inp</span><span class="p">,</span> <span class="n">path_precalc_transp</span><span class="p">,</span> <span class="n">dim</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Run commuting choice model.</span>
 
 <span class="sd">    This function runs the theoretical commuting choice model to</span>
@@ -2199,7 +2204,7 @@
 
 
 <div class="viewcode-block" id="import_sal_data"><a class="viewcode-back" href="../../api_ref.html#inputs.data.import_sal_data">[docs]</a><span class="k">def</span> <span class="nf">import_sal_data</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">path_folder</span><span class="p">,</span> <span class="n">path_data</span><span class="p">,</span> <span class="n">housing_type_data</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Import SAL data for population density by housing type.</span>
 
 <span class="sd">    This is used for validation as Small-Area-Level estimates are more</span>
@@ -2313,7 +2318,7 @@
 
 <div class="viewcode-block" id="gen_small_areas_to_grid"><a class="viewcode-back" href="../../api_ref.html#inputs.data.gen_small_areas_to_grid">[docs]</a><span class="k">def</span> <span class="nf">gen_small_areas_to_grid</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">grid_intersect</span><span class="p">,</span> <span class="n">small_area_data</span><span class="p">,</span>
                             <span class="n">small_area_code</span><span class="p">,</span> <span class="n">unit</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert SAL/SP data to grid dimensions.</span>
 
 <span class="sd">    Parameters</span>
@@ -2387,7 +2392,7 @@
 
 
 <div class="viewcode-block" id="convert_income_distribution"><a class="viewcode-back" href="../../api_ref.html#inputs.data.convert_income_distribution">[docs]</a><span class="k">def</span> <span class="nf">convert_income_distribution</span><span class="p">(</span><span class="n">income_distribution</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">path_data</span><span class="p">,</span> <span class="n">data_sp</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert SP data for income distribution into grid dimensions.</span>
 
 <span class="sd">    This is used for validation as Small-Area-Level estimates are not</span>
@@ -2462,7 +2467,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, Thomas Monnier.</p>
+    <p>&#169; Copyright .</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

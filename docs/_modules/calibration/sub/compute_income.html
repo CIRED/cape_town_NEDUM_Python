@@ -16,6 +16,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
@@ -27,11 +28,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> NEDUM-2D for CoCT
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            NEDUM-2D for CoCT
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -64,9 +69,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../index.html">Module code</a> &raquo;</li>
-      <li>calibration.sub.compute_income</li>
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">calibration.sub.compute_income</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -90,7 +95,7 @@
                            <span class="n">spline_population_income_distribution</span><span class="p">,</span>
                            <span class="n">spline_income_distribution</span><span class="p">,</span> <span class="n">path_precalc_inp</span><span class="p">,</span>
                            <span class="n">path_precalc_transp</span><span class="p">,</span> <span class="n">dim</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute monetary and time costs from commuting for some given year.</span>
 
 <span class="sd">    This function leverages the CoCT&#39;s EMME/2 transport model for inputs.</span>
@@ -360,7 +365,7 @@
 <div class="viewcode-block" id="EstimateIncome"><a class="viewcode-back" href="../../../api_ref.html#calibration.sub.compute_income.EstimateIncome">[docs]</a><span class="k">def</span> <span class="nf">EstimateIncome</span><span class="p">(</span><span class="n">param</span><span class="p">,</span> <span class="n">timeOutput</span><span class="p">,</span> <span class="n">distanceOutput</span><span class="p">,</span> <span class="n">monetaryCost</span><span class="p">,</span> <span class="n">costTime</span><span class="p">,</span>
                    <span class="n">job_centers</span><span class="p">,</span> <span class="n">average_income</span><span class="p">,</span> <span class="n">income_distribution</span><span class="p">,</span>
                    <span class="n">list_lambda</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Estimate incomes per job center and number of commuters per distance bin.</span>
 
 <span class="sd">    This function leverages the commutingSolve() function to iterate over</span>
@@ -630,7 +635,7 @@
 
 <div class="viewcode-block" id="compute_ODflows"><a class="viewcode-back" href="../../../api_ref.html#calibration.sub.compute_income.compute_ODflows">[docs]</a><span class="k">def</span> <span class="nf">compute_ODflows</span><span class="p">(</span><span class="n">householdSize</span><span class="p">,</span> <span class="n">monetaryCost</span><span class="p">,</span> <span class="n">costTime</span><span class="p">,</span> <span class="n">incomeCentersFull</span><span class="p">,</span>
                     <span class="n">whichCenters</span><span class="p">,</span> <span class="n">param_lambda</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute probability distribution and transport costs of commuting pairs.</span>
 
 <span class="sd">    This function applies theoretical formulas from the commuting choice model,</span>
@@ -766,7 +771,7 @@
                    <span class="n">popResidence</span><span class="p">,</span> <span class="n">monetaryCost</span><span class="p">,</span> <span class="n">costTime</span><span class="p">,</span> <span class="n">param_lambda</span><span class="p">,</span>
                    <span class="n">householdSize</span><span class="p">,</span> <span class="n">whichCenters</span><span class="p">,</span> <span class="n">bracketsDistance</span><span class="p">,</span>
                    <span class="n">distanceOutput</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute error and distribution for job allocation simulated from incomes.</span>
 
 <span class="sd">    This function leverages the compute_ODflows() function to compute a</span>
@@ -896,7 +901,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, Thomas Monnier.</p>
+    <p>&#169; Copyright .</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

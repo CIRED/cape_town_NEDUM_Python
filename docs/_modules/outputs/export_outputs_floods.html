@@ -16,6 +16,7 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -27,11 +28,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> NEDUM-2D for CoCT
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            NEDUM-2D for CoCT
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -64,9 +69,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">Module code</a> &raquo;</li>
-      <li>outputs.export_outputs_floods</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">outputs.export_outputs_floods</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -88,7 +93,7 @@
 
 <div class="viewcode-block" id="validation_flood"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs_floods.validation_flood">[docs]</a><span class="k">def</span> <span class="nf">validation_flood</span><span class="p">(</span><span class="n">stats1</span><span class="p">,</span> <span class="n">stats2</span><span class="p">,</span> <span class="n">legend1</span><span class="p">,</span> <span class="n">legend2</span><span class="p">,</span> <span class="n">type_flood</span><span class="p">,</span>
                      <span class="n">path_plots</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Validation bar plot for household spatial distribution across flood zones.</span>
 
 <span class="sd">    The validation is done across some selected return periods for illustrative</span>
@@ -337,7 +342,7 @@
 
 <div class="viewcode-block" id="validation_flood_coastal"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs_floods.validation_flood_coastal">[docs]</a><span class="k">def</span> <span class="nf">validation_flood_coastal</span><span class="p">(</span><span class="n">stats1</span><span class="p">,</span> <span class="n">stats2</span><span class="p">,</span> <span class="n">legend1</span><span class="p">,</span> <span class="n">legend2</span><span class="p">,</span> <span class="n">type_flood</span><span class="p">,</span>
                              <span class="n">path_plots</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Validation bar plot for household spatial distribution across flood zones.</span>
 
 <span class="sd">    The validation is done across some selected return periods for illustrative</span>
@@ -588,7 +593,7 @@
 
 
 <div class="viewcode-block" id="valid_damages"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs_floods.valid_damages">[docs]</a><span class="k">def</span> <span class="nf">valid_damages</span><span class="p">(</span><span class="n">damages1</span><span class="p">,</span> <span class="n">damages2</span><span class="p">,</span> <span class="n">path_plots</span><span class="p">,</span> <span class="n">flood_categ</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Validation bar plot for estimated damages for a given flood type.</span>
 
 <span class="sd">    Breakdown is given by housing type as depth-damage functions used to</span>
@@ -720,7 +725,7 @@
 
 
 <div class="viewcode-block" id="simul_damages"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs_floods.simul_damages">[docs]</a><span class="k">def</span> <span class="nf">simul_damages</span><span class="p">(</span><span class="n">damages</span><span class="p">,</span> <span class="n">path_plots</span><span class="p">,</span> <span class="n">flood_categ</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Bar plot for estimated damages for a given flood type.</span>
 
 <span class="sd">    Breakdown is given by housing type as depth-damage functions used to</span>
@@ -817,7 +822,7 @@
 
 <div class="viewcode-block" id="simul_damages_time"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs_floods.simul_damages_time">[docs]</a><span class="k">def</span> <span class="nf">simul_damages_time</span><span class="p">(</span><span class="n">list_damages</span><span class="p">,</span> <span class="n">path_plots</span><span class="p">,</span> <span class="n">path_tables</span><span class="p">,</span>
                        <span class="n">flood_categ</span><span class="p">,</span> <span class="n">options</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plot evolution of aggregate annualized damages per housing type over time.</span>
 
 <span class="sd">    The function returns different plots for each housing type. Again, they</span>
@@ -952,7 +957,7 @@
 
 
 <div class="viewcode-block" id="round_nearest"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs_floods.round_nearest">[docs]</a><span class="k">def</span> <span class="nf">round_nearest</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return rounded value to nearest decimal number above some threshold.</span>
 
 <span class="sd">    This is a technical calculation that is called by the</span>
@@ -979,7 +984,7 @@
 
 <div class="viewcode-block" id="plot_flood_severity_distrib"><a class="viewcode-back" href="../../api_ref.html#outputs.export_outputs_floods.plot_flood_severity_distrib">[docs]</a><span class="k">def</span> <span class="nf">plot_flood_severity_distrib</span><span class="p">(</span><span class="n">barWidth</span><span class="p">,</span> <span class="n">transparency</span><span class="p">,</span> <span class="n">dictio</span><span class="p">,</span> <span class="n">flood_type</span><span class="p">,</span>
                                 <span class="n">path_plots</span><span class="p">,</span> <span class="n">ylim</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Bar plot distribution of households across flood zones of varying severity.</span>
 
 <span class="sd">    Only selected return periods are shown for illustrative purposes. Output</span>
@@ -1137,7 +1142,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, Thomas Monnier.</p>
+    <p>&#169; Copyright .</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
