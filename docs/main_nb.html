@@ -66,7 +66,8 @@
 <li class="toctree-l4"><a class="reference internal" href="#We-first-set-options-regarding-structural-assumptions-used-in-the-model">We first set options regarding structural assumptions used in the model</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#Then-we-set-options-regarding-flood-data-used">Then we set options regarding flood data used</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#We-also-set-options-for-scenarios-on-time-moving-exogenous-variables">We also set options for scenarios on time-moving exogenous variables</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#Finally,-we-set-options-regarding-data-processing">Finally, we set options regarding data processing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#We-set-options-regarding-data-processing">We set options regarding data processing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#Finally,-we-decide-whether-or-not-we-want-to-run-dynamic-simulations-(on-top-of-initial-state-equilibrium)">Finally, we decide whether or not we want to run dynamic simulations (on top of initial state equilibrium)</a></li>
 </ul>
 </li>
 </ul>
@@ -306,8 +307,8 @@
 </div>
 </div>
 </div>
-<div class="section" id="Finally,-we-set-options-regarding-data-processing">
-<h4>Finally, we set options regarding data processing<a class="headerlink" href="#Finally,-we-set-options-regarding-data-processing" title="Permalink to this heading"></a></h4>
+<div class="section" id="We-set-options-regarding-data-processing">
+<h4>We set options regarding data processing<a class="headerlink" href="#We-set-options-regarding-data-processing" title="Permalink to this heading"></a></h4>
 <p>Default is set at zero to save computing time (data is simply loaded in the model).</p>
 <p>NB: this is only needed to create the data for the first time, or when the source is changed, so that pre-processed data is updated.</p>
 <div class="nbinput nblast docutils container">
@@ -324,12 +325,23 @@
 </div>
 </div>
 </div>
+<div class="section" id="Finally,-we-decide-whether-or-not-we-want-to-run-dynamic-simulations-(on-top-of-initial-state-equilibrium)">
+<h4>Finally, we decide whether or not we want to run dynamic simulations (on top of initial state equilibrium)<a class="headerlink" href="#Finally,-we-decide-whether-or-not-we-want-to-run-dynamic-simulations-(on-top-of-initial-state-equilibrium)" title="Permalink to this heading"></a></h4>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;dyn_simul&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+</pre></div>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="section" id="Give-name-to-simulation-to-export-the-results">
 <h2>Give name to simulation to export the results<a class="headerlink" href="#Give-name-to-simulation-to-export-the-results" title="Permalink to this heading"></a></h2>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># NB: this changes according to custom parameters of interest</span>
@@ -345,7 +357,7 @@
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We also create the associated paths and directories to store outputs</span>
@@ -386,7 +398,7 @@
 <div class="section" id="Basic-geographic-data">
 <h3>Basic geographic data<a class="headerlink" href="#Basic-geographic-data" title="Permalink to this heading"></a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inputs.data</span> <span class="k">as</span> <span class="nn">inpdt</span>
@@ -400,7 +412,7 @@
 <div class="section" id="Macro-data">
 <h3>Macro data<a class="headerlink" href="#Macro-data" title="Permalink to this heading"></a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inputs.data</span> <span class="k">as</span> <span class="nn">inpdt</span>
@@ -413,7 +425,7 @@
 <div class="section" id="Households-and-income-data">
 <h3>Households and income data<a class="headerlink" href="#Households-and-income-data" title="Permalink to this heading"></a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inputs.data</span> <span class="k">as</span> <span class="nn">inpdt</span>
@@ -447,7 +459,7 @@
 <div class="section" id="Land-use-projections">
 <h3>Land use projections<a class="headerlink" href="#Land-use-projections" title="Permalink to this heading"></a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We import basic projections</span>
@@ -464,7 +476,7 @@
 <div class="section" id="For-reference,-let-us-visualize-the-informal-settlement-risks-considered">
 <h4>For reference, let us visualize the informal settlement risks considered<a class="headerlink" href="#For-reference,-let-us-visualize-the-informal-settlement-risks-considered" title="Permalink to this heading"></a></h4>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># First for timing</span>
@@ -527,15 +539,15 @@
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/main_nb_36_0.png" src="_images/main_nb_36_0.png" />
+<img alt="_images/main_nb_38_0.png" src="_images/main_nb_38_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Then for probability</span>
@@ -611,15 +623,15 @@
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/main_nb_37_0.png" src="_images/main_nb_37_0.png" />
+<img alt="_images/main_nb_39_0.png" src="_images/main_nb_39_0.png" />
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[18]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We correct areas for each housing type at baseline year for the amount of</span>
@@ -635,7 +647,7 @@
 <div class="section" id="Let-us-visualize-land-availaibility-at-baseline-year-(2011)">
 <h4>Let us visualize land availaibility at baseline year (2011)<a class="headerlink" href="#Let-us-visualize-land-availaibility-at-baseline-year-(2011)" title="Permalink to this heading"></a></h4>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># For formal private housing</span>
@@ -659,15 +671,15 @@ coeff_land_formal done
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[19]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/main_nb_40_1.png" src="_images/main_nb_40_1.png" />
+<img alt="_images/main_nb_42_1.png" src="_images/main_nb_42_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># For informal backyards</span>
@@ -691,15 +703,15 @@ coeff_land_backyard done
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/main_nb_41_1.png" src="_images/main_nb_41_1.png" />
+<img alt="_images/main_nb_43_1.png" src="_images/main_nb_43_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># For informal settlements</span>
@@ -723,15 +735,15 @@ coeff_land_informal done
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[21]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/main_nb_42_1.png" src="_images/main_nb_42_1.png" />
+<img alt="_images/main_nb_44_1.png" src="_images/main_nb_44_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># For formal subsidized housing</span>
@@ -755,15 +767,15 @@ coeff_land_subsidized done
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/main_nb_43_1.png" src="_images/main_nb_43_1.png" />
+<img alt="_images/main_nb_45_1.png" src="_images/main_nb_45_1.png" />
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We also import housing height limits</span>
@@ -773,7 +785,7 @@ coeff_land_subsidized done
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[24]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We update parameter vector with construction parameters</span>
@@ -793,7 +805,7 @@ coeff_land_subsidized done
 <div class="section" id="Import-flood-data-(takes-some-time-when-agents-anticipate-floods)">
 <h3>Import flood data (takes some time when agents anticipate floods)<a class="headerlink" href="#Import-flood-data-(takes-some-time-when-agents-anticipate-floods)" title="Permalink to this heading"></a></h3>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[25]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inputs.data</span> <span class="k">as</span> <span class="nn">inpdt</span>
@@ -879,7 +891,7 @@ Formal backyard structures (two floors)
 <p>We will first show some flood maps for visual reference, then the associated fractions of capital destroyed computed through damage functions (final damages depend on spatial sorting).</p>
 <p>NB: all maps are undefended (do not take protective infrastructure into account), and a return period of 100 years corresponds to a 1% chance of occurrence in a given year.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Fluvial undefended maximum flood depth (in m) for a 100-year return period</span>
@@ -906,15 +918,15 @@ FU_100yr_map_depth done
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[26]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/main_nb_50_1.png" src="_images/main_nb_50_1.png" />
+<img alt="_images/main_nb_52_1.png" src="_images/main_nb_52_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Pluvial maximum flood depth (in m) for a 100-year return period</span>
@@ -941,15 +953,15 @@ P_100yr_map_depth done
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[27]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/main_nb_51_1.png" src="_images/main_nb_51_1.png" />
+<img alt="_images/main_nb_53_1.png" src="_images/main_nb_53_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Coastal maximum flood depth (in m) for a 100-year return period (without climate change)</span>
@@ -977,15 +989,15 @@ C_MERITDEM_1_0100_map_depth done
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/main_nb_52_1.png" src="_images/main_nb_52_1.png" />
+<img alt="_images/main_nb_54_1.png" src="_images/main_nb_54_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We create the maps for fraction of capital destroyed before plotting them</span>
@@ -1019,7 +1031,7 @@ structure_backyards_fract_K_destroyed done
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># For formal private housing structures</span>
@@ -1028,15 +1040,15 @@ structure_backyards_fract_K_destroyed done
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[30]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/main_nb_54_0.png" src="_images/main_nb_54_0.png" />
+<img alt="_images/main_nb_56_0.png" src="_images/main_nb_56_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># For informal backyard structures</span>
@@ -1046,15 +1058,15 @@ structure_backyards_fract_K_destroyed done
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[31]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/main_nb_55_0.png" src="_images/main_nb_55_0.png" />
+<img alt="_images/main_nb_57_0.png" src="_images/main_nb_57_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># For informal settlement structures</span>
@@ -1063,15 +1075,15 @@ structure_backyards_fract_K_destroyed done
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/main_nb_56_0.png" src="_images/main_nb_56_0.png" />
+<img alt="_images/main_nb_58_0.png" src="_images/main_nb_58_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># For formal subsidized structures</span>
@@ -1080,15 +1092,15 @@ structure_backyards_fract_K_destroyed done
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/main_nb_57_0.png" src="_images/main_nb_57_0.png" />
+<img alt="_images/main_nb_59_0.png" src="_images/main_nb_59_0.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># For contents across all housing types (does not change)</span>
@@ -1097,11 +1109,11 @@ structure_backyards_fract_K_destroyed done
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[34]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/main_nb_58_0.png" src="_images/main_nb_58_0.png" />
+<img alt="_images/main_nb_60_0.png" src="_images/main_nb_60_0.png" />
 </div>
 </div>
 </div>
@@ -1109,7 +1121,7 @@ structure_backyards_fract_K_destroyed done
 <div class="section" id="Import-scenarios-(for-time-moving-variables)">
 <h3>Import scenarios (for time-moving variables)<a class="headerlink" href="#Import-scenarios-(for-time-moving-variables)" title="Permalink to this heading"></a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[35]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">equilibrium.functions_dynamic</span> <span class="k">as</span> <span class="nn">eqdyn</span>
@@ -1126,7 +1138,7 @@ structure_backyards_fract_K_destroyed done
 <div class="section" id="Import-expected-income-net-of-commuting-costs-(for-all-time-periods)">
 <h3>Import expected income net of commuting costs (for all time periods)<a class="headerlink" href="#Import-expected-income-net-of-commuting-costs-(for-all-time-periods)" title="Permalink to this heading"></a></h3>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[36]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">inputs.data</span> <span class="k">as</span> <span class="nn">inpdt</span>
@@ -1152,7 +1164,7 @@ structure_backyards_fract_K_destroyed done
 <div class="section" id="Compute-initial-state-equilibrium">
 <h2>Compute initial state equilibrium<a class="headerlink" href="#Compute-initial-state-equilibrium" title="Permalink to this heading"></a></h2>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We run the algorithm</span>
@@ -1198,7 +1210,7 @@ structure_backyards_fract_K_destroyed done
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  17%|█████▊                             | 167/1000 [00:03&lt;00:19, 43.20it/s, error_max_abs=0.000571]
+stops when error_max_abs &lt;0.001: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [00:21&lt;00:00, 47.31it/s, error_max_abs=0.00219]
 </pre></div></div>
 </div>
 <p>Reminder: income groups are ranked from poorer to richer, and housing types follow the following order: formal-backyard-informal-RDP</p>
@@ -1217,7 +1229,7 @@ stops when error_max_abs &lt;0.001:  17%|█████▊                     
 <p>initial_state_average_income = average income per income group (not an output of the model)</p>
 <p>initial_state_limit_city = indicator dummy for having strictly more than one household per housing type and income group in each pixel</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">initial_state_simulated_jobs</span><span class="p">)</span>
@@ -1229,14 +1241,14 @@ stops when error_max_abs &lt;0.001:  17%|█████▊                     
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-[[     0.         172533.09487425 297026.45491266 162692.03422402]
- [ 67674.40036979      0.              0.              0.        ]
- [135462.69790161      0.              0.              0.        ]]
+[[     0.         172523.67319798 296993.04797422 162676.24500605]
+ [ 69269.58140003      0.              0.              0.        ]
+ [134312.67298653      0.              0.              0.        ]]
 </pre></div></div>
 </div>
 <p>We observe that the poorest income group is crowded out of the formal private sector, and is the only one living in informal settlements and informal backyards.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We create the associated output directory</span>
@@ -1256,7 +1268,7 @@ stops when error_max_abs &lt;0.001:  17%|█████▊                     
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We save the output</span>
@@ -1295,7 +1307,7 @@ stops when error_max_abs &lt;0.001:  17%|█████▊                     
 <h4>Let us start with population distribution<a class="headerlink" href="#Let-us-start-with-population-distribution" title="Permalink to this heading"></a></h4>
 <p>We first look at sorting across housing types.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># For formal private housing</span>
@@ -1320,11 +1332,11 @@ formal_sim done
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/main_nb_75_1.png" src="_images/main_nb_75_1.png" />
+<img alt="_images/main_nb_77_1.png" src="_images/main_nb_77_1.png" />
 </div>
 </div>
 <p>Here are a few caveats on how to interpret those results:</p>
@@ -1334,7 +1346,7 @@ grid-cell level, it makes more sense to interpret results at the scale of the ne
 <li><p>The fact that we are not able to replicate some stylized facts for the CoCT should be interpreted in this regard.</p></li>
 </ul>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># For informal backyards</span>
@@ -1359,16 +1371,16 @@ backyard_sim done
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/main_nb_77_1.png" src="_images/main_nb_77_1.png" />
+<img alt="_images/main_nb_79_1.png" src="_images/main_nb_79_1.png" />
 </div>
 </div>
 <p>Remember that backyarding essentially occurs within (exogenous) formal subsidized housing premises, hence the observed spatial distribution.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># For informal settlements</span>
@@ -1394,16 +1406,16 @@ informal_sim done
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/main_nb_79_1.png" src="_images/main_nb_79_1.png" />
+<img alt="_images/main_nb_81_1.png" src="_images/main_nb_81_1.png" />
 </div>
 </div>
 <p>Again, remember that informal settlement locations (not their population) are exogenously set.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># For formal subsidized housing</span>
@@ -1428,17 +1440,17 @@ rdp_sim done
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/main_nb_81_1.png" src="_images/main_nb_81_1.png" />
+<img alt="_images/main_nb_83_1.png" src="_images/main_nb_83_1.png" />
 </div>
 </div>
 <p>Finally, the spatial distribution for formal subsidized housing is just taken from the data (not simulated).</p>
 <p>We then look at sorting across income groups.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># For income group 1</span>
@@ -1463,15 +1475,15 @@ poor_sim done
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[45]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/main_nb_83_1.png" src="_images/main_nb_83_1.png" />
+<img alt="_images/main_nb_85_1.png" src="_images/main_nb_85_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># For income group 2</span>
@@ -1496,15 +1508,15 @@ midpoor_sim done
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[46]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/main_nb_84_1.png" src="_images/main_nb_84_1.png" />
+<img alt="_images/main_nb_86_1.png" src="_images/main_nb_86_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># For income group 3</span>
@@ -1529,15 +1541,15 @@ midrich_sim done
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/main_nb_85_1.png" src="_images/main_nb_85_1.png" />
+<img alt="_images/main_nb_87_1.png" src="_images/main_nb_87_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># For income group 4</span>
@@ -1562,11 +1574,11 @@ rich_sim done
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[48]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/main_nb_86_1.png" src="_images/main_nb_86_1.png" />
+<img alt="_images/main_nb_88_1.png" src="_images/main_nb_88_1.png" />
 </div>
 </div>
 <p>Overall, the distribution of the two poorest income groups is in line with what we could expect given their opportunities on the housing market: being (parly or fully) crowded out of the formal private segment, they redirect themselves to the informal segments and the formal subsidized segment (for those eligible).</p>
@@ -1576,7 +1588,7 @@ rich_sim done
 <div class="section" id="We-may-also-look-at-housing-supply-(in-m²)">
 <h4>We may also look at housing supply (in m²)<a class="headerlink" href="#We-may-also-look-at-housing-supply-(in-m²)" title="Permalink to this heading"></a></h4>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We multiply housing supply per unit of available land by the total area</span>
@@ -1586,7 +1598,7 @@ rich_sim done
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># For formal private housing</span>
@@ -1611,15 +1623,15 @@ hsupply_formal_2d_sim done
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/main_nb_90_1.png" src="_images/main_nb_90_1.png" />
+<img alt="_images/main_nb_92_1.png" src="_images/main_nb_92_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># For informal backyards</span>
@@ -1645,15 +1657,15 @@ hsupply_backyard_2d_sim done
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/main_nb_91_1.png" src="_images/main_nb_91_1.png" />
+<img alt="_images/main_nb_93_1.png" src="_images/main_nb_93_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># For informal settlements</span>
@@ -1679,15 +1691,15 @@ hsupply_informal_2d_sim done
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[52]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/main_nb_92_1.png" src="_images/main_nb_92_1.png" />
+<img alt="_images/main_nb_94_1.png" src="_images/main_nb_94_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># For formal subsidized housing</span>
@@ -1712,11 +1724,11 @@ hsupply_rdp_2d_sim done
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/main_nb_93_1.png" src="_images/main_nb_93_1.png" />
+<img alt="_images/main_nb_95_1.png" src="_images/main_nb_95_1.png" />
 </div>
 </div>
 <p>We do observe that informal settlements are somewhat denser than other housing types. This seems to indicate that horizontal densification dominates vertical densification within the context of the CoCT. Indeed, even though formal private housing can be built high, it is less constrained in terms of land availability and can spread out more, leaving some open space. On the contrary, as informal settlements are more constrained and can only expand horizontally, they end up using most of the
@@ -1726,7 +1738,7 @@ available land.</p>
 <div class="section" id="Now,-let-us-look-at-land-prices-(in-rands-/-m²)">
 <h4>Now, let us look at land prices (in rands / m²)<a class="headerlink" href="#Now,-let-us-look-at-land-prices-(in-rands-/-m²)" title="Permalink to this heading"></a></h4>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[54]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[55]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We first convert our estimates for the average annual rents into land prices</span>
@@ -1743,7 +1755,7 @@ available land.</p>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[58]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[56]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># For formal private housing</span>
@@ -1771,11 +1783,11 @@ landprice_formal_2d_sim done
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[58]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[56]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/main_nb_97_1.png" src="_images/main_nb_97_1.png" />
+<img alt="_images/main_nb_99_1.png" src="_images/main_nb_99_1.png" />
 </div>
 </div>
 <p>Our results conform to the standard urban economics predictions about the overall shape of the housing/land rent/price gradient, modulated by the value of the amenity score.</p>
@@ -1785,7 +1797,7 @@ landprice_formal_2d_sim done
 <h4>Finally, let us look at flood damages (in rands)<a class="headerlink" href="#Finally,-let-us-look-at-flood-damages-(in-rands)" title="Permalink to this heading"></a></h4>
 <p>In the interest of space and for illustrative purposes, we only show results for the formal private sector structures (which are also the biggest in absolute terms). We redirect the reader to the use cases for a more detailed view.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[59]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[57]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We first list the flood map labels to be used</span>
@@ -1805,7 +1817,7 @@ landprice_formal_2d_sim done
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[60]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[58]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We compute the full values of exposed formal private structures and contents,</span>
@@ -1825,7 +1837,7 @@ landprice_formal_2d_sim done
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[61]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[59]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We re-import flood data to be able to compute damages a posteriori, when</span>
@@ -1890,7 +1902,7 @@ Formal backyard structures (two floors)
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[62]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[60]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># From there, we recover aggregate damages associated to each flood type</span>
@@ -1963,7 +1975,7 @@ C_MERITDEM_0_0250
 </div>
 <p>Then, we get to plot the annualized value of some of those damages</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[63]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[61]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># For structures damaged by fluvial floods</span>
@@ -1997,15 +2009,15 @@ fluvialu_formal_structure_2d_sim done
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[63]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[61]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/main_nb_107_1.png" src="_images/main_nb_107_1.png" />
+<img alt="_images/main_nb_109_1.png" src="_images/main_nb_109_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[64]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[62]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># For structures damaged by pluvial floods</span>
@@ -2039,15 +2051,15 @@ pluvial_formal_structure_2d_sim done
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[64]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[62]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/main_nb_108_1.png" src="_images/main_nb_108_1.png" />
+<img alt="_images/main_nb_110_1.png" src="_images/main_nb_110_1.png" />
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[65]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[63]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># For structures damaged by coastal floods</span>
@@ -2079,11 +2091,11 @@ coastal_formal_structure_2d_sim done
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[65]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[63]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/main_nb_109_1.png" src="_images/main_nb_109_1.png" />
+<img alt="_images/main_nb_111_1.png" src="_images/main_nb_111_1.png" />
 </div>
 </div>
 <p>As could have been expected from the flood maps, fluvial damages are more acute but also more localized than pluvial damages. When superimposing the maps with what we obtained above on population spatial distribution, households appear to avoid the worst-affected areas, but are willing to trade off some flood exposure for good locations nearby the CBD (especially regarding fluvial flood risks). When superimposing them with the raw flood maps, we remark that the biggest pluvial damages occur in
@@ -2096,56 +2108,60 @@ such places where flood exposure is not the highest: it is rather the increase i
 <h2>Run simulations for subsequent periods (time depends on timeline length)<a class="headerlink" href="#Run-simulations-for-subsequent-periods-(time-depends-on-timeline-length)" title="Permalink to this heading"></a></h2>
 <p>NB: This part can be commented out to save time if one is not interested in the dynamics of the model</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[66]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[64]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We run the algorithm</span>
 <span class="kn">import</span> <span class="nn">equilibrium.run_simulations</span> <span class="k">as</span> <span class="nn">eqsim</span>
-<span class="p">(</span><span class="n">simulation_households_center</span><span class="p">,</span>
- <span class="n">simulation_households_housing_type</span><span class="p">,</span>
- <span class="n">simulation_dwelling_size</span><span class="p">,</span>
- <span class="n">simulation_rent</span><span class="p">,</span>
- <span class="n">simulation_households</span><span class="p">,</span>
- <span class="n">simulation_error</span><span class="p">,</span>
- <span class="n">simulation_housing_supply</span><span class="p">,</span>
- <span class="n">simulation_utility</span><span class="p">,</span>
- <span class="n">simulation_deriv_housing</span><span class="p">,</span>
- <span class="n">simulation_T</span><span class="p">)</span> <span class="o">=</span> <span class="n">eqsim</span><span class="o">.</span><span class="n">run_simulation</span><span class="p">(</span>
-     <span class="n">t</span><span class="p">,</span>
-     <span class="n">options</span><span class="p">,</span>
-     <span class="n">param</span><span class="p">,</span>
-     <span class="n">grid</span><span class="p">,</span>
-     <span class="n">initial_state_utility</span><span class="p">,</span>
-     <span class="n">initial_state_error</span><span class="p">,</span>
-     <span class="n">initial_state_households</span><span class="p">,</span>
-     <span class="n">initial_state_households_housing_types</span><span class="p">,</span>
-     <span class="n">initial_state_housing_supply</span><span class="p">,</span>
-     <span class="n">initial_state_household_centers</span><span class="p">,</span>
-     <span class="n">initial_state_average_income</span><span class="p">,</span>
-     <span class="n">initial_state_rent</span><span class="p">,</span>
-     <span class="n">initial_state_dwelling_size</span><span class="p">,</span>
-     <span class="n">fraction_capital_destroyed</span><span class="p">,</span>
-     <span class="n">amenities</span><span class="p">,</span>
-     <span class="n">housing_limit</span><span class="p">,</span>
-     <span class="n">spline_estimate_RDP</span><span class="p">,</span>
-     <span class="n">spline_land_constraints</span><span class="p">,</span>
-     <span class="n">spline_land_backyard</span><span class="p">,</span>
-     <span class="n">spline_land_RDP</span><span class="p">,</span>
-     <span class="n">spline_land_informal</span><span class="p">,</span>
-     <span class="n">income_class_by_housing_type</span><span class="p">,</span>
-     <span class="n">path_precalc_transp</span><span class="p">,</span>
-     <span class="n">spline_RDP</span><span class="p">,</span>
-     <span class="n">spline_agricultural_price</span><span class="p">,</span>
-     <span class="n">spline_interest_rate</span><span class="p">,</span>
-     <span class="n">spline_population_income_distribution</span><span class="p">,</span>
-     <span class="n">spline_inflation</span><span class="p">,</span>
-     <span class="n">spline_income_distribution</span><span class="p">,</span>
-     <span class="n">spline_population</span><span class="p">,</span>
-     <span class="n">spline_income</span><span class="p">,</span>
-     <span class="n">spline_minimum_housing_supply</span><span class="p">,</span>
-     <span class="n">spline_fuel</span><span class="p">,</span>
-     <span class="n">income_baseline</span>
-     <span class="p">)</span>
+
+<span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;dyn_simul&quot;</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+    <span class="p">(</span><span class="n">simulation_households_center</span><span class="p">,</span>
+     <span class="n">simulation_households_housing_type</span><span class="p">,</span>
+     <span class="n">simulation_dwelling_size</span><span class="p">,</span>
+     <span class="n">simulation_rent</span><span class="p">,</span>
+     <span class="n">simulation_households</span><span class="p">,</span>
+     <span class="n">simulation_error</span><span class="p">,</span>
+     <span class="n">simulation_housing_supply</span><span class="p">,</span>
+     <span class="n">simulation_utility</span><span class="p">,</span>
+     <span class="n">simulation_deriv_housing</span><span class="p">,</span>
+     <span class="n">simulation_T</span><span class="p">,</span>
+     <span class="n">simulation_capital_land</span><span class="p">)</span> <span class="o">=</span> <span class="n">eqsim</span><span class="o">.</span><span class="n">run_simulation</span><span class="p">(</span>
+         <span class="n">t</span><span class="p">,</span>
+         <span class="n">options</span><span class="p">,</span>
+         <span class="n">param</span><span class="p">,</span>
+         <span class="n">grid</span><span class="p">,</span>
+         <span class="n">initial_state_utility</span><span class="p">,</span>
+         <span class="n">initial_state_error</span><span class="p">,</span>
+         <span class="n">initial_state_households</span><span class="p">,</span>
+         <span class="n">initial_state_households_housing_types</span><span class="p">,</span>
+         <span class="n">initial_state_housing_supply</span><span class="p">,</span>
+         <span class="n">initial_state_household_centers</span><span class="p">,</span>
+         <span class="n">initial_state_average_income</span><span class="p">,</span>
+         <span class="n">initial_state_rent</span><span class="p">,</span>
+         <span class="n">initial_state_dwelling_size</span><span class="p">,</span>
+         <span class="n">initial_state_capital_land</span><span class="p">,</span>
+         <span class="n">fraction_capital_destroyed</span><span class="p">,</span>
+         <span class="n">amenities</span><span class="p">,</span>
+         <span class="n">housing_limit</span><span class="p">,</span>
+         <span class="n">spline_estimate_RDP</span><span class="p">,</span>
+         <span class="n">spline_land_constraints</span><span class="p">,</span>
+         <span class="n">spline_land_backyard</span><span class="p">,</span>
+         <span class="n">spline_land_RDP</span><span class="p">,</span>
+         <span class="n">spline_land_informal</span><span class="p">,</span>
+         <span class="n">income_class_by_housing_type</span><span class="p">,</span>
+         <span class="n">path_precalc_transp</span><span class="p">,</span>
+         <span class="n">spline_RDP</span><span class="p">,</span>
+         <span class="n">spline_agricultural_price</span><span class="p">,</span>
+         <span class="n">spline_interest_rate</span><span class="p">,</span>
+         <span class="n">spline_population_income_distribution</span><span class="p">,</span>
+         <span class="n">spline_inflation</span><span class="p">,</span>
+         <span class="n">spline_income_distribution</span><span class="p">,</span>
+         <span class="n">spline_population</span><span class="p">,</span>
+         <span class="n">spline_income</span><span class="p">,</span>
+         <span class="n">spline_minimum_housing_supply</span><span class="p">,</span>
+         <span class="n">spline_fuel</span><span class="p">,</span>
+         <span class="n">income_baseline</span>
+         <span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -2164,7 +2180,7 @@ Simulation without constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|█████████████████████████████████████▉| 999/1000 [00:22&lt;00:00, 45.20it/s, error_max_abs=0.017]
+stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [00:20&lt;00:00, 49.05it/s, error_max_abs=0.0028]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2180,7 +2196,7 @@ Simulation with constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  40%|█████████████▉                     | 398/1000 [00:07&lt;00:10, 55.03it/s, error_max_abs=0.000978]
+stops when error_max_abs &lt;0.001: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [00:16&lt;00:00, 59.95it/s, error_max_abs=0.00163]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2197,7 +2213,7 @@ Simulation without constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [00:21&lt;00:00, 46.76it/s, error_max_abs=0.00201]
+stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [00:20&lt;00:00, 49.57it/s, error_max_abs=0.0033]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2213,7 +2229,7 @@ Simulation with constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [00:18&lt;00:00, 53.80it/s, error_max_abs=0.00481]
+stops when error_max_abs &lt;0.001: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [00:17&lt;00:00, 57.09it/s, error_max_abs=0.00464]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2230,7 +2246,7 @@ Simulation without constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [00:21&lt;00:00, 47.33it/s, error_max_abs=0.00362]
+stops when error_max_abs &lt;0.001: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [00:21&lt;00:00, 46.12it/s, error_max_abs=0.00623]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2246,7 +2262,7 @@ Simulation with constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  22%|████████                             | 219/1000 [00:04&lt;00:14, 53.88it/s, error_max_abs=0.0007]
+stops when error_max_abs &lt;0.001: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [00:17&lt;00:00, 56.79it/s, error_max_abs=0.00915]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2263,7 +2279,7 @@ Simulation without constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|████████████████████████████████████▉| 999/1000 [01:06&lt;00:00, 15.07it/s, error_max_abs=0.0054]
+stops when error_max_abs &lt;0.001:  24%|█████████████████████████▊                                                                                    | 235/1000 [00:15&lt;00:51, 14.75it/s, error_max_abs=0.000652]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2279,7 +2295,7 @@ Simulation with constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [01:07&lt;00:00, 14.70it/s, error_max_abs=0.00442]
+stops when error_max_abs &lt;0.001:  26%|████████████████████████████▋                                                                                 | 261/1000 [00:15&lt;00:44, 16.42it/s, error_max_abs=0.000977]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2296,7 +2312,7 @@ Simulation without constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [01:21&lt;00:00, 12.19it/s, error_max_abs=0.00573]
+stops when error_max_abs &lt;0.001: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:03&lt;00:00, 15.67it/s, error_max_abs=0.00119]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2312,7 +2328,7 @@ Simulation with constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [01:15&lt;00:00, 13.17it/s, error_max_abs=0.00118]
+stops when error_max_abs &lt;0.001: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:01&lt;00:00, 16.37it/s, error_max_abs=0.00296]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2329,7 +2345,7 @@ Simulation without constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  94%|█████████████████████████████████  | 945/1000 [01:19&lt;00:04, 11.84it/s, error_max_abs=0.000831]
+stops when error_max_abs &lt;0.001: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:04&lt;00:00, 15.40it/s, error_max_abs=0.00236]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2345,7 +2361,7 @@ Simulation with constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [01:23&lt;00:00, 12.03it/s, error_max_abs=0.00136]
+stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:03&lt;00:00, 15.83it/s, error_max_abs=0.0111]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2362,7 +2378,7 @@ Simulation without constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [01:34&lt;00:00, 10.58it/s, error_max_abs=0.00239]
+stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:07&lt;00:00, 14.81it/s, error_max_abs=0.0135]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2378,7 +2394,7 @@ Simulation with constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [01:32&lt;00:00, 10.85it/s, error_max_abs=0.00127]
+stops when error_max_abs &lt;0.001:  26%|█████████████████████████████                                                                                 | 264/1000 [00:17&lt;00:48, 15.29it/s, error_max_abs=0.000993]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2395,7 +2411,7 @@ Simulation without constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|████████████████████████████████████▉| 999/1000 [01:36&lt;00:00, 10.32it/s, error_max_abs=0.0649]
+stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:12&lt;00:00, 13.87it/s, error_max_abs=0.0649]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2411,7 +2427,7 @@ Simulation with constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  28%|█████████▊                         | 282/1000 [00:32&lt;01:23,  8.59it/s, error_max_abs=0.000998]
+stops when error_max_abs &lt;0.001: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:04&lt;00:00, 15.48it/s, error_max_abs=0.00136]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2428,7 +2444,7 @@ Simulation without constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [02:11&lt;00:00,  7.61it/s, error_max_abs=0.00807]
+stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:13&lt;00:00, 13.53it/s, error_max_abs=0.0144]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2444,7 +2460,7 @@ Simulation with constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [01:35&lt;00:00, 10.43it/s, error_max_abs=0.00975]
+stops when error_max_abs &lt;0.001:  33%|█████████████████████████████████████                                                                          | 334/1000 [00:25&lt;00:50, 13.21it/s, error_max_abs=0.00098]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2461,7 +2477,7 @@ Simulation without constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [01:47&lt;00:00,  9.27it/s, error_max_abs=0.00188]
+stops when error_max_abs &lt;0.001: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:14&lt;00:00, 13.36it/s, error_max_abs=0.00356]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2477,7 +2493,7 @@ Simulation with constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  28%|██████████▏                         | 284/1000 [00:29&lt;01:14,  9.62it/s, error_max_abs=0.00097]
+stops when error_max_abs &lt;0.001:  28%|███████████████████████████████▏                                                                              | 284/1000 [00:19&lt;00:49, 14.56it/s, error_max_abs=0.000987]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2494,7 +2510,7 @@ Simulation without constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [01:50&lt;00:00,  9.07it/s, error_max_abs=0.00787]
+stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:11&lt;00:00, 13.92it/s, error_max_abs=0.0222]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2510,7 +2526,7 @@ Simulation with constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  28%|█████████▉                         | 284/1000 [00:29&lt;01:15,  9.47it/s, error_max_abs=0.000967]
+stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:07&lt;00:00, 14.80it/s, error_max_abs=0.0208]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2527,7 +2543,7 @@ Simulation without constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|████████████████████████████████████▉| 999/1000 [01:47&lt;00:00,  9.26it/s, error_max_abs=0.0114]
+stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:13&lt;00:00, 13.56it/s, error_max_abs=0.0282]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2543,7 +2559,7 @@ Simulation with constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|████████████████████████████████████▉| 999/1000 [01:41&lt;00:00,  9.87it/s, error_max_abs=0.0178]
+stops when error_max_abs &lt;0.001: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:09&lt;00:00, 14.39it/s, error_max_abs=0.00311]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2560,7 +2576,7 @@ Simulation without constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|████████████████████████████████████▉| 999/1000 [01:47&lt;00:00,  9.28it/s, error_max_abs=0.0105]
+stops when error_max_abs &lt;0.001: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:14&lt;00:00, 13.39it/s, error_max_abs=0.00955]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2576,7 +2592,7 @@ Simulation with constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|████████████████████████████████████▉| 999/1000 [01:41&lt;00:00,  9.85it/s, error_max_abs=0.0115]
+stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:11&lt;00:00, 14.01it/s, error_max_abs=0.0199]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2593,7 +2609,7 @@ Simulation without constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|████████████████████████████████████▉| 999/1000 [01:47&lt;00:00,  9.33it/s, error_max_abs=0.0157]
+stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:10&lt;00:00, 14.07it/s, error_max_abs=0.0104]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2609,7 +2625,7 @@ Simulation with constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|█████████████████████████████████████▉| 999/1000 [01:45&lt;00:00,  9.50it/s, error_max_abs=0.022]
+stops when error_max_abs &lt;0.001: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:10&lt;00:00, 14.25it/s, error_max_abs=0.00602]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2626,7 +2642,7 @@ Simulation without constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [01:50&lt;00:00,  9.06it/s, error_max_abs=0.00807]
+stops when error_max_abs &lt;0.001: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:12&lt;00:00, 13.85it/s, error_max_abs=0.00922]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2642,7 +2658,7 @@ Simulation with constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  34%|███████████▉                       | 341/1000 [00:33&lt;01:04, 10.21it/s, error_max_abs=0.000978]
+stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:09&lt;00:00, 14.47it/s, error_max_abs=0.0124]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2659,7 +2675,7 @@ Simulation without constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  26%|█████████                          | 258/1000 [00:25&lt;01:13, 10.14it/s, error_max_abs=0.000993]
+stops when error_max_abs &lt;0.001:  23%|█████████████████████████▍                                                                                    | 231/1000 [00:16&lt;00:56, 13.64it/s, error_max_abs=0.000704]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2675,7 +2691,7 @@ Simulation with constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|████████████████████████████████████▉| 999/1000 [01:29&lt;00:00, 11.10it/s, error_max_abs=0.0032]
+stops when error_max_abs &lt;0.001:  36%|███████████████████████████████████████▍                                                                      | 359/1000 [00:24&lt;00:43, 14.86it/s, error_max_abs=0.000982]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2692,7 +2708,7 @@ Simulation without constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|████████████████████████████████████▉| 999/1000 [01:38&lt;00:00, 10.15it/s, error_max_abs=0.0116]
+stops when error_max_abs &lt;0.001:  29%|███████████████████████████████▍                                                                              | 286/1000 [00:20&lt;00:51, 13.75it/s, error_max_abs=0.000995]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2708,7 +2724,7 @@ Simulation with constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  42%|██████████████▊                    | 423/1000 [00:41&lt;00:56, 10.14it/s, error_max_abs=0.000733]
+stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:08&lt;00:00, 14.50it/s, error_max_abs=0.0222]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2725,7 +2741,7 @@ Simulation without constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  30%|██████████▌                        | 301/1000 [00:28&lt;01:05, 10.66it/s, error_max_abs=0.000995]
+stops when error_max_abs &lt;0.001: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:12&lt;00:00, 13.71it/s, error_max_abs=0.00293]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2741,7 +2757,7 @@ Simulation with constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  40%|██████████████▌                     | 403/1000 [00:38&lt;00:57, 10.37it/s, error_max_abs=0.00095]
+stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:07&lt;00:00, 14.74it/s, error_max_abs=0.0189]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2758,7 +2774,7 @@ Simulation without constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [01:34&lt;00:00, 10.58it/s, error_max_abs=0.00251]
+stops when error_max_abs &lt;0.001: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:12&lt;00:00, 13.87it/s, error_max_abs=0.00278]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2774,7 +2790,7 @@ Simulation with constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  43%|███████████████▏                   | 434/1000 [00:40&lt;00:53, 10.65it/s, error_max_abs=0.000996]
+stops when error_max_abs &lt;0.001: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:15&lt;00:00, 13.23it/s, error_max_abs=0.021]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2791,7 +2807,7 @@ Simulation without constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [01:36&lt;00:00, 10.38it/s, error_max_abs=0.00561]
+stops when error_max_abs &lt;0.001: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:37&lt;00:00, 10.20it/s, error_max_abs=0.00697]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2807,7 +2823,7 @@ Simulation with constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [01:27&lt;00:00, 11.40it/s, error_max_abs=0.00419]
+stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:08&lt;00:00, 14.54it/s, error_max_abs=0.0252]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2824,7 +2840,7 @@ Simulation without constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [01:48&lt;00:00,  9.20it/s, error_max_abs=0.00461]
+stops when error_max_abs &lt;0.001: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:12&lt;00:00, 13.77it/s, error_max_abs=0.015]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2840,7 +2856,7 @@ Simulation with constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|████████████████████████████████████▉| 999/1000 [01:44&lt;00:00,  9.52it/s, error_max_abs=0.0114]
+stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:07&lt;00:00, 14.75it/s, error_max_abs=0.0127]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2857,7 +2873,7 @@ Simulation without constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [01:17&lt;00:00, 12.92it/s, error_max_abs=0.00198]
+stops when error_max_abs &lt;0.001: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:12&lt;00:00, 13.86it/s, error_max_abs=0.00645]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2873,7 +2889,7 @@ Simulation with constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  55%|███████████████████▍               | 554/1000 [00:48&lt;00:38, 11.46it/s, error_max_abs=0.000986]
+stops when error_max_abs &lt;0.001:  56%|█████████████████████████████████████████████████████████████▏                                                | 556/1000 [00:37&lt;00:30, 14.79it/s, error_max_abs=0.000961]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2890,7 +2906,7 @@ Simulation without constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [01:16&lt;00:00, 13.00it/s, error_max_abs=0.00938]
+stops when error_max_abs &lt;0.001: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:12&lt;00:00, 13.78it/s, error_max_abs=0.00254]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2906,7 +2922,7 @@ Simulation with constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  60%|█████████████████████              | 602/1000 [00:40&lt;00:26, 14.83it/s, error_max_abs=0.000971]
+stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:08&lt;00:00, 14.62it/s, error_max_abs=0.0022]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2923,7 +2939,7 @@ Simulation without constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  25%|████████▊                          | 252/1000 [00:19&lt;00:57, 12.95it/s, error_max_abs=0.000988]
+stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:23&lt;00:00, 11.91it/s, error_max_abs=0.0129]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2939,7 +2955,7 @@ Simulation with constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|█████████████████████████████████████▉| 999/1000 [01:16&lt;00:00, 13.04it/s, error_max_abs=0.019]
+stops when error_max_abs &lt;0.001:  66%|████████████████████████████████████████████████████████████████████████▏                                     | 656/1000 [00:45&lt;00:23, 14.52it/s, error_max_abs=0.000983]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2956,7 +2972,7 @@ Simulation without constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [01:23&lt;00:00, 12.02it/s, error_max_abs=0.00451]
+stops when error_max_abs &lt;0.001:  38%|█████████████████████████████████████████▍                                                                    | 377/1000 [00:39&lt;01:04,  9.65it/s, error_max_abs=0.000999]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2972,7 +2988,7 @@ Simulation with constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|████████████████████████████████████▉| 999/1000 [01:14&lt;00:00, 13.37it/s, error_max_abs=0.0409]
+stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:06&lt;00:00, 15.03it/s, error_max_abs=0.0401]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2989,7 +3005,7 @@ Simulation without constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [01:13&lt;00:00, 13.56it/s, error_max_abs=0.00303]
+stops when error_max_abs &lt;0.001:  30%|█████████████████████████████████▎                                                                            | 303/1000 [00:21&lt;00:48, 14.37it/s, error_max_abs=0.000874]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -3005,7 +3021,7 @@ Simulation with constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|█████████████████████████████████████▉| 999/1000 [01:11&lt;00:00, 13.94it/s, error_max_abs=0.323]
+stops when error_max_abs &lt;0.001: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:05&lt;00:00, 15.36it/s, error_max_abs=0.323]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -3022,7 +3038,7 @@ Simulation without constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [01:13&lt;00:00, 13.56it/s, error_max_abs=0.00666]
+stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:24&lt;00:00, 11.87it/s, error_max_abs=0.0165]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -3038,7 +3054,7 @@ Simulation with constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|█████████████████████████████████████▉| 999/1000 [01:11&lt;00:00, 14.07it/s, error_max_abs=0.446]
+stops when error_max_abs &lt;0.001: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:04&lt;00:00, 15.51it/s, error_max_abs=0.446]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -3055,7 +3071,7 @@ Simulation without constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|████████████████████████████████████▉| 999/1000 [01:16&lt;00:00, 13.01it/s, error_max_abs=0.0225]
+stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:23&lt;00:00, 11.93it/s, error_max_abs=0.0151]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -3071,7 +3087,7 @@ Simulation with constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|█████████████████████████████████████▉| 999/1000 [01:06&lt;00:00, 14.99it/s, error_max_abs=0.402]
+stops when error_max_abs &lt;0.001: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:21&lt;00:00, 12.30it/s, error_max_abs=0.402]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -3088,7 +3104,7 @@ Simulation without constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [01:15&lt;00:00, 13.27it/s, error_max_abs=0.00427]
+stops when error_max_abs &lt;0.001:  30%|█████████████████████████████████▍                                                                            | 304/1000 [00:33&lt;01:16,  9.11it/s, error_max_abs=0.000999]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -3104,34 +3120,38 @@ Simulation with constraint
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|█████████████████████████████████████▉| 999/1000 [01:05&lt;00:00, 15.18it/s, error_max_abs=0.366]
+stops when error_max_abs &lt;0.001: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [01:12&lt;00:00, 13.87it/s, error_max_abs=0.365]
 </pre></div></div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[67]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[65]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We save the output</span>
-<span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path_simul</span> <span class="o">+</span> <span class="s1">&#39;/simulation_households_center.npy&#39;</span><span class="p">,</span>
-        <span class="n">simulation_households_center</span><span class="p">)</span>
-<span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path_simul</span> <span class="o">+</span> <span class="s1">&#39;/simulation_households_housing_type.npy&#39;</span><span class="p">,</span>
-        <span class="n">simulation_households_housing_type</span><span class="p">)</span>
-<span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path_simul</span> <span class="o">+</span> <span class="s1">&#39;/simulation_dwelling_size.npy&#39;</span><span class="p">,</span>
-        <span class="n">simulation_dwelling_size</span><span class="p">)</span>
-<span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path_simul</span> <span class="o">+</span> <span class="s1">&#39;/simulation_rent.npy&#39;</span><span class="p">,</span>
-        <span class="n">simulation_rent</span><span class="p">)</span>
-<span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path_simul</span> <span class="o">+</span> <span class="s1">&#39;/simulation_households.npy&#39;</span><span class="p">,</span>
-        <span class="n">simulation_households</span><span class="p">)</span>
-<span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path_simul</span> <span class="o">+</span> <span class="s1">&#39;/simulation_error.npy&#39;</span><span class="p">,</span>
-        <span class="n">simulation_error</span><span class="p">)</span>
-<span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path_simul</span> <span class="o">+</span> <span class="s1">&#39;/simulation_housing_supply.npy&#39;</span><span class="p">,</span>
-        <span class="n">simulation_housing_supply</span><span class="p">)</span>
-<span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path_simul</span> <span class="o">+</span> <span class="s1">&#39;/simulation_utility.npy&#39;</span><span class="p">,</span>
-        <span class="n">simulation_utility</span><span class="p">)</span>
-<span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path_simul</span> <span class="o">+</span> <span class="s1">&#39;/simulation_deriv_housing.npy&#39;</span><span class="p">,</span>
-        <span class="n">simulation_deriv_housing</span><span class="p">)</span>
-<span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path_simul</span> <span class="o">+</span> <span class="s1">&#39;/simulation_T.npy&#39;</span><span class="p">,</span>
-        <span class="n">simulation_T</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;dyn_simul&quot;</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path_simul</span> <span class="o">+</span> <span class="s1">&#39;/simulation_households_center.npy&#39;</span><span class="p">,</span>
+            <span class="n">simulation_households_center</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path_simul</span> <span class="o">+</span> <span class="s1">&#39;/simulation_households_housing_type.npy&#39;</span><span class="p">,</span>
+            <span class="n">simulation_households_housing_type</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path_simul</span> <span class="o">+</span> <span class="s1">&#39;/simulation_dwelling_size.npy&#39;</span><span class="p">,</span>
+            <span class="n">simulation_dwelling_size</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path_simul</span> <span class="o">+</span> <span class="s1">&#39;/simulation_rent.npy&#39;</span><span class="p">,</span>
+            <span class="n">simulation_rent</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path_simul</span> <span class="o">+</span> <span class="s1">&#39;/simulation_households.npy&#39;</span><span class="p">,</span>
+            <span class="n">simulation_households</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path_simul</span> <span class="o">+</span> <span class="s1">&#39;/simulation_error.npy&#39;</span><span class="p">,</span>
+            <span class="n">simulation_error</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path_simul</span> <span class="o">+</span> <span class="s1">&#39;/simulation_housing_supply.npy&#39;</span><span class="p">,</span>
+            <span class="n">simulation_housing_supply</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path_simul</span> <span class="o">+</span> <span class="s1">&#39;/simulation_utility.npy&#39;</span><span class="p">,</span>
+            <span class="n">simulation_utility</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path_simul</span> <span class="o">+</span> <span class="s1">&#39;/simulation_deriv_housing.npy&#39;</span><span class="p">,</span>
+            <span class="n">simulation_deriv_housing</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path_simul</span> <span class="o">+</span> <span class="s1">&#39;/simulation_T.npy&#39;</span><span class="p">,</span>
+            <span class="n">simulation_T</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">path_simul</span> <span class="o">+</span> <span class="s1">&#39;/simulation_capital_land.npy&#39;</span><span class="p">,</span>
+            <span class="n">simulation_capital_land</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -3139,55 +3159,58 @@ stops when error_max_abs &lt;0.001: 100%|█████████████
 <h3>Output visualization<a class="headerlink" href="#Output-visualization" title="Permalink to this heading"></a></h3>
 <p>All the above outputs are available at each period. For reference, we include here some aggregates that evolve over time.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[68]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[66]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We set the x-axis of our plots</span>
-<span class="n">years_simul</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2011</span><span class="p">,</span> <span class="mi">2011</span> <span class="o">+</span> <span class="mi">30</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;dyn_simul&quot;</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+    <span class="n">years_simul</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2011</span><span class="p">,</span> <span class="mi">2011</span> <span class="o">+</span> <span class="mi">30</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="Evolution-of-population-sorting-across-housing-types">
 <h4>Evolution of population sorting across housing types<a class="headerlink" href="#Evolution-of-population-sorting-across-housing-types" title="Permalink to this heading"></a></h4>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[69]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[67]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">years_simul</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">simulation_households_housing_type</span><span class="p">,</span> <span class="mi">2</span><span class="p">)[:,</span> <span class="mi">0</span><span class="p">],</span>
-        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;gold&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Formal&quot;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">years_simul</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">simulation_households_housing_type</span><span class="p">,</span> <span class="mi">2</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">],</span>
-        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;darkorange&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Backyard&quot;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">years_simul</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">simulation_households_housing_type</span><span class="p">,</span> <span class="mi">2</span><span class="p">)[:,</span> <span class="mi">2</span><span class="p">],</span>
-        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Informal&quot;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">years_simul</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">simulation_households_housing_type</span><span class="p">,</span> <span class="mi">2</span><span class="p">)[:,</span> <span class="mi">3</span><span class="p">],</span>
-        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;maroon&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Subsidized&quot;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">right</span><span class="o">=</span><span class="mi">2035</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span>
-    <span class="n">mpl</span><span class="o">.</span><span class="n">ticker</span><span class="o">.</span><span class="n">StrMethodFormatter</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{x:,.0f}</span><span class="s1">&#39;</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Total number of households per housing type&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_output_plots</span> <span class="o">+</span> <span class="s1">&#39;evol_nb_households_htype.png&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;dyn_simul&quot;</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">years_simul</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">simulation_households_housing_type</span><span class="p">,</span> <span class="mi">2</span><span class="p">)[:,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;gold&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Formal&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">years_simul</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">simulation_households_housing_type</span><span class="p">,</span> <span class="mi">2</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;darkorange&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Backyard&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">years_simul</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">simulation_households_housing_type</span><span class="p">,</span> <span class="mi">2</span><span class="p">)[:,</span> <span class="mi">2</span><span class="p">],</span>
+            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Informal&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">years_simul</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">simulation_households_housing_type</span><span class="p">,</span> <span class="mi">2</span><span class="p">)[:,</span> <span class="mi">3</span><span class="p">],</span>
+            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;maroon&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Subsidized&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">right</span><span class="o">=</span><span class="mi">2035</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span>
+        <span class="n">mpl</span><span class="o">.</span><span class="n">ticker</span><span class="o">.</span><span class="n">StrMethodFormatter</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{x:,.0f}</span><span class="s1">&#39;</span><span class="p">))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelbottom</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;Total number of households per housing type&quot;</span><span class="p">,</span> <span class="n">labelpad</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">path_output_plots</span> <span class="o">+</span> <span class="s1">&#39;evol_nb_households_htype.png&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[70]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[68]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="n">path_output_plots</span> <span class="o">+</span> <span class="s2">&quot;evol_nb_households_htype.png&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;dyn_simul&quot;</span><span class="p">]</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+    <span class="n">Image</span><span class="p">(</span><span class="n">path_output_plots</span> <span class="o">+</span> <span class="s2">&quot;evol_nb_households_htype.png&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[70]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[68]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="_images/main_nb_120_0.png" src="_images/main_nb_120_0.png" />
+<img alt="_images/main_nb_122_0.png" src="_images/main_nb_122_0.png" />
 </div>
 </div>
 <p>The graph above can direcly be interpreted given the land-use scenarios we provided.</p>
@@ -3214,7 +3237,7 @@ mid-poor income groups leave the submarket.</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2023, Global Facility for Disaster Reduction and Recovery (The World Bank).</p>
+    <p>&#169; Copyright 2023, The World Bank.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

@@ -514,15 +514,15 @@ This leads to the update of, among others, number of households per income class
 
 .. literalinclude:: ../equilibrium/run_simulations.py
    :language: python
-   :lines: 228-247
-   :lineno-start: 228
+   :lines: 230-249
+   :lineno-start: 230
 
 Note that we also update the scale factor of the Cobb-Douglas housing production function so as to neutralize the impact that inflation of incomes would have on housing supply through rents [#fmoney_illus]_:
 
 .. literalinclude:: ../equilibrium/run_simulations.py
    :language: python
-   :lines: 252-255
-   :lineno-start: 252
+   :lines: 254-257
+   :lineno-start: 254
 
 This is because we build a stable equilibrium model with rational agents. In particular, this requires to remove money illusion (i.e., the tendency of households to view their wealth and income in nominal terms, rather than in real terms).
 
@@ -530,14 +530,14 @@ Also note that we are updating land availability coefficents, as they evolve thr
 
 .. literalinclude:: ../equilibrium/run_simulations.py
    :language: python
-   :lines: 256-261
-   :lineno-start: 256
+   :lines: 258-263
+   :lineno-start: 258
 
 Then, we proceed in three steps. We first compute a new unconstrained equilibrium with the updated variables. We then compute the targeted difference between the final value of formal private housing supply at :math:`t+1` and the one at :math:`t`, through the ``evolution_housing_supply`` function:
 
 .. literalinclude:: ../equilibrium/run_simulations.py
    :language: python
-   :lines: 278-281
+   :lines: 280-283
    :lineno-start: 278
 
 This law of motion reflects the fact that formal private housing stock depreciates with time and that developers respond to price incentives with delay as in :cite:t:`synergies`, hence might differ from the one computed as an unconstrained equilibrium output. Formally, this corresponds to:
@@ -561,8 +561,8 @@ Finally, we compute a new equilibrium under this constraint, which yields our fi
 
 .. literalinclude:: ../equilibrium/run_simulations.py
    :language: python
-   :lines: 284-285
-   :lineno-start: 284
+   :lines: 286-287
+   :lineno-start: 286
 
 Then, we run the ``compute_equilibrium`` function with the modified option that developers do not adjust their housing supply anymore (so that ``housing_supply`` = ``housing_in`` in the body of the ``compute_housing_supply_formal`` function). All outputs will then be re-computed to fit this fixed target housing supply.
 

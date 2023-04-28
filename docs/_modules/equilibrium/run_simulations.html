@@ -103,7 +103,8 @@
                    <span class="n">initial_state_housing_supply</span><span class="p">,</span>
                    <span class="n">initial_state_household_centers</span><span class="p">,</span>
                    <span class="n">initial_state_average_income</span><span class="p">,</span> <span class="n">initial_state_rent</span><span class="p">,</span>
-                   <span class="n">initial_state_dwelling_size</span><span class="p">,</span> <span class="n">fraction_capital_destroyed</span><span class="p">,</span>
+                   <span class="n">initial_state_dwelling_size</span><span class="p">,</span> <span class="n">initial_state_capital_land</span><span class="p">,</span>
+                   <span class="n">fraction_capital_destroyed</span><span class="p">,</span>
                    <span class="n">amenities</span><span class="p">,</span> <span class="n">housing_limit</span><span class="p">,</span> <span class="n">spline_estimate_RDP</span><span class="p">,</span>
                    <span class="n">spline_land_constraints</span><span class="p">,</span> <span class="n">spline_land_backyard</span><span class="p">,</span>
                    <span class="n">spline_land_RDP</span><span class="p">,</span> <span class="n">spline_land_informal</span><span class="p">,</span>
@@ -288,6 +289,7 @@
     <span class="n">simulation_error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="mi">4</span><span class="p">))</span>
     <span class="n">simulation_utility</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="mi">4</span><span class="p">))</span>
     <span class="n">simulation_deriv_housing</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">dist</span><span class="p">)))</span>
+    <span class="n">simulation_capital_land</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">),</span> <span class="mi">4</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">dist</span><span class="p">)))</span>
 
     <span class="c1"># Starting the simulation</span>
     <span class="k">for</span> <span class="n">index_iter</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">years_simulations</span><span class="p">)):</span>
@@ -401,6 +403,9 @@
                 <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">((</span><span class="n">index_iter</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;iter_calc_lite&quot;</span><span class="p">]))</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="c1"># We retain the new constrained equilibrium with dynamic housing</span>
             <span class="c1"># supply as an output</span>
+            <span class="n">simulation_capital_land</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">index_iter</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;iter_calc_lite&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="p">:,</span> <span class="p">:</span>
+                    <span class="p">]</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">initial_state_capital_land</span><span class="p">)</span>
             <span class="n">simulation_households_center</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span>
                 <span class="p">(</span><span class="n">index_iter</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;iter_calc_lite&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="p">:,</span> <span class="p">:</span>
                     <span class="p">]</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">initial_state_household_centers</span><span class="p">)</span>
@@ -446,7 +451,7 @@
     <span class="k">return</span> <span class="p">(</span><span class="n">simulation_households_center</span><span class="p">,</span> <span class="n">simulation_households_housing_type</span><span class="p">,</span>
             <span class="n">simulation_dwelling_size</span><span class="p">,</span> <span class="n">simulation_rent</span><span class="p">,</span> <span class="n">simulation_households</span><span class="p">,</span>
             <span class="n">simulation_error</span><span class="p">,</span> <span class="n">simulation_housing_supply</span><span class="p">,</span> <span class="n">simulation_utility</span><span class="p">,</span>
-            <span class="n">simulation_deriv_housing</span><span class="p">,</span> <span class="n">simulation_T</span><span class="p">)</span></div>
+            <span class="n">simulation_deriv_housing</span><span class="p">,</span> <span class="n">simulation_T</span><span class="p">,</span> <span class="n">simulation_capital_land</span><span class="p">)</span></div>
 </pre></div>
 
            </div>
@@ -456,7 +461,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2023, Global Facility for Disaster Reduction and Recovery (The World Bank).</p>
+    <p>&#169; Copyright 2023, The World Bank.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

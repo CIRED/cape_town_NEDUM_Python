@@ -62,11 +62,11 @@ options["coastal"] = 1
 options["dem"] = "MERITDEM"
 #  We consider undefended flood maps as our default because they are more
 #  reliable
-options["defended"] = 1
+options["defended"] = 0
 #  Dummy for taking sea-level rise into account in coastal flood data
 #  NB: Projections are up to 2050, based upon IPCC AR5 assessment for the
 #  RCP 8.5 scenario
-options["climate_change"] = 1
+options["climate_change"] = 0
 
 # More custom options regarding scenarios
 options["inc_ineq_scenario"] = 2
@@ -208,6 +208,8 @@ simulation_error = np.load(
     path_outputs + name + '/simulation_error.npy')
 simulation_utility = np.load(
     path_outputs + name + '/simulation_utility.npy')
+simulation_capital_land = np.load(
+    path_outputs + name + '/simulation_capital_land.npy')
 simulation_housing_supply = np.load(
     path_outputs + name + '/simulation_housing_supply.npy')
 simulation_deriv_housing = np.load(
@@ -323,6 +325,24 @@ plt.close()
 
 
 # %% BEGIN THE LOOP AFTER CREATING STORAGE VARIABLES
+
+# We compute commuting choice inputs for all subsequent periods (impact of
+# fuel price scenarios) before iterating over time
+# NB: the option can be turned off if already computed for the simulation run
+
+options["compute_net_income"] = 1
+
+if options["compute_net_income"] == 1:
+    for t_temp in np.arange(0, 30):
+        print(t_temp)
+        (incomeNetOfCommuting, modalShares, ODflows, averageIncome
+         ) = inpdt.import_transport_data(
+             grid, param, t_temp, households_per_income_class, average_income,
+             spline_inflation, spline_fuel,
+             spline_population_income_distribution, spline_income_distribution,
+             path_precalc_inp, path_precalc_transp, 'GRID', options)
+
+# We start the time loop
 
 for year_temp in np.arange(0, 30):
 
@@ -779,7 +799,7 @@ for year_temp in np.arange(0, 30):
 
     # We get damages per housing type for one representative household!
     content_cost = outfld.compute_content_cost(
-        simulation_households_center[year_temp, :, :],
+        simulation_households[year_temp, :, :],
         simulation_housing_supply[year_temp, :, :],
         income_net_of_commuting_costs, param,
         fraction_capital_destroyed, simulation_rent[year_temp, :, :],
@@ -787,8 +807,8 @@ for year_temp in np.arange(0, 30):
 
     # Note that capital is in monetary values
     formal_structure_cost = outfld.compute_formal_structure_cost(
-        simulation_rent[year_temp, :, :], param, interest_rate, coeff_land,
-        simulation_households_housing_type[year_temp, :, :], param["coeff_A"])
+        simulation_capital_land[year_temp, :, :],
+        simulation_households_housing_type[year_temp, :, :], coeff_land)
 
     # We re-import flood data to compute ex-post damages in case agents do not
     # anticipate floods

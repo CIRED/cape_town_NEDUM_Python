@@ -20,7 +20,8 @@ def run_simulation(t, options, param, grid, initial_state_utility,
                    initial_state_housing_supply,
                    initial_state_household_centers,
                    initial_state_average_income, initial_state_rent,
-                   initial_state_dwelling_size, fraction_capital_destroyed,
+                   initial_state_dwelling_size, initial_state_capital_land,
+                   fraction_capital_destroyed,
                    amenities, housing_limit, spline_estimate_RDP,
                    spline_land_constraints, spline_land_backyard,
                    spline_land_RDP, spline_land_informal,
@@ -205,6 +206,7 @@ def run_simulation(t, options, param, grid, initial_state_utility,
     simulation_error = np.zeros((len(t), 4))
     simulation_utility = np.zeros((len(t), 4))
     simulation_deriv_housing = np.zeros((len(t), len(grid.dist)))
+    simulation_capital_land = np.zeros((len(t), 4, len(grid.dist)))
 
     # Starting the simulation
     for index_iter in range(0, len(years_simulations)):
@@ -318,6 +320,9 @@ def run_simulation(t, options, param, grid, initial_state_utility,
                 - np.floor((index_iter - 1) / param["iter_calc_lite"])) == 0:
             # We retain the new constrained equilibrium with dynamic housing
             # supply as an output
+            simulation_capital_land[int(
+                (index_iter - 1) / param["iter_calc_lite"] + 1), :, :
+                    ] = copy.deepcopy(initial_state_capital_land)
             simulation_households_center[int(
                 (index_iter - 1) / param["iter_calc_lite"] + 1), :, :
                     ] = copy.deepcopy(initial_state_household_centers)
@@ -363,4 +368,4 @@ def run_simulation(t, options, param, grid, initial_state_utility,
     return (simulation_households_center, simulation_households_housing_type,
             simulation_dwelling_size, simulation_rent, simulation_households,
             simulation_error, simulation_housing_supply, simulation_utility,
-            simulation_deriv_housing, simulation_T)
+            simulation_deriv_housing, simulation_T, simulation_capital_land)

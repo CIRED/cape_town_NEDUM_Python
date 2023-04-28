@@ -39,9 +39,9 @@ Overview
 Resources
 ---------
 
-Documentation is freely available `here <https://cired.github.io/cape_town_NEDUM_Python/>`__.
+Documentation is freely available at `https://cired.github.io/cape_town_NEDUM_Python/ <https://cired.github.io/cape_town_NEDUM_Python/>`_.
 
-The reference working paper used along the documentation is available `here <https://openknowledge.worldbank.org/handle/10986/31987?locale-attribute=fr>`__.
+The reference working paper used along the documentation is available at `https://openknowledge.worldbank.org/entities/publication/f599340d-9916-5611-8f54-e9dda7eef282 <https://openknowledge.worldbank.org/entities/publication/f599340d-9916-5611-8f54-e9dda7eef282>`_.
 
 ------------
 Installation
@@ -49,13 +49,14 @@ Installation
 
 **Step 1**: Git clone **NEDUM-2D** repository in your computer
 
-* Use your terminal and go to a location where you want to store the **NEDUM-2D** model
-* Type: ``git clone https://github.com/CIRED/cape_town_NEDUM_Python.git``
+* Go to `https://github.com/CIRED/cape_town_NEDUM_Python <https://github.com/CIRED/cape_town_NEDUM_Python>`_ and set up the repository on your local machine (choose your preferred option clicking on the ``code`` button).
 * The tree structure of the repository should correspond to (comments in parentheses)::
 
 	code capetown python (name of the repo)
 	├── _doc_source (source code for documentation)
+	├── _ex (exercise notebooks for training sessions)
 	├── _flood_processing (notebook + data used to pre-process Deltares coastal flood maps)
+	├── _old (old Python scripts used for development)
 	├── _research (research articles referenced in the code)
 	├── docs (html output for documentation)
 	├── calibration (package used for calibration)
@@ -64,20 +65,20 @@ Installation
 	├── outputs (package used for output plots and tables)
 	├── .gitignore (defines files to ignore when pushing commits online)
 	├── LICENSE (open source license file)
+	├── nedum.yml (packages for conda)
 	├── README.rst (introduction file)
+	├── requirements.txt (packages for pip)
 	├── 0_calib_nb.ipynb (Jupyter notebook that runs calibration)
-	├── 0_calib_nb.py (Jupytext-paired Python script that runs calibration)
 	├── 1_main_nb.ipynb (Jupyter notebook that runs the model)
-	├── 1_main_nb.py (Jupytext-paired Python script that runs the model)
 	├── 2_plots_equil.py (exports basic plots and tables for initial state static equilibrium)
 	├── 2_plots_inputs.py (exports basic plots and tables for input data)
 	├── 2_plots_simul.py (exports basic plots and tables for subsequent dynamic simulations)
-	├── 3_plots_use_case_cchange.py (exports interactive plots and tables for c.change use case)
-	├── 3_plots_use_case_anticip.py (exports interactive plots and tables for insurance use case)
+	├── 3_plots_use_case_cchange.py (exports interactive plots and tables for climate change use case)
+	├── 3_plots_use_case_anticip.py (exports interactive plots and tables for anticipation use case)
 	├── 4_use_case_nb_empty.ipynb (Jupyter notebook that loads and comments on use case outputs)
 	└── 4_use_case_nb_full.ipynb (Jupyter notebook that loads and comments on use case outputs)
 
-**Step 2**: Set project directory
+**Step 2**: Set up project directory
 
 * To run properly, the **NEDUM-2D** repository (here, ``code capetown python``) should be included in a project folder that also contains input data (and an empty output folder), according to the following tree structure (comments in parentheses)::
 
@@ -96,20 +97,28 @@ Installation
 
 Note that we do not host the data on GitHub, but that it is available upon request.
 
-**Step 3**: Launch **NEDUM-2D**
+**Step 3**: Set up Python environment
 
-* If needed, run the ``0_calib_nb`` notebook (either in .py or .ipynb format) to calibrate parameters again (under ``precalculated_inputs``) if underlying data (in ``data_Cape_Town``) has changed. A static copy is shown in the documentation for illustrative purposes.
-* Execute the ``1_main_nb`` notebook (either in .py or .ipynb format) to run the simulations and obtain a preview of results. Outcomes will be automatically saved in a dedicated subfolder (according to a naming convention defined in the preamble of the script) under the ``Output`` directory. A static copy is shown in the documentation for illustrative purposes.
+* If you are not familiar with Python, we recommend using the `Anaconda <https://www.anaconda.com/download/>`_ distribution and setting up a dedicated `virtual environment <https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html>`_ for **NEDUM-2D**.
+* Open your terminal and go where you located the code repository (by pasting its local path after the command ``cd`` in the Anaconda terminal)
+* Make sure that all the packages indicated in the ``requirements.txt`` file are installed. Alternatively, if you are using Anaconda, you can directly create the adequate environment by typing ``conda env create -f nedum.yml`` from your base environment in the Anaconda terminal (this may take some time to run).
+
+**Step 4**: Launch **NEDUM-2D**
+
+* If you are using Anaconda, activate the adequate environment by typing ``conda activate nedum`` in the Anaconda terminal. Open the integrated development environment (IDE) of your choice by typing its name in the terminal: we recommend using ``jupyter-notebook`` for ``.ipynb`` scripts and ``spyder`` for ``.py`` scripts, as they are the two IDEs set up with the ``nedum`` environment.
+* Note that a set of options is left for the user to change in the preamble of most scripts. Each combination corresponds to a specific simulation run, that is saved according to a given naming convention. Before running the scripts, please make sure that the options correspond to the simulation run you are interested in.
+* If needed, run the ``0_calib_nb`` notebook to calibrate parameters again (under ``precalculated_inputs``) if underlying data (in ``data_Cape_Town``) has changed. A static copy is shown in the documentation for illustrative purposes.
+* Execute the ``1_main_nb`` notebook to run the simulations and obtain a preview of results. Outcomes will be automatically saved in a dedicated subfolder (according to the naming convention defined in the preamble of the script) under the ``Output`` directory. A static copy is shown in the documentation for illustrative purposes.
 * Run the ``2_plots`` scripts to export static tables and figures in dedicated subfolders. ``2_plots_inputs.py`` plots input data that does not change across scenarios (output is saved in dedicated subfolders under the ``Output`` directory). ``2_plots_equil.py`` plots outcomes for the initial state static equilibrium. Output changes across scenarios and is saved under the specific subfolder created at previous step with ``1_main_nb``. ``2_plots_simul.py`` plots outcomes for dynamic simulations over subsequent periods. Output is saved in same directory as for ``2_plots_equil.py``: we have created a separate script in case the end user is not interested in the dynamics (which are long to loop over). In case of discrepancies, we recommend using ``2_plots_equil.py`` for each period individually.
 * Run the ``3_plots_use_case_anticip.py`` and ``3_plots_use_case_cchange.py`` to export (in a specific subfolder) the interactive plots and tables associated with respectively the anticipation and climate change use cases that we developed for this version of the model. This requires to run both ``1_main_nb`` and ``2_plots_equil.py`` for the scenarios used in each script (with and without anticipation, with and without climate change). The options that define which scenario to run can be modified in the preamble of the scripts (see :doc:`../technical_doc` for more details).
-* Run the ``4_use_case_nb_empty.ipynb`` notebook to recover key interactive plots from ``3_plots_use_case_anticip.py`` and ``3_plots_use_case_cchange.py`` with associated comments and interpretation. As the interactive plots are too heavy to save or load as a ``.html`` page, we save the notebook without the associated output. ``4_use_case_nb_full.ipynb`` provides a static version with cached output (without the possibility to zoom in and out or display information by hovering over the plots), that is shown in the documentation for illustrative purposes.
-* See :doc:`../technical_doc` for more details on running custom simulations. Note that to keep ``.py`` and ``.ipynb`` versions of the same script in sync, one needs to pair them by setting up Jupytext locally.
+* Run the ``4_use_case_nb_empty.ipynb`` notebook to recover key interactive plots from ``3_plots_use_case_anticip.py`` and ``3_plots_use_case_cchange.py`` with associated comments and interpretation. As the interactive plots are too heavy to save and load as a ``.html`` page, we saved the notebook without the associated cached output. ``4_use_case_nb_full.ipynb`` provides a static version with cached output (without the possibility to zoom in and out or display information by hovering over the plots), that is shown in the documentation for illustrative purposes.
+* See :doc:`../technical_doc` for more details on running custom simulations.
 
 ----------
 Versioning
 ----------
 
-* The ``gh_pages`` branch contains the latest update of the code and is set as default. If you want to modify the code, please fork the repository and start from this branch, as this is the one used in this documentation.
+* The ``gh_pages`` branch of the GitHub repository contains the latest update of the code and is set as default. If you want to modify the code, please fork the repository and start from this branch, as this is the one used in this documentation.
 * All other branches are deprecated.
 
 -----------------

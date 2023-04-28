@@ -686,8 +686,8 @@ of the selected_density variable.</p>
 Dep. Variable:                      y   R-squared:                       0.665
 Model:                            OLS   Adj. R-squared:                  0.657
 Method:                 Least Squares   F-statistic:                     89.87
-Date:                Thu, 22 Dec 2022   Prob (F-statistic):           4.10e-32
-Time:                        21:56:39   Log-Likelihood:                -52.613
+Date:                Thu, 27 Apr 2023   Prob (F-statistic):           4.10e-32
+Time:                        13:06:39   Log-Likelihood:                -52.613
 No. Observations:                 140   AIC:                             113.2
 Df Residuals:                     136   BIC:                             125.0
 Df Model:                           3
@@ -762,7 +762,7 @@ coeff_A = 0.030595011996082885
 <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;scan_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;normal&quot;</span><span class="p">:</span>
     <span class="n">list_lambda</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">13.8</span><span class="p">,</span> <span class="mf">14.3</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span>
 <span class="k">if</span> <span class="n">options</span><span class="p">[</span><span class="s2">&quot;scan_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;fine&quot;</span><span class="p">:</span>
-    <span class="n">list_lambda</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">13.94</span><span class="p">,</span> <span class="mf">14.00</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">)</span>
+    <span class="n">list_lambda</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">13.94</span><span class="p">,</span> <span class="mf">13.981</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -817,15 +817,6 @@ incomes for group  2
  - computed - max error 0.009946364871984739
 incomes for group  3
  - computed - max error 0.007537367867095079
-Estimating for lambda =  13.999999999999998
-incomes for group  0
- - computed - max error 0.009896503198857657
-incomes for group  1
- - computed - max error 0.009959202423203651
-incomes for group  2
- - computed - max error 0.009756606690656451
-incomes for group  3
- - computed - max error 0.00632138569723866
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
@@ -1229,8 +1220,8 @@ Scanning complete
 Dep. Variable:                      y   R-squared:                       0.160
 Model:                            OLS   Adj. R-squared:                  0.134
 Method:                 Least Squares   F-statistic:                     6.268
-Date:                Thu, 22 Dec 2022   Prob (F-statistic):           4.06e-08
-Time:                        22:07:24   Log-Likelihood:                 5.1856
+Date:                Thu, 27 Apr 2023   Prob (F-statistic):           4.06e-08
+Time:                        13:13:52   Log-Likelihood:                 5.1856
 No. Observations:                 307   AIC:                             9.629
 Df Residuals:                     297   BIC:                             46.90
 Df Model:                           9
@@ -1419,7 +1410,9 @@ amenity_map done
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[44]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">equilibrium.compute_equilibrium</span> <span class="k">as</span> <span class="nn">eqcmp</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">param</span><span class="p">[</span><span class="s2">&quot;precision&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.01</span>
+
+<span class="kn">import</span> <span class="nn">equilibrium.compute_equilibrium</span> <span class="k">as</span> <span class="nn">eqcmp</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_amenity_backyard</span><span class="p">)):</span>
     <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_amenity_settlement</span><span class="p">)):</span>
 
@@ -1485,7 +1478,7 @@ amenity_map done
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [00:34&lt;00:00, 28.74it/s, error_max_abs=0.00781]
+stops when error_max_abs &lt;0.01:  13%|██████████████▍                                                                                                 | 129/1000 [00:03&lt;00:23, 36.53it/s, error_max_abs=0.00783]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1501,7 +1494,7 @@ iteration 1/36
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|█████████████████████████████████████▉| 999/1000 [00:32&lt;00:00, 30.51it/s, error_max_abs=0.015]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:23, 37.32it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1517,7 +1510,7 @@ iteration 2/36
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|████████████████████████████████████▉| 999/1000 [00:34&lt;00:00, 29.33it/s, error_max_abs=0.0172]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:23, 36.84it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1533,7 +1526,7 @@ iteration 3/36
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  17%|█████▊                             | 167/1000 [00:04&lt;00:24, 33.88it/s, error_max_abs=0.000571]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:22, 38.25it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1549,7 +1542,7 @@ iteration 4/36
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  17%|█████▊                             | 167/1000 [00:04&lt;00:24, 33.67it/s, error_max_abs=0.000571]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:23, 37.84it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1565,7 +1558,7 @@ iteration 5/36
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  17%|█████▊                             | 167/1000 [00:04&lt;00:24, 33.68it/s, error_max_abs=0.000571]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:22, 38.30it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1581,7 +1574,7 @@ iteration 6/36
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  17%|█████▊                             | 167/1000 [00:05&lt;00:25, 32.39it/s, error_max_abs=0.000571]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:23, 37.82it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1597,7 +1590,7 @@ iteration 7/36
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [00:30&lt;00:00, 32.48it/s, error_max_abs=0.00781]
+stops when error_max_abs &lt;0.01:  13%|██████████████▍                                                                                                 | 129/1000 [00:03&lt;00:22, 38.37it/s, error_max_abs=0.00787]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1613,7 +1606,7 @@ iteration 8/36
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [00:30&lt;00:00, 33.13it/s, error_max_abs=0.00488]
+stops when error_max_abs &lt;0.01:  13%|██████████████▌                                                                                                 | 130/1000 [00:03&lt;00:22, 38.26it/s, error_max_abs=0.00699]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1629,7 +1622,7 @@ iteration 9/36
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|████████████████████████████████████▉| 999/1000 [00:32&lt;00:00, 30.85it/s, error_max_abs=0.0151]
+stops when error_max_abs &lt;0.01:  13%|██████████████▌                                                                                                 | 130/1000 [00:03&lt;00:22, 37.89it/s, error_max_abs=0.00737]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1645,7 +1638,7 @@ iteration 10/36
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [00:30&lt;00:00, 32.62it/s, error_max_abs=0.00158]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:22, 38.57it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1661,7 +1654,7 @@ iteration 11/36
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [00:40&lt;00:00, 24.54it/s, error_max_abs=0.00121]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:23, 37.84it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1677,7 +1670,7 @@ iteration 12/36
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|████████████████████████████████████▉| 999/1000 [00:35&lt;00:00, 28.52it/s, error_max_abs=0.0103]
+stops when error_max_abs &lt;0.01:  14%|████████████████                                                                                                | 143/1000 [00:03&lt;00:22, 38.27it/s, error_max_abs=0.00922]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1693,7 +1686,7 @@ iteration 13/36
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  17%|█████▊                             | 167/1000 [00:06&lt;00:31, 26.62it/s, error_max_abs=0.000571]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:23, 37.67it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1709,7 +1702,7 @@ iteration 14/36
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [00:33&lt;00:00, 30.15it/s, error_max_abs=0.00716]
+stops when error_max_abs &lt;0.01:  13%|██████████████▍                                                                                                 | 129/1000 [00:03&lt;00:22, 38.05it/s, error_max_abs=0.00719]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1725,7 +1718,7 @@ iteration 15/36
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [00:34&lt;00:00, 29.05it/s, error_max_abs=0.00402]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:22, 38.17it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1741,7 +1734,7 @@ iteration 16/36
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [00:33&lt;00:00, 30.12it/s, error_max_abs=0.00925]
+stops when error_max_abs &lt;0.01:  13%|██████████████▌                                                                                                 | 130/1000 [00:03&lt;00:22, 38.41it/s, error_max_abs=0.00927]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1757,7 +1750,7 @@ iteration 17/36
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  17%|█████▊                             | 167/1000 [00:06&lt;00:34, 24.18it/s, error_max_abs=0.000571]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:22, 38.09it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1773,7 +1766,7 @@ iteration 18/36
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [00:33&lt;00:00, 29.81it/s, error_max_abs=0.00763]
+stops when error_max_abs &lt;0.01:  13%|██████████████▍                                                                                                 | 129/1000 [00:03&lt;00:24, 35.38it/s, error_max_abs=0.00804]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1789,7 +1782,7 @@ iteration 19/36
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|████████████████████████████████████▉| 999/1000 [00:33&lt;00:00, 30.05it/s, error_max_abs=0.0117]
+stops when error_max_abs &lt;0.01:  14%|███████████████▍                                                                                                | 138/1000 [00:03&lt;00:22, 38.03it/s, error_max_abs=0.00786]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1805,7 +1798,7 @@ iteration 20/36
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  17%|█████▊                             | 167/1000 [00:06&lt;00:30, 27.31it/s, error_max_abs=0.000571]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:04&lt;00:29, 29.91it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1821,7 +1814,7 @@ iteration 21/36
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [00:33&lt;00:00, 30.07it/s, error_max_abs=0.00781]
+stops when error_max_abs &lt;0.01:  13%|██████████████▍                                                                                                 | 129/1000 [00:03&lt;00:25, 34.43it/s, error_max_abs=0.00784]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1837,7 +1830,7 @@ iteration 22/36
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|████████████████████████████████████▉| 999/1000 [00:35&lt;00:00, 27.97it/s, error_max_abs=0.0032]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:26, 33.15it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1853,7 +1846,7 @@ iteration 23/36
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|████████████████████████████████████▉| 999/1000 [00:32&lt;00:00, 31.17it/s, error_max_abs=0.0111]
+stops when error_max_abs &lt;0.01: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [00:28&lt;00:00, 34.99it/s, error_max_abs=0.0111]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1869,7 +1862,7 @@ iteration 24/36
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [00:32&lt;00:00, 30.51it/s, error_max_abs=0.00749]
+stops when error_max_abs &lt;0.01:  13%|██████████████▍                                                                                                 | 129/1000 [00:03&lt;00:24, 35.52it/s, error_max_abs=0.00744]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1885,7 +1878,7 @@ iteration 25/36
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [00:33&lt;00:00, 29.59it/s, error_max_abs=0.00604]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:04&lt;00:30, 28.11it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1901,7 +1894,7 @@ iteration 26/36
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [00:33&lt;00:00, 30.18it/s, error_max_abs=0.00654]
+stops when error_max_abs &lt;0.01:  13%|██████████████▍                                                                                                 | 129/1000 [00:03&lt;00:25, 34.77it/s, error_max_abs=0.00992]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1917,7 +1910,7 @@ iteration 27/36
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  17%|█████▊                             | 167/1000 [00:05&lt;00:26, 31.58it/s, error_max_abs=0.000571]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:24, 35.82it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1933,7 +1926,7 @@ iteration 28/36
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [00:32&lt;00:00, 30.32it/s, error_max_abs=0.00716]
+stops when error_max_abs &lt;0.01:  13%|██████████████▍                                                                                                 | 129/1000 [00:03&lt;00:26, 32.90it/s, error_max_abs=0.00717]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1949,7 +1942,7 @@ iteration 29/36
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|████████████████████████████████████▉| 999/1000 [00:31&lt;00:00, 31.29it/s, error_max_abs=0.0185]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:24, 36.07it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1965,7 +1958,7 @@ iteration 30/36
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [00:34&lt;00:00, 29.06it/s, error_max_abs=0.00396]
+stops when error_max_abs &lt;0.01:  13%|██████████████▌                                                                                                 | 130/1000 [00:03&lt;00:23, 37.02it/s, error_max_abs=0.00699]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1981,7 +1974,7 @@ iteration 31/36
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|████████████████████████████████████▉| 999/1000 [00:32&lt;00:00, 30.41it/s, error_max_abs=0.0144]
+stops when error_max_abs &lt;0.01: 100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [00:27&lt;00:00, 36.19it/s, error_max_abs=0.0144]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -1997,7 +1990,7 @@ iteration 32/36
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [00:34&lt;00:00, 29.08it/s, error_max_abs=0.00412]
+stops when error_max_abs &lt;0.01:  13%|██████████████▌                                                                                                 | 130/1000 [00:03&lt;00:26, 33.23it/s, error_max_abs=0.00699]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2013,7 +2006,7 @@ iteration 33/36
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [00:33&lt;00:00, 29.60it/s, error_max_abs=0.00869]
+stops when error_max_abs &lt;0.01:  13%|██████████████▌                                                                                                 | 130/1000 [00:04&lt;00:30, 28.81it/s, error_max_abs=0.00872]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2029,7 +2022,7 @@ iteration 34/36
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  17%|█████▊                             | 167/1000 [00:05&lt;00:27, 30.77it/s, error_max_abs=0.000571]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:24, 35.79it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2045,7 +2038,7 @@ iteration 35/36
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [00:32&lt;00:00, 30.74it/s, error_max_abs=0.00716]
+stops when error_max_abs &lt;0.01:  13%|██████████████▍                                                                                                 | 129/1000 [00:03&lt;00:23, 36.89it/s, error_max_abs=0.00719]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2111,8 +2104,8 @@ iteration 36/36
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-amenity_backyard = 0.6000000000000001
-amenity_settlement = 0.5800000000000001
+amenity_backyard = 0.5900000000000001
+amenity_settlement = 0.5700000000000001
 </pre></div></div>
 </div>
 </div>
@@ -2274,8 +2267,8 @@ amenity_settlement = 0.5800000000000001
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [00:37&lt;00:00, 26.69it/s, error_max_abs=0.00869]
-stops when error_max_abs &lt;0.001:  17%|██████                              | 167/1000 [00:05&lt;00:27, 30.46it/s, error_max_abs=0.00068]
+stops when error_max_abs &lt;0.01:  13%|██████████████▍                                                                                                 | 129/1000 [00:03&lt;00:25, 34.75it/s, error_max_abs=0.00992]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:22, 38.40it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2291,7 +2284,7 @@ iteration 1/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  17%|█████▊                             | 167/1000 [00:05&lt;00:26, 31.04it/s, error_max_abs=0.000571]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:22, 38.96it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2307,7 +2300,7 @@ iteration 2/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  17%|█████▊                             | 167/1000 [00:05&lt;00:26, 30.94it/s, error_max_abs=0.000571]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:22, 39.02it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2323,7 +2316,7 @@ iteration 3/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  17%|█████▊                             | 167/1000 [00:05&lt;00:27, 30.73it/s, error_max_abs=0.000571]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:22, 38.70it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2339,7 +2332,7 @@ iteration 4/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [00:34&lt;00:00, 28.98it/s, error_max_abs=0.00164]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:22, 38.77it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2355,7 +2348,7 @@ iteration 5/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  17%|█████▊                             | 167/1000 [00:05&lt;00:26, 30.88it/s, error_max_abs=0.000571]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:23, 37.32it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2371,7 +2364,7 @@ iteration 6/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|████████████████████████████████████▉| 999/1000 [00:33&lt;00:00, 29.97it/s, error_max_abs=0.0117]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:22, 38.79it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2387,7 +2380,7 @@ iteration 7/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [00:32&lt;00:00, 30.77it/s, error_max_abs=0.00439]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:22, 39.40it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2403,7 +2396,7 @@ iteration 8/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [00:38&lt;00:00, 26.23it/s, error_max_abs=0.00445]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:22, 38.58it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2419,7 +2412,7 @@ iteration 9/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  36%|████████████▊                      | 365/1000 [00:10&lt;00:18, 34.04it/s, error_max_abs=0.000685]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:22, 39.19it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2435,7 +2428,7 @@ iteration 10/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|████████████████████████████████████▉| 999/1000 [00:30&lt;00:00, 33.24it/s, error_max_abs=0.0041]
+stops when error_max_abs &lt;0.01:  24%|██████████████████████████▊                                                                                     | 239/1000 [00:06&lt;00:20, 37.40it/s, error_max_abs=0.00192]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2451,7 +2444,7 @@ iteration 11/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  17%|█████▊                             | 167/1000 [00:04&lt;00:23, 35.23it/s, error_max_abs=0.000571]
+stops when error_max_abs &lt;0.01:  33%|████████████████████████████████████▉                                                                           | 330/1000 [00:12&lt;00:26, 25.71it/s, error_max_abs=0.00928]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2467,7 +2460,7 @@ iteration 12/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  17%|█████▉                             | 168/1000 [00:04&lt;00:24, 34.10it/s, error_max_abs=0.000723]
+stops when error_max_abs &lt;0.01:  13%|██████████████▍                                                                                                 | 129/1000 [00:03&lt;00:25, 33.79it/s, error_max_abs=0.00868]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2483,7 +2476,7 @@ iteration 13/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [00:30&lt;00:00, 32.50it/s, error_max_abs=0.00289]
+stops when error_max_abs &lt;0.01:  13%|██████████████▌                                                                                                 | 130/1000 [00:03&lt;00:20, 41.65it/s, error_max_abs=0.00699]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2499,7 +2492,7 @@ iteration 14/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  17%|█████▊                             | 167/1000 [00:04&lt;00:24, 33.88it/s, error_max_abs=0.000571]
+stops when error_max_abs &lt;0.01:  65%|████████████████████████████████████████████████████████████████████████▍                                       | 647/1000 [00:17&lt;00:09, 37.48it/s, error_max_abs=0.00237]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2515,7 +2508,7 @@ iteration 15/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  17%|█████▊                             | 167/1000 [00:04&lt;00:23, 34.76it/s, error_max_abs=0.000571]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:21, 40.77it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2531,7 +2524,7 @@ iteration 16/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  17%|█████▊                             | 167/1000 [00:04&lt;00:24, 34.43it/s, error_max_abs=0.000816]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:21, 40.48it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2547,7 +2540,7 @@ iteration 17/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  17%|█████▊                             | 167/1000 [00:04&lt;00:24, 34.51it/s, error_max_abs=0.000571]
+stops when error_max_abs &lt;0.01:  42%|███████████████████████████████████████████████▎                                                                  | 415/1000 [00:10&lt;00:14, 39.24it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2563,7 +2556,7 @@ iteration 18/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|████████████████████████████████████▉| 999/1000 [00:29&lt;00:00, 33.54it/s, error_max_abs=0.0181]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:23, 37.47it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2579,7 +2572,7 @@ iteration 19/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  17%|█████▊                             | 167/1000 [00:04&lt;00:24, 34.54it/s, error_max_abs=0.000571]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:22, 38.33it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2595,7 +2588,7 @@ iteration 20/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [00:29&lt;00:00, 34.08it/s, error_max_abs=0.00229]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:23, 36.69it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2611,7 +2604,7 @@ iteration 21/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|█████████████████████████████████████▉| 999/1000 [00:31&lt;00:00, 32.14it/s, error_max_abs=0.009]
+stops when error_max_abs &lt;0.01:  13%|██████████████▉                                                                                                 | 133/1000 [00:03&lt;00:24, 34.72it/s, error_max_abs=0.00584]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2627,7 +2620,7 @@ iteration 22/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|████████████████████████████████████▉| 999/1000 [00:32&lt;00:00, 30.94it/s, error_max_abs=0.0154]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:23, 36.56it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2643,7 +2636,7 @@ iteration 23/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  17%|█████▊                             | 167/1000 [00:05&lt;00:28, 29.69it/s, error_max_abs=0.000723]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:24, 35.60it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2659,7 +2652,7 @@ iteration 24/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  17%|█████▊                             | 167/1000 [00:04&lt;00:23, 34.94it/s, error_max_abs=0.000571]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:22, 38.37it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2675,7 +2668,7 @@ iteration 25/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  17%|█████▊                             | 167/1000 [00:04&lt;00:23, 35.47it/s, error_max_abs=0.000571]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:22, 38.45it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2691,7 +2684,7 @@ iteration 26/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [00:29&lt;00:00, 33.37it/s, error_max_abs=0.00312]
+stops when error_max_abs &lt;0.01: 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████▉| 999/1000 [00:25&lt;00:00, 38.89it/s, error_max_abs=0.028]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2707,7 +2700,7 @@ iteration 27/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|████████████████████████████████████▉| 999/1000 [00:29&lt;00:00, 33.52it/s, error_max_abs=0.0199]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:23, 36.53it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2723,7 +2716,7 @@ iteration 28/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [00:28&lt;00:00, 35.19it/s, error_max_abs=0.00272]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:23, 37.21it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2739,7 +2732,7 @@ iteration 29/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [00:29&lt;00:00, 34.13it/s, error_max_abs=0.00268]
+stops when error_max_abs &lt;0.01:  13%|██████████████▍                                                                                                 | 129/1000 [00:03&lt;00:21, 40.71it/s, error_max_abs=0.00818]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2755,7 +2748,7 @@ iteration 30/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [00:30&lt;00:00, 32.60it/s, error_max_abs=0.00716]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:02&lt;00:18, 47.14it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2771,7 +2764,7 @@ iteration 31/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [00:28&lt;00:00, 34.97it/s, error_max_abs=0.00791]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:02&lt;00:18, 46.71it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2787,7 +2780,7 @@ iteration 32/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [00:28&lt;00:00, 34.62it/s, error_max_abs=0.00438]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:20, 42.73it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2803,7 +2796,7 @@ iteration 33/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  17%|█████▉                             | 169/1000 [00:04&lt;00:23, 35.53it/s, error_max_abs=0.000797]
+stops when error_max_abs &lt;0.01:  13%|██████████████▍                                                                                                 | 129/1000 [00:03&lt;00:21, 41.38it/s, error_max_abs=0.00755]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2819,7 +2812,7 @@ iteration 34/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  99%|██████████████████████████████████▋| 991/1000 [00:28&lt;00:00, 35.03it/s, error_max_abs=0.000885]
+stops when error_max_abs &lt;0.01:  19%|█████████████████████▊                                                                                             | 190/1000 [00:04&lt;00:18, 43.76it/s, error_max_abs=0.01]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2835,7 +2828,7 @@ iteration 35/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  17%|█████▊                             | 167/1000 [00:05&lt;00:25, 32.21it/s, error_max_abs=0.000571]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:02&lt;00:19, 43.83it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2851,7 +2844,7 @@ iteration 36/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  17%|█████▊                             | 167/1000 [00:06&lt;00:30, 27.60it/s, error_max_abs=0.000571]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:20, 42.39it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2867,7 +2860,7 @@ iteration 37/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  17%|█████▉                             | 169/1000 [00:04&lt;00:23, 35.41it/s, error_max_abs=0.000929]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:20, 41.85it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2883,7 +2876,7 @@ iteration 38/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  17%|█████▊                             | 167/1000 [00:04&lt;00:23, 35.22it/s, error_max_abs=0.000571]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:02&lt;00:19, 44.37it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2899,7 +2892,7 @@ iteration 39/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  17%|█████▉                             | 170/1000 [00:04&lt;00:23, 34.71it/s, error_max_abs=0.000831]
+stops when error_max_abs &lt;0.01:  43%|████████████████████████████████████████████████▌                                                               | 434/1000 [00:09&lt;00:12, 43.97it/s, error_max_abs=0.00395]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2915,7 +2908,7 @@ iteration 40/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  17%|█████▊                             | 167/1000 [00:04&lt;00:23, 35.00it/s, error_max_abs=0.000571]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:22, 38.36it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2931,7 +2924,7 @@ iteration 41/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  17%|█████▉                             | 169/1000 [00:04&lt;00:23, 35.03it/s, error_max_abs=0.000739]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:22, 39.19it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2947,7 +2940,7 @@ iteration 42/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [00:29&lt;00:00, 34.36it/s, error_max_abs=0.00124]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:22, 38.68it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2963,7 +2956,7 @@ iteration 43/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [00:28&lt;00:00, 34.76it/s, error_max_abs=0.00544]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:23, 36.36it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2979,7 +2972,7 @@ iteration 44/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [00:31&lt;00:00, 31.59it/s, error_max_abs=0.00285]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:21, 39.84it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -2995,7 +2988,7 @@ iteration 45/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [00:35&lt;00:00, 28.03it/s, error_max_abs=0.00432]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                 | 131/1000 [00:03&lt;00:21, 39.86it/s, error_max_abs=0.00956]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -3011,7 +3004,7 @@ iteration 46/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  17%|█████▊                             | 167/1000 [00:05&lt;00:29, 28.66it/s, error_max_abs=0.000571]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:21, 40.54it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -3027,7 +3020,7 @@ iteration 47/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001:  17%|█████▊                             | 167/1000 [00:06&lt;00:30, 27.54it/s, error_max_abs=0.000571]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:21, 40.14it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -3043,7 +3036,7 @@ iteration 48/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|███████████████████████████████████▉| 999/1000 [00:37&lt;00:00, 26.86it/s, error_max_abs=0.00162]
+stops when error_max_abs &lt;0.01:  13%|██████████████▋                                                                                                   | 129/1000 [00:03&lt;00:21, 40.57it/s, error_max_abs=0.007]
 </pre></div></div>
 </div>
 <div class="nboutput docutils container">
@@ -3059,7 +3052,7 @@ iteration 49/50
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-stops when error_max_abs &lt;0.001: 100%|████████████████████████████████████▉| 999/1000 [00:32&lt;00:00, 30.34it/s, error_max_abs=0.0019]
+stops when error_max_abs &lt;0.01:  25%|███████████████████████████▉                                                                                    | 249/1000 [00:06&lt;00:18, 40.01it/s, error_max_abs=0.00924]
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -3106,7 +3099,7 @@ iteration 50/50
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2023, Global Facility for Disaster Reduction and Recovery (The World Bank).</p>
+    <p>&#169; Copyright 2023, The World Bank.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

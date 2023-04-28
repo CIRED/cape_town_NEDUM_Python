@@ -44,50 +44,6 @@ options = inpprm.import_options()
 param = inpprm.import_param(
     path_precalc_inp, options)
 
-# Set custom options for this simulation
-#  Dummy for taking floods into account in the utility function
-options["agents_anticipate_floods"] = 1
-#  Dummy for preventing new informal settlement development
-options["informal_land_constrained"] = 0
-
-# More custom options regarding flood model
-#  Dummy for taking pluvial floods into account (on top of fluvial floods)
-options["pluvial"] = 1
-#  Dummy for reducing pluvial risk for (better protected) formal structures
-options["correct_pluvial"] = 1
-#  Dummy for taking coastal floods into account (on top of fluvial floods)
-options["coastal"] = 1
-#  Digital elevation to be used with coastal flood data (MERITDEM or NASADEM)
-#  NB: MERITDEM is also the DEM used for fluvial and pluvial flood data
-options["dem"] = "MERITDEM"
-#  We consider undefended flood maps as our default because they are more
-#  reliable
-options["defended"] = 0
-#  Dummy for taking sea-level rise into account in coastal flood data
-#  NB: Projections are up to 2050, based upon IPCC AR5 assessment for the
-#  RCP 8.5 scenario
-options["climate_change"] = 0
-
-# More custom options regarding scenarios
-options["inc_ineq_scenario"] = 2
-options["pop_growth_scenario"] = 4
-options["fuel_price_scenario"] = 2
-
-# Processing options for this simulation
-options["convert_sp_data"] = 0
-
-
-# GIVE NAME TO SIMULATION TO EXPORT THE RESULTS
-# (change according to custom parameters to be included)
-
-name = ('floods' + str(options["agents_anticipate_floods"])
-        + str(options["informal_land_constrained"]) + '_P'
-        + str(options["pluvial"]) + str(options["correct_pluvial"])
-        + '_C' + str(options["coastal"]) + str(options["climate_change"])
-        + '_scenario' + str(options["inc_ineq_scenario"])
-        + str(options["pop_growth_scenario"])
-        + str(options["fuel_price_scenario"]))
-
 path_plots = path_outputs + '/input_plots/'
 path_tables = path_outputs + '/input_tables/'
 
@@ -178,32 +134,32 @@ cal_average_income = np.load(
 
 # LOAD EQUILIBRIUM DATA
 
-initial_state_utility = np.load(
-    path_outputs + name + '/initial_state_utility.npy')
-initial_state_error = np.load(
-    path_outputs + name + '/initial_state_error.npy')
-initial_state_simulated_jobs = np.load(
-    path_outputs + name + '/initial_state_simulated_jobs.npy')
-initial_state_households_housing_types = np.load(
-    path_outputs + name + '/initial_state_households_housing_types.npy')
-initial_state_household_centers = np.load(
-    path_outputs + name + '/initial_state_household_centers.npy')
-initial_state_households = np.load(
-    path_outputs + name + '/initial_state_households.npy')
-initial_state_dwelling_size = np.load(
-    path_outputs + name + '/initial_state_dwelling_size.npy')
-initial_state_housing_supply = np.load(
-    path_outputs + name + '/initial_state_housing_supply.npy')
-initial_state_rent = np.load(
-    path_outputs + name + '/initial_state_rent.npy')
-initial_state_rent_matrix = np.load(
-    path_outputs + name + '/initial_state_rent_matrix.npy')
-initial_state_capital_land = np.load(
-    path_outputs + name + '/initial_state_capital_land.npy')
-initial_state_average_income = np.load(
-    path_outputs + name + '/initial_state_average_income.npy')
-initial_state_limit_city = np.load(
-    path_outputs + name + '/initial_state_limit_city.npy')
+# initial_state_utility = np.load(
+#     path_outputs + name + '/initial_state_utility.npy')
+# initial_state_error = np.load(
+#     path_outputs + name + '/initial_state_error.npy')
+# initial_state_simulated_jobs = np.load(
+#     path_outputs + name + '/initial_state_simulated_jobs.npy')
+# initial_state_households_housing_types = np.load(
+#     path_outputs + name + '/initial_state_households_housing_types.npy')
+# initial_state_household_centers = np.load(
+#     path_outputs + name + '/initial_state_household_centers.npy')
+# initial_state_households = np.load(
+#     path_outputs + name + '/initial_state_households.npy')
+# initial_state_dwelling_size = np.load(
+#     path_outputs + name + '/initial_state_dwelling_size.npy')
+# initial_state_housing_supply = np.load(
+#     path_outputs + name + '/initial_state_housing_supply.npy')
+# initial_state_rent = np.load(
+#     path_outputs + name + '/initial_state_rent.npy')
+# initial_state_rent_matrix = np.load(
+#     path_outputs + name + '/initial_state_rent_matrix.npy')
+# initial_state_capital_land = np.load(
+#     path_outputs + name + '/initial_state_capital_land.npy')
+# initial_state_average_income = np.load(
+#     path_outputs + name + '/initial_state_average_income.npy')
+# initial_state_limit_city = np.load(
+#     path_outputs + name + '/initial_state_limit_city.npy')
 
 
 # LOAD FLOOD DATA

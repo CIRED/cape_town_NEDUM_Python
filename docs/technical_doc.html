@@ -719,43 +719,43 @@
 <li><p>Land use</p></li>
 </ul>
 <p>This leads to the update of, among others, number of households per income class, expected income net of commuting costs, capital values of formal subsidized and informal dwelling units:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">228</span>            <span class="p">(</span><span class="n">average_income</span><span class="p">,</span> <span class="n">households_per_income_class</span>
-<span class="linenos">229</span>             <span class="p">)</span> <span class="o">=</span> <span class="n">eqdyn</span><span class="o">.</span><span class="n">compute_average_income</span><span class="p">(</span>
-<span class="linenos">230</span>                <span class="n">spline_population_income_distribution</span><span class="p">,</span>
-<span class="linenos">231</span>                <span class="n">spline_income_distribution</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">year_temp</span><span class="p">)</span>
-<span class="linenos">232</span>            <span class="n">income_net_of_commuting_costs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
-<span class="linenos">233</span>                <span class="n">precalculated_transport</span> <span class="o">+</span> <span class="s2">&quot;GRID_incomeNetOfCommuting_&quot;</span>
-<span class="linenos">234</span>                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">year_temp</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;.npy&quot;</span><span class="p">)</span>
-<span class="linenos">235</span>            <span class="p">(</span><span class="n">param</span><span class="p">[</span><span class="s2">&quot;subsidized_structure_value&quot;</span><span class="p">]</span>
-<span class="linenos">236</span>             <span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">param</span><span class="p">[</span><span class="s2">&quot;subsidized_structure_value_ref&quot;</span><span class="p">]</span>
-<span class="linenos">237</span>                  <span class="o">*</span> <span class="p">(</span><span class="n">spline_inflation</span><span class="p">(</span><span class="n">year_temp</span><span class="p">)</span> <span class="o">/</span> <span class="n">spline_inflation</span><span class="p">(</span><span class="mi">0</span><span class="p">)))</span>
-<span class="linenos">238</span>            <span class="p">(</span><span class="n">param</span><span class="p">[</span><span class="s2">&quot;informal_structure_value&quot;</span><span class="p">]</span>
-<span class="linenos">239</span>             <span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">param</span><span class="p">[</span><span class="s2">&quot;informal_structure_value_ref&quot;</span><span class="p">]</span>
-<span class="linenos">240</span>                  <span class="o">*</span> <span class="p">(</span><span class="n">spline_inflation</span><span class="p">(</span><span class="n">year_temp</span><span class="p">)</span> <span class="o">/</span> <span class="n">spline_inflation</span><span class="p">(</span><span class="mi">0</span><span class="p">)))</span>
-<span class="linenos">241</span>            <span class="n">mean_income</span> <span class="o">=</span> <span class="n">spline_income</span><span class="p">(</span><span class="n">year_temp</span><span class="p">)</span>
-<span class="linenos">242</span>            <span class="n">interest_rate</span> <span class="o">=</span> <span class="n">eqdyn</span><span class="o">.</span><span class="n">interpolate_interest_rate</span><span class="p">(</span>
-<span class="linenos">243</span>                <span class="n">spline_interest_rate</span><span class="p">,</span> <span class="n">year_temp</span><span class="p">)</span>
-<span class="linenos">244</span>            <span class="n">population</span> <span class="o">=</span> <span class="n">spline_population</span><span class="p">(</span><span class="n">year_temp</span><span class="p">)</span>
-<span class="linenos">245</span>            <span class="n">total_RDP</span> <span class="o">=</span> <span class="n">spline_RDP</span><span class="p">(</span><span class="n">year_temp</span><span class="p">)</span>
-<span class="linenos">246</span>            <span class="n">minimum_housing_supply</span> <span class="o">=</span> <span class="n">spline_minimum_housing_supply</span><span class="p">(</span><span class="n">year_temp</span><span class="p">)</span>
-<span class="linenos">247</span>            <span class="n">number_properties_RDP</span> <span class="o">=</span> <span class="n">spline_estimate_RDP</span><span class="p">(</span><span class="n">year_temp</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">230</span>            <span class="p">(</span><span class="n">average_income</span><span class="p">,</span> <span class="n">households_per_income_class</span>
+<span class="linenos">231</span>             <span class="p">)</span> <span class="o">=</span> <span class="n">eqdyn</span><span class="o">.</span><span class="n">compute_average_income</span><span class="p">(</span>
+<span class="linenos">232</span>                <span class="n">spline_population_income_distribution</span><span class="p">,</span>
+<span class="linenos">233</span>                <span class="n">spline_income_distribution</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">year_temp</span><span class="p">)</span>
+<span class="linenos">234</span>            <span class="n">income_net_of_commuting_costs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
+<span class="linenos">235</span>                <span class="n">precalculated_transport</span> <span class="o">+</span> <span class="s2">&quot;GRID_incomeNetOfCommuting_&quot;</span>
+<span class="linenos">236</span>                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">year_temp</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot;.npy&quot;</span><span class="p">)</span>
+<span class="linenos">237</span>            <span class="p">(</span><span class="n">param</span><span class="p">[</span><span class="s2">&quot;subsidized_structure_value&quot;</span><span class="p">]</span>
+<span class="linenos">238</span>             <span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">param</span><span class="p">[</span><span class="s2">&quot;subsidized_structure_value_ref&quot;</span><span class="p">]</span>
+<span class="linenos">239</span>                  <span class="o">*</span> <span class="p">(</span><span class="n">spline_inflation</span><span class="p">(</span><span class="n">year_temp</span><span class="p">)</span> <span class="o">/</span> <span class="n">spline_inflation</span><span class="p">(</span><span class="mi">0</span><span class="p">)))</span>
+<span class="linenos">240</span>            <span class="p">(</span><span class="n">param</span><span class="p">[</span><span class="s2">&quot;informal_structure_value&quot;</span><span class="p">]</span>
+<span class="linenos">241</span>             <span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">param</span><span class="p">[</span><span class="s2">&quot;informal_structure_value_ref&quot;</span><span class="p">]</span>
+<span class="linenos">242</span>                  <span class="o">*</span> <span class="p">(</span><span class="n">spline_inflation</span><span class="p">(</span><span class="n">year_temp</span><span class="p">)</span> <span class="o">/</span> <span class="n">spline_inflation</span><span class="p">(</span><span class="mi">0</span><span class="p">)))</span>
+<span class="linenos">243</span>            <span class="n">mean_income</span> <span class="o">=</span> <span class="n">spline_income</span><span class="p">(</span><span class="n">year_temp</span><span class="p">)</span>
+<span class="linenos">244</span>            <span class="n">interest_rate</span> <span class="o">=</span> <span class="n">eqdyn</span><span class="o">.</span><span class="n">interpolate_interest_rate</span><span class="p">(</span>
+<span class="linenos">245</span>                <span class="n">spline_interest_rate</span><span class="p">,</span> <span class="n">year_temp</span><span class="p">)</span>
+<span class="linenos">246</span>            <span class="n">population</span> <span class="o">=</span> <span class="n">spline_population</span><span class="p">(</span><span class="n">year_temp</span><span class="p">)</span>
+<span class="linenos">247</span>            <span class="n">total_RDP</span> <span class="o">=</span> <span class="n">spline_RDP</span><span class="p">(</span><span class="n">year_temp</span><span class="p">)</span>
+<span class="linenos">248</span>            <span class="n">minimum_housing_supply</span> <span class="o">=</span> <span class="n">spline_minimum_housing_supply</span><span class="p">(</span><span class="n">year_temp</span><span class="p">)</span>
+<span class="linenos">249</span>            <span class="n">number_properties_RDP</span> <span class="o">=</span> <span class="n">spline_estimate_RDP</span><span class="p">(</span><span class="n">year_temp</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Note that we also update the scale factor of the Cobb-Douglas housing production function so as to neutralize the impact that inflation of incomes would have on housing supply through rents <a class="footnote-reference brackets" href="#fmoney-illus" id="id33">23</a>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">252</span>            <span class="n">construction_param</span> <span class="o">=</span> <span class="p">(</span>
-<span class="linenos">253</span>                <span class="p">(</span><span class="n">mean_income</span> <span class="o">/</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;income_year_reference&quot;</span><span class="p">])</span>
-<span class="linenos">254</span>                <span class="o">**</span> <span class="p">(</span><span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;coeff_b&quot;</span><span class="p">])</span> <span class="o">*</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;coeff_A&quot;</span><span class="p">]</span>
-<span class="linenos">255</span>            <span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">254</span>            <span class="n">construction_param</span> <span class="o">=</span> <span class="p">(</span>
+<span class="linenos">255</span>                <span class="p">(</span><span class="n">mean_income</span> <span class="o">/</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;income_year_reference&quot;</span><span class="p">])</span>
+<span class="linenos">256</span>                <span class="o">**</span> <span class="p">(</span><span class="o">-</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;coeff_b&quot;</span><span class="p">])</span> <span class="o">*</span> <span class="n">param</span><span class="p">[</span><span class="s2">&quot;coeff_A&quot;</span><span class="p">]</span>
+<span class="linenos">257</span>            <span class="p">)</span>
 </pre></div>
 </div>
 <p>This is because we build a stable equilibrium model with rational agents. In particular, this requires to remove money illusion (i.e., the tendency of households to view their wealth and income in nominal terms, rather than in real terms).</p>
 <p>Also note that we are updating land availability coefficents, as they evolve through time, and agricultural rent, which also depends on the interest rate and the updated scale factor:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">256</span>            <span class="n">coeff_land</span> <span class="o">=</span> <span class="n">inpdt</span><span class="o">.</span><span class="n">import_coeff_land</span><span class="p">(</span>
-<span class="linenos">257</span>                <span class="n">spline_land_constraints</span><span class="p">,</span> <span class="n">spline_land_backyard</span><span class="p">,</span>
-<span class="linenos">258</span>                <span class="n">spline_land_informal</span><span class="p">,</span> <span class="n">spline_land_RDP</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">year_temp</span><span class="p">)</span>
-<span class="linenos">259</span>            <span class="n">agricultural_rent</span> <span class="o">=</span> <span class="n">inpprm</span><span class="o">.</span><span class="n">compute_agricultural_rent</span><span class="p">(</span>
-<span class="linenos">260</span>                <span class="n">spline_agricultural_price</span><span class="p">(</span><span class="n">year_temp</span><span class="p">),</span> <span class="n">construction_param</span><span class="p">,</span>
-<span class="linenos">261</span>                <span class="n">interest_rate</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">258</span>            <span class="n">coeff_land</span> <span class="o">=</span> <span class="n">inpdt</span><span class="o">.</span><span class="n">import_coeff_land</span><span class="p">(</span>
+<span class="linenos">259</span>                <span class="n">spline_land_constraints</span><span class="p">,</span> <span class="n">spline_land_backyard</span><span class="p">,</span>
+<span class="linenos">260</span>                <span class="n">spline_land_informal</span><span class="p">,</span> <span class="n">spline_land_RDP</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">year_temp</span><span class="p">)</span>
+<span class="linenos">261</span>            <span class="n">agricultural_rent</span> <span class="o">=</span> <span class="n">inpprm</span><span class="o">.</span><span class="n">compute_agricultural_rent</span><span class="p">(</span>
+<span class="linenos">262</span>                <span class="n">spline_agricultural_price</span><span class="p">(</span><span class="n">year_temp</span><span class="p">),</span> <span class="n">construction_param</span><span class="p">,</span>
+<span class="linenos">263</span>                <span class="n">interest_rate</span><span class="p">,</span> <span class="n">param</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Then, we proceed in three steps. We first compute a new unconstrained equilibrium with the updated variables. We then compute the targeted difference between the final value of formal private housing supply at <span class="math notranslate nohighlight">\(t+1\)</span> and the one at <span class="math notranslate nohighlight">\(t\)</span>, through the <code class="docutils literal notranslate"><span class="pre">evolution_housing_supply</span></code> function:</p>
@@ -779,8 +779,8 @@
 </pre></div>
 </div>
 <p>Finally, we compute a new equilibrium under this constraint, which yields our final outputs at <span class="math notranslate nohighlight">\(t+1\)</span>. Concretely, we set the value of housing supply at <span class="math notranslate nohighlight">\(t+1\)</span> as being the sum of the housing supply at <span class="math notranslate nohighlight">\(t\)</span> plus the difference we just computed, and store it under the <code class="docutils literal notranslate"><span class="pre">housing_in</span></code> parameter (whose default value does not matter). In the body of the <code class="docutils literal notranslate"><span class="pre">run_simulations</span></code> function, this looks like:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">284</span>            <span class="n">param</span><span class="p">[</span><span class="s2">&quot;housing_in&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">stat_temp_housing_supply</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
-<span class="linenos">285</span>            <span class="o">+</span> <span class="n">deriv_housing_temp</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">286</span>            <span class="n">param</span><span class="p">[</span><span class="s2">&quot;housing_in&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">stat_temp_housing_supply</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+<span class="linenos">287</span>            <span class="o">+</span> <span class="n">deriv_housing_temp</span>
 </pre></div>
 </div>
 <p>Then, we run the <code class="docutils literal notranslate"><span class="pre">compute_equilibrium</span></code> function with the modified option that developers do not adjust their housing supply anymore (so that <code class="docutils literal notranslate"><span class="pre">housing_supply</span></code> = <code class="docutils literal notranslate"><span class="pre">housing_in</span></code> in the body of the <code class="docutils literal notranslate"><span class="pre">compute_housing_supply_formal</span></code> function). All outputs will then be re-computed to fit this fixed target housing supply.</p>
@@ -1360,7 +1360,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2023, Global Facility for Disaster Reduction and Recovery (The World Bank).</p>
+    <p>&#169; Copyright 2023, The World Bank.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

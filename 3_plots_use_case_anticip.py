@@ -1892,7 +1892,7 @@ for key, value in dict_df_agg_damages.items():
     value.to_excel(writer, sheet_name=key)
 
 # Close the Pandas Excel writer and output the Excel file.
-writer.save()
+writer.close()
 
 # Save other data sets
 damage_maps_concat.to_csv(path_use_case + 'damage_maps_concat.csv')

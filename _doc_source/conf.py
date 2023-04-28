@@ -18,7 +18,7 @@ sys.path.insert(0, os.path.abspath('..'))
 # -- Project information -----------------------------------------------------
 
 project = 'NEDUM-2D for CoCT'
-copyright = '2023, Global Facility for Disaster Reduction and Recovery (The World Bank)'
+copyright = '2023, The World Bank'
 author = 'Thomas Monnier'
 
 
