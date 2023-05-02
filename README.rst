@@ -154,7 +154,7 @@ For internal reference within the CoCT, please contact kristoff.potgieter@capeto
 
 |
 
-User guide conception: Thomas Monnier - `Website <https://tlmonnier.github.io>`_ - `Github <https://github.com/TLMonnier>`_ - `Twitter <https://twitter.com/TLMonnier>`_ - thomas.monnier@ensae.fr
+User guide conception: Thomas Monnier - `Website <https://tlmonnier.github.io>`_ - `Twitter <https://twitter.com/TLMonnier>`_ - `Github <https://github.com/TLMonnier>`_ - thomas.monnier@ensae.fr
 
 Distributed under the GNU GENERAL PUBLIC LICENSE.
 
