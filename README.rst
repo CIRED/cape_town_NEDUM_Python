@@ -100,7 +100,7 @@ Note that we do not host the data on GitHub, but that it is available upon reque
 **Step 3**: Set up Python environment
 
 * If you are not familiar with Python, we recommend using the `Anaconda <https://www.anaconda.com/download/>`_ distribution and setting up a dedicated `virtual environment <https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html>`_ for **NEDUM-2D**.
-* Open your terminal and go where you located the code repository (by pasting its local path after the command ``cd`` in the Anaconda terminal)
+* Open your terminal (Anaconda prompt) and go where you located the ``code capetown python`` folder (by pasting its local path after the command ``cd`` in Anaconda prompt, then press enter)
 * Make sure that all the packages indicated in the ``requirements.txt`` file are installed. Alternatively, if you are using Anaconda, you can directly create the adequate environment by typing ``conda env create -f nedum.yml`` from your base environment in the Anaconda terminal (this may take some time to run).
 
 **Step 4**: Launch **NEDUM-2D**
